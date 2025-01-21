@@ -1,3 +1,1 @@
-type: 간단 명료 제목 [jira 이슈 번호(하위작업)]
-
-- type 종류 : feat, fix, docs, style, refactor, test, chore
+type: title [jira 이슈 번호]
