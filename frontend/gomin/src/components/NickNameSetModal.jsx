@@ -1,5 +1,6 @@
 import React from "react";
 
+// 닉네임 설정하는 모달임
 const NickNameSetModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 

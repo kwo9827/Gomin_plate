@@ -1,5 +1,9 @@
 import React from 'react';
 
+// 초밥 하나에 대한 컴포넌트
+// 클릭이 되어야 겠죠 ?
+// 초밥 타입에 따라 보여지는 이미지도 달라야할거에요 ?
+// SushiView로 가야합니다 ???
 const Sushi = ({ id }) => {
     // id에 따른 초밥 이름 예시 (나중에 디자인 변경을 위한 자리)
     const sushiNames = {

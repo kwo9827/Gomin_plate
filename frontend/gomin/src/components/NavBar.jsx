@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// 네비게이션 바를 구현하라
 const Navbar = () => {
     return (
         <nav style={navbarStyle}>

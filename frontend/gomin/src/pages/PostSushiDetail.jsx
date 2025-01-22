@@ -1,5 +1,6 @@
 import React from 'react';
 
+// 현재는 사용하지 아니할듯
 const PostSushiDetail = () => {
     return (
         <div>

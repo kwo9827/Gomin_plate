@@ -1,3 +1,4 @@
+// authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/axios';
 
@@ -9,11 +10,20 @@ export const socialLogin = createAsyncThunk(
     }
 );
 
+// 닉네임 수정하는 API
 export const updateNickname = createAsyncThunk(
     'auth/updateNickname',
     async (nickname) => {
         const response = await api.put('/user/nickname', { nickname });
         return response.data;
+    }
+);
+
+// 회원탈퇴 API
+export const deleteAccount = createAsyncThunk(
+    'auth/deleteAccount',
+    async () => {
+        await api.delete('/user/me'); // 회원탈퇴 API 호출
     }
 );
 
@@ -44,6 +54,12 @@ const authSlice = createSlice({
                 if (state.user) {
                     state.user.nickname = action.payload.data.nickname;
                 }
+            })
+            .addCase(deleteAccount.fulfilled, (state) => {
+                state.accessToken = null;
+                state.isAuthenticated = false;
+                state.user = null;
+                localStorage.removeItem('accessToken');
             });
     },
 });
