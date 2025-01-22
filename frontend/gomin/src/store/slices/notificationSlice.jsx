@@ -1,3 +1,4 @@
+// 알림 관련 슬라이스
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/axios';
 

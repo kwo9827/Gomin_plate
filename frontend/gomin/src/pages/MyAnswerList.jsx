@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SushiAnswerList = () => {
+const MyAnswerList = () => {
     return (
         <div>
             나의 답변 리스트 페이지
@@ -8,4 +8,4 @@ const SushiAnswerList = () => {
     );
 };
 
-export default SushiAnswerList;
+export default MyAnswerList;

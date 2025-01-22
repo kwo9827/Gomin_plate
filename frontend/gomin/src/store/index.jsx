@@ -4,6 +4,8 @@ import sushiReducer from './slices/sushiSlice';
 import answerReducer from './slices/answerSlice';
 import notificationReducer from './slices/notificationSlice';
 
+import currentMember from './slices/memberSlice';
+
 export const store = configureStore({
     reducer: {
         auth: authReducer,

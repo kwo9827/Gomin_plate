@@ -1,5 +1,6 @@
 import React from "react";
 
+// 포스트잇 모달 그리세요
 const PostItModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
