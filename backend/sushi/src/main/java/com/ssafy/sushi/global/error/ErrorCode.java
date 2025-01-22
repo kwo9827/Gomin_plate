@@ -12,6 +12,9 @@ public enum ErrorCode {
     RESOURCE_NOT_FOUND(404, "C002", "요청한 리소스를 찾을 수 없습니다"),
     INTERNAL_SERVER_ERROR(500, "C003", "서버 내부 오류가 발생했습니다"),
 
+    // AUTH
+    OAUTH_SERVER_ERROR(500, "A001", "OAuth 서버 오류가 발생했습니다"),
+
     // USER
     USER_NOT_FOUND(404, "U001", "유저를 찾을 수 없습니다.");
 
