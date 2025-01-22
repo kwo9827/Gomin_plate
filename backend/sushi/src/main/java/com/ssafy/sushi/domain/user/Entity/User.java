@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 //@SQLDelete(sql = "UPDATE users SET deleted_at = NOW() WHERE id = ?")  // deleted_at 필드 변경할 것

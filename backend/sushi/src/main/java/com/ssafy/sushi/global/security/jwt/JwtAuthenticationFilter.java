@@ -1,5 +1,6 @@
 package com.ssafy.sushi.global.security.jwt;
 
+import com.ssafy.sushi.global.common.util.TestUserMaker;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private static final String TEST_TOKEN = "test";
+
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -28,8 +31,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //           1. 헤더에서 JWT 토큰 추출
             String token = resolveToken(request);
 
+            // test 계정 통과
+            if (StringUtils.hasText(token) && TEST_TOKEN.equals(token)) {
+                Authentication authentication = TestUserMaker.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+
 //            2. 토큰 유효한지 확인
-            if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
+            else if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
+
 //                3. 토큰에서 인증 정보 추출
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
 
