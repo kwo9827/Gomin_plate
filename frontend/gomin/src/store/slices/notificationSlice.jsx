@@ -1,7 +1,9 @@
-// 알림 관련 슬라이스
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/axios';
 
+/** 알림 관련 API와 상태를 관리하는 슬라이스 */
+
+/** 알림 목록을 조회하는 API  */
 export const fetchNotifications = createAsyncThunk(
     'notification/fetchAll',
     async () => {
@@ -10,11 +12,25 @@ export const fetchNotifications = createAsyncThunk(
     }
 );
 
+/** 알림 읽음 처리 */
 export const markAsRead = createAsyncThunk(
     'notification/markAsRead',
     async (notificationId) => {
         const response = await api.put(`/notification/${notificationId}`);
         return { notificationId, data: response.data };
+    }
+);
+
+/** 읽지 않은 알림 존재 여부 조회 */
+export const fetchUnreadExists = createAsyncThunk(
+    'notification/fetchUnreadExists',
+    async () => {
+        const response = await api.get('/notification/unread-exists', {
+            headers: {
+                Authorization: `Bearer {JWT_TOKEN}`,  // Authorization 헤더 추가
+            },
+        });
+        return response.data;
     }
 );
 
@@ -24,6 +40,7 @@ const notificationSlice = createSlice({
         notifications: [],
         status: 'idle',
         error: null,
+        hasUnread: false,  // 읽지 않은 알림 여부를 저장할 상태 추가
     },
     reducers: {
         clearNotifications: (state) => {
@@ -44,6 +61,9 @@ const notificationSlice = createSlice({
                         n => n.notificationId !== action.payload.notificationId
                     );
                 }
+            })
+            .addCase(fetchUnreadExists.fulfilled, (state, action) => {
+                state.hasUnread = action.payload.data.hasUnread;  // 읽지 않은 알림 존재 여부 업데이트
             });
     },
 });

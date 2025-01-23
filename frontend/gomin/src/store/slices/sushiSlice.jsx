@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/axios';
 
-// 무작위 초밥을 받아오는 요청
-// 초밥 id, 데코 요소만 담겨옴
+/* 초밥(질문)에 대한 API와 상태관리를 하는 슬라이스 */
 export const fetchRailSushi = createAsyncThunk(
     'sushi/fetchRail',
     async (size = 15) => {
@@ -11,8 +10,7 @@ export const fetchRailSushi = createAsyncThunk(
     }
 );
 
-// 내가 올린 초밥 리스트 요청
-// 초밥 배열 내용 다담겨서
+/* 본인이 등록한 초밥(질문)에 대한 리스트를 불러오는 API */
 export const fetchMySushi = createAsyncThunk(
     'sushi/fetchMySushi',
     async () => {
@@ -21,8 +19,7 @@ export const fetchMySushi = createAsyncThunk(
     }
 );
 
-// 레일 위에 있는 스시 중에 
-// 하나 고르는 api
+/* 레일에 있는 초밥 중 특정 초밥에 대한 데이터를 불러오는 API */
 export const fetchSushiDetail = createAsyncThunk(
     'sushi/fetchDetail',
     async (sushiId) => {
@@ -31,7 +28,7 @@ export const fetchSushiDetail = createAsyncThunk(
     }
 );
 
-// 초밥 등록하기
+/* 초밥(질문)을 등록하는 API */
 export const createSushi = createAsyncThunk(
     'sushi/create',
     async (sushiData) => {
@@ -40,7 +37,7 @@ export const createSushi = createAsyncThunk(
     }
 );
 
-// 내 초밥 상세 정보 요청
+/* 나의 초밥(질문)에 대한 상세 데이터 요청 API */
 export const fetchMySushiDetail = createAsyncThunk(
     'sushi/fetchMySushiDetail',
     async (sushiId) => {

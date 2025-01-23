@@ -1,6 +1,8 @@
-// authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/axios';
+
+/* 인증 관련 API와 상태 관리를 하는 슬라이스 */
+
 
 export const socialLogin = createAsyncThunk(
     'auth/socialLogin',
@@ -23,7 +25,7 @@ export const updateNickname = createAsyncThunk(
 export const deleteAccount = createAsyncThunk(
     'auth/deleteAccount',
     async () => {
-        await api.delete('/user/me'); // 회원탈퇴 API 호출
+        await api.delete('/user/me');
     }
 );
 

@@ -1,6 +1,9 @@
 import React from 'react';
 
-// 초밥이 지나갈 레일 컴포넌트, 인자로 초밥리스트를 받아야겠지 ??
+/** 초밥이 지나갈 레일 컴포넌트
+ * 1. 초밥 데이터를 배열로 받는다
+ * 2. 초밥 객체를 흘려보낸다.
+ */
 const Rail = ({ sushiData }) => {
     return (
         <div>
