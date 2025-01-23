@@ -1,6 +1,6 @@
 import React from 'react';
 
-// 맨 처음에 뜰 인트로 페이지
+/** 서비스에 접근하면 제일 먼저 나타나는 인트로 화면 */
 const Intro = () => {
     return (
         <div>

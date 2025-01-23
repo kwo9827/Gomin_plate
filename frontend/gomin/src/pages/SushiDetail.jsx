@@ -3,6 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMySushiDetail } from "../store/slices/sushiSlice";
 
+/** mysushilist에서 하나 클릭했을때 오는 초밥 디테일 페이지
+ * 1. 디자인 수정 필요
+ * 2. 답변이 간략히 보일 포스트잇 컴포넌트 구현 후 연결 필요 할 듯
+ */
 const SushiDetail = () => {
     const location = useLocation();
     const navigate = useNavigate();

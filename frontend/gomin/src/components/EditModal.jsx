@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateNickname, deleteAccount } from "../store/slices/authSlice";
 
-// 닉네임 변경과 회원탈퇴를 수행하는 EditModal임
-// 거의 다 만들어놨으니까 디자인만 만드셈 ㅅㄱ
+/** 닉네임 변경, 회원탈퇴를 수행하는 모달
+ * 1. 닉변, 회원가입 API 다 연결해뒀음
+ * 2. 스타일은 임의로 넣은 상태
+ */
 const EditModal = ({ isOpen, onClose }) => {
     const [nickname, setNickname] = useState("");
     const dispatch = useDispatch();

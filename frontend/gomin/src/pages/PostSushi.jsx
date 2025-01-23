@@ -15,6 +15,11 @@ const sliderSettings = {
     slidesToScroll: 1,
 };
 
+/** 홈화면에서 초밥 등록벨을 눌렀을때 나타날 주문서 페이지
+ * 1. 현재 API 연결 완료
+ * 2. 디자인 수정 필요
+ * 3. 상태저장부 까지 구현 완료
+ */
 const PostSushi = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();

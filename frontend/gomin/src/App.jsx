@@ -24,8 +24,8 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/mysushilist" element={<MySushiList />} />
         <Route path="/myanswerlist" element={<MyAnswerList />} />
-        <Route path="/sushidetail/:id" element={<SushiDetail />} />
-        <Route path="/sushiview/:id" element={<SushiView />} />
+        <Route path="/sushidetail" element={<SushiDetail />} />
+        <Route path="/sushiview" element={<SushiView />} />
         <Route path="/postsushi" element={<PostSushi />} />
         <Route path="/sushidetail" element={<SushiDetail />} />
         <Route path="*" element={<ErrorPage />} /> {/* 모든 경로에 매칭되지 않으면 ErrorPage로 이동 */}

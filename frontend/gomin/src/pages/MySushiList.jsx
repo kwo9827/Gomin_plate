@@ -7,6 +7,12 @@ import SushiCard from '../components/SushiCard';
 // 초밥 카드를 누르면 초밥 디테일로 이동함
 // 지금 실제 api 만들어지면 동작할거는 주석처리함
 // 더미데이터로 동작하게 되어있음
+/** 내가 등록한 초밥(질문)에 대한 리스트를 출력하는 페이지
+ * 1. 현재 API 연결부는 주석 처리 한 상태
+ * 2. 더미데이터로 보여지고 있음
+ * 3. 추후 API 구현 시 주석을 지우고 실제 연결 필요
+ * 4. sushicard onclick시 sushidetail로 id를 props를 통해 연결
+ */
 const MySushiList = () => {
     const dispatch = useDispatch();
 

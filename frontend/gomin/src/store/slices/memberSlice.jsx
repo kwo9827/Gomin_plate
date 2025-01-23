@@ -1,5 +1,7 @@
-// 현재 사용자에 대한 상태 관리하는 슬라이스
 import { createSlice } from '@reduxjs/toolkit';
+
+
+/* 현재 사용자에 대한 정보를 관리하는 슬라이스 */
 
 const initialState = {
     nickname: '', // 유저의 닉네임

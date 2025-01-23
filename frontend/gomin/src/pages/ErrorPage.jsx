@@ -1,5 +1,8 @@
 import React from 'react';
 
+/** 정해지지 않은 라우터로 접근했을시 보여질 에러 페이지 
+ * 1. 디자인 수정이 필요함
+ */
 const ErrorPage = () => {
     return (
         <div style={errorPageStyle}>

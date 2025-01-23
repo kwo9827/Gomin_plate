@@ -1,6 +1,9 @@
 import React from "react";
 
-// 포스트잇 모달 그리세요
+/** 답변을 보기 위한 포스트잇 컴포넌트
+ * 1. 여기서는 API 요청을 할 것이 아니라 props로 답변 내용을 담아서 뿌리는게 효율적
+ * 2. SushiDetail에서 Sushi 데이터에 달린 answers[] 데이터 하나 빼서 담으면 될 듯
+ */
 const PostItModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 

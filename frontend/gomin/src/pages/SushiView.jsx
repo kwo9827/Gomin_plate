@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { fetchSushiDetail } from '../features/sushi/sushiSlice';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-// 나중에 라우터로 id 뜨게하지마셈
+/** 레일에 지나가는 초밥을 눌렀을때 나타날 페이지
+ * 1. 초밥 객체에 대한 정보를 받고 출력
+ * 2. 사용자는 답변 입력 가능
+ * 3. API 연결 완료
+ */
 const SushiView = () => {
-    const { id } = useParams();
+    const location = useLocation();
     const navigate = useNavigate();
-    // const dispatch = useDispatch();
+    const { id } = location.state || {}; // state에서 id 가져오기
 
     const [sushiData, setSushiData] = useState(null);
     const [content, setContent] = useState('');
 
-    // 더미 데이터 (API 대신 사용)
     const dummySushi = {
         sushiId: id,
         title: '더미 초밥 제목',
@@ -25,19 +26,13 @@ const SushiView = () => {
     };
 
     useEffect(() => {
-        // 실제 API 호출 (주석 처리)
-        // dispatch(fetchSushiDetail(id))
-        //     .unwrap()
-        //     .then((data) => {
-        //         setSushiData(data);
-        //     })
-        //     .catch((error) => {
-        //         console.error('초밥 정보를 불러오는 데 실패했습니다.', error);
-        //     });
-
-        // 더미 데이터 설정
+        if (!id) {
+            alert('초밥 ID가 없습니다. 홈으로 이동합니다.');
+            navigate('/Home');
+            return;
+        }
         setSushiData(dummySushi);
-    }, [id]);
+    }, [id, navigate]);
 
     const handleSubmit = () => {
         if (content.trim() === '') {
@@ -50,17 +45,6 @@ const SushiView = () => {
             return;
         }
 
-        // 실제 API 요청 (주석 처리)
-        // dispatch(createAnswer({ sushiId: sushiData.sushiId, content }))
-        //     .unwrap()
-        //     .then(() => {
-        //         navigate('/Home');
-        //     })
-        //     .catch((error) => {
-        //         console.error('답변 작성에 실패했습니다.', error);
-        //     });
-
-        // 더미 데이터로 동작
         console.log('작성된 답변 데이터:', {
             sushiId: sushiData.sushiId,
             content,

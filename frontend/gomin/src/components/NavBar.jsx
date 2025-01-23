@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// 네비게이션 바를 구현하라
+/** 상단 네비게이션 바
+ * 1. 기본 틀 구성
+ * 2. 디자인 새로 해야함
+ * 3. 버튼 눌렀을때 동작 구현해야함 (현재는 모두 루트로 감)
+ */
 const Navbar = () => {
     return (
         <nav style={navbarStyle}>
