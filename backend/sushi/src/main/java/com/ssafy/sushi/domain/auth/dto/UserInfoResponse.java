@@ -9,7 +9,6 @@ import lombok.Getter;
 public class UserInfoResponse {
     private String id;
     private String nickname;
-    private String profileImageUrl;
     private Boolean isNew;
 
     public static UserInfoResponse of(User user, Boolean isNew) {
