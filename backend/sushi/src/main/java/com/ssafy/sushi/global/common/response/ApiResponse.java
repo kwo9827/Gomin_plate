@@ -32,4 +32,10 @@ public class ApiResponse<T> {
                 .status(error.getStatus())
                 .body(new ApiResponse<>(false, null, new ErrorResponse(error.getCode(), error.getMessage())));
     }
+
+    public static <T> ResponseEntity<ApiResponse<T>> error(ErrorCode error, String message) {
+        return ResponseEntity
+                .status(error.getStatus())
+                .body(new ApiResponse<>(false, null, new ErrorResponse(error.getCode(), message)));
+    }
 }

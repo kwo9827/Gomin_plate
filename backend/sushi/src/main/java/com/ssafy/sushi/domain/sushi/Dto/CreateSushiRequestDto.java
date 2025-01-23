@@ -1,0 +1,48 @@
+package com.ssafy.sushi.domain.sushi.Dto;
+
+import com.ssafy.sushi.domain.sushi.Entity.Category;
+import com.ssafy.sushi.domain.sushi.Entity.Sushi;
+import com.ssafy.sushi.domain.sushi.Entity.SushiType;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class CreateSushiRequestDto {
+
+    @NotBlank
+    private String title;
+
+    @NotBlank
+    private String content;
+
+    @NotNull
+    @Min(1) @Max(10)
+    private Integer answerCount;
+
+    @NotBlank
+    private String category;
+
+    @NotBlank
+    private String sushiType;
+
+    public Sushi toEntity(CreateSushiRequestDto createSushiRequestDto, Long userId, Category category, SushiType sushiType) {
+
+        Sushi sushi = Sushi.builder()
+                .userId(userId)
+                .category(category)
+                .sushiType(sushiType)
+                .title(createSushiRequestDto.getTitle())
+                .content(createSushiRequestDto.getContent())
+                .expireTime(LocalDateTime.now().plusHours(24)) // 유통기한은 24시간 후
+                .answerCount(createSushiRequestDto.getAnswerCount())
+                .build();
+
+        return sushi;
+    }
+
+}

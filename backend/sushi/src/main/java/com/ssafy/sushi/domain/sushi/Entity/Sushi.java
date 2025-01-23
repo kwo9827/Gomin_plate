@@ -1,0 +1,44 @@
+package com.ssafy.sushi.domain.sushi.Entity;
+
+import com.ssafy.sushi.global.common.Entity.BaseEntity;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "sushi")
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class Sushi extends BaseEntity {
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId; //초밥 등록 유저
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category; //고민 카테고리
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sushi_type_id")
+    private SushiType sushiType; //초밥 종류
+
+    @Column(nullable = false)
+    private String title; //제목
+
+    @Column(nullable = false)
+    private String content; //내용
+
+    @Column(name = "expire_time", nullable = false)
+    private LocalDateTime expireTime; //유통기한
+
+    @Column(name = "answer_count", nullable = false)
+    private Integer answerCount; //받고 싶은 답변 수
+
+    @Column(name = "is_closed", nullable = false)
+    @Builder.Default
+    private Boolean isClosed = false; //초밥 마감 여부 (기본값 설정)
+
+}
