@@ -6,17 +6,15 @@ import lombok.Getter;
 @Getter
 @Builder
 public class OAuthLoginResponse {
-    private String id;
     private String accessToken;
     private String refreshToken;
-    private Boolean isNew;
+    private UserInfoResponse user;
 
-    public static OAuthLoginResponse of(Long id, String accessToken, String refreshToken, boolean isNew) {
+    public static OAuthLoginResponse of(String accessToken, String refreshToken, UserInfoResponse userInfoResponse) {
         return OAuthLoginResponse.builder()
-                .id(id.toString())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .isNew(isNew)
+                .user(userInfoResponse)
                 .build();
     }
 }

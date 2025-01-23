@@ -1,6 +1,7 @@
 package com.ssafy.sushi.domain.auth;
 
 import com.ssafy.sushi.domain.auth.dto.OAuthLoginResponse;
+import com.ssafy.sushi.domain.auth.dto.UserInfoResponse;
 import com.ssafy.sushi.domain.user.Entity.User;
 import com.ssafy.sushi.domain.user.UserRepository;
 import com.ssafy.sushi.domain.user.enums.Provider;
@@ -35,13 +36,15 @@ public class OAuthService {
                 userResponse.getId().toString()
         );
 
-        boolean isNew = existingUser.isEmpty();
+        Boolean isNew = existingUser.isEmpty();
         User user = existingUser.orElseGet(() -> createKakaoUser(userResponse));
 
         String accessToken = jwtTokenProvider.createToken(user.getId().toString());
         String refreshToken = "temp";
 
-        return OAuthLoginResponse.of(user.getId(), accessToken, refreshToken, isNew);
+        UserInfoResponse userInfoResponse = UserInfoResponse.of(user, isNew);
+
+        return OAuthLoginResponse.of(accessToken, refreshToken, userInfoResponse);
     }
 
     // 신규 회원 db 저장
