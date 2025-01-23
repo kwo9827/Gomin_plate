@@ -44,4 +44,9 @@ public class Sushi extends BaseEntity {
     @Builder.Default
     private Boolean isClosed = false; //초밥 마감 여부 (기본값 설정)
 
+    // isClosed를 true로 변경하는 비즈니스 로직 메소드
+    public void closeSushi() {
+        this.isClosed = true;
+    }
+
 }

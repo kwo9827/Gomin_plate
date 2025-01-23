@@ -23,6 +23,7 @@ public class SushiService {
     private final SushiRepository sushiRepository;
     private final SushiTypeRepository sushiTypeRepository;
     private final CategoryRepository categoryRepository;
+    private final ScheduleService scheduleService;
 
     /**
      * 초밥 등록
@@ -37,6 +38,8 @@ public class SushiService {
                 new CustomException(ErrorCode.SUSHITYPE_NOT_FOUND));
 
         Sushi sushi = createSushiRequestDto.toEntity(createSushiRequestDto, userId, category, sushiType);
+
+        scheduleService.sushiEnd(sushi);
 
         return sushiRepository.save(sushi);
     }
