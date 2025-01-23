@@ -32,10 +32,13 @@ public class Sushi extends BaseEntity {
     private String content; //내용
 
     @Column(name = "expire_time", nullable = false)
-    private LocalDateTime expireTime; //유통기한
+    private LocalDateTime expirationTime; //유통기한
 
-    @Column(name = "answer_count", nullable = false)
-    private Integer answerCount; //받고 싶은 답변 수
+    @Column(name = "max_answers", nullable = false)
+    private Integer maxAnswers; //초기 설정 답변 인원수
+
+    @Column(name = "remaining_answers", nullable = false)
+    private Integer remainingAnswers; //답변 가능한 인원수
 
     @Column(name = "is_closed", nullable = false)
     @Builder.Default

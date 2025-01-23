@@ -22,7 +22,7 @@ public class CreateSushiRequestDto {
 
     @NotNull
     @Min(1) @Max(10)
-    private Integer answerCount;
+    private Integer maxAnswers;
 
     @NotBlank
     private String category;
@@ -38,8 +38,9 @@ public class CreateSushiRequestDto {
                 .sushiType(sushiType)
                 .title(createSushiRequestDto.getTitle())
                 .content(createSushiRequestDto.getContent())
-                .expireTime(LocalDateTime.now().plusHours(24)) // 유통기한은 24시간 후
-                .answerCount(createSushiRequestDto.getAnswerCount())
+                .expirationTime(LocalDateTime.now().plusHours(24)) // 유통기한은 24시간 후
+                .maxAnswers(createSushiRequestDto.getMaxAnswers())
+                .remainingAnswers(createSushiRequestDto.getMaxAnswers())
                 .build();
 
         return sushi;
