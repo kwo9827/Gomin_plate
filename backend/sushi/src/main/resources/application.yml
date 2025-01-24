@@ -11,7 +11,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    defer-datasource-initialization: true # hibernate 초기화 이후 data.sql 실행
+    defer-datasource-initialization: true # hibernate 초기화 이후 schema.sql 실행
   profiles:
     include: secret
 

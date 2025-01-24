@@ -19,7 +19,7 @@ public class TestUserMaker {
     private final long tokenValidTime = 24 * 60 * 60 * 1000L; // 24시간
 
     public static Authentication getAuthentication(String token) {
-        Long userId = 1L;
+        Integer userId = 1;
 
         UserPrincipal userPrincipal = UserPrincipal.builder()
                 .id(userId)

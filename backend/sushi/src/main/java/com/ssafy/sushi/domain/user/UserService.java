@@ -18,7 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
 
 
-    public UserInfoResponse getUserInfo(Long userId) {
+    public UserInfoResponse getUserInfo(Integer userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 

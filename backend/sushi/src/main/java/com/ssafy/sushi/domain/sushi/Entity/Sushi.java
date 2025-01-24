@@ -1,5 +1,6 @@
 package com.ssafy.sushi.domain.sushi.Entity;
 
+import com.ssafy.sushi.domain.user.Entity.User;
 import com.ssafy.sushi.global.common.Entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,8 +15,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Sushi extends BaseEntity {
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId; //초밥 등록 유저
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user; //초밥 등록 유저
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")

@@ -12,12 +12,12 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 public class UserPrincipal implements OAuth2User {
-    private Long id;
+    private Integer id;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
     @Builder
-    public UserPrincipal(Long id, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Integer id, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.authorities = authorities;
     }
