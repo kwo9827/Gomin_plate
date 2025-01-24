@@ -30,7 +30,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ApiResponse<Object>> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException e) {
-        log.error("HandleMethodArgumentNotValidException", e);
-        return ApiResponse.error(ErrorCode.INVALID_INPUT_VALUE);
+        log.error("HandleMethod :{}", e.getBindingResult().getFieldError().getDefaultMessage());
+        log.error("getField :{}", e.getBindingResult().getFieldError().getField());
+
+        String field = e.getBindingResult().getFieldError().getField();
+        String defaultMessage = e.getBindingResult().getFieldError().getDefaultMessage();
+
+        return ApiResponse.error(ErrorCode.INVALID_INPUT_VALUE, field + " : " + defaultMessage);
     }
 }
