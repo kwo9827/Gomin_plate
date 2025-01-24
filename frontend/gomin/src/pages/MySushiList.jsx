@@ -1,51 +1,140 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchMySushi } from '../store/slices/sushiSlice';
-import SushiCard from '../components/SushiCard';
+import React, { useState } from "react";
+import SushiCard from "../components/SushiCard";
 
-// 나의 초밥 리스트를 불러와서 리스트로 뿌려줌
-// 초밥 카드를 누르면 초밥 디테일로 이동함
-// 지금 실제 api 만들어지면 동작할거는 주석처리함
-// 더미데이터로 동작하게 되어있음
-/** 내가 등록한 초밥(질문)에 대한 리스트를 출력하는 페이지
- * 1. 현재 API 연결부는 주석 처리 한 상태
- * 2. 더미데이터로 보여지고 있음
- * 3. 추후 API 구현 시 주석을 지우고 실제 연결 필요
- * 4. sushicard onclick시 sushidetail로 id를 props를 통해 연결
- */
 const MySushiList = () => {
-    const dispatch = useDispatch();
+  const dummySushiData = [
+    { id: 1, title: "임가현 1" },
+    { id: 2, title: "이은지 2" },
+    { id: 3, title: "심규빈 3" },
+    { id: 4, title: "오승열 4" },
+    { id: 5, title: "민승용 5" },
+    { id: 6, title: "이상호 6" },
+  ];
 
-    // 더미 데이터
-    const dummySushiData = [
-        { id: 1, title: '초밥 1', plateType: '접시 1', sushiType: '연어' },
-        { id: 2, title: '초밥 2', plateType: '접시 2', sushiType: '참치' },
-        { id: 3, title: '초밥 3', plateType: '접시 3', sushiType: '광어' },
-        { id: 4, title: '초밥 4', plateType: '접시 4', sushiType: '새우' },
-        { id: 5, title: '초밥 5', plateType: '접시 5', sushiType: '장어' },
-    ];
+  const [search, setSearch] = useState("");
 
-    // 나의 초밥 리스트를 불러옴 (현재는 더미 데이터로 대체)
-    // const mySushi = useSelector((state) => state.sushi.mySushi);
+  const onChange = (e) => {
+    setSearch(e.target.value);
+  };
 
-    // 더미 데이터로 대체
-    const mySushi = dummySushiData;
+  const filteredSushi = dummySushiData.filter((sushi) =>
+    sushi.title.toLowerCase().includes(search.toLowerCase())
+  );
 
-    useEffect(() => {
-        // 실제 API 요청을 주석 처리하고, 대신 더미 데이터로 테스트
-        // dispatch(fetchMySushi());
-    }, [dispatch]);
+  return (
+    <div style={listContainerStyle}>
+      {/* '나의 고민' */}
+      <div style={outerBoxStyle}>
+        <div style={innerBoxStyle}>나의 고민</div>
+      </div>
 
-    return (
-        <div>
-            <h1>My Sushi List</h1>
-            <ul>
-                {mySushi.map((sushi) => (
-                    <SushiCard key={sushi.id} id={sushi.id} title={sushi.title} />
-                ))}
-            </ul>
-        </div>
-    );
+      {/* 검색창 */}
+      <div style={searchContainerStyle}>
+        <input
+          type="text"
+          value={search}
+          onChange={onChange}
+          placeholder="검색어를 입력하세요."
+          style={searchInputStyle}
+        />
+      </div>
+
+      {/* 초밥 리스트 */}
+      <ul style={listStyle}>
+        {filteredSushi.map((sushi) => (
+          <li key={sushi.id} style={listItemStyle}>
+            <SushiCard id={sushi.id} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+/* 카드 리스트 스타일 */
+const listContainerStyle = {
+  width: "100%", 
+  maxWidth: "600px", 
+  margin: "0 auto",            // 수평 중앙 정렬
+  padding: "20px",             
+  boxSizing: "border-box", 
+  backgroundColor: "#FDFCC8"
+};
+
+/* '나의 고민' 외부 박스 */
+const outerBoxStyle = {
+  width: "100%",
+  maxWidth: "250px", 
+  margin: "20px auto",           // 수평 중앙 정렬
+  border: "4px solid #8B6B3E", // 외곽 테두리 색상
+  borderRadius: "8px", 
+  backgroundColor: "#B2975C", 
+  padding: "6px", 
+  boxSizing: "border-box",
+
+  /* !!!!추가!!!! */
+  /* 모바일 화면 대응 */
+  "@media (max-width: 480px)": {
+    maxWidth: "70%", // 모바일에서 너비 조정
+  },
+};
+
+/* '나의 고민' 내부 박스 */
+const innerBoxStyle = {
+  width: "100%",
+  border: "2px solid #906C48", 
+  borderRadius: "4px", 
+  backgroundColor: "#B2975C", 
+  textAlign: "center",
+  color: "#5D4A37", 
+  fontSize: "1.5rem",        // font size: 32
+  fontWeight: "bold",
+  padding: "6px 0", 
+  boxSizing: "border-box",
+
+  /* !!!!추가!!!! */
+  /* 모바일 화면 대응 */
+  "@media (max-width: 480px)": {
+    fontSize: "1.3rem", 
+    padding: "5px 0",
+  },
+};
+
+/* 검색창 테두리 */
+const searchContainerStyle = {
+  display: "flex", 
+  justifyContent: "center",
+  marginBottom: "20px",
+};
+
+/* 검색 입력창 */
+const searchInputStyle = {
+  width: "100%", 
+  maxWidth: "330px",
+  height: "36px", 
+  fontSize: "1rem",     // font size 20
+  textAlign: "center",
+  padding: "0 10px", 
+  border: "2px solid #906C48", 
+  borderRadius: "6px", 
+  outline: "none",         // 입력창 마우스 시 외곽선 제거
+
+  /* !!!!추가!!!! */
+  /* 모바일 화면 대응 */
+  "@media (max-width: 480px)": {
+    width: "90%", 
+  },
+};
+
+/* 초밥 리스트 */
+const listStyle = {
+  listStyle: "none", 
+  padding: 0, 
+  margin: 0, 
+};
+
+const listItemStyle = {
+  
 };
 
 export default MySushiList;
