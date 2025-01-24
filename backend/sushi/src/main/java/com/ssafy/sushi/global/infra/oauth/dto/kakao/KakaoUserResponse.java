@@ -1,4 +1,4 @@
-package com.ssafy.sushi.global.infra.oauth.dto;
+package com.ssafy.sushi.global.infra.oauth.dto.kakao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -16,6 +16,8 @@ public class KakaoUserResponse {
     @Getter
     @NoArgsConstructor
     public static class KakaoAccount {
+
+        private String email;
         private Profile profile;
 
         @Getter

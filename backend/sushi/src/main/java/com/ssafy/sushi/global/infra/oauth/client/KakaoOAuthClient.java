@@ -3,8 +3,8 @@ package com.ssafy.sushi.global.infra.oauth.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.ssafy.sushi.global.infra.oauth.constants.KakaoOAuthConstants;
-import com.ssafy.sushi.global.infra.oauth.dto.KakaoTokenResponse;
-import com.ssafy.sushi.global.infra.oauth.dto.KakaoUserResponse;
+import com.ssafy.sushi.global.infra.oauth.dto.kakao.KakaoTokenResponse;
+import com.ssafy.sushi.global.infra.oauth.dto.kakao.KakaoUserResponse;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
