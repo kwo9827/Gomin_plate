@@ -5,8 +5,11 @@ import api from '../../api/axios';
 export const fetchRailSushi = createAsyncThunk(
     'sushi/fetchRail',
     async (size = 15) => {
-        const response = await api.get(`/sushi/rail?size=${size}`);
-        return response.data;
+        // API 요청 대신 더미 데이터를 사용하도록 변경
+        const dummyData = generateDummyData();
+        return dummyData;
+        // const response = await api.get(`/sushi/rail?size=${size}`);
+        // return response.data;
     }
 );
 
@@ -87,3 +90,20 @@ const sushiSlice = createSlice({
 
 export const { clearCurrentSushi } = sushiSlice.actions;
 export default sushiSlice.reducer;
+
+/* 더미 초밥 데이터 생성 함수 */
+const generateDummyData = () => {
+    return {
+        success: true,
+        data: {
+            sushi: Array.from({ length: 15 }).map(() => ({
+                sushiId: Math.floor(Math.random() * 100), // 임의의 sushiId
+                category: "회전초밥", // 카테고리
+                sushiType: `초밥 타입 ${Math.floor(Math.random() * 10)}`, // 임의의 초밥 타입
+                remainingAnswers: Math.floor(Math.random() * 10), // 임의의 남은 응답 수
+                expirationTime: new Date(Date.now() + Math.floor(Math.random() * 10000)).toISOString() // 만료 시간 (현재 시간 기준)
+            }))
+        },
+        error: null
+    };
+};
