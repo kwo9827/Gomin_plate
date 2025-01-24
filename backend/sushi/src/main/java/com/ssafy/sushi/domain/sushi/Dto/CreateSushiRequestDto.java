@@ -3,6 +3,7 @@ package com.ssafy.sushi.domain.sushi.Dto;
 import com.ssafy.sushi.domain.sushi.Entity.Category;
 import com.ssafy.sushi.domain.sushi.Entity.Sushi;
 import com.ssafy.sushi.domain.sushi.Entity.SushiType;
+import com.ssafy.sushi.domain.user.Entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -30,10 +31,10 @@ public class CreateSushiRequestDto {
     @NotBlank
     private String sushiType;
 
-    public Sushi toEntity(CreateSushiRequestDto createSushiRequestDto, Long userId, Category category, SushiType sushiType) {
+    public Sushi toEntity(CreateSushiRequestDto createSushiRequestDto, User user, Category category, SushiType sushiType) {
 
         Sushi sushi = Sushi.builder()
-                .userId(userId)
+                .user(user)
                 .category(category)
                 .sushiType(sushiType)
                 .title(createSushiRequestDto.getTitle())

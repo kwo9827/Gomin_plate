@@ -15,9 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByProviderAndProviderId(Provider provider, String providerId);
 
     @NotNull
-    @Override
     @Query("SELECT u FROM User u WHERE u.id = :id")
-    Optional<User> findById(@NotNull @Param("id") Long id);
+    Optional<User> findById(@NotNull @Param("id") Integer id);
 
     // 삭제된 사용자를 포함하여 조회
     @Query("SELECT u FROM User u WHERE u.provider = :provider AND u.providerId = :providerId")

@@ -50,8 +50,8 @@ public class JwtTokenProvider {
     }
 
     // 토큰에서 회원 정보 추출
-    public Long getUserId(String token) {
-        return Long.parseLong(extractAllClaims(token).getSubject());
+    public Integer getUserId(String token) {
+        return Integer.parseInt(extractAllClaims(token).getSubject());
     }
 
     // Claims 추출
@@ -75,7 +75,7 @@ public class JwtTokenProvider {
 
     // Spring Security 인증 객체 생성
     public Authentication getAuthentication(String token) {
-        Long userId = getUserId(token);
+        Integer userId = getUserId(token);
 
         UserPrincipal userPrincipal = UserPrincipal.builder()
                 .id(userId)

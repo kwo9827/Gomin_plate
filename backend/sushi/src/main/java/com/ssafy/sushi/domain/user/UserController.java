@@ -19,7 +19,7 @@ public class UserController {
 
     @GetMapping("/user/me")
     public ResponseEntity<ApiResponse<UserInfoResponse>> createUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(userService.getUserInfo(userId));
     }
