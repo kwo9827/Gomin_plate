@@ -26,6 +26,6 @@ public class ScheduleService {
             log.info("초밥이 마감 처리되었습니다: Id = {}", sushi.getId());
 
             excutorService.shutdown();
-        }, 60, TimeUnit.MINUTES);
+        }, 24, TimeUnit.HOURS);
     }
 }
