@@ -16,7 +16,7 @@ const Navbar = () => {
                 <Link to="/" style={linkStyle}>
                     <button style={buttonStyle}>버튼 1</button>
                 </Link>
-                <Link to="/" style={linkStyle}>
+                <Link to="/MySushiList" style={linkStyle}>
                     <button style={buttonStyle}>버튼 2</button>
                 </Link>
                 <Link to="/" style={linkStyle}>
