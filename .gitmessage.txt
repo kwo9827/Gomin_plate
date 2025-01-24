@@ -1,1 +1,1 @@
-type: title [jira 이슈 번호]
+type: title [S12P11B109-번호]
