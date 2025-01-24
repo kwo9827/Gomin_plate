@@ -22,6 +22,7 @@ const Home = () => {
     const openNotification = () => setIsNotificationOpen(true); // NotificationModal 열기
     const closeNotification = () => setIsNotificationOpen(false); // NotificationModal 닫기
 
+
     // 무작위 초밥 가져오기
     useEffect(() => {
         dispatch(fetchRailSushi(sushiSize)); // 15개 초밥을 가져옴
@@ -45,7 +46,8 @@ const Home = () => {
             <NotificationModal isOpen={isNotificationOpen} onClose={closeNotification} />
 
             {/* 레일 구현 */}
-            <Rail sushiData={railSushi} /> {/* Rail 컴포넌트에 sushiData를 전달 */}
+            <Rail sushiData={railSushi} /> {/* Rail 컴포넌트에 sushiData를 전달 */}\
+
         </div>
     );
 };
