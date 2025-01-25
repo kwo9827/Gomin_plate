@@ -4,6 +4,7 @@ import com.ssafy.sushi.domain.sushi.Dto.response.MySushiListResponse;
 import com.ssafy.sushi.domain.sushi.Service.SushiService;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.security.UserPrincipal;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ class SushiControllerTest {
     private JpaMetamodelMappingContext jpaMetamodelMappingContext;
 
     @Test
+    @DisplayName("내 초밥 목록 조회")
     void getMySushiList() throws Exception {
         // given
 
@@ -63,10 +66,14 @@ class SushiControllerTest {
                 .getMySushiList(any(), any(Pageable.class));
 
         // when
-        mockMvc.perform(get("/api/sushi/my")
-                        .with(SecurityMockMvcRequestPostProcessors.authentication(authentication))
-                        .param("page", "0")
-                        .param("size", "10"))
+        ResultActions result = mockMvc.perform(get("/api/sushi/my")
+                .with(SecurityMockMvcRequestPostProcessors.authentication(authentication))
+                .param("page", "0")
+                .param("size", "10"));
+
+
+        // then
+        result
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.content").exists())
                 .andExpect(jsonPath("$.data.content").isArray())
