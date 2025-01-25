@@ -1,6 +1,7 @@
 package com.ssafy.sushi.domain.sushi.Service;
 
 import com.ssafy.sushi.domain.sushi.Dto.CreateSushiRequestDto;
+import com.ssafy.sushi.domain.sushi.Dto.response.SushiOnRail;
 import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailItem;
 import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailResponse;
 import com.ssafy.sushi.domain.sushi.Entity.Category;
@@ -60,10 +61,10 @@ public class SushiService {
     @Transactional
     public Sushi saveSushi(CreateSushiRequestDto createSushiRequestDto, Integer userId) {
 
-        Category category = categoryRepository.findByName(createSushiRequestDto.getCategory()).orElseThrow(() ->
+        Category category = categoryRepository.findById(createSushiRequestDto.getCategory()).orElseThrow(() ->
                 new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
-        SushiType sushiType = sushiTypeRepository.findByName(createSushiRequestDto.getSushiType()).orElseThrow(() ->
+        SushiType sushiType = sushiTypeRepository.findById(createSushiRequestDto.getSushiType()).orElseThrow(() ->
                 new CustomException(ErrorCode.SUSHITYPE_NOT_FOUND));
 
         User user = userRepository.findById(userId).orElseThrow(() ->
@@ -77,25 +78,22 @@ public class SushiService {
     }
 
     /**
-     * 전체 초밥 조회
-     * 일단 만들었음
+     * 레일 위의 초밥 조회
      */
-    public List<Sushi> findAllSushi() {
-        return sushiRepository.findAll();
-    }
+    public SushiOnRail getRailSushi(Integer sushiId) {
+        // 특정 초밥 조회
+        Sushi sushi = sushiRepository.findByid(sushiId).orElseThrow(() ->
+                new CustomException(ErrorCode.SUSHI_NOT_FOUND));
 
-    /**
-     * 유저가 등록한 초밥 목록 조회
-     */
-    public List<Sushi> findSushiByUserId(Integer userId) {
-        return sushiRepository.findByUserId(userId);
+        return SushiOnRail.builder()
+                .sushiId(sushi.getId())
+                .title(sushi.getTitle())
+                .content(sushi.getContent())
+                .category(sushi.getCategory().getId())
+                .sushiType(sushi.getSushiType().getId())
+                .maxAnswers(sushi.getMaxAnswers())
+                .remainingAnswers(sushi.getRemainingAnswers())
+                .expirationTime(sushi.getExpirationTime())
+                .build();
     }
-
-    /**
-     * 특정 초밥 조회
-     */
-    public Sushi findOne(Integer sushiId) {
-        return sushiRepository.findByid(sushiId);
-    }
-
 }

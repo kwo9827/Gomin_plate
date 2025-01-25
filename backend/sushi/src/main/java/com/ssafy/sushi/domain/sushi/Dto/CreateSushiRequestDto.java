@@ -25,11 +25,13 @@ public class CreateSushiRequestDto {
     @Min(1) @Max(10)
     private Integer maxAnswers;
 
-    @NotBlank
-    private String category;
+    @NotNull
+    @Min(1)
+    private Integer category;
 
-    @NotBlank
-    private String sushiType;
+    @NotNull
+    @Min(1)
+    private Integer sushiType;
 
     public Sushi toEntity(CreateSushiRequestDto createSushiRequestDto, User user, Category category, SushiType sushiType) {
 

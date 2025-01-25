@@ -1,6 +1,7 @@
 package com.ssafy.sushi.domain.sushi;
 
 import com.ssafy.sushi.domain.sushi.Dto.CreateSushiRequestDto;
+import com.ssafy.sushi.domain.sushi.Dto.response.SushiOnRail;
 import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailResponse;
 import com.ssafy.sushi.domain.sushi.Entity.Sushi;
 import com.ssafy.sushi.domain.sushi.Service.SushiService;
@@ -34,5 +35,10 @@ public class SushiController {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(sushiService.getRandomSushi(userId, size));
+    }
+
+    @GetMapping("/rail/{sushiId}")
+    public ResponseEntity<ApiResponse<SushiOnRail>> getRailSushi(@PathVariable("sushiId") Integer sushiId){
+        return ApiResponse.success(sushiService.getRailSushi(sushiId));
     }
 }
