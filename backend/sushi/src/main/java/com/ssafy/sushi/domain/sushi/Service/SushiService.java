@@ -1,6 +1,7 @@
 package com.ssafy.sushi.domain.sushi.Service;
 
 import com.ssafy.sushi.domain.sushi.Dto.CreateSushiRequestDto;
+import com.ssafy.sushi.domain.sushi.Dto.response.MySushiListResponse;
 import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailItem;
 import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailResponse;
 import com.ssafy.sushi.domain.sushi.Entity.Category;
@@ -11,9 +12,12 @@ import com.ssafy.sushi.domain.sushi.Repository.SushiRepository;
 import com.ssafy.sushi.domain.sushi.Repository.SushiTypeRepository;
 import com.ssafy.sushi.domain.user.Entity.User;
 import com.ssafy.sushi.domain.user.UserRepository;
+import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +58,13 @@ public class SushiService {
                 .build();
     }
 
+    public CustomPage<MySushiListResponse> getMySushiList(Integer userId, Pageable pageable) {
+
+        Page<Sushi> sushiList = sushiRepository.findSushiByUserId(userId, pageable);
+
+        return new CustomPage<>(sushiList.map(MySushiListResponse::of));
+    }
+
     /**
      * 초밥 등록
      */
@@ -76,20 +87,6 @@ public class SushiService {
         return sushiRepository.save(sushi);
     }
 
-    /**
-     * 전체 초밥 조회
-     * 일단 만들었음
-     */
-    public List<Sushi> findAllSushi() {
-        return sushiRepository.findAll();
-    }
-
-    /**
-     * 유저가 등록한 초밥 목록 조회
-     */
-    public List<Sushi> findSushiByUserId(Integer userId) {
-        return sushiRepository.findByUserId(userId);
-    }
 
     /**
      * 특정 초밥 조회
@@ -97,5 +94,4 @@ public class SushiService {
     public Sushi findOne(Integer sushiId) {
         return sushiRepository.findByid(sushiId);
     }
-
 }

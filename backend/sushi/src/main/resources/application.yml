@@ -19,5 +19,10 @@ spring:
     init:
       mode: always  # 모든 데이터베이스로 초기화 대상 변경
 
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true  # 페이징 0부터가 아닌 1부터
+
 logging.level:
   org.hibernate.SQL: debug

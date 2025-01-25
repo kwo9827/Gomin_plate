@@ -1,13 +1,18 @@
 package com.ssafy.sushi.domain.sushi;
 
 import com.ssafy.sushi.domain.sushi.Dto.CreateSushiRequestDto;
+import com.ssafy.sushi.domain.sushi.Dto.response.MySushiListResponse;
 import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailResponse;
 import com.ssafy.sushi.domain.sushi.Entity.Sushi;
 import com.ssafy.sushi.domain.sushi.Service.SushiService;
+import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.common.response.ApiResponse;
 import com.ssafy.sushi.global.common.util.AuthenticationUtil;
 import com.ssafy.sushi.global.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -34,5 +39,14 @@ public class SushiController {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(sushiService.getRandomSushi(userId, size));
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<CustomPage<MySushiListResponse>>> getMySushiList(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+
+        return ApiResponse.success(sushiService.getMySushiList(userId, pageable));
     }
 }
