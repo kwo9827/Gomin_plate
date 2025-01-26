@@ -51,4 +51,9 @@ public class Sushi extends BaseEntity {
         this.isClosed = true;
     }
 
+    // 답변 가능한 인원수 -1
+    public void reduceRemainingAnswers(){
+        this.remainingAnswers -= 1;
+    }
+
 }

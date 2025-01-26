@@ -1,6 +1,7 @@
 package com.ssafy.sushi.domain.sushi;
 
-import com.ssafy.sushi.domain.sushi.Dto.CreateSushiRequestDto;
+import com.ssafy.sushi.domain.sushi.Dto.request.CreateSushiRequest;
+import com.ssafy.sushi.domain.sushi.Dto.response.SushiOnRailResponse;
 import com.ssafy.sushi.domain.sushi.Dto.response.MySushiListResponse;
 import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailResponse;
 import com.ssafy.sushi.domain.sushi.Entity.Sushi;
@@ -26,7 +27,7 @@ public class SushiController {
     private final SushiService sushiService;
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<String>> createSushi(@RequestBody @Validated CreateSushiRequestDto request, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<ApiResponse<String>> createSushi(@RequestBody @Validated CreateSushiRequest request, @AuthenticationPrincipal UserPrincipal userPrincipal) {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
         Sushi sushi = sushiService.saveSushi(request, userId);
         return ApiResponse.success("초밥 생성 성공");
@@ -39,6 +40,14 @@ public class SushiController {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(sushiService.getRandomSushi(userId, size));
+    }
+
+    @GetMapping("/rail/{sushiId}")
+    public ResponseEntity<ApiResponse<SushiOnRailResponse>> getRailSushi(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable("sushiId") Integer sushiId){
+        Integer userId = userPrincipal.getId();
+        return ApiResponse.success(sushiService.getRailSushi(userId, sushiId));
     }
 
     @GetMapping("/my")

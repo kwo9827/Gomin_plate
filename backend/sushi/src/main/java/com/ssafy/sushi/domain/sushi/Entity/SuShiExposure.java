@@ -2,11 +2,11 @@ package com.ssafy.sushi.domain.sushi.Entity;
 
 import com.ssafy.sushi.domain.user.Entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+
+import static java.time.LocalDateTime.now;
 
 @Entity
 @Table(name = "sushi_exposure",
@@ -15,7 +15,9 @@ import java.time.LocalDateTime;
                 name = "sushi_exposure_userId_sushiId_unique",
                 columnNames = {"user_id", "sushi_id"})})
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SuShiExposure {
 
     @Id
@@ -31,4 +33,9 @@ public class SuShiExposure {
     private Sushi sushi;
 
     private LocalDateTime timestamp;
+
+    public void updateTimestamp(){
+        this.timestamp = now();
+    }
+
 }
