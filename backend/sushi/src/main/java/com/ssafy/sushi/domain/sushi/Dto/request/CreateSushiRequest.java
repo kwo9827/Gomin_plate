@@ -35,7 +35,9 @@ public class CreateSushiRequest {
 
     public Sushi toEntity(CreateSushiRequest CreateSushiRequest, User user, Category category, SushiType sushiType) {
 
-        Sushi sushi = Sushi.builder()
+        // 유통기한은 24시간 후
+
+        return Sushi.builder()
                 .user(user)
                 .category(category)
                 .sushiType(sushiType)
@@ -45,8 +47,6 @@ public class CreateSushiRequest {
                 .maxAnswers(CreateSushiRequest.getMaxAnswers())
                 .remainingAnswers(CreateSushiRequest.getMaxAnswers())
                 .build();
-
-        return sushi;
     }
 
 }

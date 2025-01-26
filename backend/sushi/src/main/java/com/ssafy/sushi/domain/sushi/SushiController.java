@@ -1,10 +1,10 @@
 package com.ssafy.sushi.domain.sushi;
 
 import com.ssafy.sushi.domain.sushi.Dto.request.CreateSushiRequest;
-import com.ssafy.sushi.domain.sushi.Dto.response.SushiOnRailResponse;
+import com.ssafy.sushi.domain.sushi.Dto.response.CreateSushiResponse;
 import com.ssafy.sushi.domain.sushi.Dto.response.MySushiListResponse;
+import com.ssafy.sushi.domain.sushi.Dto.response.SushiOnRailResponse;
 import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailResponse;
-import com.ssafy.sushi.domain.sushi.Entity.Sushi;
 import com.ssafy.sushi.domain.sushi.Service.SushiService;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.common.response.ApiResponse;
@@ -27,10 +27,10 @@ public class SushiController {
     private final SushiService sushiService;
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<String>> createSushi(@RequestBody @Validated CreateSushiRequest request, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<ApiResponse<CreateSushiResponse>> createSushi(@RequestBody @Validated CreateSushiRequest request, @AuthenticationPrincipal UserPrincipal userPrincipal) {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
-        Sushi sushi = sushiService.saveSushi(request, userId);
-        return ApiResponse.success("초밥 생성 성공");
+
+        return ApiResponse.success(sushiService.saveSushi(request, userId));
     }
 
     @GetMapping("/rail")

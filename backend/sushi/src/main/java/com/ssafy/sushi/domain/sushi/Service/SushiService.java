@@ -1,10 +1,7 @@
 package com.ssafy.sushi.domain.sushi.Service;
 
 import com.ssafy.sushi.domain.sushi.Dto.request.CreateSushiRequest;
-import com.ssafy.sushi.domain.sushi.Dto.response.SushiOnRailResponse;
-import com.ssafy.sushi.domain.sushi.Dto.response.MySushiListResponse;
-import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailItem;
-import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailResponse;
+import com.ssafy.sushi.domain.sushi.Dto.response.*;
 import com.ssafy.sushi.domain.sushi.Entity.Category;
 import com.ssafy.sushi.domain.sushi.Entity.SuShiExposure;
 import com.ssafy.sushi.domain.sushi.Entity.Sushi;
@@ -75,7 +72,7 @@ public class SushiService {
      * 초밥 등록
      */
     @Transactional
-    public Sushi saveSushi(CreateSushiRequest request, Integer userId) {
+    public CreateSushiResponse saveSushi(CreateSushiRequest request, Integer userId) {
 
         Category category = categoryRepository.findById(request.getCategory()).orElseThrow(() ->
                 new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
@@ -87,10 +84,11 @@ public class SushiService {
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Sushi sushi = request.toEntity(request, user, category, sushiType);
+        CreateSushiResponse response = CreateSushiResponse.of(sushiRepository.save(sushi));
 
         scheduleService.sushiEnd(sushi);
 
-        return sushiRepository.save(sushi);
+        return response;
     }
 
     /**
