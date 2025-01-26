@@ -85,6 +85,7 @@ public class SushiService {
     /**
      * 레일 위의 초밥 조회
      */
+    @Transactional
     public SushiOnRailResponse getRailSushi(Integer userId, Integer sushiId) {
         //초밥 조회
         Sushi sushi = getSushiById(sushiId);
@@ -93,17 +94,16 @@ public class SushiService {
         return SushiOnRailResponse.of(sushi);
     }
 
-    private void updateSushiExposure(Integer userId, Sushi sushi) {
+    @Transactional
+    public void updateSushiExposure(Integer userId, Sushi sushi) {
         // 사용자와 초밥에 대한 exposure 조회
         SuShiExposure exposure = sushiExposureRepository.findByUserIdAndSushiId(userId, sushi.getId());
 
         // 이미 존재하면 timestamp만 갱신
         if (exposure != null) {
             exposure.updateTimestamp();
-            sushiExposureRepository.flush();
         } else {
             // 존재하지 않으면 새로운 exposure 생성
-            // user를 다시 찾아와야하는게... 이게 맞나.......
             User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
             exposure = SuShiExposure.builder()
