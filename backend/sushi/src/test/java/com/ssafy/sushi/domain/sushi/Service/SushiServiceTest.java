@@ -1,6 +1,6 @@
 package com.ssafy.sushi.domain.sushi.Service;
 
-import com.ssafy.sushi.domain.answer.AnswerRepository;
+import com.ssafy.sushi.domain.answer.Repository.AnswerRepository;
 import com.ssafy.sushi.domain.answer.Entity.Answer;
 import com.ssafy.sushi.domain.sushi.Dto.response.MySushiDetailResponse;
 import com.ssafy.sushi.domain.sushi.Entity.Category;
