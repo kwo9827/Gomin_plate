@@ -3,14 +3,16 @@ package com.ssafy.sushi.domain.answer.Entity;
 import com.ssafy.sushi.domain.sushi.Entity.Sushi;
 import com.ssafy.sushi.domain.user.Entity.User;
 import com.ssafy.sushi.global.common.Entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "answer")
+@Table(
+        name = "answer",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "answer_userId_sushiId_unique",
+                        columnNames = {"user_id", "sushi_id"})})
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

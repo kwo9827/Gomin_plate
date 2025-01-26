@@ -1,5 +1,7 @@
 package com.ssafy.sushi.domain.sushi.Service;
 
+import com.ssafy.sushi.domain.answer.AnswerRepository;
+import com.ssafy.sushi.domain.answer.Entity.Answer;
 import com.ssafy.sushi.domain.sushi.Dto.request.CreateSushiRequest;
 import com.ssafy.sushi.domain.sushi.Dto.response.*;
 import com.ssafy.sushi.domain.sushi.Entity.Category;
@@ -37,6 +39,7 @@ public class SushiService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final SushiExposureRepository sushiExposureRepository;
+    private final AnswerRepository answerRepository;
 
     private final ScheduleService scheduleService;
 
@@ -66,6 +69,18 @@ public class SushiService {
         Page<Sushi> sushiList = sushiRepository.findSushiByUserId(userId, pageable);
 
         return new CustomPage<>(sushiList.map(MySushiListResponse::of));
+    }
+
+    public MySushiDetailResponse getMySushiDetail(Integer userId, Integer sushiId) {
+        Sushi sushi = getSushiById(sushiId);
+
+        if (!sushi.getUser().getId().equals(userId)) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_SUSHI_ACCESS);
+        }
+
+        List<Answer> answerList = answerRepository.findBySushiId(sushiId);
+
+        return MySushiDetailResponse.of(sushi, answerList);
     }
 
     /**
@@ -125,7 +140,7 @@ public class SushiService {
     }
 
     private Sushi getSushiById(Integer sushiId) {
-        return sushiRepository.findByid(sushiId).orElseThrow(() ->
+        return sushiRepository.findById(sushiId).orElseThrow(() ->
                 new CustomException(ErrorCode.SUSHI_NOT_FOUND));
     }
 }

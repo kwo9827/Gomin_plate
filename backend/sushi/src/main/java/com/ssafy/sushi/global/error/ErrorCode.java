@@ -23,7 +23,8 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(404, "S001", "존재하지 않는 카테고리입니다."),
     SUSHITYPE_NOT_FOUND(404, "S002", "존재하지 않는 초밥유형입니다."),
     SUSHI_NOT_FOUND(404, "S003", "존재하지 않는 초밥입니다."),
-    SUSHI_IS_CLOSED(500, "S004", "이미 마감된 초밥입니다.");
+    SUSHI_IS_CLOSED(500, "S004", "이미 마감된 초밥입니다."),
+    UNAUTHORIZED_SUSHI_ACCESS(403, "S005", "해당 초밥에 대한 권한이 없습니다.");
 
     private final int status;
     private final String code;
