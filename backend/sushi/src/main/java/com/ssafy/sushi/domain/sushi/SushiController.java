@@ -1,15 +1,13 @@
 package com.ssafy.sushi.domain.sushi;
 
 import com.ssafy.sushi.domain.sushi.Dto.request.CreateSushiRequest;
-import com.ssafy.sushi.domain.sushi.Dto.response.CreateSushiResponse;
-import com.ssafy.sushi.domain.sushi.Dto.response.MySushiListResponse;
-import com.ssafy.sushi.domain.sushi.Dto.response.SushiOnRailResponse;
-import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailResponse;
+import com.ssafy.sushi.domain.sushi.Dto.response.*;
 import com.ssafy.sushi.domain.sushi.Service.SushiService;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.common.response.ApiResponse;
 import com.ssafy.sushi.global.common.util.AuthenticationUtil;
 import com.ssafy.sushi.global.security.UserPrincipal;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -57,5 +55,14 @@ public class SushiController {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(sushiService.getMySushiList(userId, pageable));
+    }
+
+    @GetMapping("/my/{sushiId}")
+    public ResponseEntity<ApiResponse<MySushiDetailResponse>> getMySushiDetail(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable("sushiId") @Positive Integer sushiId) {
+        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+
+        return ApiResponse.success(sushiService.getMySushiDetail(userId, sushiId));
     }
 }
