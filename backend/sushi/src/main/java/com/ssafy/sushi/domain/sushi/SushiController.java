@@ -1,14 +1,19 @@
 package com.ssafy.sushi.domain.sushi;
 
 import com.ssafy.sushi.domain.sushi.Dto.request.CreateSushiRequest;
+import com.ssafy.sushi.domain.sushi.Dto.response.CreateSushiResponse;
+import com.ssafy.sushi.domain.sushi.Dto.response.MySushiListResponse;
 import com.ssafy.sushi.domain.sushi.Dto.response.SushiOnRailResponse;
 import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailResponse;
-import com.ssafy.sushi.domain.sushi.Entity.Sushi;
 import com.ssafy.sushi.domain.sushi.Service.SushiService;
+import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.common.response.ApiResponse;
 import com.ssafy.sushi.global.common.util.AuthenticationUtil;
 import com.ssafy.sushi.global.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -22,10 +27,10 @@ public class SushiController {
     private final SushiService sushiService;
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<String>> createSushi(@RequestBody @Validated CreateSushiRequest request, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<ApiResponse<CreateSushiResponse>> createSushi(@RequestBody @Validated CreateSushiRequest request, @AuthenticationPrincipal UserPrincipal userPrincipal) {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
-        Sushi sushi = sushiService.saveSushi(request, userId);
-        return ApiResponse.success("초밥 생성 성공");
+
+        return ApiResponse.success(sushiService.saveSushi(request, userId));
     }
 
     @GetMapping("/rail")
@@ -43,5 +48,14 @@ public class SushiController {
             @PathVariable("sushiId") Integer sushiId){
         Integer userId = userPrincipal.getId();
         return ApiResponse.success(sushiService.getRailSushi(userId, sushiId));
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<CustomPage<MySushiListResponse>>> getMySushiList(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+
+        return ApiResponse.success(sushiService.getMySushiList(userId, pageable));
     }
 }

@@ -1,9 +1,7 @@
 package com.ssafy.sushi.domain.sushi.Service;
 
 import com.ssafy.sushi.domain.sushi.Dto.request.CreateSushiRequest;
-import com.ssafy.sushi.domain.sushi.Dto.response.SushiOnRailResponse;
-import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailItem;
-import com.ssafy.sushi.domain.sushi.Dto.response.SushiRailResponse;
+import com.ssafy.sushi.domain.sushi.Dto.response.*;
 import com.ssafy.sushi.domain.sushi.Entity.Category;
 import com.ssafy.sushi.domain.sushi.Entity.SuShiExposure;
 import com.ssafy.sushi.domain.sushi.Entity.Sushi;
@@ -14,9 +12,12 @@ import com.ssafy.sushi.domain.sushi.Repository.SushiRepository;
 import com.ssafy.sushi.domain.sushi.Repository.SushiTypeRepository;
 import com.ssafy.sushi.domain.user.Entity.User;
 import com.ssafy.sushi.domain.user.UserRepository;
+import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,11 +61,18 @@ public class SushiService {
                 .build();
     }
 
+    public CustomPage<MySushiListResponse> getMySushiList(Integer userId, Pageable pageable) {
+
+        Page<Sushi> sushiList = sushiRepository.findSushiByUserId(userId, pageable);
+
+        return new CustomPage<>(sushiList.map(MySushiListResponse::of));
+    }
+
     /**
      * 초밥 등록
      */
     @Transactional
-    public Sushi saveSushi(CreateSushiRequest request, Integer userId) {
+    public CreateSushiResponse saveSushi(CreateSushiRequest request, Integer userId) {
 
         Category category = categoryRepository.findById(request.getCategory()).orElseThrow(() ->
                 new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
@@ -76,10 +84,11 @@ public class SushiService {
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Sushi sushi = request.toEntity(request, user, category, sushiType);
+        CreateSushiResponse response = CreateSushiResponse.of(sushiRepository.save(sushi));
 
         scheduleService.sushiEnd(sushi);
 
-        return sushiRepository.save(sushi);
+        return response;
     }
 
     /**
