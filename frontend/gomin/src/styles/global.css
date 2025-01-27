@@ -1,12 +1,19 @@
-@tailwind base;
+/* tailwindCSS 관련 오류있어서 일단 주석석처리햇슴 */
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+@import "./font.css";
 
-@layer base {
+/* @layer base {
   body {
     @apply bg-background text-gray-900 font-sans;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading;
   }
 }
@@ -24,5 +31,8 @@
     @apply px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 
     focus:ring-primary focus:border-transparent outline-none;
   }
-}
+} */
 
+body {
+  font-family: "Ownglyph", Ownglyph;
+}
