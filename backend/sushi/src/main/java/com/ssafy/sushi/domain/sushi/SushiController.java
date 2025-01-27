@@ -81,7 +81,6 @@ public class SushiController {
             @PathVariable("sushiId") Integer sushiId){
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
-
         return ApiResponse.success(answerService.saveAnswer(request, userId, sushiId), HttpStatus.CREATED);
     }
 }

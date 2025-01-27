@@ -39,8 +39,7 @@ public class ScheduleService {
                 notificationService.sendNotification(
                         freshSushi.getUser(),
                         NotificationType.EXP,
-                        "초밥의 유통기한이 마감되었습니다.",
-                        "api/sushi/my/" + freshSushi.getId()
+                        freshSushi.getId()
                 );
 
                 log.info("초밥이 마감 처리되었습니다: Id = {}", freshSushi.getId());

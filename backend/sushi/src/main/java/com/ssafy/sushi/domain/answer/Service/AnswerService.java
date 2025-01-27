@@ -43,6 +43,11 @@ public class AnswerService {
             throw new CustomException(ErrorCode.ANSWER_IS_FULL);
         }
 
+        // 유통기한이 마감되었다면
+        if(sushi.getIsClosed()){
+            throw new CustomException(ErrorCode.SUSHI_IS_CLOSED);
+        }
+
         // 답변 생성
         Answer answer = Answer.builder()
                 .user(user)
@@ -62,8 +67,7 @@ public class AnswerService {
             notificationService.sendNotification(
                     sushi.getUser(),
                     NotificationType.ANS_END,
-                    "답변 마감!! 지금 가서 확인해보세요!",
-                    "api/sushi/my/" + sushi.getId());
+                    sushi.getId());
         }
 
         return response;
