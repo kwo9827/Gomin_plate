@@ -2,9 +2,10 @@ package com.ssafy.sushi.domain.answer.Service;
 
 import com.ssafy.sushi.domain.answer.AnswerRepository;
 import com.ssafy.sushi.domain.answer.Dto.request.CreateAnswerRequest;
+import com.ssafy.sushi.domain.answer.Dto.response.CreateAnswerResponse;
 import com.ssafy.sushi.domain.answer.Entity.Answer;
-import com.ssafy.sushi.domain.notification.Entity.Notification;
-import com.ssafy.sushi.domain.notification.Repository.NotificationRepository;
+import com.ssafy.sushi.domain.notification.Service.NotificationService;
+import com.ssafy.sushi.domain.notification.enums.NotificationType;
 import com.ssafy.sushi.domain.sushi.Entity.Sushi;
 import com.ssafy.sushi.domain.sushi.Repository.SushiRepository;
 import com.ssafy.sushi.domain.user.Entity.User;
@@ -23,13 +24,13 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final UserRepository userRepository;
     private final SushiRepository sushiRepository;
-    private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
 
     /**
      * 답변 등록
      */
     @Transactional
-    public void saveAnswer(CreateAnswerRequest request, Integer userId, Integer sushiId) {
+    public CreateAnswerResponse saveAnswer(CreateAnswerRequest request, Integer userId, Integer sushiId) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -48,7 +49,7 @@ public class AnswerService {
                 .sushi(sushi)
                 .content(request.getContent())
                 .build();
-        answerRepository.save(answer);
+        CreateAnswerResponse response = CreateAnswerResponse.of(answerRepository.save(answer));
 
         // 답변 가능 인원 수 -1
         sushi.reduceRemainingAnswers();
@@ -58,13 +59,13 @@ public class AnswerService {
             // 마감처리
             sushi.closeSushi();
             //== 알림 날리기==//
-            Notification notification = Notification.builder()
-                    .user(sushi.getUser())
-                    .notificationType('2')
-                    .message("답변 마감!! 지금 가서 확인해보세요!")
-                    .redirectUrl("api/sushi/my/" + sushi.getId())
-                    .build();
-            notificationRepository.save(notification);
+            notificationService.sendNotification(
+                    sushi.getUser(),
+                    NotificationType.ANS_END,
+                    "답변 마감!! 지금 가서 확인해보세요!",
+                    "api/sushi/my/" + sushi.getId());
         }
+
+        return response;
     }
 }

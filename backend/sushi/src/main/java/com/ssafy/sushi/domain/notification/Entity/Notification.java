@@ -1,5 +1,7 @@
 package com.ssafy.sushi.domain.notification.Entity;
 
+import com.ssafy.sushi.domain.notification.enums.NotificationType;
+import com.ssafy.sushi.domain.notification.enums.NotificationTypeConverter;
 import com.ssafy.sushi.domain.user.Entity.User;
 import com.ssafy.sushi.global.common.Entity.BaseEntity;
 import jakarta.persistence.*;
@@ -17,8 +19,8 @@ public class Notification extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "notification_type",nullable = false)
-    private Character notificationType; // [ 1: 유통기한마감, 2: 답변마감, 3: 답변 좋아요 ]
+    @Convert(converter = NotificationTypeConverter.class)
+    private NotificationType notificationType;
 
     @Column(nullable = false)
     private String message;

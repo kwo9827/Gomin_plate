@@ -1,6 +1,7 @@
 package com.ssafy.sushi.domain.sushi;
 
 import com.ssafy.sushi.domain.answer.Dto.request.CreateAnswerRequest;
+import com.ssafy.sushi.domain.answer.Dto.response.CreateAnswerResponse;
 import com.ssafy.sushi.domain.answer.Service.AnswerService;
 import com.ssafy.sushi.domain.sushi.Dto.request.CreateSushiRequest;
 import com.ssafy.sushi.domain.sushi.Dto.response.*;
@@ -74,13 +75,13 @@ public class SushiController {
     }
 
     @PostMapping("/rail/{sushiId}/answer")
-    public ResponseEntity<ApiResponse<Void>> createAnswer(
+    public ResponseEntity<ApiResponse<CreateAnswerResponse>> createAnswer(
             @RequestBody @Validated CreateAnswerRequest request,
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("sushiId") Integer sushiId){
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
-        answerService.saveAnswer(request, userId, sushiId);
 
-        return ApiResponse.success(HttpStatus.CREATED);
+
+        return ApiResponse.success(answerService.saveAnswer(request, userId, sushiId), HttpStatus.CREATED);
     }
 }

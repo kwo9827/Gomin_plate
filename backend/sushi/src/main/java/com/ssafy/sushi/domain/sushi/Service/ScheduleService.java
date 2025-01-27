@@ -1,7 +1,7 @@
 package com.ssafy.sushi.domain.sushi.Service;
 
-import com.ssafy.sushi.domain.notification.Entity.Notification;
-import com.ssafy.sushi.domain.notification.Repository.NotificationRepository;
+import com.ssafy.sushi.domain.notification.Service.NotificationService;
+import com.ssafy.sushi.domain.notification.enums.NotificationType;
 import com.ssafy.sushi.domain.sushi.Entity.Sushi;
 import com.ssafy.sushi.domain.sushi.Repository.SushiRepository;
 import com.ssafy.sushi.global.error.ErrorCode;
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class ScheduleService {
 
     private final SushiRepository sushiRepository;
-    private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
 
     public void sushiEnd(Sushi sushi) {
         ScheduledExecutorService excutorService = Executors.newScheduledThreadPool(1);
@@ -36,13 +36,12 @@ public class ScheduleService {
                 sushiRepository.save(freshSushi);
 
                 // 알림 생성
-                Notification notification = Notification.builder()
-                        .user(freshSushi.getUser())
-                        .notificationType('1')
-                        .message("초밥의 유통기한이 마감되었습니다.")
-                        .redirectUrl("api/sushi/my/" + freshSushi.getId())
-                        .build();
-                notificationRepository.save(notification);
+                notificationService.sendNotification(
+                        freshSushi.getUser(),
+                        NotificationType.EXP,
+                        "초밥의 유통기한이 마감되었습니다.",
+                        "api/sushi/my/" + freshSushi.getId()
+                );
 
                 log.info("초밥이 마감 처리되었습니다: Id = {}", freshSushi.getId());
             } else {
