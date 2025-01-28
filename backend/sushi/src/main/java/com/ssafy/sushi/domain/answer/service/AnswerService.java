@@ -2,15 +2,16 @@ package com.ssafy.sushi.domain.answer.service;
 
 import com.ssafy.sushi.domain.answer.dto.request.CreateAnswerRequest;
 import com.ssafy.sushi.domain.answer.dto.response.CreateAnswerResponse;
-import com.ssafy.sushi.domain.answer.dto.response.MyAnswerResponse;
+import com.ssafy.sushi.domain.answer.dto.response.MyAnswerDetailResponse;
+import com.ssafy.sushi.domain.answer.dto.response.MyAnswerListResponse;
 import com.ssafy.sushi.domain.answer.entity.Answer;
 import com.ssafy.sushi.domain.answer.repository.AnswerRepository;
 import com.ssafy.sushi.domain.notification.enums.NotificationType;
 import com.ssafy.sushi.domain.notification.service.NotificationService;
 import com.ssafy.sushi.domain.sushi.entity.Sushi;
 import com.ssafy.sushi.domain.sushi.repository.SushiRepository;
-import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.domain.user.UserRepository;
+import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
@@ -42,12 +43,12 @@ public class AnswerService {
                 new CustomException(ErrorCode.SUSHI_NOT_FOUND));
 
         // 답변 가능 인원이 초과되었다면(마감되었다면)
-        if(sushi.getRemainingAnswers() == 0){
+        if (sushi.getRemainingAnswers() == 0) {
             throw new CustomException(ErrorCode.ANSWER_IS_FULL);
         }
 
         // 유통기한이 마감되었다면
-        if(sushi.getIsClosed()){
+        if (sushi.getIsClosed()) {
             throw new CustomException(ErrorCode.SUSHI_IS_CLOSED);
         }
 
@@ -63,7 +64,7 @@ public class AnswerService {
         sushi.reduceRemainingAnswers();
 
         // 답변 가능 인원 수가 0이 되면
-        if(sushi.getRemainingAnswers() == 0){
+        if (sushi.getRemainingAnswers() == 0) {
             // 마감처리
             sushi.closeSushi();
             //== 알림 날리기==//
@@ -79,8 +80,16 @@ public class AnswerService {
     /**
      * 나의 답변 목록 조회
      */
-    public CustomPage<MyAnswerResponse> getMyAnswerList(Integer userId, Pageable pageable) {
-        Page<MyAnswerResponse> sushiList = answerRepository.findMyAnswersByUserId(userId, pageable);
+    public CustomPage<MyAnswerListResponse> getMyAnswerList(Integer userId, Pageable pageable) {
+        Page<MyAnswerListResponse> sushiList = answerRepository.findMyAnswersByUserId(userId, pageable);
         return new CustomPage<>(sushiList);
+    }
+
+    public MyAnswerDetailResponse getMyAnswerDetail(Integer userId, Integer sushiId) {
+
+        Answer answer = answerRepository.findMyAnswerDetail(userId, sushiId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
+
+        return MyAnswerDetailResponse.of(answer);
     }
 }
