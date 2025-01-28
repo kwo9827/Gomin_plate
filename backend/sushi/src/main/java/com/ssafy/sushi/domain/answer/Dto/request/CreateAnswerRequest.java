@@ -1,4 +1,4 @@
-package com.ssafy.sushi.domain.answer.Dto.request;
+package com.ssafy.sushi.domain.answer.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
