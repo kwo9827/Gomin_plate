@@ -1,6 +1,6 @@
-package com.ssafy.sushi.domain.answer.Dto.response;
+package com.ssafy.sushi.domain.answer.dto.response;
 
-import com.ssafy.sushi.domain.answer.Entity.Answer;
+import com.ssafy.sushi.domain.answer.entity.Answer;
 import lombok.Builder;
 import lombok.Data;
 

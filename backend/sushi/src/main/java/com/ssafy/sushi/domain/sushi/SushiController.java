@@ -1,11 +1,11 @@
 package com.ssafy.sushi.domain.sushi;
 
-import com.ssafy.sushi.domain.answer.Dto.request.CreateAnswerRequest;
-import com.ssafy.sushi.domain.answer.Dto.response.CreateAnswerResponse;
-import com.ssafy.sushi.domain.answer.Service.AnswerService;
-import com.ssafy.sushi.domain.sushi.Dto.request.CreateSushiRequest;
-import com.ssafy.sushi.domain.sushi.Dto.response.*;
-import com.ssafy.sushi.domain.sushi.Service.SushiService;
+import com.ssafy.sushi.domain.answer.dto.request.CreateAnswerRequest;
+import com.ssafy.sushi.domain.answer.dto.response.CreateAnswerResponse;
+import com.ssafy.sushi.domain.answer.service.AnswerService;
+import com.ssafy.sushi.domain.sushi.dto.request.CreateSushiRequest;
+import com.ssafy.sushi.domain.sushi.dto.response.*;
+import com.ssafy.sushi.domain.sushi.service.SushiService;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.common.response.ApiResponse;
 import com.ssafy.sushi.global.common.util.AuthenticationUtil;
