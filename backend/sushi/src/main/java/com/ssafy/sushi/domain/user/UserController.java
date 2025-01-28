@@ -1,6 +1,7 @@
 package com.ssafy.sushi.domain.user;
 
-import com.ssafy.sushi.domain.user.dto.UserInfoResponse;
+import com.ssafy.sushi.domain.user.dto.response.UserInfoResponse;
+import com.ssafy.sushi.domain.user.dto.response.UserLikeNumResponse;
 import com.ssafy.sushi.global.common.response.ApiResponse;
 import com.ssafy.sushi.global.common.util.AuthenticationUtil;
 import com.ssafy.sushi.global.security.UserPrincipal;
@@ -22,5 +23,12 @@ public class UserController {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(userService.getUserInfo(userId));
+    }
+
+    @GetMapping("/user/my-like")
+    public ResponseEntity<ApiResponse<UserLikeNumResponse>> getUserLikeNum(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+
+        return ApiResponse.success(userService.getUserLikeNum(userId));
     }
 }

@@ -1,7 +1,8 @@
 package com.ssafy.sushi.domain.user;
 
+import com.ssafy.sushi.domain.user.dto.response.UserLikeNumResponse;
 import com.ssafy.sushi.domain.user.entity.User;
-import com.ssafy.sushi.domain.user.dto.UserInfoResponse;
+import com.ssafy.sushi.domain.user.dto.response.UserInfoResponse;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,12 @@ public class UserService {
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return UserInfoResponse.of(user);
+    }
+
+    public UserLikeNumResponse getUserLikeNum(Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        return UserLikeNumResponse.of(user);
     }
 }
