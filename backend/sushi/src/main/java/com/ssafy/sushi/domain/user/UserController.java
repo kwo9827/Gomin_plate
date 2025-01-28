@@ -13,20 +13,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/user/me")
-    public ResponseEntity<ApiResponse<UserInfoResponse>> createUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<UserInfoResponse>> createUser(
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(userService.getUserInfo(userId));
     }
 
-    @GetMapping("/user/my-like")
-    public ResponseEntity<ApiResponse<UserLikeNumResponse>> getUserLikeNum(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    @GetMapping("/my-like")
+    public ResponseEntity<ApiResponse<UserLikeNumResponse>> getUserLikeNum(
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(userService.getUserLikeNum(userId));
