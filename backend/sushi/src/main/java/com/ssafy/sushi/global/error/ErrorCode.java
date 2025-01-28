@@ -28,7 +28,9 @@ public enum ErrorCode {
 
     // ANSWER
     ANSWER_IS_FULL(500, "R001", "답변 가능 인원이 초과되었습니다."),
-    ANSWER_NOT_FOUND(404, "R002", "답변한 초밥을 찾을 수 없습니다.");
+    ANSWER_NOT_FOUND(404, "R002", "답변한 초밥을 찾을 수 없습니다."),
+    ANSWER_ALREADY_LIKED(400, "R003", "이미 좋아요를 누른 답변입니다."),
+    SELF_LIKE_DENIED(400, "R004", "자신의 답변에는 좋아요를 누를 수 없습니다."),;
 
     private final int status;
     private final String code;

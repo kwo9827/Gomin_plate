@@ -92,4 +92,29 @@ public class AnswerService {
 
         return MyAnswerDetailResponse.of(answer);
     }
+
+    @Transactional
+    public void likeAnswer(Integer asker, Integer answerId) {
+
+        Answer answer = answerRepository.findById(answerId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
+
+        if (answer.getIsLiked()) {
+            throw new CustomException(ErrorCode.ANSWER_ALREADY_LIKED);
+        }
+
+        if (answer.getUser().getId().equals(asker)) {
+            throw new CustomException(ErrorCode.SELF_LIKE_DENIED);
+        }
+
+        answer.markAsLiked();
+
+        User respondent = answer.getUser();
+        respondent.incrementTotalLikes();
+
+        notificationService.sendNotification(
+                respondent,
+                NotificationType.ANS_LIKE,
+                answerId);
+    }
 }
