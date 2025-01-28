@@ -24,7 +24,10 @@ public enum ErrorCode {
     SUSHITYPE_NOT_FOUND(404, "S002", "존재하지 않는 초밥유형입니다."),
     SUSHI_NOT_FOUND(404, "S003", "존재하지 않는 초밥입니다."),
     SUSHI_IS_CLOSED(500, "S004", "이미 마감된 초밥입니다."),
-    UNAUTHORIZED_SUSHI_ACCESS(403, "S005", "해당 초밥에 대한 권한이 없습니다.");
+    UNAUTHORIZED_SUSHI_ACCESS(403, "S005", "해당 초밥에 대한 권한이 없습니다."),
+
+    // ANSWER
+    ANSWER_IS_FULL(500, "R001", "답변 가능 인원이 초과되었습니다.");
 
     private final int status;
     private final String code;

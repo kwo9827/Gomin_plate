@@ -1,5 +1,8 @@
 package com.ssafy.sushi.domain.sushi;
 
+import com.ssafy.sushi.domain.answer.Dto.request.CreateAnswerRequest;
+import com.ssafy.sushi.domain.answer.Dto.response.CreateAnswerResponse;
+import com.ssafy.sushi.domain.answer.Service.AnswerService;
 import com.ssafy.sushi.domain.sushi.Dto.request.CreateSushiRequest;
 import com.ssafy.sushi.domain.sushi.Dto.response.*;
 import com.ssafy.sushi.domain.sushi.Service.SushiService;
@@ -12,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -23,9 +27,12 @@ import org.springframework.web.bind.annotation.*;
 public class SushiController {
 
     private final SushiService sushiService;
+    private final AnswerService answerService;
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<CreateSushiResponse>> createSushi(@RequestBody @Validated CreateSushiRequest request, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<ApiResponse<CreateSushiResponse>> createSushi(
+            @RequestBody @Validated CreateSushiRequest request,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(sushiService.saveSushi(request, userId));
@@ -45,6 +52,7 @@ public class SushiController {
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("sushiId") Integer sushiId){
         Integer userId = userPrincipal.getId();
+
         return ApiResponse.success(sushiService.getRailSushi(userId, sushiId));
     }
 
@@ -64,5 +72,15 @@ public class SushiController {
         Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(sushiService.getMySushiDetail(userId, sushiId));
+    }
+
+    @PostMapping("/rail/{sushiId}/answer")
+    public ResponseEntity<ApiResponse<CreateAnswerResponse>> createAnswer(
+            @RequestBody @Validated CreateAnswerRequest request,
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable("sushiId") Integer sushiId){
+        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+
+        return ApiResponse.success(answerService.saveAnswer(request, userId, sushiId), HttpStatus.CREATED);
     }
 }
