@@ -32,4 +32,8 @@ public class User extends BaseEntity {
     public void incrementTotalLikes() {
         this.totalLikes++;
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
