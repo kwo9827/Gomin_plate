@@ -1,6 +1,6 @@
 package com.ssafy.sushi.domain.auth.dto;
 
-import com.ssafy.sushi.domain.user.Entity.User;
+import com.ssafy.sushi.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 

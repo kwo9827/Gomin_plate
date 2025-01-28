@@ -4,7 +4,7 @@ import com.ssafy.sushi.domain.auth.dto.OAuthLoginResponse;
 import com.ssafy.sushi.domain.auth.dto.OAuthUserInfo;
 import com.ssafy.sushi.domain.auth.dto.UserInfoResponse;
 import com.ssafy.sushi.domain.auth.strategy.OAuthStrategy;
-import com.ssafy.sushi.domain.user.Entity.User;
+import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.domain.user.UserRepository;
 import com.ssafy.sushi.domain.user.enums.Provider;
 import com.ssafy.sushi.global.error.ErrorCode;

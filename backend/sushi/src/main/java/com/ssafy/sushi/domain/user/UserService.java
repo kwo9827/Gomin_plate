@@ -1,6 +1,6 @@
 package com.ssafy.sushi.domain.user;
 
-import com.ssafy.sushi.domain.user.Entity.User;
+import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.domain.user.dto.UserInfoResponse;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;

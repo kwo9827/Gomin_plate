@@ -1,6 +1,6 @@
 package com.ssafy.sushi.domain.user;
 
-import com.ssafy.sushi.domain.user.Entity.User;
+import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.domain.user.enums.Provider;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
