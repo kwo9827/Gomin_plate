@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class MyAnswerResponse {
+public class MyAnswerListResponse {
     private Integer sushiId;
     private Integer category;
     private Integer sushiType;
