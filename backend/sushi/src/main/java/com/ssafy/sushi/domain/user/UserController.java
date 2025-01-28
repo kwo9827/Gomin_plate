@@ -17,20 +17,32 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
+
+    private final AuthenticationUtil authenticationUtil;
     private final UserService userService;
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<UserInfoResponse>> createUser(
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(userService.getUserInfo(userId));
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
+
+        userService.deleteUser(userId);
+
+        return ApiResponse.success(HttpStatus.OK);
     }
 
     @GetMapping("/my-like")
     public ResponseEntity<ApiResponse<UserLikeNumResponse>> getUserLikeNum(
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(userService.getUserLikeNum(userId));
     }
@@ -39,11 +51,10 @@ public class UserController {
     public ResponseEntity<ApiResponse<Void>> updateNickname(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody @Valid UpdateNicknameRequest request) {
-        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         userService.updateNickname(userId, request);
 
         return ApiResponse.success(HttpStatus.OK);
     }
-
 }
