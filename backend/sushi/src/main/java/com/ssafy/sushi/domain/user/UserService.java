@@ -42,4 +42,12 @@ public class UserService {
 
         user.updateNickname(request.getNickname());
     }
+
+    @Transactional
+    public void deleteUser(Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        userRepository.delete(user);
+    }
 }

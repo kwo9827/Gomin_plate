@@ -1,5 +1,6 @@
 package com.ssafy.sushi.global.common.util;
 
+import com.ssafy.sushi.domain.user.UserRepository;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
 import com.ssafy.sushi.global.security.UserPrincipal;
