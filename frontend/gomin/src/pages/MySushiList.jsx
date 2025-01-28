@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import SushiCard from "../components/SushiCard";
+import searchIcon from "../assets/search.png"; // search.png를 import
 
 const MySushiList = () => {
   const dummySushiData = [
@@ -12,129 +13,146 @@ const MySushiList = () => {
   ];
 
   const [search, setSearch] = useState("");
-
   const onChange = (e) => {
-    setSearch(e.target.value);
+    const searchValue = e.target.value;
+    setSearch(searchValue);
   };
-
   const filteredSushi = dummySushiData.filter((sushi) =>
     sushi.title.toLowerCase().includes(search.toLowerCase())
   );
+  const onSearch = () => {
+    console.log("현재 검색 상태:", search); 
+  };
 
   return (
-    <div style={listContainerStyle}>
-      {/* '나의 고민' */}
-      <div style={outerBoxStyle}>
-        <div style={innerBoxStyle}>나의 고민</div>
-      </div>
+    <div style={backgroundStyle}>
+      <div style={listContainerStyle}>
+        {/* '나의 고민' */}
+        <div style={outerBoxStyle}>
+          <div style={innerBoxStyle}>나의 고민</div>
+        </div>
 
-      {/* 검색창 */}
-      <div style={searchContainerStyle}>
-        <input
-          type="text"
-          value={search}
-          onChange={onChange}
-          placeholder="검색어를 입력하세요."
-          style={searchInputStyle}
-        />
-      </div>
+        {/* 검색창 */}
+        <div style={searchContainerStyle}>
+          <input
+            type="text"
+            value={search}
+            onChange={onChange}
+            placeholder="고민을 검색해주세요."
+            style={searchInputStyle}
+          />
+          <img
+            src={searchIcon}
+            alt="검색 버튼"
+            onClick={onSearch} 
+            style={searchImageStyle}
+          />
+        </div>
 
-      {/* 초밥 리스트 */}
-      <ul style={listStyle}>
-        {filteredSushi.map((sushi) => (
-          <li key={sushi.id} style={listItemStyle}>
-            <SushiCard id={sushi.id} />
-          </li>
-        ))}
-      </ul>
+        {/* 검색 결과 */}
+        {filteredSushi.length > 0 ? (
+          <ul style={listStyle}>
+            {filteredSushi.map((sushi) => (
+              <li key={sushi.id}>
+                <SushiCard id={sushi.id} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div style={noResultStyle}>일치하는 고민이 없습니다.</div>
+        )}
+      </div>
     </div>
   );
 };
 
-/* 카드 리스트 스타일 */
-const listContainerStyle = {
-  width: "100%", 
-  maxWidth: "600px", 
-  margin: "0 auto",            // 수평 중앙 정렬
-  padding: "20px",             
-  boxSizing: "border-box", 
-  backgroundColor: "#FDFCC8"
+/* 전체 배경 스타일 */
+const backgroundStyle = {
+  backgroundColor: "#FDFCC8",
+  minHeight: "100vh",
+  height: "100%",
+  width: "100vw",
+  padding: "20px",
+  boxSizing: "border-box",
+  overflowX: "hidden",
 };
 
-/* '나의 고민' 외부 박스 */
+/* 카드 리스트 스타일 */
+const listContainerStyle = {
+  width: "100%",
+  maxWidth: "600px",
+  margin: "0 auto",
+  padding: "20px",
+  boxSizing: "border-box",
+};
+
+/* '나의 고민' 외곽 박스 */
 const outerBoxStyle = {
   width: "100%",
-  maxWidth: "250px", 
-  margin: "20px auto",           // 수평 중앙 정렬
-  border: "4px solid #8B6B3E", // 외곽 테두리 색상
-  borderRadius: "8px", 
-  backgroundColor: "#B2975C", 
-  padding: "6px", 
+  maxWidth: "250px",
+  margin: "20px auto",
+  border: "4px solid #8B6B3E",
+  borderRadius: "8px",
+  backgroundColor: "#B2975C",
+  padding: "6px",
   boxSizing: "border-box",
-
-  /* !!!!추가!!!! */
-  /* 모바일 화면 대응 */
-  "@media (max-width: 480px)": {
-    maxWidth: "70%", // 모바일에서 너비 조정
-  },
 };
 
 /* '나의 고민' 내부 박스 */
 const innerBoxStyle = {
   width: "100%",
-  border: "2px solid #906C48", 
-  borderRadius: "4px", 
-  backgroundColor: "#B2975C", 
+  border: "2px solid #906C48",
+  borderRadius: "4px",
+  backgroundColor: "#B2975C",
   textAlign: "center",
-  color: "#5D4A37", 
-  fontSize: "1.5rem",        // font size: 32
+  color: "#5D4A37",
+  fontSize: "1.5rem",
   fontWeight: "bold",
-  padding: "6px 0", 
+  padding: "6px 0",
   boxSizing: "border-box",
-
-  /* !!!!추가!!!! */
-  /* 모바일 화면 대응 */
-  "@media (max-width: 480px)": {
-    fontSize: "1.3rem", 
-    padding: "5px 0",
-  },
 };
 
-/* 검색창 테두리 */
+/* 검색창 전체 스타일 */
 const searchContainerStyle = {
-  display: "flex", 
+  display: "flex",
   justifyContent: "center",
-  marginBottom: "20px",
+  gap: "5px", // 검색창과 돋보기 이미지지 사이 간격
+  marginBottom: "10px",
 };
 
 /* 검색 입력창 */
 const searchInputStyle = {
-  width: "100%", 
+  width: "100%",
   maxWidth: "330px",
-  height: "36px", 
-  fontSize: "1rem",     // font size 20
+  height: "36px",
+  fontSize: "1rem",
   textAlign: "center",
-  padding: "0 10px", 
-  border: "2px solid #906C48", 
-  borderRadius: "6px", 
-  outline: "none",         // 입력창 마우스 시 외곽선 제거
-
-  /* !!!!추가!!!! */
-  /* 모바일 화면 대응 */
-  "@media (max-width: 480px)": {
-    width: "90%", 
-  },
+  padding: "0 10px",
+  border: "2px solid #906C48",
+  borderRadius: "6px",
+  outline: "none",
 };
 
-/* 초밥 리스트 */
+/* 검색 이미지 버튼 */
+const searchImageStyle = {
+  width: "36px",
+  height: "36px",
+  cursor: "pointer",
+};
+
+/* 검색 결과가 없을 때 */
+const noResultStyle = {
+  textAlign: "center",
+  color: "#8B6B3E",
+  fontSize: "1.2rem",
+  marginTop: "20px",
+};
+
+/* 초밥 리스트 스타일 */
 const listStyle = {
-  listStyle: "none", 
-  padding: 0, 
-  margin: 0, 
-};
-
-const listItemStyle = {
-  
+  listStyle: "none",
+  padding: 0,
+  margin: 0,
 };
 
 export default MySushiList;
