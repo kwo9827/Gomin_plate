@@ -23,12 +23,13 @@ import org.springframework.web.bind.annotation.*;
 public class AnswerController {
 
     private final AnswerService answerService;
+    private final AuthenticationUtil authenticationUtil;
 
     @GetMapping("")
     public ResponseEntity<ApiResponse<CustomPage<MyAnswerListResponse>>> getMySushiList(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(answerService.getMyAnswerList(userId, pageable));
     }
@@ -37,7 +38,7 @@ public class AnswerController {
     public ResponseEntity<ApiResponse<MyAnswerDetailResponse>> getMySushiDetail(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("sushiId") @Positive Integer sushiId) {
-        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(answerService.getMyAnswerDetail(userId, sushiId));
     }
@@ -46,7 +47,7 @@ public class AnswerController {
     public ResponseEntity<ApiResponse<Void>> likeAnswer(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("answerId") @Positive Integer answerId) {
-        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         answerService.likeAnswer(userId, answerId);
 

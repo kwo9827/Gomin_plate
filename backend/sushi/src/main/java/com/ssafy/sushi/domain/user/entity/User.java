@@ -4,6 +4,10 @@ import com.ssafy.sushi.domain.user.enums.Provider;
 import com.ssafy.sushi.global.common.Entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user")
@@ -11,8 +15,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-//@SQLDelete(sql = "UPDATE users SET deleted_at = NOW() WHERE id = ?")  // deleted_at 필드 변경할 것
-//@SQLRestriction("deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")  // deleted_at 필드 변경할 것
+@SQLRestriction("deleted_at IS NULL")
 public class User extends BaseEntity {
 
     @Column(nullable = false, length = 50)
@@ -29,7 +33,14 @@ public class User extends BaseEntity {
     @Builder.Default
     private Integer totalLikes = 0;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public void incrementTotalLikes() {
         this.totalLikes++;
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
