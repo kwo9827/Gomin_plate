@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const SushiCard = ({ id }) => {
+const SushiCard = ({ id, showHeart = false }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -12,6 +12,9 @@ const SushiCard = ({ id }) => {
     <div style={outerContainerStyle} onClick={handleClick}>
       <div style={middleContainerStyle}>
         <div style={innerContainerStyle}>
+          {/* ❤️ 좋아요 받은 경우 하트 표시 */}
+          {showHeart && <span style={heartIconStyle}>❤️</span>}
+          
           {/* 초밥 이미지 */}
           <div style={sushiImageStyle}>
             <img
@@ -38,8 +41,17 @@ const SushiCard = ({ id }) => {
   );
 };
 
-/* 첫 번째 테두리 */
+/* ✅ ❤️ 하트 아이콘 스타일 */
+const heartIconStyle = {
+  position: "absolute",
+  top: "8px",
+  right: "8px",
+  fontSize: "1.3rem", // 하트 크기
+};
+
+/* ✅ SushiCard를 감싸는 컨테이너 스타일 */
 const outerContainerStyle = {
+  position: "relative", // 하트 이모티콘을 절대 위치로 배치할 수 있도록 설정
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -52,7 +64,6 @@ const outerContainerStyle = {
   boxSizing: "border-box",
 };
 
-/* 두 번째 테두리 */
 const middleContainerStyle = {
   width: "100%",
   backgroundColor: "#B2975C", 
@@ -61,8 +72,8 @@ const middleContainerStyle = {
   boxSizing: "border-box",
 };
 
-/* 세 번째 테두리 */
 const innerContainerStyle = {
+  position: "relative", // 하트 이모티콘을 배치할 기준
   width: "100%",
   backgroundColor: "#FFFFF0",
   borderRadius: "4px", 
@@ -88,24 +99,22 @@ const textContainerStyle = {
   overflow: "hidden",
 };
 
-/* 제목 텍스트 스타일 */
+/* 제목 스타일 */
 const titleStyle = {
   fontSize: "1.2rem",
   fontWeight: "bold",
   color: "#5A4628",
   marginBottom: "8px",
-
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
 };
 
-/* 본문 텍스트 스타일 */
+/* 본문 스타일 */
 const contentStyle = {
   fontSize: "1rem",
   color: "#8D7B7B",
   lineHeight: "1.4",
-
   display: "-webkit-box",
   WebkitLineClamp: 2,
   WebkitBoxOrient: "vertical",
