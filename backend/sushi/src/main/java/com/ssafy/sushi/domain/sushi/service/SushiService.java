@@ -1,7 +1,7 @@
 package com.ssafy.sushi.domain.sushi.service;
 
-import com.ssafy.sushi.domain.answer.repository.AnswerRepository;
 import com.ssafy.sushi.domain.answer.entity.Answer;
+import com.ssafy.sushi.domain.answer.repository.AnswerRepository;
 import com.ssafy.sushi.domain.sushi.dto.request.CreateSushiRequest;
 import com.ssafy.sushi.domain.sushi.dto.response.*;
 import com.ssafy.sushi.domain.sushi.entity.Category;
@@ -12,8 +12,8 @@ import com.ssafy.sushi.domain.sushi.repository.CategoryRepository;
 import com.ssafy.sushi.domain.sushi.repository.SushiExposureRepository;
 import com.ssafy.sushi.domain.sushi.repository.SushiRepository;
 import com.ssafy.sushi.domain.sushi.repository.SushiTypeRepository;
-import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.domain.user.UserRepository;
+import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
@@ -142,5 +142,15 @@ public class SushiService {
     private Sushi getSushiById(Integer sushiId) {
         return sushiRepository.findById(sushiId).orElseThrow(() ->
                 new CustomException(ErrorCode.SUSHI_NOT_FOUND));
+    }
+
+    public SushiTypeResponse getAllSushiTypes() {
+        List<SushiType> sushiTypeList = sushiTypeRepository.findAll();
+
+        return SushiTypeResponse.builder()
+                .sushiType(sushiTypeList.stream()
+                        .map(SushiTypeItem::of)
+                        .toList())
+                .build();
     }
 }
