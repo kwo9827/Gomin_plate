@@ -51,7 +51,7 @@ public class SushiController {
     @GetMapping("/rail/{sushiId}")
     public ResponseEntity<ApiResponse<SushiOnRailResponse>> getRailSushi(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable("sushiId") Integer sushiId){
+            @PathVariable("sushiId") Integer sushiId) {
         Integer userId = userPrincipal.getId();
 
         return ApiResponse.success(sushiService.getRailSushi(userId, sushiId));
@@ -79,9 +79,15 @@ public class SushiController {
     public ResponseEntity<ApiResponse<CreateAnswerResponse>> createAnswer(
             @RequestBody @Validated CreateAnswerRequest request,
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable("sushiId") Integer sushiId){
+            @PathVariable("sushiId") Integer sushiId) {
         Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(answerService.saveAnswer(request, userId, sushiId), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/type")
+    public ResponseEntity<ApiResponse<SushiTypeResponse>> getAllSushiTypes() {
+
+        return ApiResponse.success(sushiService.getAllSushiTypes());
     }
 }
