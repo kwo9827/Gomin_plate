@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMySushiDetail } from "../store/slices/sushiSlice";
+import PostItModal from "../components/PostItModal"; // PostItModal 추가
 
 const SushiDetail = () => {
     const location = useLocation();
@@ -11,6 +12,22 @@ const SushiDetail = () => {
     const currentSushi = useSelector((state) => state.sushi.currentSushi);
     const status = useSelector((state) => state.sushi.status);
     const [currentPage, setCurrentPage] = useState(0);
+
+    /* 모달 관련 상태 추가 */
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [likedAnswerId, setLikedAnswerId] = useState(null);  // 좋아요 상태 추가
+
+    /* 모달 열기 */
+    const openModal = (answer) => {
+        setSelectedAnswer(answer);
+        setModalOpen(true);
+    };
+
+    /* 모달 닫기 */
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
     /* GPT가 만들어준 더미 데이터 */
     const dummySushi = {
@@ -106,18 +123,24 @@ const SushiDetail = () => {
 
                 {/* 답변 목록(포스트잇 들어갈 자리) */}
                 <div style={postItWrapperStyle}>
-                    {/* 첫 번째 줄 (3개 or 2개??) */}
                     <div style={postItRowStyle}>
                         {answerList.slice(currentPage * answersPerPage, currentPage * answersPerPage + 3).map((item, index) => (
-                            <div key={item.answerId} style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}>
+                            <div 
+                                key={item.answerId} 
+                                style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
+                                onClick={() => openModal(item)} // 클릭 시 모달 열림
+                            >
                                 <p>{item.content}</p>
                             </div>
                         ))}
                     </div>
-                    {/* 두 번째 줄 (2개) */}
                     <div style={postItRowStyle}>
                         {answerList.slice(currentPage * answersPerPage + 3, (currentPage + 1) * answersPerPage).map((item, index) => (
-                            <div key={item.answerId} style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}>
+                            <div 
+                                key={item.answerId} 
+                                style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
+                                onClick={() => openModal(item)} // 클릭 시 모달 열림
+                            >
                                 <p>{item.content}</p>
                             </div>
                         ))}
@@ -134,6 +157,15 @@ const SushiDetail = () => {
                     )}
                 </div>
             </div>
+
+            {/* PostItModal 렌더링 - modalOpen이 true일 때만 보임 */}
+            {modalOpen && <PostItModal 
+                isOpen={modalOpen} 
+                onClose={closeModal} 
+                answer={selectedAnswer} 
+                likedAnswerId={likedAnswerId} 
+                setLikedAnswerId={setLikedAnswerId} 
+            />}
         </div>
     );
 };
