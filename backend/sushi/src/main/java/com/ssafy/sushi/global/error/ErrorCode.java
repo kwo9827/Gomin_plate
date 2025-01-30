@@ -28,7 +28,10 @@ public enum ErrorCode {
 
     // ANSWER
     ANSWER_IS_FULL(500, "R001", "답변 가능 인원이 초과되었습니다."),
-    ANSWER_NOT_FOUND(404, "R002", "답변한 초밥을 찾을 수 없습니다.");
+    ANSWER_NOT_FOUND(404, "R002", "답변한 초밥을 찾을 수 없습니다."),
+
+    // NOTIFICATION
+    NOTIFICATION_NOT_FOUND(404, "N001", "알림을 찾을 수 없습니다.");
 
     private final int status;
     private final String code;
