@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 /* 현재 사용자에 대한 정보를 관리하는 슬라이스 */
 
 const initialState = {
-  nickname: "", // 유저의 닉네임
+  nickname: "방구맨", // 유저의 닉네임
   email: "", // 유저의 이메일
   likesReceived: 0, // 유저가 받은 좋아요 수
   accessToken: "", // 인증된 유저의 액세스 토큰
