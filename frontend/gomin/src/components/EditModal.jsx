@@ -89,10 +89,11 @@ const modalStyle = {
   backgroundColor: "#fdf5e6",
   padding: "20px",
   borderRadius: "10px",
-  width: "80%",
+  width: "70%",
   maxWidth: "600px",
   position: "relative",
-  border: "8px solid #8b4513",
+  border: "8px solid #906C48",
+  outline: "2px solid #67523E",
 };
 
 const titleStyle = {
