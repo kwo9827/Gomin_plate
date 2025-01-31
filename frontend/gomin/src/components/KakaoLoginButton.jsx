@@ -6,10 +6,11 @@ const KakaoLoginButton = () => {
   const dispatch = useDispatch();
 
   const handleKakaoLogin = () => {
-    const clientId = "blind"; // 카카오 REST API 키
+    const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID;
     const redirectUri = "http://localhost:5173/oauth/kakao/callback"; // 리다이렉트 URI
     dispatch(kakaoLogin({ clientId, redirectUri }));
   };
+
 
   return (
     <button
