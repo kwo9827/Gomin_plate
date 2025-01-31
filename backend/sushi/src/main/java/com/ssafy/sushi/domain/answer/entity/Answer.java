@@ -34,4 +34,7 @@ public class Answer extends BaseEntity {
     @Builder.Default
     private Boolean isLiked = false;
 
+    public void markAsLiked() {
+        this.isLiked = true;
+    }
 }
