@@ -23,6 +23,13 @@ public interface AnswerRepository extends JpaRepository<Answer, Integer> {
             "WHERE a.user.id = :userId")
     Page<MyAnswerListResponse> findMyAnswersByUserId(Integer userId, Pageable pageable);
 
+    @Query("SELECT new com.ssafy.sushi.domain.answer.dto.response.MyAnswerListResponse(" +
+            "s.id, s.category.id, s.sushiType.id, s.title, s.content, a.isLiked, a.createdAt) " +
+            "FROM Answer a " +
+            "JOIN a.sushi s " +
+            "WHERE a.user.id = :userId " +
+            "AND (s.title LIKE %:keyword% OR s.content LIKE %:keyword%)")
+    Page<MyAnswerListResponse> findMyAnswersByUserIdAndSearch(Integer userId, String keyword, Pageable pageable);
 
     @Query("SELECT a " +
             "FROM Answer a " +
