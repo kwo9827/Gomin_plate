@@ -22,7 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -67,12 +66,7 @@ public class SushiService {
 
     public CustomPage<MySushiListResponse> getMySushiList(Integer userId, String keyword, Pageable pageable) {
 
-        Page<Sushi> sushiList;
-        if (StringUtils.hasText(keyword)) {
-            sushiList = sushiRepository.findSushiByUserIdAndSearch(userId, keyword, pageable);
-        } else {
-            sushiList = sushiRepository.findSushiByUserId(userId, pageable);
-        }
+        Page<Sushi> sushiList = sushiRepository.findSushiByUserIdAndSearch(userId, keyword, pageable);
 
         return new CustomPage<>(sushiList.map(MySushiListResponse::of));
     }

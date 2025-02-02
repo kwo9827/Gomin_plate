@@ -20,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 @Service
 @Transactional(readOnly = true)
@@ -82,12 +81,7 @@ public class AnswerService {
      * 나의 답변 목록 조회
      */
     public CustomPage<MyAnswerListResponse> getMyAnswerList(Integer userId, String keyword, Pageable pageable) {
-        Page<MyAnswerListResponse> sushiList;
-        if (StringUtils.hasText(keyword)) {
-            sushiList = answerRepository.findMyAnswersByUserIdAndSearch(userId, keyword, pageable);
-        } else {
-            sushiList = answerRepository.findMyAnswersByUserId(userId, pageable);
-        }
+        Page<MyAnswerListResponse> sushiList = answerRepository.findMyAnswersByUserIdAndSearch(userId, keyword, pageable);
 
         return new CustomPage<>(sushiList);
     }
