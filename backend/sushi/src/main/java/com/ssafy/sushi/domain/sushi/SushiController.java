@@ -60,10 +60,11 @@ public class SushiController {
     @GetMapping("/my")
     public ResponseEntity<ApiResponse<CustomPage<MySushiListResponse>>> getMySushiList(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestParam(required = false) String keyword,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
-        return ApiResponse.success(sushiService.getMySushiList(userId, pageable));
+        return ApiResponse.success(sushiService.getMySushiList(userId, keyword, pageable));
     }
 
     @GetMapping("/my/{sushiId}")

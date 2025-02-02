@@ -80,8 +80,9 @@ public class AnswerService {
     /**
      * 나의 답변 목록 조회
      */
-    public CustomPage<MyAnswerListResponse> getMyAnswerList(Integer userId, Pageable pageable) {
-        Page<MyAnswerListResponse> sushiList = answerRepository.findMyAnswersByUserId(userId, pageable);
+    public CustomPage<MyAnswerListResponse> getMyAnswerList(Integer userId, String keyword, Pageable pageable) {
+        Page<MyAnswerListResponse> sushiList = answerRepository.findMyAnswersByUserIdAndSearch(userId, keyword, pageable);
+
         return new CustomPage<>(sushiList);
     }
 

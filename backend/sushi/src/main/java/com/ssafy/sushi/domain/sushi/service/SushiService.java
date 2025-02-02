@@ -64,9 +64,9 @@ public class SushiService {
                 .build();
     }
 
-    public CustomPage<MySushiListResponse> getMySushiList(Integer userId, Pageable pageable) {
+    public CustomPage<MySushiListResponse> getMySushiList(Integer userId, String keyword, Pageable pageable) {
 
-        Page<Sushi> sushiList = sushiRepository.findSushiByUserId(userId, pageable);
+        Page<Sushi> sushiList = sushiRepository.findSushiByUserIdAndSearch(userId, keyword, pageable);
 
         return new CustomPage<>(sushiList.map(MySushiListResponse::of));
     }
