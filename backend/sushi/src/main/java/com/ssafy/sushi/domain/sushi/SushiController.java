@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/sushi")
 public class SushiController {
 
+    private final AuthenticationUtil authenticationUtil;
     private final SushiService sushiService;
     private final AnswerService answerService;
 
@@ -33,7 +34,7 @@ public class SushiController {
     public ResponseEntity<ApiResponse<CreateSushiResponse>> createSushi(
             @RequestBody @Validated CreateSushiRequest request,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(sushiService.saveSushi(request, userId));
     }
@@ -42,7 +43,7 @@ public class SushiController {
     public ResponseEntity<ApiResponse<SushiRailResponse>> getRandomSushi(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestParam(value = "size", required = false, defaultValue = "15") Integer size) {
-        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(sushiService.getRandomSushi(userId, size));
     }
@@ -50,7 +51,7 @@ public class SushiController {
     @GetMapping("/rail/{sushiId}")
     public ResponseEntity<ApiResponse<SushiOnRailResponse>> getRailSushi(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable("sushiId") Integer sushiId){
+            @PathVariable("sushiId") Integer sushiId) {
         Integer userId = userPrincipal.getId();
 
         return ApiResponse.success(sushiService.getRailSushi(userId, sushiId));
@@ -60,7 +61,7 @@ public class SushiController {
     public ResponseEntity<ApiResponse<CustomPage<MySushiListResponse>>> getMySushiList(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(sushiService.getMySushiList(userId, pageable));
     }
@@ -69,7 +70,7 @@ public class SushiController {
     public ResponseEntity<ApiResponse<MySushiDetailResponse>> getMySushiDetail(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("sushiId") @Positive Integer sushiId) {
-        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(sushiService.getMySushiDetail(userId, sushiId));
     }
@@ -78,9 +79,15 @@ public class SushiController {
     public ResponseEntity<ApiResponse<CreateAnswerResponse>> createAnswer(
             @RequestBody @Validated CreateAnswerRequest request,
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable("sushiId") Integer sushiId){
-        Integer userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+            @PathVariable("sushiId") Integer sushiId) {
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(answerService.saveAnswer(request, userId, sushiId), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/type")
+    public ResponseEntity<ApiResponse<SushiTypeResponse>> getAllSushiTypes() {
+
+        return ApiResponse.success(sushiService.getAllSushiTypes());
     }
 }

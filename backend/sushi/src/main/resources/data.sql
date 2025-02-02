@@ -3,12 +3,12 @@ INSERT INTO user (nickname, provider, provider_id, created_at, updated_at, total
 VALUES ('테스트맨', 'KAKAO', '112312312', CURRENT_TIMESTAMP,CURRENT_TIMESTAMP, 1);
 
 -- 더미 유저
-INSERT INTO user (nickname, provider, provider_id, created_at, updated_at)
-VALUES ('testUser1', 'KAKAO', 1231440, NOW(), NOW()),
-       ('testUser2', 'GOOGLE', 1231441, NOW(), NOW()),
-       ('testUser3', 'KAKAO', 1231442, NOW(), NOW()),
-       ('testUser4', 'GOOGLE', 1231443, NOW(), NOW()),
-       ('testUser5', 'KAKAO', 1231444, NOW(), NOW());
+INSERT INTO user (nickname, total_likes, provider, provider_id, created_at, updated_at)
+VALUES ('testUser1', 0, 'KAKAO', 1231440, NOW(), NOW()),
+       ('testUser2', 1, 'GOOGLE', 1231441, NOW(), NOW()),
+       ('testUser3', 0, 'KAKAO', 1231442, NOW(), NOW()),
+       ('testUser4', 2, 'GOOGLE', 1231443, NOW(), NOW()),
+       ('testUser5', 0, 'KAKAO', 1231444, NOW(), NOW());
 
 -- 초밥(고민) 데이터
 -- 현재 시각 기준으로 다양한 상태의 데이터 생성

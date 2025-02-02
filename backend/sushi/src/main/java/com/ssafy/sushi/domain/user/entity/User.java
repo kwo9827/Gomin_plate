@@ -3,17 +3,20 @@ package com.ssafy.sushi.domain.user.entity;
 import com.ssafy.sushi.domain.user.enums.Provider;
 import com.ssafy.sushi.global.common.Entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@SQLDelete(sql = "UPDATE users SET deleted_at = NOW() WHERE id = ?")  // deleted_at 필드 변경할 것
-//@SQLRestriction("deleted_at IS NULL")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")  // deleted_at 필드 변경할 것
+@SQLRestriction("deleted_at IS NULL")
 public class User extends BaseEntity {
 
     @Column(nullable = false, length = 50)
@@ -27,13 +30,17 @@ public class User extends BaseEntity {
     private String providerId;
 
     @Column(name = "total_likes")
-    private Integer totalLikes;
+    @Builder.Default
+    private Integer totalLikes = 0;
 
-    @Builder
-    public User(String nickname, Provider provider, String providerId) {
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    public void incrementTotalLikes() {
+        this.totalLikes++;
+    }
+
+    public void updateNickname(String nickname) {
         this.nickname = nickname;
-        this.provider = provider;
-        this.providerId = providerId;
-        this.totalLikes = 0;
     }
 }
