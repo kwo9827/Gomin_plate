@@ -14,7 +14,7 @@ const SushiCard = ({ id, showHeart = false }) => {
         <div style={innerContainerStyle}>
           {/* ❤️ 좋아요 받은 경우 하트 표시 */}
           {showHeart && <span style={heartIconStyle}>❤️</span>}
-          
+
           {/* 초밥 이미지 */}
           <div style={sushiImageStyle}>
             <img
@@ -41,7 +41,7 @@ const SushiCard = ({ id, showHeart = false }) => {
   );
 };
 
-/* ✅ ❤️ 하트 아이콘 스타일 */
+/* 하트 아이콘 스타일 */
 const heartIconStyle = {
   position: "absolute",
   top: "8px",
@@ -49,7 +49,7 @@ const heartIconStyle = {
   fontSize: "1.3rem", // 하트 크기
 };
 
-/* ✅ SushiCard를 감싸는 컨테이너 스타일 */
+/* SushiCard를 감싸는 컨테이너 스타일 */
 const outerContainerStyle = {
   position: "relative", // 하트 이모티콘을 절대 위치로 배치할 수 있도록 설정
   display: "flex",
@@ -59,16 +59,16 @@ const outerContainerStyle = {
   maxWidth: "420px",
   margin: "10px auto",
   padding: "6px",
-  backgroundColor: "#906C48", 
-  borderRadius: "10px",       
+  backgroundColor: "#906C48",
+  borderRadius: "10px",
   boxSizing: "border-box",
 };
 
 const middleContainerStyle = {
   width: "100%",
-  backgroundColor: "#B2975C", 
-  borderRadius: "4px", 
-  padding: "8px", 
+  backgroundColor: "#B2975C",
+  borderRadius: "4px",
+  padding: "8px",
   boxSizing: "border-box",
 };
 
@@ -76,8 +76,8 @@ const innerContainerStyle = {
   position: "relative", // 하트 이모티콘을 배치할 기준
   width: "100%",
   backgroundColor: "#FFFFF0",
-  borderRadius: "4px", 
-  padding: "10px", 
+  borderRadius: "4px",
+  padding: "10px",
   boxSizing: "border-box",
   display: "flex",
   flexDirection: "row",

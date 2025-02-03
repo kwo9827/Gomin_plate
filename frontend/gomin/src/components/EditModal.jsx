@@ -56,6 +56,7 @@ const EditModal = ({ isOpen, onClose }) => {
           />
         </div>
         {error && <p style={errorStyle}>{error}</p>}
+
         <div style={buttonContainer}>
           <button onClick={handleSaveNickname} style={confirmButtonStyle}>
             확인
@@ -64,6 +65,7 @@ const EditModal = ({ isOpen, onClose }) => {
             취소
           </button>
         </div>
+
         <button onClick={handleDeleteAccount} style={deleteAccountStyle}>
           회원탈퇴
         </button>

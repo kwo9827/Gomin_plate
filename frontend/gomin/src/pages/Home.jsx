@@ -4,33 +4,45 @@ import Modal from "../components/EditModal";
 import PostSushiBell from "../components/PostSushiBell";
 import NotificationBell from "../components/NotificationBell";
 import NotificationModal from "../components/NotificationModal";
+import SushiUnlock from "../components/SushiUnlock";
 
 const Home = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isSushiUnlockOpen, setIsSushiUnlockOpen] = useState(false);
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
-    const openNotification = () => setIsNotificationOpen(true);
-    const closeNotification = () => setIsNotificationOpen(false);
+  const openNotification = () => setIsNotificationOpen(true);
+  const closeNotification = () => setIsNotificationOpen(false);
 
-    return (
-        <div className="home-container">
-            <h1>회전 초밥 레일</h1>
+  const openSushiUnlock = () => setIsSushiUnlockOpen(true);
+  const closeSushiUnlock = () => setIsSushiUnlockOpen(false);
 
-            <div className="control-buttons">
-                <button onClick={openModal}>모달 열기</button>
-                <PostSushiBell />
-                <NotificationBell onClick={openNotification} />
-            </div>
+  return (
+    <div className="home-container">
+      <h1>회전 초밥 레일</h1>
 
-            <Rail />
+      <div className="control-buttons">
+        <button onClick={openModal}>닉네임 모달 열기</button>
+        <button onClick={openSushiUnlock}>해금 초밥 열기</button>
+        <PostSushiBell />
+        <NotificationBell onClick={openNotification} />
+      </div>
 
-            <Modal isOpen={isModalOpen} onClose={closeModal} />
-            <NotificationModal isOpen={isNotificationOpen} onClose={closeNotification} />
-        </div>
-    );
+      <Rail />
+
+      <Modal isOpen={isModalOpen} onClose={closeModal} />
+
+      <SushiUnlock isOpen={isSushiUnlockOpen} onClose={closeSushiUnlock} />
+
+      <NotificationModal
+        isOpen={isNotificationOpen}
+        onClose={closeNotification}
+      />
+    </div>
+  );
 };
 
 export default Home;
