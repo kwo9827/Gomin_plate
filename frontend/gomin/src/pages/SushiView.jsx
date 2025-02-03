@@ -9,9 +9,6 @@ const SushiView = () => {
     const [sushiData, setSushiData] = useState(null);
     const [content, setContent] = useState("");
 
-
-    console.log(sushiId, category, sushiType, remainingAnswers, expirationTime);
-
     useEffect(() => {
         if (!sushiId) {
             alert("초밥 ID가 없습니다. 홈으로 이동합니다.");
