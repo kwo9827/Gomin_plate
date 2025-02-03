@@ -1,10 +1,4 @@
 spring:
-#  datasource:
-#    url: ${DB_URL}
-#    username: ${DB_USERNAME}
-#    password: ${DB_PASSWORD}
-#    driver-class-name: org.mariadb.jdbc.Driver
-
   jpa:
     hibernate:
       ddl-auto: none
@@ -17,10 +11,11 @@ spring:
     init:
       mode: never  # 모든 데이터베이스로 초기화 대상 변경
 
-#  data:
-#    web:
-#      pageable:
-#        one-indexed-parameters: true  # 페이징 0부터가 아닌 1부터
-
 logging.level:
   org.hibernate.SQL: info
+
+oauth:
+  kakao:
+    redirect-uri: https://www.gomin.my/oauth/kakao/callback  # 운영 도메인으로 변경
+  google:
+    redirect-uri: https://www.gomin.my/oauth/google/callback  # 운영 도메인으로 변경
