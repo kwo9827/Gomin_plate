@@ -5,28 +5,28 @@ import { fetchMySushiDetail } from "../store/slices/sushiSlice";
 import PostItModal from "../components/PostItModal"; // PostItModal 추가
 
 const SushiDetail = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const { id } = location.state || {};
-    const currentSushi = useSelector((state) => state.sushi.currentSushi);
-    const status = useSelector((state) => state.sushi.status);
-    const [currentPage, setCurrentPage] = useState(0);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { id } = location.state || {};
+  const currentSushi = useSelector((state) => state.sushi.currentSushi);
+  const status = useSelector((state) => state.sushi.status);
+  const [currentPage, setCurrentPage] = useState(0);
 
-    useEffect(() => {
-        if (id) {
-            dispatch(fetchMySushiDetail(id)); // id로 상세 데이터 요청
-        } else {
-            navigate("/home"); // id가 없으면 홈으로 리다이렉트
-        }
-    }, [id, dispatch, navigate]);
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchMySushiDetail(id)); // id로 상세 데이터 요청
+    } else {
+      navigate("/home"); // id가 없으면 홈으로 리다이렉트
+    }
+  }, [id, dispatch, navigate]);
 
-    console.log(currentSushi);
+  console.log(currentSushi);
 
-    /* 모달 관련 상태 추가 */
-    const [modalOpen, setModalOpen] = useState(false);
-    const [selectedAnswer, setSelectedAnswer] = useState(null);
-    const [likedAnswerId, setLikedAnswerId] = useState(null);  // 좋아요 상태 추가
+  /* 모달 관련 상태 추가 */
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [likedAnswerId, setLikedAnswerId] = useState(null);  // 좋아요 상태 추가
 
   /* 모달 열기 */
   const openModal = (answer) => {
@@ -39,12 +39,11 @@ const SushiDetail = () => {
     setModalOpen(false);
   };
 
-
-    // currentSushi에서 데이터를 가져오고, 데이터가 없으면 더미 데이터 사용
-    const sushiData = currentSushi;
-    const answerList = sushiData.answer || [];
-    const answersPerPage = 5;
-    const totalPages = Math.ceil(answerList.length / answersPerPage);
+  // currentSushi에서 데이터를 가져오고, 데이터가 없으면 더미 데이터 사용
+  const sushiData = currentSushi;
+  const answerList = sushiData.answer || [];
+  const answersPerPage = 5;
+  const totalPages = Math.ceil(answerList.length / answersPerPage);
 
   useEffect(() => {
     if (id) {
@@ -87,63 +86,11 @@ const SushiDetail = () => {
         <hr style={dividerStyle} />
 
         {/* 날짜 */}
-        <p style={dateStyle}>{sushiData.expirationTime}</p>
+        <p style={dateStyle}>{new Date(sushiData.expirationTime).toLocaleString()}</p>
 
-                {/* 날짜 */}
-                <p style={dateStyle}>{new Date(sushiData.expirationTime).toLocaleString()}</p>
-
-                {/* 본문 내용 */}
-                <div style={contentBoxStyle}>
-                    <p style={contentStyle}>{sushiData.content}</p>
-                </div>
-
-                <hr style={dividerStyle} />
-
-                {/* 답변 목록(포스트잇 들어갈 자리) */}
-                <div style={postItWrapperStyle}>
-                    <div style={postItRowStyle}>
-                        {answerList.slice(currentPage * answersPerPage, currentPage * answersPerPage + 3).map((item, index) => (
-                            <div
-                                key={item.answerId}
-                                style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
-                                onClick={() => openModal(item)} // 클릭 시 모달 열림
-                            >
-                                <p>{item.content}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <div style={postItRowStyle}>
-                        {answerList.slice(currentPage * answersPerPage + 3, (currentPage + 1) * answersPerPage).map((item, index) => (
-                            <div
-                                key={item.answerId}
-                                style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
-                                onClick={() => openModal(item)} // 클릭 시 모달 열림
-                            >
-                                <p>{item.content}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* 양 옆으로 슬라이드 버튼 */}
-                <div style={arrowContainerStyle}>
-                    {currentPage > 0 && (
-                        <button onClick={prevPage} style={arrowLeftStyle}>◀</button>
-                    )}
-                    {currentPage < totalPages - 1 && (
-                        <button onClick={nextPage} style={arrowRightStyle}>▶</button>
-                    )}
-                </div>
-            </div>
-
-            {/* PostItModal 렌더링 - modalOpen이 true일 때만 보임 */}
-            {modalOpen && <PostItModal
-                isOpen={modalOpen}
-                onClose={closeModal}
-                answer={selectedAnswer}
-                likedAnswerId={likedAnswerId}
-                setLikedAnswerId={setLikedAnswerId}
-            />}
+        {/* 본문 내용 */}
+        <div style={contentBoxStyle}>
+          <p style={contentStyle}>{sushiData.content}</p>
         </div>
 
         <hr style={dividerStyle} />
@@ -151,56 +98,36 @@ const SushiDetail = () => {
         {/* 답변 목록(포스트잇 들어갈 자리) */}
         <div style={postItWrapperStyle}>
           <div style={postItRowStyle}>
-            {answerList
-              .slice(
-                currentPage * answersPerPage,
-                currentPage * answersPerPage + 3
-              )
-              .map((item, index) => (
-                <div
-                  key={item.answerId}
-                  style={{
-                    ...postItStyle,
-                    backgroundColor: postItColors[index % postItColors.length],
-                  }}
-                  onClick={() => openModal(item)} // 클릭 시 모달 열림
-                >
-                  <p>{item.content}</p>
-                </div>
-              ))}
+            {answerList.slice(currentPage * answersPerPage, currentPage * answersPerPage + 3).map((item, index) => (
+              <div
+                key={item.answerId}
+                style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
+                onClick={() => openModal(item)} // 클릭 시 모달 열림
+              >
+                <p>{item.content}</p>
+              </div>
+            ))}
           </div>
           <div style={postItRowStyle}>
-            {answerList
-              .slice(
-                currentPage * answersPerPage + 3,
-                (currentPage + 1) * answersPerPage
-              )
-              .map((item, index) => (
-                <div
-                  key={item.answerId}
-                  style={{
-                    ...postItStyle,
-                    backgroundColor: postItColors[index % postItColors.length],
-                  }}
-                  onClick={() => openModal(item)} // 클릭 시 모달 열림
-                >
-                  <p>{item.content}</p>
-                </div>
-              ))}
+            {answerList.slice(currentPage * answersPerPage + 3, (currentPage + 1) * answersPerPage).map((item, index) => (
+              <div
+                key={item.answerId}
+                style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
+                onClick={() => openModal(item)} // 클릭 시 모달 열림
+              >
+                <p>{item.content}</p>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* 양 옆으로 슬라이드 버튼 */}
         <div style={arrowContainerStyle}>
           {currentPage > 0 && (
-            <button onClick={prevPage} style={arrowLeftStyle}>
-              ◀
-            </button>
+            <button onClick={prevPage} style={arrowLeftStyle}>◀</button>
           )}
           {currentPage < totalPages - 1 && (
-            <button onClick={nextPage} style={arrowRightStyle}>
-              ▶
-            </button>
+            <button onClick={nextPage} style={arrowRightStyle}>▶</button>
           )}
         </div>
       </div>
@@ -220,7 +147,6 @@ const SushiDetail = () => {
 };
 
 /* 스타일들 */
-
 const outsideStyle = {
   backgroundColor: "#FDFCC8",
   minHeight: "100vh",
