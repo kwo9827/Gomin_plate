@@ -1,0 +1,21 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+
+logging.level:
+  org.hibernate.SQL: debug
+
+oauth:
+  kakao:
+    redirect-uri: http://localhost:5173/oauth/kakao/callback  # 운영 도메인으로 변경
+  google:
+    redirect-uri: http://localhost:5173/oauth/google/callback  # 운영 도메인으로 변경

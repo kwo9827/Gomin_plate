@@ -32,4 +32,8 @@ public class Notification extends BaseEntity {
     @Column(name = "redirect_url", nullable = false)
     private String redirectUrl;
 
+    public void markNotificationAsRead(){
+        this.isRead = true;
+    }
+
 }

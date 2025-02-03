@@ -28,10 +28,11 @@ public class AnswerController {
     @GetMapping("")
     public ResponseEntity<ApiResponse<CustomPage<MyAnswerListResponse>>> getMySushiList(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestParam(required = false) String keyword,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
-        return ApiResponse.success(answerService.getMyAnswerList(userId, pageable));
+        return ApiResponse.success(answerService.getMyAnswerList(userId, keyword, pageable));
     }
 
     @GetMapping("/{sushiId}")

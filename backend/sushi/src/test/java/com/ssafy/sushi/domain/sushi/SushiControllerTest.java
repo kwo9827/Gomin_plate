@@ -1,8 +1,10 @@
 package com.ssafy.sushi.domain.sushi;
 
+import com.ssafy.sushi.domain.answer.service.AnswerService;
 import com.ssafy.sushi.domain.sushi.dto.response.MySushiListResponse;
 import com.ssafy.sushi.domain.sushi.service.SushiService;
 import com.ssafy.sushi.global.common.CustomPage;
+import com.ssafy.sushi.global.common.util.AuthenticationUtil;
 import com.ssafy.sushi.global.security.UserPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,6 +40,12 @@ class SushiControllerTest {
     @MockitoBean
     private SushiService sushiService;
 
+    @MockitoBean
+    private AnswerService answerService;
+
+    @MockitoBean
+    private AuthenticationUtil authenticationUtil;
+
     @MockitoBean // EnableJpaAuditing 어노테이션을 사용하기 위해 추가
     private JpaMetamodelMappingContext jpaMetamodelMappingContext;
 
@@ -63,7 +71,7 @@ class SushiControllerTest {
 
         doReturn(expectedPage)
                 .when(sushiService)
-                .getMySushiList(any(), any(Pageable.class));
+                .getMySushiList(any(), any(), any(Pageable.class));
 
         // when
         ResultActions result = mockMvc.perform(get("/api/sushi/my")
