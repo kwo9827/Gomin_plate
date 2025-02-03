@@ -8,6 +8,7 @@ import MySushiList from "./pages/MySushiList";
 import SushiView from "./pages/SushiView";
 import PostSushi from "./pages/PostSushi";
 import Navbar from "./components/NavBar";
+import OAuthCallback from "./components/OAuthCallback";
 import ErrorPage from "./pages/ErrorPage"; // Error 페이지 임포트
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/sushiview" element={<SushiView />} />
         <Route path="/postsushi" element={<PostSushi />} />
         <Route path="/sushidetail" element={<SushiDetail />} />
+        <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
         <Route path="*" element={<ErrorPage />} />{" "}
         {/* 모든 경로에 매칭되지 않으면 ErrorPage로 이동 */}
       </Routes>

@@ -1,60 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-/** 레일에 지나가는 초밥을 눌렀을때 나타날 페이지
- * 1. 초밥 객체에 대한 정보를 받고 출력
- * 2. 사용자는 답변 입력 가능
- * 3. API 연결 완료
- */
 const SushiView = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { id } = location.state || {}; // state에서 id 가져오기
+    const { sushiId, category, sushiType, remainingAnswers, expirationTime } = location.state || {}; // 수정: sushiId를 정확히 가져오도록 변경
 
     const [sushiData, setSushiData] = useState(null);
-    const [content, setContent] = useState('');
-
-    const dummySushi = {
-        sushiId: id,
-        title: '더미 초밥 제목',
-        content: '더미 초밥 내용',
-        plateType: '골드',
-        sushiType: '스시',
-        maxAnswers: 5,
-        remainingAnswers: 2,
-        expirationTime: '2025-01-31T23:59:59',
-    };
+    const [content, setContent] = useState("");
 
     useEffect(() => {
-        if (!id) {
-            alert('초밥 ID가 없습니다. 홈으로 이동합니다.');
-            navigate('/Home');
+        if (!sushiId) {
+            alert("초밥 ID가 없습니다. 홈으로 이동합니다.");
+            navigate("/Home");
             return;
         }
+
+        const dummySushi = {
+            sushiId,
+            title: "더미 초밥 제목",
+            content: "더미 초밥 내용",
+            plateType: "골드",
+            sushiType: "스시",
+            maxAnswers: 5,
+            remainingAnswers: 2,
+            expirationTime: "2025-01-31T23:59:59",
+        };
+
         setSushiData(dummySushi);
-    }, [id, navigate]);
+    }, [sushiId, navigate]);
 
     const handleSubmit = () => {
-        if (content.trim() === '') {
-            alert('답변 내용을 입력해주세요!');
+        if (content.trim() === "") {
+            alert("답변 내용을 입력해주세요!");
             return;
         }
 
         if (sushiData.remainingAnswers <= 0) {
-            alert('더 이상 답변을 작성할 수 없습니다.');
+            alert("더 이상 답변을 작성할 수 없습니다.");
             return;
         }
 
-        console.log('작성된 답변 데이터:', {
+        console.log("작성된 답변 데이터:", {
             sushiId: sushiData.sushiId,
             content,
         });
 
-        navigate('/Home');
+        navigate("/Home");
     };
 
     const handleBack = () => {
-        navigate('/Home');
+        navigate("/Home");
     };
 
     if (!sushiData) {
@@ -77,10 +73,10 @@ const SushiView = () => {
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="답변을 입력하세요."
                 rows="4"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
             />
             <button onClick={handleSubmit}>답변 작성</button>
-            <button onClick={handleBack} style={{ marginLeft: '10px' }}>
+            <button onClick={handleBack} style={{ marginLeft: "10px" }}>
                 뒤로 가기
             </button>
         </div>

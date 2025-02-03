@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Modal from "../components/EditModal";
 import Rail from "../components/Rail";
+import Modal from "../components/EditModal";
 import PostSushiBell from "../components/PostSushiBell";
 import NotificationBell from "../components/NotificationBell";
 import NotificationModal from "../components/NotificationModal";

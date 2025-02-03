@@ -16,11 +16,11 @@ const Navbar = () => {
                 <Link to="/" style={linkStyle}>
                     <button style={buttonStyle}>버튼 1</button>
                 </Link>
-                <Link to="/" style={linkStyle}>
-                    <button style={buttonStyle}>버튼 2</button>
+                <Link to="/MySushiList" style={linkStyle}>
+                    <button style={buttonStyle}>MySushiList</button>
                 </Link>
-                <Link to="/" style={linkStyle}>
-                    <button style={buttonStyle}>버튼 3</button>
+                <Link to="/MyAnswerList" style={linkStyle}>
+                    <button style={buttonStyle}>MyAnswerList</button>
                 </Link>
             </div>
         </nav>

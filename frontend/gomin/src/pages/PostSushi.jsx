@@ -482,6 +482,7 @@ const cancelButtonStyle = {
   borderRadius: "5px",
   backgroundColor: "#808080",
   color: "white",
+  fontSize: "16px",
   cursor: "pointer",
   width: "40%",
   whiteSpace: "nowrap",

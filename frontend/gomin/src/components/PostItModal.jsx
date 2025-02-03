@@ -1,24 +1,27 @@
 import React from "react";
 
-/** 답변을 보기 위한 포스트잇 컴포넌트
- * 1. 여기서는 API 요청을 할 것이 아니라 props로 답변 내용을 담아서 뿌리는게 효율적
- * 2. SushiDetail에서 Sushi 데이터에 달린 answers[] 데이터 하나 빼서 담으면 될 듯
- */
-const PostItModal = ({ isOpen, onClose }) => {
-    if (!isOpen) return null;
+const PostItModal = ({ isOpen, onClose, answer, likedAnswerId, setLikedAnswerId }) => {
+    if (!isOpen || !answer) return null;
+
+    /* 좋아요 버튼 */
+    const toggleLike = () => {
+        setLikedAnswerId((prev) => (prev === answer.answerId ? null : answer.answerId));
+    };
 
     return (
-        <div style={overlayStyle}>
-            <div style={modalStyle}>
-                <h2>포스트잇 모달창</h2>
-                <p>이것은 포스트잇 모달이다.</p>
-                <button onClick={onClose}>닫기</button>
+        <div style={overlayStyle} onClick={onClose}>
+            <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
+                <div style={closeButtonStyle} onClick={onClose}>✖</div>
+                <div style={contentStyle}>{answer.content}</div>
+                <div style={heartStyle} onClick={toggleLike}>
+                    {likedAnswerId === answer.answerId ? "❤️" : "🤍"}
+                </div>
             </div>
         </div>
     );
 };
 
-// 스타일
+/* 스타일 */
 const overlayStyle = {
     position: "fixed",
     top: 0,
@@ -29,13 +32,39 @@ const overlayStyle = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 1000,
 };
 
 const modalStyle = {
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "8px",
+    backgroundColor: "#FFF7B8",
+    padding: "40px",
+    borderRadius: "15px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    position: "relative",
+    width: "300px",
     textAlign: "center",
+    fontFamily: "'Nanum Pen Script', cursive",
+    fontSize: "1.2rem",
+};
+
+const closeButtonStyle = {
+    position: "absolute",
+    top: "10px",
+    right: "10px",
+    cursor: "pointer",
+    fontSize: "18px",
+};
+
+const contentStyle = {
+    margin: "20px 0",
+};
+
+const heartStyle = {
+    position: "absolute",
+    bottom: "10px",
+    right: "10px",
+    fontSize: "24px",
+    cursor: "pointer",
 };
 
 export default PostItModal;
