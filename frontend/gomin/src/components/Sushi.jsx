@@ -1,13 +1,27 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import eggImg from "../assets/sushi/egg.png";
-import salmonImg from "../assets/sushi/salmon.png";
-import shrimpImg from "../assets/sushi/shrimp.png";
-import cuttleImg from "../assets/sushi/cuttle.png";
-import eelImg from "../assets/sushi/eel.png";
-import octopusImg from "../assets/sushi/octopus.png";
-import wagyuImg from "../assets/sushi/wagyu.png";
+// 초밥 이미지 임포트
+import eggImg from "../assets/sushi/egg.webp";
+import salmonImg from "../assets/sushi/salmon.webp";
+import shrimpImg from "../assets/sushi/shrimp.webp";
+import cuttleImg from "../assets/sushi/cuttle.webp";
+import eelImg from "../assets/sushi/eel.webp";
+import octopusImg from "../assets/sushi/octopus.webp";
+import wagyuImg from "../assets/sushi/wagyu.webp";
+import scallopImg from "../assets/sushi/가리비초밥.webp";
+import tunaImg from "../assets/sushi/참치초밥.webp";
+import uniImg from "../assets/sushi/성게알초밥.webp";
+import flatfighImg from "../assets/sushi/광어초밥.webp";
+
+// Plates 이미지 임포트
+import redImg from "../assets/plates/red.webp";
+import yellowImg from "../assets/plates/yellow.webp";
+import greenImg from "../assets/plates/green.webp";
+import blueImg from "../assets/plates/blue.webp";
+import violetImg from "../assets/plates/violet.webp";
+import grayImg from "../assets/plates/gray.webp";
+import whiteImg from "../assets/plates/white.webp";
 
 /** 레일에서 흘러가는 초밥 하나에 대한 컴포넌트
  * 1. 레일에 흘러가는 초밥 데이터를 보여줄 컴포넌트
@@ -15,6 +29,7 @@ import wagyuImg from "../assets/sushi/wagyu.png";
  * 3. 클릭시 sushiview로 id state를 넘기며 navigate됨
  * 4. 초밥 종류를 인자로 받아서 초밥이 다르게 보여지게 구현하면 됨
  */
+
 const Sushi = ({
   sushiId,
   category,
@@ -34,6 +49,16 @@ const Sushi = ({
     6: "기타",
   };
 
+  // 카테고리에 맞는 Plates 이미지 매핑
+  const plates = {
+    1: redImg,
+    2: yellowImg,
+    3: blueImg,
+    4: greenImg,
+    5: violetImg,
+    6: grayImg,
+  };
+
   // 초밥 타입 매핑
   const sushiTypes = {
     1: { name: "계란", image: eggImg },
@@ -43,6 +68,10 @@ const Sushi = ({
     5: { name: "문어", image: octopusImg },
     6: { name: "장어", image: eelImg },
     7: { name: "와규", image: wagyuImg },
+    8: { name: "가리비", image: scallopImg },
+    9: { name: "광어", image: flatfighImg },
+    10: { name: "성게알", image: uniImg },
+    11: { name: "참치", image: tunaImg },
   };
 
   const categoryName = categories[category] || "알 수 없는 카테고리";
@@ -50,6 +79,8 @@ const Sushi = ({
     name: "알 수 없는 초밥",
     image: null,
   };
+
+  const plateImage = plates[category] || whiteImg;
 
   const handleSushiClick = () => {
     // SushiView로 state를 전달
@@ -62,27 +93,63 @@ const Sushi = ({
     <div
       className="sushi"
       onClick={handleSushiClick}
-      style={{ cursor: "pointer", textAlign: "center" }}
+      style={{
+        cursor: "pointer",
+        textAlign: "center",
+        width: "150px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
     >
-      {sushiName.image && (
-        <img
-          src={sushiName.image}
-          alt={sushiName.name}
-          style={{
-            width: "100px", // 원하는 너비
-            height: "100px", // 원하는 높이
-            overflow: "hidden", // 넘치는 부분 숨기기
-            objectFit: "cover",
-            objectPosition: "center",
-            transform: "scale(3)",
-          }}
-        />
-      )}
-      <p> ~Plates 컴포넌트~ </p>
+      {/* 초밥과 접시를 감싸는 div */}
+      <div
+        style={{
+          position: "relative",
+          width: "180px",
+          height: "100px",
+          overflow: "hidden",
+        }}
+      >
+        {plateImage && (
+          <img
+            src={plateImage}
+            alt={`Plate for ${categoryName}`}
+            style={{
+              width: "150px",
+              height: "150px",
+              position: "absolute",
+              top: "45%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              borderRadius: "50%",
+            }}
+          />
+        )}
+
+        {sushiName.image && (
+          <img
+            src={sushiName.image}
+            alt={sushiName.name}
+            style={{
+              width: "100px",
+              height: "100px",
+              overflow: "hidden", // 넘치는 부분 숨기기
+              objectFit: "cover",
+              objectPosition: "center",
+              position: "absolute",
+              top: "50%",
+              left: "48%",
+              transform: "translate(-50%, -50%) scale(3.7)",
+            }}
+          />
+        )}
+      </div>
+
       <h3>{sushiName.name}</h3>
-      <p>고민 카테고리: {categoryName}</p>
-      <p>남은 답변 수: {remainingAnswers}</p>
-      <p>유효 기간: {expirationTime}</p>
+      <p style={{ margin: 0 }}>고민 카테고리: {categoryName}</p>
+      <p style={{ margin: 0 }}>남은 답변 수: {remainingAnswers}</p>
+      <p style={{ margin: 0 }}>유효 기간: {expirationTime}</p>
     </div>
   );
 };
