@@ -72,7 +72,7 @@ const Rail = () => {
                         transform: "translateY(-50%)",
                     }}
                 >
-                    <Sushi id={sushi.sushiId} />
+                    <Sushi sushiId={sushi.sushiId} category={sushi.category} sushiType={sushi.sushiType} remainingAnswers={sushi.remainingAnswers} expirationTime={sushi.expirationTime} />
                 </div>
             ))}
             <style>{`

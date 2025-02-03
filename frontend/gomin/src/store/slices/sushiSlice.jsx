@@ -5,19 +5,22 @@ import api from '../../api/axios';
 export const fetchRailSushi = createAsyncThunk(
     'sushi/fetchRail',
     async (size = 15) => {
-        // API 요청 대신 더미 데이터를 사용하도록 변경
-        const dummyData = generateDummyData();
-        return dummyData;
-        // const response = await api.get(`/sushi/rail?size=${size}`);
-        // return response.data;
+        const response = await api.get(`/sushi/rail?size=${size}`);
+        return response.data;
     }
 );
 
 /* 본인이 등록한 초밥(질문)에 대한 리스트를 불러오는 API */
 export const fetchMySushi = createAsyncThunk(
     'sushi/fetchMySushi',
-    async () => {
-        const response = await api.get('/sushi/my');
+    async ({ search = '', page = 1, size = 10 }) => {
+        const response = await api.get('/sushi/my', {
+            params: {
+                search,
+                page,
+                size,
+            },
+        });
         return response.data;
     }
 );
@@ -70,14 +73,14 @@ const sushiSlice = createSlice({
             })
             .addCase(fetchRailSushi.fulfilled, (state, action) => {
                 state.status = 'idle';
-                state.railSushi = action.payload.data.sushi;
+                state.railSushi = action.payload.data.sushi;  // 응답 구조 수정
             })
             .addCase(fetchRailSushi.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })
             .addCase(fetchMySushi.fulfilled, (state, action) => {
-                state.mySushi = action.payload.data.sushi;
+                state.mySushi = action.payload.data.content;  // 응답 구조 수정
             })
             .addCase(fetchSushiDetail.fulfilled, (state, action) => {
                 state.currentSushi = action.payload.data;
@@ -90,20 +93,3 @@ const sushiSlice = createSlice({
 
 export const { clearCurrentSushi } = sushiSlice.actions;
 export default sushiSlice.reducer;
-
-/* 더미 초밥 데이터 생성 함수 */
-const generateDummyData = () => {
-    return {
-        success: true,
-        data: {
-            sushi: Array.from({ length: 15 }).map(() => ({
-                sushiId: Math.floor(Math.random() * 100), // 임의의 sushiId
-                category: "회전초밥", // 카테고리
-                sushiType: `초밥 타입 ${Math.floor(Math.random() * 10)}`, // 임의의 초밥 타입
-                remainingAnswers: Math.floor(Math.random() * 10), // 임의의 남은 응답 수
-                expirationTime: new Date(Date.now() + Math.floor(Math.random() * 10000)).toISOString() // 만료 시간 (현재 시간 기준)
-            }))
-        },
-        error: null
-    };
-};
