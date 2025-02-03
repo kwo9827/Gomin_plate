@@ -3,6 +3,7 @@ package com.ssafy.sushi.global.config.security;
 import com.ssafy.sushi.global.security.jwt.JwtAuthenticationFilter;
 import com.ssafy.sushi.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,8 +26,8 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-//    @Value("${app.url.front}")
-//    private String frontUrl;
+    @Value("${app.domain}")
+    private String domain;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -43,7 +44,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                                 authorize
                                         .requestMatchers("/api/**").permitAll()
-//                                .requestMatchers("/api/user/**").authenticated()
                                         .anyRequest().authenticated()
                 )
 //                JWT 인증 필터 추가
@@ -55,17 +55,18 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
+        String localhostFront = "http://localhost:5173";
+
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Collections.singletonList(frontUrl, "http://localhost:3000"));
-//        configuration.setAllowedOrigins(Arrays.asList(frontUrl, "http://localhost:3000"));
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of(domain, localhostFront));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization", "Content-Type", "X-Requested-With",
                 "Access-Control-Allow-Credentials", "Access-Control-Allow-Origin",
                 "Accept", "Origin", "Cookie", "Set-Cookie"
         ));
-        configuration.setExposedHeaders(Arrays.asList("Set-Cookie"));  // 쿠키 노출 허용
+        configuration.setExposedHeaders(List.of("Set-Cookie"));  // 쿠키 노출 허용
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
