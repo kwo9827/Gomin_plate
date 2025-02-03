@@ -8,10 +8,20 @@ const SushiDetail = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { id } = location.state || {}; 
+    const { id } = location.state || {};
     const currentSushi = useSelector((state) => state.sushi.currentSushi);
     const status = useSelector((state) => state.sushi.status);
     const [currentPage, setCurrentPage] = useState(0);
+
+    useEffect(() => {
+        if (id) {
+            dispatch(fetchMySushiDetail(id)); // id로 상세 데이터 요청
+        } else {
+            navigate("/home"); // id가 없으면 홈으로 리다이렉트
+        }
+    }, [id, dispatch, navigate]);
+
+    console.log(currentSushi);
 
     /* 모달 관련 상태 추가 */
     const [modalOpen, setModalOpen] = useState(false);
@@ -29,46 +39,9 @@ const SushiDetail = () => {
         setModalOpen(false);
     };
 
-    /* GPT가 만들어준 더미 데이터 */
-    const dummySushi = {
-        title: "너무 잘 생겨서 남자들한테 너무 미안해요.",
-        content: `저는 싸피 대전 캠퍼스 12기에서 교육을 받고 있는 ㅇㅇㅇ입니다.
-        제가 다른 남자들보다 잘 생겨서 남자들이 저한테 상대적 박탈감을 느낄까 봐 많이 걱정됩니다.
-        저 이렇게 잘 생겨도 괜찮은거 맞겠죠??sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-        sssssssssssssssssssssssssssssssssssssssssssssssssss
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿
-        규빈 상호 가현 은지 승용 승열 렛츠기릿`,
-        expirationTime: "2025-01-22",
-        answer: [
-            { answerId: 1, content: "안녕하세요. 잘 읽었습니다." },
-            { answerId: 2, content: "이 글 너무 공감돼요!" },
-            { answerId: 3, content: "재밌는 이야기네요 ㅎㅎ" },
-            { answerId: 4, content: "잘 보고 갑니다!" },
-            { answerId: 5, content: "응원합니다!" },
-            { answerId: 6, content: "좋은 글이네요." },
-            { answerId: 7, content: "많이 고민하셨겠어요." },
-            { answerId: 8, content: "이해됩니다." },
-            { answerId: 9, content: "비슷한 경험이 있어요." },
-            { answerId: 10, content: "힘내세요!" },
-        ],
-    };
 
-    const sushiData = currentSushi?.data || dummySushi;
+    // currentSushi에서 데이터를 가져오고, 데이터가 없으면 더미 데이터 사용
+    const sushiData = currentSushi;
     const answerList = sushiData.answer || [];
     const answersPerPage = 5;
     const totalPages = Math.ceil(answerList.length / answersPerPage);
@@ -112,7 +85,7 @@ const SushiDetail = () => {
                 <hr style={dividerStyle} />
 
                 {/* 날짜 */}
-                <p style={dateStyle}>{sushiData.expirationTime}</p>
+                <p style={dateStyle}>{new Date(sushiData.expirationTime).toLocaleString()}</p>
 
                 {/* 본문 내용 */}
                 <div style={contentBoxStyle}>
@@ -125,8 +98,8 @@ const SushiDetail = () => {
                 <div style={postItWrapperStyle}>
                     <div style={postItRowStyle}>
                         {answerList.slice(currentPage * answersPerPage, currentPage * answersPerPage + 3).map((item, index) => (
-                            <div 
-                                key={item.answerId} 
+                            <div
+                                key={item.answerId}
                                 style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
                                 onClick={() => openModal(item)} // 클릭 시 모달 열림
                             >
@@ -136,8 +109,8 @@ const SushiDetail = () => {
                     </div>
                     <div style={postItRowStyle}>
                         {answerList.slice(currentPage * answersPerPage + 3, (currentPage + 1) * answersPerPage).map((item, index) => (
-                            <div 
-                                key={item.answerId} 
+                            <div
+                                key={item.answerId}
                                 style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
                                 onClick={() => openModal(item)} // 클릭 시 모달 열림
                             >
@@ -159,23 +132,23 @@ const SushiDetail = () => {
             </div>
 
             {/* PostItModal 렌더링 - modalOpen이 true일 때만 보임 */}
-            {modalOpen && <PostItModal 
-                isOpen={modalOpen} 
-                onClose={closeModal} 
-                answer={selectedAnswer} 
-                likedAnswerId={likedAnswerId} 
-                setLikedAnswerId={setLikedAnswerId} 
+            {modalOpen && <PostItModal
+                isOpen={modalOpen}
+                onClose={closeModal}
+                answer={selectedAnswer}
+                likedAnswerId={likedAnswerId}
+                setLikedAnswerId={setLikedAnswerId}
             />}
         </div>
     );
 };
 
-/* 뒷배경 */
+/* 스타일들 */
+
 const outsideStyle = {
     backgroundColor: "#FDFCC8",
 };
 
-/* 바깥 테두리 */
 const outerContainerStyle = {
     backgroundColor: "#FFFFF0",
     minHeight: "100vh",
@@ -188,7 +161,6 @@ const outerContainerStyle = {
     margin: "10px",
 };
 
-/* 뒤로 가기 */
 const backButtonStyle = {
     position: "absolute",
     top: "20px",
@@ -199,7 +171,6 @@ const backButtonStyle = {
     cursor: "pointer",
 };
 
-/* 제목 */
 const titleStyle = {
     fontSize: "2rem",
     fontWeight: "bold",
@@ -207,14 +178,12 @@ const titleStyle = {
     color: "#5D4A37",
 };
 
-/* 날짜 */
 const dateStyle = {
     fontSize: "1rem",
     color: "#8D7B7B",
     marginBottom: "20px",
 };
 
-/* 본문 내용 박스 */
 const contentBoxStyle = {
     backgroundColor: "#FFFFF0",
     padding: "15px",
@@ -224,7 +193,6 @@ const contentBoxStyle = {
     border: "4px solid #B2975C",
 };
 
-/* 본문 내용 */
 const contentStyle = {
     fontSize: "1.1rem",
     color: "#5D4A37",
@@ -232,14 +200,12 @@ const contentStyle = {
     textAlign: "left",
 };
 
-/* 구분선 */
 const dividerStyle = {
     width: "90%",
     margin: "20px auto",
     border: "1px solid #B2975C",
 };
 
-/* 포스트잇 배치 */
 const postItWrapperStyle = {
     display: "flex",
     flexDirection: "column",
@@ -248,14 +214,12 @@ const postItWrapperStyle = {
     marginTop: "20px",
 };
 
-/* 포스트잇 줄 스타일 */
 const postItRowStyle = {
     display: "flex",
     justifyContent: "center",
     gap: "10px",
 };
 
-/* 포스트잇 스타일 */
 const postItStyle = {
     width: "100px",
     height: "100px",
@@ -271,17 +235,14 @@ const postItStyle = {
     alignItems: "center",
 };
 
-/* 포스트잇 배경색 */
 const postItColors = ["#FFD700", "#FFA07A", "#87CEFA", "#98FB98", "#F0E68C"];
 
-/* 화살표 컨테이너 */
 const arrowContainerStyle = {
     display: "flex",
     justifyContent: "center",
     marginTop: "10px",
 };
 
-/* 화살표 스타일 */
 const arrowLeftStyle = { marginRight: "10px", cursor: "pointer" };
 const arrowRightStyle = { marginLeft: "10px", cursor: "pointer" };
 
