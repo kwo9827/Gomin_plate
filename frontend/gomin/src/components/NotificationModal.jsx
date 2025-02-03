@@ -1,19 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { fetchNotifications, markAsRead, fetchUnreadExists } from '../store/slices/notificationSlice';
 
-/** NotificationBell을 눌렀을때 열리는 모달
- * 본인에게 온 알림을 볼 수 있음
- * 1. 현재 API 연결 완료
- * 2. 디자인만 어케해보셈.
- * 3. 알림온 데이터로 초밥 디테일로 가는거 구현하시면 됨
- */
 const NotificationModal = ({ isOpen, onClose }) => {
     const dispatch = useDispatch();
-    const { notifications, hasUnread } = useSelector((state) => state.notification);
+    const navigate = useNavigate();
+    const { notifications } = useSelector((state) => state.notification);
     const status = useSelector((state) => state.notification.status);
 
-    // 알림 데이터를 가져오기
     useEffect(() => {
         if (isOpen) {
             dispatch(fetchNotifications());
@@ -21,63 +16,168 @@ const NotificationModal = ({ isOpen, onClose }) => {
         }
     }, [isOpen, dispatch]);
 
-    // 알림 읽음 처리
-    const handleMarkAsRead = (notificationId) => {
-        dispatch(markAsRead(notificationId));
+    const handleNotificationClick = (notification) => {
+        dispatch(markAsRead(notification.notificationId));
+        navigate('/sushiview', { state: { id: notification.sushiId } });
+        onClose();
     };
 
     if (!isOpen) return null;
 
     return (
-        <div style={overlayStyle}>
-            <div style={modalStyle}>
-                <h2>알림 페이지 모달창</h2>
-                {status === 'loading' ? (
-                    <p>로딩 중...</p>
-                ) : (
-                    <div>
-                        {notifications.length > 0 ? (
-                            <ul>
-                                {notifications.map((notification) => (
-                                    <li key={notification.notificationId}>
-                                        <p>{notification.message}</p>
-                                        <p>알림 타입: {notification.type}</p>
-                                        <p>생성일: {notification.createdAt}</p>
-                                        <button onClick={() => handleMarkAsRead(notification.notificationId)}>
-                                            읽음 처리
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>알림이 없습니다.</p>
-                        )}
+        <div className="notification-overlay" style={styles.overlay}>
+            <div className="notification-modal" style={styles.modal}>
+                <div className="notification-header" style={styles.header}>
+                    <div className="notification-titlecard" style={styles.titlecard}>
+                        <div className="notification-smallcard" style={styles.smallcard}>
+                            <h2 className="notification-title" style={styles.title}>알림</h2>
+                        </div>
                     </div>
-                )}
-                <button onClick={onClose}>닫기</button>
+                    <button className="notification-close" style={styles.closeButton} onClick={onClose}>×</button>
+                </div>
+                <div className="notification-content" style={styles.content}>
+                    {status === 'loading' ? (
+                        <p style={styles.loadingText}>로딩 중...</p>
+                    ) : (
+                        <>
+                            {notifications.length > 0 ? (
+                                notifications.map((notification) => (
+                                    <div
+                                        key={notification.notificationId}
+                                        className="notification-card"
+                                        style={styles.card}
+                                        onClick={() => handleNotificationClick(notification)}
+                                    >
+                                        <div style={styles.cardContent}>
+                                            <p style={styles.message}>{notification.message}</p>
+                                            <p style={styles.time}>
+                                                {new Date(notification.createdAt).toLocaleString()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p style={styles.emptyText}>알림이 없습니다.</p>
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );
 };
 
-// 스타일
-const overlayStyle = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+const styles = {
+    overlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000,
+        backdropFilter: 'blur(10px)'
+    },
+    modal: {
+        width: '100%',
+        maxWidth: '400px',
+        backgroundColor: '#f4e4bc',
+        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+        overflow: 'hidden',
+        border: "8px solid #906C48",
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '15px 20px',
+        backgroundColor: '#FFFEEC',
+        borderBottom: '1px solid #c4a87c',
+        position: 'relative'  // 유지
+    },
+    titlecard: {
+        position: 'relative',
+        width: '238px',
+        height: '60px',
+        backgroundColor: '#B2975C',
+        borderRadius: '2px',
+        margin: '0 auto',
+        border: '3px solid #906C48',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    smallcard: {
+        position: 'relative',
+        width: '226px',
+        height: '50px',
+        backgroundColor: '#B2975C',
+        borderRadius: '2px',
+        margin: '0 auto',
+        border: '2px solid #906C48',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    title: {
+        margin: 0,
+        color: '#5c4b3c',
+        fontSize: '28px',
+        fontWeight: 'bold',
+    },
+    closeButton: {
+        position: 'absolute',  // 추가
+        top: '10px',           // 상단에서 10px 여백
+        right: '10px',         // 오른쪽에서 10px 여백
+        background: 'none',
+        border: 'none',
+        fontSize: '24px',
+        color: '#906C48',
+        cursor: 'pointer',
+        padding: 0,
+        lineHeight: 1
+    },
+    content: {
+        maxHeight: '400px',
+        overflowY: 'auto',
+    },
+    card: {
+        backgroundColor: '#FFFFF0',
+        borderRadius: '2px',
+        cursor: 'pointer',
+        border: '2px solid #DAD0CA',
+        transition: 'transform 0.2s',
+        ':hover': {
+            transform: 'translateY(-2px)'
+        }
+    },
+    cardContent: {
+        padding: '15px'
+    },
+    message: {
+        margin: '0 0 8px 0',
+        color: '#333',
+        fontSize: '14px'
+    },
+    time: {
+        margin: 0,
+        color: '#666',
+        fontSize: '12px'
+    },
+    loadingText: {
+        textAlign: 'center',
+        color: '#666',
+        padding: '20px'
+    },
+    emptyText: {
+        textAlign: 'center',
+        color: '#666',
+        padding: '20px'
+    }
 };
 
-const modalStyle = {
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "8px",
-    textAlign: "center",
-};
 
 export default NotificationModal;
