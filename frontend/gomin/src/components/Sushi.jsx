@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import eggImg from "../assets/egg.png";
-import salmonImg from "../assets/salmon.png";
-import shrimpImg from "../assets/shrimp.png";
-import cuttleImg from "../assets/cuttle.png";
-import eelImg from "../assets/eel.png";
-import octopusImg from "../assets/octopus.png";
-import wagyuImg from "../assets/wagyu.png";
+import eggImg from "../assets/sushi/egg.png";
+import salmonImg from "../assets/sushi/salmon.png";
+import shrimpImg from "../assets/sushi/shrimp.png";
+import cuttleImg from "../assets/sushi/cuttle.png";
+import eelImg from "../assets/sushi/eel.png";
+import octopusImg from "../assets/sushi/octopus.png";
+import wagyuImg from "../assets/sushi/wagyu.png";
 
 /** 레일에서 흘러가는 초밥 하나에 대한 컴포넌트
  * 1. 레일에 흘러가는 초밥 데이터를 보여줄 컴포넌트
