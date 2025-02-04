@@ -25,7 +25,7 @@ export const toggleLike = createAsyncThunk(
 export const fetchMyAnswers = createAsyncThunk(
     'answer/fetchMyAnswers',
     async () => {
-        const response = await api.get('/sushi/answer');
+        const response = await api.get('/answer');
         return response.data;
     }
 );
@@ -56,7 +56,7 @@ const answerSlice = createSlice({
                 }
             })
             .addCase(fetchMyAnswers.fulfilled, (state, action) => {
-                state.myAnswers = action.payload.data.sushi;
+                state.myAnswers = action.payload.data;
             });
     },
 });
