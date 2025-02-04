@@ -6,6 +6,10 @@ spring:
       hibernate:
         format_sql: true
     defer-datasource-initialization: true
+  data:
+    redis:
+      host: localhost # 권장 x ip 주소로...
+      port: 6379
 
   sql:
     init:
