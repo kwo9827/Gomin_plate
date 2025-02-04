@@ -3,7 +3,7 @@ import api from '../../api/axios';
 
 /* 답변에 대한 API와 상태를 관리하는 슬라이스 */
 
-/* 답변 생성 하는 API*/
+/* 답변 생성 하는 API */
 export const createAnswer = createAsyncThunk(
     'answer/create',
     async ({ sushiId, content }) => {
@@ -30,12 +30,21 @@ export const fetchMyAnswers = createAsyncThunk(
     }
 );
 
+/* 본인 답변에 대한 본 초밥의 상세 페이지 API */
+export const fetchAnswerDetail = createAsyncThunk(
+    'answer/fetchAnswerDetail',
+    async (sushiId) => {
+        const response = await api.get(`/answer/${sushiId}`);
+        return response.data;
+    }
+);
 
 const answerSlice = createSlice({
     name: 'answer',
     initialState: {
         answers: [],
         myAnswers: [],
+        answerDetail: null, // 상세 답변 상태 추가
         status: 'idle',
         error: null,
     },
@@ -57,6 +66,17 @@ const answerSlice = createSlice({
             })
             .addCase(fetchMyAnswers.fulfilled, (state, action) => {
                 state.myAnswers = action.payload.data;
+            })
+            .addCase(fetchAnswerDetail.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchAnswerDetail.fulfilled, (state, action) => {
+                state.status = 'idle';
+                state.answerDetail = action.payload.data; // 상세 답변 정보 저장
+            })
+            .addCase(fetchAnswerDetail.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
             });
     },
 });
