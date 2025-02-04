@@ -7,7 +7,7 @@ const KakaoLoginButton = () => {
 
   const handleKakaoLogin = () => {
     const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID;
-    const redirectUri = "http://localhost:5173/oauth/kakao/callback"; // 리다이렉트 URI
+    const redirectUri = "https://www.gomin.my/oauth/kakao/callback"; // 리다이렉트 URI
     dispatch(kakaoLogin({ clientId, redirectUri }));
   };
 
