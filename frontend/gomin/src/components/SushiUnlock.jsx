@@ -24,14 +24,13 @@ const SushiUnlock = ({ isOpen, onClose }) => {
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
-        {/* 닫기 버튼 */}
-        <button onClick={onClose} style={cancelButtonStyle}>
-          ✖
-        </button>
-
         {/* 나의 초밥 제목 */}
         <div style={outerBoxStyle}>
           <div style={innerBoxStyle}>나의 초밥</div>
+          {/* 닫기 버튼 */}
+          <button onClick={onClose} style={cancelButtonStyle}>
+            ✖
+          </button>
         </div>
 
         {/* 좋아요 및 프로그레스 바 */}
@@ -51,8 +50,8 @@ const SushiUnlock = ({ isOpen, onClose }) => {
         {/* 해금된 초밥 리스트 */}
         <div style={sushiGrid}>
           {Array.from({ length: SUSHI_COUNT }).map((_, index) => (
-            <div style={sushiOuterStyle}>
-              <div key={index} style={sushiItem}>
+            <div key={index} style={sushiOuterStyle}>
+              <div style={sushiItem}>
                 {index < unlockedSushiCount ? "🍣 해금됨" : "🔒 잠김"}
               </div>
             </div>
@@ -75,6 +74,7 @@ const overlayStyle = {
   justifyContent: "center",
   alignItems: "center",
   zIndex: 1000,
+  backdropFilter: "blur(10px)",
 };
 
 // 모달 스타일
@@ -154,7 +154,7 @@ const progressFill = {
   height: "100%",
   backgroundColor: "#FF6F61",
   borderRadius: "10px",
-  transition: "width 0.3s ease-in-out",
+  transition: "width 0.5s ease-in-out", // 애니메이션 적용
 };
 
 const progressText = {

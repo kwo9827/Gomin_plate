@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SushiCard from "../components/SushiCard";
 import searchIcon from "../assets/search.png";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { fetchMySushi } from "../store/slices/sushiSlice";
 
 const MySushiList = () => {
@@ -16,18 +16,19 @@ const MySushiList = () => {
   const mySushi = useSelector((state) => state.sushi.mySushi);
 
   useEffect(() => {
-    dispatch(fetchMySushi({
-      search: '',
-      page: 1,
-      size: 10
-    }))
-      .then((result) => {
-        console.log('내 초밥 리스트:', result.payload.data.sushi);
-      });
+    dispatch(
+      fetchMySushi({
+        search: "",
+        page: 1,
+        size: 10,
+      })
+    ).then((result) => {
+      console.log("내 초밥 리스트:", result.payload.data.sushi);
+    });
   }, [dispatch]);
 
   useEffect(() => {
-    console.log('현재 내 초밥 상태:', mySushi);
+    console.log("현재 내 초밥 상태:", mySushi);
   }, [mySushi]);
 
   const filteredSushi = mySushi.filter((sushi) =>
@@ -65,7 +66,11 @@ const MySushiList = () => {
           <ul style={listStyle}>
             {filteredSushi.map((sushi) => (
               <li key={sushi.id}>
-                <SushiCard id={sushi.sushiId} title={sushi.title} content={sushi.content} />
+                <SushiCard
+                  id={sushi.sushiId}
+                  title={sushi.title}
+                  content={sushi.content}
+                />
               </li>
             ))}
           </ul>
