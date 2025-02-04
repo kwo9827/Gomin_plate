@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMySushiDetail } from "../store/slices/sushiSlice";
-import PostItModal from "../components/PostItModal"; // PostItModal 추가
+import PostItModal from "../components/PostItModal";
 
 const SushiDetail = () => {
   const location = useLocation();
@@ -13,20 +13,26 @@ const SushiDetail = () => {
   const status = useSelector((state) => state.sushi.status);
   const [currentPage, setCurrentPage] = useState(0);
 
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchMySushiDetail(id)); // id로 상세 데이터 요청
-    } else {
-      navigate("/home"); // id가 없으면 홈으로 리다이렉트
-    }
-  }, [id, dispatch, navigate]);
-
-  console.log(currentSushi);
+  // 구조 분해 할당으로 안전하게 데이터 추출
+  const {
+    title = '',
+    content = '',
+    expirationTime = new Date(),
+    answer = []
+  } = currentSushi || {};
 
   /* 모달 관련 상태 추가 */
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [likedAnswerId, setLikedAnswerId] = useState(null);  // 좋아요 상태 추가
+  const [likedAnswerId, setLikedAnswerId] = useState(null);
+
+  useEffect(() => {
+    if (!id) {
+      navigate("/home");
+      return;
+    }
+    dispatch(fetchMySushiDetail(id));
+  }, [id, dispatch, navigate]);
 
   /* 모달 열기 */
   const openModal = (answer) => {
@@ -39,25 +45,21 @@ const SushiDetail = () => {
     setModalOpen(false);
   };
 
-  // currentSushi에서 데이터를 가져오고, 데이터가 없으면 더미 데이터 사용
-  const sushiData = currentSushi;
-  const answerList = sushiData.answer || [];
   const answersPerPage = 5;
-  const totalPages = Math.ceil(answerList.length / answersPerPage);
+  const totalPages = Math.ceil(answer.length / answersPerPage);
 
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchMySushiDetail(id));
-    }
-  }, [id, dispatch]);
-
-  if (!id) {
-    navigate("/home");
-    return null;
+  // 로딩 및 오류 상태 처리
+  if (status === 'loading') {
+    return <div style={loadingStyle}>로딩 중...</div>;
   }
 
-  if (status === "loading") {
-    return <p>Loading...</p>;
+  if (status === 'failed') {
+    return <div style={errorStyle}>데이터를 불러오는 데 실패했습니다.</div>;
+  }
+
+  if (!currentSushi || !id) {
+    navigate("/home");
+    return null;
   }
 
   /* 댓글 페이지 양 옆으로 슬라이드하기 */
@@ -82,15 +84,15 @@ const SushiDetail = () => {
         </button>
 
         {/* 제목 */}
-        <h2 style={titleStyle}>{sushiData.title}</h2>
+        <h2 style={titleStyle}>{title}</h2>
         <hr style={dividerStyle} />
 
         {/* 날짜 */}
-        <p style={dateStyle}>{new Date(sushiData.expirationTime).toLocaleString()}</p>
+        <p style={dateStyle}>{new Date(expirationTime).toLocaleString()}</p>
 
         {/* 본문 내용 */}
         <div style={contentBoxStyle}>
-          <p style={contentStyle}>{sushiData.content}</p>
+          <p style={contentStyle}>{content}</p>
         </div>
 
         <hr style={dividerStyle} />
@@ -98,22 +100,22 @@ const SushiDetail = () => {
         {/* 답변 목록(포스트잇 들어갈 자리) */}
         <div style={postItWrapperStyle}>
           <div style={postItRowStyle}>
-            {answerList.slice(currentPage * answersPerPage, currentPage * answersPerPage + 3).map((item, index) => (
+            {answer.slice(currentPage * answersPerPage, currentPage * answersPerPage + 3).map((item, index) => (
               <div
                 key={item.answerId}
                 style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
-                onClick={() => openModal(item)} // 클릭 시 모달 열림
+                onClick={() => openModal(item)}
               >
                 <p>{item.content}</p>
               </div>
             ))}
           </div>
           <div style={postItRowStyle}>
-            {answerList.slice(currentPage * answersPerPage + 3, (currentPage + 1) * answersPerPage).map((item, index) => (
+            {answer.slice(currentPage * answersPerPage + 3, (currentPage + 1) * answersPerPage).map((item, index) => (
               <div
                 key={item.answerId}
                 style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
-                onClick={() => openModal(item)} // 클릭 시 모달 열림
+                onClick={() => openModal(item)}
               >
                 <p>{item.content}</p>
               </div>
@@ -252,5 +254,23 @@ const arrowContainerStyle = {
 
 const arrowLeftStyle = { marginRight: "10px", cursor: "pointer" };
 const arrowRightStyle = { marginLeft: "10px", cursor: "pointer" };
+
+const loadingStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100vh',
+  fontSize: '1.5rem',
+  color: '#5D4A37'
+};
+
+const errorStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100vh',
+  fontSize: '1.5rem',
+  color: 'red'
+};
 
 export default SushiDetail;
