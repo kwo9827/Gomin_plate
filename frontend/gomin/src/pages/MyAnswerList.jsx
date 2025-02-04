@@ -9,25 +9,17 @@ import SushiCard from "../components/SushiCard";
  */
 const MyAnswerList = () => {
     const dispatch = useDispatch();
-    const { myAnswers, status } = useSelector((state) => state.answer); // Redux 데이터
+    const { myAnswers = [], status } = useSelector((state) => state.answer);
     const isLoading = status === "loading";
 
-    // GPT가 만들어준 더미 데이터 (실제 API가 없을 때 테스트용)
-    const dummyAnswers = [
-        { sushiId: 1, title: "내가 답변한 질문 1", category: "인간관계", sushiType: "연어", content: "이건 첫 번째 답변입니다.", getLike: true, createdAt: "2025-01-28" },
-        { sushiId: 2, title: "내가 답변한 질문 2", category: "직장생활", sushiType: "참치", content: "두 번째 답변의 내용이 여기에 들어갑니다.", getLike: false, createdAt: "2025-01-27" },
-        { sushiId: 3, title: "내가 답변한 질문 3", category: "연애", sushiType: "광어", content: "세 번째 답변의 내용입니다.", getLike: true, createdAt: "2025-01-26" },
-        { sushiId: 4, title: "내가 답변한 질문 4", category: "학업", sushiType: "새우", content: "이것은 네 번째 답변이에요.", getLike: false, createdAt: "2025-01-25" },
-        { sushiId: 5, title: "내가 답변한 질문 5", category: "취업", sushiType: "장어", content: "마지막 답변의 내용이 들어갑니다.", getLike: true, createdAt: "2025-01-24" },
-    ];
     // 실제 API 데이터가 없을 경우 더미 데이터 사용
-    const answerData = myAnswers.length > 0 ? myAnswers : dummyAnswers;
-
-
+    const answerData = Array.isArray(myAnswers.content) ? myAnswers.content : []; // 배열인지 체크 후 사용
 
     useEffect(() => {
         dispatch(fetchMyAnswers()); // 본인 답변 리스트 가져오기
     }, [dispatch]);
+
+    console.log(myAnswers.content);
 
     return (
         <div style={backgroundStyle}>
@@ -45,7 +37,13 @@ const MyAnswerList = () => {
                     <ul style={listStyle}>
                         {answerData.map((answer) => (
                             <li key={answer.sushiId} style={listItemStyle}>
-                                <SushiCard id={answer.sushiId} showHeart={answer.getLike} />
+                                <SushiCard
+                                    id={answer.sushiId}
+                                    category={answer.category}
+                                    title={answer.title}
+                                    content={answer.content}
+                                    showHeart={answer.isLiked || answer.getLike}
+                                />
                             </li>
                         ))}
                     </ul>
