@@ -145,11 +145,6 @@ const Sushi = ({
           />
         )}
       </div>
-
-      <h3>{sushiName.name}</h3>
-      <p style={{ margin: 0 }}>고민 카테고리: {categoryName}</p>
-      <p style={{ margin: 0 }}>남은 답변 수: {remainingAnswers}</p>
-      <p style={{ margin: 0 }}>유효 기간: {expirationTime}</p>
     </div>
   );
 };
