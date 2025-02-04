@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSushiDetail } from "../store/slices/sushiSlice";
 
 const SushiView = () => {
   const location = useLocation();
@@ -13,6 +15,16 @@ const SushiView = () => {
   const [titleShadowColor, setTitleShadowColor] = useState(
     "rgba(255, 255, 255, 0.4)"
   );
+
+  // fetch해온 초밥 데이터 관리
+  const dispatch = useDispatch();
+  const currentSushi = useSelector((state) => state.sushi.currentSushi);
+
+  useEffect(() => {
+    dispatch(fetchSushiDetail(sushiId));
+  }, [dispatch, sushiId]);
+
+  console.log(currentSushi);
 
   // 접시 타입에 따른 형광펜 색상 매핑
   const titleShadowColors = {
@@ -32,8 +44,8 @@ const SushiView = () => {
 
   const dummySushi = {
     sushiId,
-    title: `초밥 id는 ${sushiId} 이것입니다. 타이틀 길이제한을 해야할까요?`,
-    content: `초밥 ${sushiType}에 대한 고민입니다 독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅 독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅 `,
+    title: "12",
+    content: "12",
     plateType: `${category}`,
     sushiType,
     maxAnswers: 5,
@@ -47,8 +59,23 @@ const SushiView = () => {
       navigate("/Home");
       return;
     }
-    setSushiData(dummySushi);
-  }, [sushiId, navigate]);
+
+    // currentSushi의 데이터를 dummySushi에 반영
+    if (currentSushi) {
+      setSushiData({
+        sushiId: currentSushi.sushiId,
+        title: currentSushi.title,
+        content: currentSushi.content,
+        plateType: `${category}`,
+        sushiType: currentSushi.sushiType,
+        maxAnswers: currentSushi.maxAnswers,
+        remainingAnswers: currentSushi.remainingAnswers,
+        expirationTime: currentSushi.expirationTime,
+      });
+    } else {
+      setSushiData(dummySushi); // currentSushi가 없을 경우 더미 데이터 사용
+    }
+  }, [sushiId, currentSushi, navigate, category]);
 
   const handleOpenAnswerInput = () => {
     setShowAnswerInput(true);
