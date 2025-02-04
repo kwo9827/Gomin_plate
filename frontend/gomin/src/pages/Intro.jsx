@@ -1,11 +1,12 @@
 import React from "react";
 import KakaoLoginButton from "../components/KakaoLoginButton";
+import introImage from "../assets/intro.webp";
 
 const Intro = () => {
   return (
     <div 
       style={{
-        backgroundImage: `url("src/assets/intro.webp")`,
+        backgroundImage: `url(${introImage})`,
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
