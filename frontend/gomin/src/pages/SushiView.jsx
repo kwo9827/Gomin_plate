@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSushiDetail } from "../store/slices/sushiSlice";
+import { createAnswer } from "../store/slices/answerSlice";
 
 const SushiView = () => {
   const location = useLocation();
@@ -24,7 +25,8 @@ const SushiView = () => {
     dispatch(fetchSushiDetail(sushiId));
   }, [dispatch, sushiId]);
 
-  console.log(currentSushi);
+  // 답변 작성 슬라이스 관리
+  const answers = useSelector((state) => state.answer.answers);
 
   // 접시 타입에 따른 형광펜 색상 매핑
   const titleShadowColors = {
@@ -81,7 +83,7 @@ const SushiView = () => {
     setShowAnswerInput(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (content.trim() === "") {
       alert("답변 내용을 입력해주세요!");
       return;
@@ -97,11 +99,17 @@ const SushiView = () => {
       content,
     });
 
-    setShowAnswerInput(false); // 제출 후 입력창 닫기
-    setContent(""); // 입력 내용 초기화
-
-    // 제출 후 홈으로 돌아가기
-    navigate("/Home");
+    // createAnswer API 호출
+    try {
+      await dispatch(createAnswer({ sushiId: sushiData.sushiId, content }));
+      setShowAnswerInput(false); // 제출 후 입력창 닫기
+      setContent(""); // 입력 내용 초기화
+      alert("답변이 제출되었습니다!");
+      navigate("/Home"); // 제출 후 홈으로 이동
+    } catch (error) {
+      console.error("답변 제출 실패:", error);
+      alert("답변 제출에 실패했습니다.");
+    }
   };
 
   const handleBack = () => {
@@ -259,24 +267,25 @@ const styles = {
     borderRadius: "6px",
     border: "4px solid #B2975C",
     fontFamily: "inherit",
-    fontSize: "1rem",
-    boxSizing: "border-box",
+    fontSize: "1.1rem",
+    lineHeight: "1.5",
     resize: "none",
   },
   buttonContainer: {
     display: "flex",
     justifyContent: "space-between",
+    marginTop: "30px",
     width: "100%",
-    marginTop: "auto", // 버튼을 아래로 붙이기
   },
   button: {
-    width: "auto",
-    color: "#5D4A37",
-    backgroundColor: "transparent",
     border: "none",
-    cursor: "pointer",
-    fontFamily: "inherit",
+    borderRadius: "6px",
+    backgroundColor: "#B2975C",
+    color: "#5D4A37",
     fontSize: "1rem",
+    padding: "12px 25px",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
   },
 };
 
