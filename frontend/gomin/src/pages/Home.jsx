@@ -7,6 +7,8 @@ import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 
+import { useSelector } from "react-redux";
+
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -24,6 +26,10 @@ const Home = () => {
 
   const openSushiUnlock = () => setIsSushiUnlockOpen(true);
   const closeSushiUnlock = () => setIsSushiUnlockOpen(false);
+
+  const token = useSelector((state) => state.member?.accessToken || "");
+
+  console.log("사용자 토큰 : ", token);
 
   return (
     <div className="home-container">
