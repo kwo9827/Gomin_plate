@@ -2,6 +2,7 @@ package com.ssafy.sushi.domain.user;
 
 import com.ssafy.sushi.domain.user.dto.request.UpdateNicknameRequest;
 import com.ssafy.sushi.domain.user.dto.response.UserLikeNumResponse;
+import com.ssafy.sushi.domain.user.dto.response.UserNicknameChangeResponse;
 import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.domain.user.dto.response.UserInfoResponse;
 import com.ssafy.sushi.global.error.ErrorCode;
@@ -35,12 +36,14 @@ public class UserService {
     }
 
     @Transactional
-    public void updateNickname(Integer userId, UpdateNicknameRequest request) {
+    public UserNicknameChangeResponse updateNickname(Integer userId, UpdateNicknameRequest request) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.updateNickname(request.getNickname());
+
+        return UserNicknameChangeResponse.of(user);
     }
 
     @Transactional
