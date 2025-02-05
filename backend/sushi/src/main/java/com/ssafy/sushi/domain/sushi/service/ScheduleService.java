@@ -48,6 +48,6 @@ public class ScheduleService {
             }
                 excutorService.shutdown();
 
-        }, 10, TimeUnit.MINUTES);
+        }, 24, TimeUnit.HOURS);
     }
 }

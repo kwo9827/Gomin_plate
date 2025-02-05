@@ -19,3 +19,9 @@ oauth:
     redirect-uri: https://www.gomin.my/oauth/kakao/callback  # 운영 도메인으로 변경
   google:
     redirect-uri: https://www.gomin.my/oauth/google/callback  # 운영 도메인으로 변경
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
