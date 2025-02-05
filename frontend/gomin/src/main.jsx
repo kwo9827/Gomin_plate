@@ -5,6 +5,7 @@ import { Provider } from "react-redux"; // Provider 임포트
 import App from "./App.jsx";
 import { store } from "./store/index.jsx";
 import "./styles/global.css";
+import "./index.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

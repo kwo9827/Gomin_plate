@@ -19,7 +19,7 @@ function App() {
   const shouldShowNavbar = location.pathname !== "/";
 
   return (
-    <div>
+    <div className="container">
       {shouldShowNavbar && <Navbar />}{" "}
       {/* Intro 페이지 제외하고 Navbar 보이기 */}
       <Routes>
