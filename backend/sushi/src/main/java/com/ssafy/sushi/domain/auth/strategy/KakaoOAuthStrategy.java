@@ -20,6 +20,7 @@ public class KakaoOAuthStrategy implements OAuthStrategy {
     public OAuthUserInfo getUserInfo(String code) {
         try {
             KakaoTokenResponse tokenResponse = kakaoOAuthClient.getToken(code);
+
             KakaoUserResponse userResponse = kakaoOAuthClient.getUserInfo(tokenResponse.getAccessToken());
 
             return OAuthUserInfo.builder()

@@ -3,6 +3,7 @@ package com.ssafy.sushi.domain.user;
 import com.ssafy.sushi.domain.user.dto.request.UpdateNicknameRequest;
 import com.ssafy.sushi.domain.user.dto.response.UserInfoResponse;
 import com.ssafy.sushi.domain.user.dto.response.UserLikeNumResponse;
+import com.ssafy.sushi.domain.user.dto.response.UserNicknameChangeResponse;
 import com.ssafy.sushi.global.common.response.ApiResponse;
 import com.ssafy.sushi.global.common.util.AuthenticationUtil;
 import com.ssafy.sushi.global.security.UserPrincipal;
@@ -48,13 +49,11 @@ public class UserController {
     }
 
     @PutMapping("/nickname")
-    public ResponseEntity<ApiResponse<Void>> updateNickname(
+    public ResponseEntity<ApiResponse<UserNicknameChangeResponse>> updateNickname(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody @Valid UpdateNicknameRequest request) {
         Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
-        userService.updateNickname(userId, request);
-
-        return ApiResponse.success(HttpStatus.OK);
+        return ApiResponse.success(userService.updateNickname(userId, request));
     }
 }
