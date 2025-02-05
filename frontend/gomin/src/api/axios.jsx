@@ -9,13 +9,11 @@ api.interceptors.request.use((config) => {
 
     const token = useSelector((state) => state.member?.accessToken || "");
 
-    // if (token) {
-    //     config.headers.Authorization = `Bearer ${token}`;
-    // } else {
-    //     config.headers.Authorization = `Bearer test`;
-    // }
-
-    config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    } else {
+        config.headers.Authorization = `Bearer test`;
+    }
 
     // config.headers.Authorization = `Bearer test`;
 

@@ -29,7 +29,7 @@ const Home = () => {
 
   const token = useSelector((state) => state.member?.accessToken || "");
 
-  console.log("사용자 토큰 : ", token);
+  console.log("사용자의 accessToken : ", token);
 
   return (
     <div className="home-container">
