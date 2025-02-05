@@ -1,23 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { countLike } from "../store/slices/memberSlice";
+import { toggleLike } from "../store/slices/answerSlice";
 
 const MAX_LIKES = 36; // 좋아요 최대 개수 (3개당 초밥 1개, 12개 해금)
 const SUSHI_COUNT = 12; // 총 초밥 개수
 
 const SushiUnlock = ({ isOpen, onClose }) => {
-  const [likes, setLikes] = useState(0); // 좋아요 개수
+  // const [likes, setLikes] = useState(0); // 좋아요 개수
+
+  const dispatch = useDispatch();
+  const likesReceived = useSelector((state) => state.member.likesReceived);
+
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(countLike()); // 모달이 열릴 때 좋아요 개수 가져오기
+    }
+  }, [isOpen, dispatch]);
 
   // 현재 해금된 초밥 개수 계산 (좋아요 3개마다 1개 해금)
-  const unlockedSushiCount = Math.min(Math.floor(likes / 3), SUSHI_COUNT);
+  const unlockedSushiCount = Math.min(
+    Math.floor(likesReceived / 3),
+    SUSHI_COUNT
+  );
 
   // 진행 바 (좋아요 개수 / 36 * 100%)
-  const progressPercentage = Math.min((likes / MAX_LIKES) * 100, 100);
+  const progressPercentage = Math.min((likesReceived / MAX_LIKES) * 100, 100);
 
   // 좋아요 증가
-  const handleLike = () => {
-    if (likes < MAX_LIKES) {
-      setLikes(likes + 1);
-    }
-  };
+  // const handleLike = (answerId) => {
+  //   dispatch(toggleLike(answerId)).then(() => {
+  //     dispatch(countLike());
+  //   });
+  // };
 
   if (!isOpen) return null;
 
@@ -35,15 +50,15 @@ const SushiUnlock = ({ isOpen, onClose }) => {
 
         {/* 좋아요 및 프로그레스 바 */}
         <div style={progressContainer}>
-          {/* 좋아요 버튼 */}
+          {/* 좋아요 버튼
           <button onClick={handleLike} style={likeButtonStyle}>
             ❤️
-          </button>
+          </button> */}
           <div style={progressBar}>
             <div style={{ ...progressFill, width: `${progressPercentage}%` }} />
           </div>
           <span style={progressText}>
-            {likes} / {MAX_LIKES}
+            {likesReceived} / {MAX_LIKES}
           </span>
         </div>
 
@@ -163,18 +178,6 @@ const progressText = {
   fontWeight: "bold",
 };
 
-// 좋아요 버튼
-const likeButtonStyle = {
-  backgroundColor: "transparent",
-  color: "white",
-  border: "none",
-  padding: "10px 20px",
-  borderRadius: "5px",
-  fontSize: "16px",
-  cursor: "pointer",
-  margin: "10px 0",
-};
-
 // 초밥 리스트 스타일
 const sushiGrid = {
   display: "grid",
@@ -214,5 +217,17 @@ const sushiItem = {
   alignItems: "center",
   boxSizing: "border-box",
 };
+
+// // 좋아요 버튼
+// const likeButtonStyle = {
+//   backgroundColor: "transparent",
+//   color: "white",
+//   border: "none",
+//   padding: "10px 20px",
+//   borderRadius: "5px",
+//   fontSize: "16px",
+//   cursor: "pointer",
+//   margin: "10px 0",
+// };
 
 export default SushiUnlock;

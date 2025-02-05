@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "../../api/axios";
 
 /* 현재 사용자에 대한 정보를 관리하는 슬라이스 */
 
@@ -10,6 +11,18 @@ const initialState = {
   refreshToken: "", // 인증된 유저의 리프레시 토큰
   isNew: false, // 신규 회원 여부
 };
+
+// 좋아요 받은 개수 가져오는 API 요청
+export const countLike = createAsyncThunk("member/countLike", async () => {
+  try {
+    const response = await api.get("/user/my-like");
+    console.log("API 응답 데이터", response.data);
+    return response.data.data;
+  } catch (error) {
+    console.log("API 요청 실패", error);
+  }
+  return response.data;
+});
 
 const memberSlice = createSlice({
   name: "member",
@@ -44,6 +57,17 @@ const memberSlice = createSlice({
       state.isNew = false;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      // 백엔드에서 좋아요 개수를 가져와 상태에 업데이트
+      .addCase(countLike.fulfilled, (state, action) => {
+        console.log("CountLike fulfilled", action.payload); // 콘솔 확인
+        state.likesReceived = action.payload.totalLikes;
+      })
+      .addCase(countLike.rejected, (state, action) => {
+        console.log("countLike API 요청 error", action.error);
+      });
+  },
 });
 
 export const {
@@ -52,4 +76,5 @@ export const {
   updateLikesReceived,
   clearMemberData,
 } = memberSlice.actions;
+
 export default memberSlice.reducer;
