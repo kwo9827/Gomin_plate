@@ -1,5 +1,6 @@
 package com.ssafy.sushi.domain.sushi.dto.request;
 
+import com.ssafy.sushi.domain.sushi.constants.SushiConstants;
 import com.ssafy.sushi.domain.sushi.entity.Category;
 import com.ssafy.sushi.domain.sushi.entity.Sushi;
 import com.ssafy.sushi.domain.sushi.entity.SushiType;
@@ -35,18 +36,15 @@ public class CreateSushiRequest {
 
     public Sushi toEntity(CreateSushiRequest CreateSushiRequest, User user, Category category, SushiType sushiType) {
 
-        // 유통기한은 24시간 후
-
         return Sushi.builder()
                 .user(user)
                 .category(category)
                 .sushiType(sushiType)
                 .title(CreateSushiRequest.getTitle())
                 .content(CreateSushiRequest.getContent())
-                .expirationTime(LocalDateTime.now().plusHours(24)) // 유통기한은 24시간 후
+                .expirationTime(LocalDateTime.now().plusMinutes(SushiConstants.EXPIRATION_MINUTES)) // 유통기한은 24시간 후
                 .maxAnswers(CreateSushiRequest.getMaxAnswers())
                 .remainingAnswers(CreateSushiRequest.getMaxAnswers())
                 .build();
     }
-
 }
