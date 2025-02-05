@@ -22,6 +22,7 @@ export const socialLogin = createAsyncThunk(
       console.log(response.data); // 응답 구조 확인
       console.log(response.data.data); // 실제 필요한 데이터 확인
       dispatch(setAuthData(response.data.data));
+      console.log("sociallogin 호출됐다고 !!");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "소셜 로그인 요청 실패");
