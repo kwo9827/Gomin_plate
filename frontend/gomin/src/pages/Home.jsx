@@ -10,7 +10,6 @@ import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 
-
 //이미지 파일
 import alarmTrueImg from "../assets/home/alarmON.webp";
 import alarmFalseImg from "../assets/home/alarmOFF.webp";
@@ -21,7 +20,6 @@ import openssImg from "../assets/home/open.webp";
 import masterImg from "../assets/home/master.webp";
 
 import { useSelector } from "react-redux";
-
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -42,7 +40,6 @@ const Home = () => {
   const openSushiUnlock = () => setIsSushiUnlockOpen(true);
   const closeSushiUnlock = () => setIsSushiUnlockOpen(false);
 
-
   const hasUnread = useSelector(
     (state) => state.notification.hasUnread ?? false
   );
@@ -53,6 +50,9 @@ const Home = () => {
   useEffect(() => {
     dispatch(fetchUnreadExists());
   }, [dispatch]);
+
+  const token = useSelector((state) => state.member?.accessToken || "");
+  console.log("사용자의 accessToken : ", token);
 
   return (
     <>
@@ -86,35 +86,13 @@ const Home = () => {
             transform: "translateX(0) translateY(-46%)",
           }}
         ></div>
-        {/* 책상 */}
-        {/* <img
-          src={deskImg}
-          alt="Desk"
-          style={{
-            ...styles.img,
-            height: "35%",
-            bottom: "0",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 3,
-          }}
-        /> */}
 
-  const token = useSelector((state) => state.member?.accessToken || "");
-
-  console.log("사용자의 accessToken : ", token);
-
-  return (
-    <div className="home-container">
-      <h1>회전 초밥 레일이어요용</h1>
-
-
-        {/* 책상과 Rail을 묶은 div */}
+        {/* 책상과 Rail */}
         <div style={styles.deskContainer}>
           {/* 책상 */}
           <img src={deskImg} alt="Desk" style={styles.deskImage} />
 
-          {/* Rail (책상 위에 배치) */}
+          {/* Rail */}
           <div style={styles.rail}>
             <Rail />
           </div>
