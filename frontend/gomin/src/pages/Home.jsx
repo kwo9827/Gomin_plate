@@ -33,7 +33,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <h1>회전 초밥 레일</h1>
+      <h1>회전 초밥 레일이야</h1>
 
       <div className="control-buttons">
         <button onClick={openModal}>닉네임 모달 열기</button>
