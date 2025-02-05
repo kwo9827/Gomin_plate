@@ -25,6 +25,7 @@ export const socialLogin = createAsyncThunk(
       console.log("sociallogin 호출됐다고 !!");
       return response.data;
     } catch (error) {
+      console.log("socialLogin 실패 한거임 !!")
       return rejectWithValue(error.response?.data || "소셜 로그인 요청 실패");
     }
   }
