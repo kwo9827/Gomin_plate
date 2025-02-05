@@ -10,6 +10,7 @@ import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 
+
 //이미지 파일
 import alarmTrueImg from "../assets/home/alarmON.webp";
 import alarmFalseImg from "../assets/home/alarmOFF.webp";
@@ -18,6 +19,9 @@ import bellImg from "../assets/home/bell.webp";
 import deskImg from "../assets/home/desk.webp";
 import openssImg from "../assets/home/open.webp";
 import masterImg from "../assets/home/master.webp";
+
+import { useSelector } from "react-redux";
+
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -37,6 +41,7 @@ const Home = () => {
 
   const openSushiUnlock = () => setIsSushiUnlockOpen(true);
   const closeSushiUnlock = () => setIsSushiUnlockOpen(false);
+
 
   const hasUnread = useSelector(
     (state) => state.notification.hasUnread ?? false
@@ -94,6 +99,15 @@ const Home = () => {
             zIndex: 3,
           }}
         /> */}
+
+  const token = useSelector((state) => state.member?.accessToken || "");
+
+  console.log("사용자의 accessToken : ", token);
+
+  return (
+    <div className="home-container">
+      <h1>회전 초밥 레일이어요용</h1>
+
 
         {/* 책상과 Rail을 묶은 div */}
         <div style={styles.deskContainer}>

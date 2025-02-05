@@ -1,66 +1,65 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axios";
-import { clearMemberData, setAuthData } from "./memberSlice";
+import { clearMemberData, setAuthData, updateNicknameState } from "./memberSlice";
 
-/* 카카오 로그인 요청 처리 */
 export const kakaoLogin = createAsyncThunk(
   "auth/kakaoLogin",
   async ({ clientId, redirectUri }, { rejectWithValue }) => {
     try {
-      // 카카오 로그인 URL 생성
       const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
-      window.location.href = kakaoAuthUrl; // 카카오 로그인 페이지로 리다이렉트
+      window.location.href = kakaoAuthUrl;
     } catch (error) {
       return rejectWithValue(error.response?.data || "카카오 로그인 요청 실패");
     }
   }
 );
 
-/* 소셜 로그인 요청 처리 */
 export const socialLogin = createAsyncThunk(
   "auth/socialLogin",
   async ({ provider, code }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.post(`/oauth/${provider}`, { code });
-      // 멤버 데이터 저장
-      dispatch(setAuthData(response.data.data));
+      console.log(response.data); // 응답 구조 확인
+      console.log(response.data.data); // 실제 필요한 데이터 확인
+      // dispatch(setAuthData(response.data.data));
+      console.log("sociallogin 호출됐다고 !!");
       return response.data;
     } catch (error) {
+      console.log("socialLogin 실패 한거임 !!")
       return rejectWithValue(error.response?.data || "소셜 로그인 요청 실패");
     }
   }
 );
 
-/* 로그아웃 요청 처리 */
 export const logoutApi = createAsyncThunk(
   "auth/logoutApi",
   async (_, { dispatch, rejectWithValue }) => {
     try {
-      const response = await api.post("/api/auth/logout");
-      // 멤버 데이터 초기화
+      await api.post("/api/auth/logout");
       dispatch(clearMemberData());
-      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "로그아웃 요청 실패");
     }
   }
 );
 
-// 닉네임 수정 API
+/** 닉네임 수정 API */
 export const updateNickname = createAsyncThunk(
   "auth/updateNickname",
-  async (nickname) => {
+  async (nickname, { dispatch }) => {
     const response = await api.put("/user/nickname", { nickname });
+
+    // `memberSlice`에도 업데이트 적용
+    dispatch(updateNicknameState(response.data.data.nickname));
+
     return response.data;
   }
 );
 
-// 회원탈퇴 API
 export const deleteAccount = createAsyncThunk(
   "auth/deleteAccount",
   async (_, { dispatch }) => {
     await api.delete("/user/me");
-    // 멤버 데이터 초기화
     dispatch(clearMemberData());
   }
 );

@@ -21,18 +21,25 @@ const PostSushi = ({ onClose }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [maxAnswers, setMaxAnswers] = useState(1);
-  const [plateType, setPlateType] = useState("");
-  const [sushiType, setSushiType] = useState("초밥1");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(0);
+  const [sushiType, setSushiType] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
+  const categoryMapping = {
+    연애: 1,
+    우정: 2,
+    진로: 3,
+    건강: 4,
+    가족: 5,
+    기타: 6,
+  };
+
   const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
-    setPlateType(e.target.value);
+    setCategory(Number(e.target.value));
   };
 
   const handleProgressChange = (e) => {
-    setMaxAnswers(e.target.value);
+    setMaxAnswers(Number(e.target.value));
   };
 
   const handleSushiTypeChange = (name) => {
@@ -40,8 +47,12 @@ const PostSushi = ({ onClose }) => {
   };
 
   const handleNext = () => {
-    if (!plateType || maxAnswers === 0) {
-      alert("카테고리와 인원수를 설정해주세요.");
+    if (!category) {
+      alert("카테고리를 설정해주세요.");
+      return;
+    }
+    if (!sushiType) {
+      alert("초밥을 골라주세요.");
       return;
     }
     setStep(2);
@@ -60,7 +71,7 @@ const PostSushi = ({ onClose }) => {
       title,
       content,
       maxAnswers,
-      plateType,
+      category,
       sushiType,
     };
     console.log("등록된 내용:", sushiData);
@@ -104,8 +115,8 @@ const PostSushi = ({ onClose }) => {
                       type="radio"
                       id="category1"
                       name="category"
-                      value="연애"
-                      checked={category === "연애"}
+                      value={categoryMapping["연애"]}
+                      checked={category === categoryMapping["연애"]}
                       onChange={handleCategoryChange}
                     />
                     연애
@@ -115,8 +126,8 @@ const PostSushi = ({ onClose }) => {
                       type="radio"
                       id="category2"
                       name="category"
-                      value="우정"
-                      checked={category === "우정"}
+                      value={categoryMapping["우정"]}
+                      checked={category === categoryMapping["우정"]}
                       onChange={handleCategoryChange}
                     />
                     우정
@@ -126,8 +137,8 @@ const PostSushi = ({ onClose }) => {
                       type="radio"
                       id="category3"
                       name="category"
-                      value="진로"
-                      checked={category === "진로"}
+                      value={categoryMapping["진로"]}
+                      checked={category === categoryMapping["진로"]}
                       onChange={handleCategoryChange}
                     />
                     진로
@@ -137,8 +148,8 @@ const PostSushi = ({ onClose }) => {
                       type="radio"
                       id="category4"
                       name="category"
-                      value="건강"
-                      checked={category === "건강"}
+                      value={categoryMapping["건강"]}
+                      checked={category === categoryMapping["건강"]}
                       onChange={handleCategoryChange}
                     />
                     건강
@@ -148,8 +159,8 @@ const PostSushi = ({ onClose }) => {
                       type="radio"
                       id="category5"
                       name="category"
-                      value="가족"
-                      checked={category === "가족"}
+                      value={categoryMapping["가족"]}
+                      checked={category === categoryMapping["가족"]}
                       onChange={handleCategoryChange}
                     />
                     가족
@@ -159,8 +170,8 @@ const PostSushi = ({ onClose }) => {
                       type="radio"
                       id="category6"
                       name="category"
-                      value="기타"
-                      checked={category === "기타"}
+                      value={categoryMapping["기타"]}
+                      checked={category === categoryMapping["기타"]}
                       onChange={handleCategoryChange}
                     />
                     기타
@@ -181,15 +192,15 @@ const PostSushi = ({ onClose }) => {
                 <p style={orderSet}>초밥 종류 선택</p>
                 <div className="slider-container">
                   <Slider {...settings}>
-                    <div onClick={() => handleSushiTypeChange("초밥1")}>
+                    <div onClick={() => handleSushiTypeChange(1)}>
                       <img src="/images/sushi1.jpg" alt="초밥1" />
                       <p>초밥1</p>
                     </div>
-                    <div onClick={() => handleSushiTypeChange("초밥2")}>
+                    <div onClick={() => handleSushiTypeChange(2)}>
                       <img src="/images/sushi2.jpg" alt="초밥2" />
                       <p>초밥2</p>
                     </div>
-                    <div onClick={() => handleSushiTypeChange("초밥3")}>
+                    <div onClick={() => handleSushiTypeChange(3)}>
                       <img src="/images/sushi3.jpg" alt="초밥3" />
                       <p>초밥3</p>
                     </div>
@@ -467,7 +478,6 @@ const confirmButtonStyle = {
   borderRadius: "5px",
   backgroundColor: "#dc3545",
   color: "white",
-  fontSize: "16px",
   cursor: "pointer",
   width: "40%",
   whiteSpace: "nowrap",
@@ -482,7 +492,6 @@ const cancelButtonStyle = {
   borderRadius: "5px",
   backgroundColor: "#808080",
   color: "white",
-  fontSize: "16px",
   cursor: "pointer",
   width: "40%",
   whiteSpace: "nowrap",

@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Intro from "./pages/Intro";
 import MyAnswerList from "./pages/MyAnswerList";
 import SushiDetail from "./pages/SushiDetail";
+import SushiAnswerDetail from "./pages/SushiAnswerDetail";
 import MySushiList from "./pages/MySushiList";
 import SushiView from "./pages/SushiView";
 import PostSushi from "./pages/PostSushi";
@@ -30,6 +31,7 @@ function App() {
         <Route path="/sushiview" element={<SushiView />} />
         <Route path="/postsushi" element={<PostSushi />} />
         <Route path="/sushidetail" element={<SushiDetail />} />
+        <Route path="/sushianswerdetail" element={<SushiAnswerDetail />} />
         <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
         <Route path="*" element={<ErrorPage />} />{" "}
         {/* 모든 경로에 매칭되지 않으면 ErrorPage로 이동 */}
