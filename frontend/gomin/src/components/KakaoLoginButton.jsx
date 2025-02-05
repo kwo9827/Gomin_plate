@@ -11,20 +11,29 @@ const KakaoLoginButton = () => {
     dispatch(kakaoLogin({ clientId, redirectUri }));
   };
 
-
   return (
     <button
       onClick={handleKakaoLogin}
       style={{
         background: "#FEE500",
-        padding: "10px 20px",
+        height: "5vh",  // 화면 세로 크기에 비례하도록 설정
+        width: "5vh",   // 가로 크기도 세로와 동일하게 설정
+        maxWidth: "60px", // 최대 크기 제한
+        maxHeight: "60px", 
+        minWidth: "40px", // 최소 크기 제한
+        minHeight: "40px", 
         border: "none",
-        borderRadius: "4px",
+        borderRadius: "50%", // 원형으로 만들기
         color: "#000",
         fontWeight: "bold",
+        fontSize: "1rem",  // 반응형 폰트 크기
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "pointer",
       }}
     >
-      카카오 로그인
+      K
     </button>
   );
 };

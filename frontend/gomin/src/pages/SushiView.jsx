@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSushiDetail } from "../store/slices/sushiSlice";
+import { createAnswer } from "../store/slices/answerSlice";
 
 const SushiView = () => {
   const location = useLocation();
@@ -13,6 +16,17 @@ const SushiView = () => {
   const [titleShadowColor, setTitleShadowColor] = useState(
     "rgba(255, 255, 255, 0.4)"
   );
+
+  // fetch해온 초밥 데이터 관리
+  const dispatch = useDispatch();
+  const currentSushi = useSelector((state) => state.sushi.currentSushi);
+
+  useEffect(() => {
+    dispatch(fetchSushiDetail(sushiId));
+  }, [dispatch, sushiId]);
+
+  // 답변 작성 슬라이스 관리
+  const answers = useSelector((state) => state.answer.answers);
 
   // 접시 타입에 따른 형광펜 색상 매핑
   const titleShadowColors = {
@@ -32,8 +46,8 @@ const SushiView = () => {
 
   const dummySushi = {
     sushiId,
-    title: `초밥 id는 ${sushiId} 이것입니다. 타이틀 길이제한을 해야할까요?`,
-    content: `초밥 ${sushiType}에 대한 고민입니다 독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅 독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅독도는우리땅가사바뀌었다던데저는이전가사밖에모르거든요 울릉도동남쪽뱃길따라이백리 (근데 여기가 막 87K 이런 가사던데)외로운섬하나새들의고향그누가아무리자기네땅이라고우겨도독도는우리따우리땅 경상북도울릉군울릉읍독도리동경132북위37평균기온12도강수량은1300독도는우리땅(이것도다바뀌었대)오징어꼴뚜기대구명태거북이연어알물새알해녀대합실(이거특산물도다바뀌었대)17만평방미터우물하나분화구독도는우리땅우리땅 `,
+    title: "12",
+    content: "12",
     plateType: `${category}`,
     sushiType,
     maxAnswers: 5,
@@ -47,14 +61,29 @@ const SushiView = () => {
       navigate("/Home");
       return;
     }
-    setSushiData(dummySushi);
-  }, [sushiId, navigate]);
+
+    // currentSushi의 데이터를 dummySushi에 반영
+    if (currentSushi) {
+      setSushiData({
+        sushiId: currentSushi.sushiId,
+        title: currentSushi.title,
+        content: currentSushi.content,
+        plateType: `${category}`,
+        sushiType: currentSushi.sushiType,
+        maxAnswers: currentSushi.maxAnswers,
+        remainingAnswers: currentSushi.remainingAnswers,
+        expirationTime: currentSushi.expirationTime,
+      });
+    } else {
+      setSushiData(dummySushi); // currentSushi가 없을 경우 더미 데이터 사용
+    }
+  }, [sushiId, currentSushi, navigate, category]);
 
   const handleOpenAnswerInput = () => {
     setShowAnswerInput(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (content.trim() === "") {
       alert("답변 내용을 입력해주세요!");
       return;
@@ -70,11 +99,17 @@ const SushiView = () => {
       content,
     });
 
-    setShowAnswerInput(false); // 제출 후 입력창 닫기
-    setContent(""); // 입력 내용 초기화
-
-    // 제출 후 홈으로 돌아가기
-    navigate("/Home");
+    // createAnswer API 호출
+    try {
+      await dispatch(createAnswer({ sushiId: sushiData.sushiId, content }));
+      setShowAnswerInput(false); // 제출 후 입력창 닫기
+      setContent(""); // 입력 내용 초기화
+      alert("답변이 제출되었습니다!");
+      navigate("/Home"); // 제출 후 홈으로 이동
+    } catch (error) {
+      console.error("답변 제출 실패:", error);
+      alert("답변 제출에 실패했습니다.");
+    }
   };
 
   const handleBack = () => {
@@ -232,24 +267,25 @@ const styles = {
     borderRadius: "6px",
     border: "4px solid #B2975C",
     fontFamily: "inherit",
-    fontSize: "1rem",
-    boxSizing: "border-box",
+    fontSize: "1.1rem",
+    lineHeight: "1.5",
     resize: "none",
   },
   buttonContainer: {
     display: "flex",
     justifyContent: "space-between",
+    marginTop: "30px",
     width: "100%",
-    marginTop: "auto", // 버튼을 아래로 붙이기
   },
   button: {
-    width: "auto",
-    color: "#5D4A37",
-    backgroundColor: "transparent",
     border: "none",
-    cursor: "pointer",
-    fontFamily: "inherit",
+    borderRadius: "6px",
+    backgroundColor: "#B2975C",
+    color: "#5D4A37",
     fontSize: "1rem",
+    padding: "12px 25px",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
   },
 };
 

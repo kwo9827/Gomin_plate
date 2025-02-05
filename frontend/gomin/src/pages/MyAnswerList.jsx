@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMyAnswers } from "../store/slices/answerSlice";
-import SushiCard from "../components/SushiCard";
+import SushiAnswerCard from "../components/SushiAnswerCard";
 
 /** 내가 답변한 초밥(질문)에 대한 리스트가 출력되는 페이지
  * 1. API 연결 되어있는 상태
@@ -37,7 +37,7 @@ const MyAnswerList = () => {
                     <ul style={listStyle}>
                         {answerData.map((answer) => (
                             <li key={answer.sushiId} style={listItemStyle}>
-                                <SushiCard
+                                <SushiAnswerCard
                                     id={answer.sushiId}
                                     category={answer.category}
                                     title={answer.title}
