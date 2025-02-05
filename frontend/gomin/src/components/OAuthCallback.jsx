@@ -13,6 +13,8 @@ const OAuthCallback = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get("code");
 
+      console.log(code);
+
       if (code) {
         dispatch(socialLogin({ provider: "kakao", code }))
           .then(() => {
