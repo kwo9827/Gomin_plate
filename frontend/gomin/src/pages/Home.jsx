@@ -19,8 +19,6 @@ import deskImg from "../assets/home/desk.webp";
 import openssImg from "../assets/home/open.webp";
 import masterImg from "../assets/home/master.webp";
 
-import { useSelector } from "react-redux";
-
 const Home = () => {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
