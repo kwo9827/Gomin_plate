@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   nickname: "방구맨",
@@ -8,6 +8,18 @@ const initialState = {
   refreshToken: "",
   isNew: false,
 };
+
+/** 사용자 좋아요 개수 요청 API */
+export const countLike = createAsyncThunk("member/countLike", async () => {
+  try {
+    const response = await api.get("/user/my-like");
+    console.log("API 응답 데이터", response.data);
+    return response.data.data;
+  } catch (error) {
+    console.log("API 요청 실패", error);
+  }
+  return response.data;
+});
 
 const memberSlice = createSlice({
   name: "member",
