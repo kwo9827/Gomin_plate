@@ -19,6 +19,8 @@ export const socialLogin = createAsyncThunk(
   async ({ provider, code }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.post(`/oauth/${provider}`, { code });
+      console.log(response.data); // 응답 구조 확인
+      console.log(response.data.data); // 실제 필요한 데이터 확인
       dispatch(setAuthData(response.data.data));
       return response.data;
     } catch (error) {
