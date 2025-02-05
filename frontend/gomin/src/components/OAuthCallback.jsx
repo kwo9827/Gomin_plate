@@ -16,7 +16,7 @@ const OAuthCallback = () => {
       if (code) {
         dispatch(socialLogin({ provider: "kakao", code }))
           .then(() => {
-            navigate("/"); // 로그인 후 홈으로 이동
+            navigate("/home"); // 로그인 후 홈으로 이동
           })
           .catch((error) => {
             console.error("소셜 로그인 실패:", error);
