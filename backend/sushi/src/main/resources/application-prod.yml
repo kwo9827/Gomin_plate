@@ -27,7 +27,9 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health"
+        include: "health,info"  # health 외에 info 엔드포인트도 노출
+      cors:
+        allowed-origins: "*"  # 모든 도메인에서 액세스 가능하게 설정
   endpoint:
     health:
-      show-details: "always"
+      show-details: "always"  # health 정보 노출
