@@ -7,7 +7,7 @@ import api from '../../api/axios';
 export const createAnswer = createAsyncThunk(
     'answer/create',
     async ({ sushiId, content }) => {
-        const response = await api.post(`/sushi/rail/${sushiId}`, { content });
+        const response = await api.post(`/sushi/rail/${sushiId}/answer`, { content });
         return response.data;
     }
 );
