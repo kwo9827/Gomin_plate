@@ -7,7 +7,7 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
     console.log("들어온거확인인");
-    const token = useSelector((state) => state.member?.accessToken || "test");
+    const token = useSelector((state) => state.member.accessToken);
 
     // if (token) {
     //     config.headers.Authorization = `Bearer ${token}`;
