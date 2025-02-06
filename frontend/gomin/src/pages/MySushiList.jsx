@@ -95,7 +95,6 @@ const styles = {
   },
   /**리스트 감싸는 스타일 */
   listContainer: {
-    overflowY: "auto",
     // position: "relative",
     // zIndex: 2,
     // width: "100%",
