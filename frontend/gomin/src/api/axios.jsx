@@ -7,7 +7,7 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
 
-    // const token = useSelector((state) => state.member?.accessToken || "");
+    const token = useSelector((state) => state.member?.accessToken || "");
 
     // if (token) {
     //     config.headers.Authorization = `Bearer ${token}`;
@@ -15,9 +15,9 @@ api.interceptors.request.use((config) => {
     //     config.headers.Authorization = `Bearer test`;
     // }
 
-    // config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
 
-    config.headers.Authorization = `Bearer test`;
+    // config.headers.Authorization = `Bearer test`;
 
     return config;
 });
