@@ -61,6 +61,22 @@ const Home = () => {
   }, [accessToken, navigate]);
   /** 여기 까지 */
 
+  const isNew = useSelector((state) => state.member?.isNew);
+  const userNickName = localStorage.getItem("userNickName");
+
+  useEffect(() => {
+    if (!isNew || userNickName) {
+      openModal();
+    }
+  }, [isNew, userNickName]);
+
+  // 닉네임이 설정되면 모달을 닫기
+  useEffect(() => {
+    if (!userNickName) {
+      closeModal(); // 닉네임이 있으면 모달을 닫음
+    }
+  }, [userNickName]);
+
   return (
     <>
       {/* 배경 이미지 */}
