@@ -1,25 +1,27 @@
-import axios from 'axios';
-import { useSelector } from 'react-redux';
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const api = axios.create({
-    baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
 });
 
 api.interceptors.request.use((config) => {
+  /**테스트할때 주석하기 */
+  //   const token = useSelector((state) => state.member?.accessToken || "");
 
-    const token = useSelector((state) => state.member?.accessToken || "");
+  // if (token) {
+  //     config.headers.Authorization = `Bearer ${token}`;
+  // } else {
+  //     config.headers.Authorization = `Bearer test`;
+  // }
 
-    // if (token) {
-    //     config.headers.Authorization = `Bearer ${token}`;
-    // } else {
-    //     config.headers.Authorization = `Bearer test`;
-    // }
+  /**테스트할때 주석하기 */
+  // config.headers.Authorization = `Bearer ${token}`;
 
-    config.headers.Authorization = `Bearer ${token}`;
+  /**테스트할때 주석풀기 */
+  config.headers.Authorization = `Bearer test`;
 
-    // config.headers.Authorization = `Bearer test`;
-
-    return config;
+  return config;
 });
 
 export default api;

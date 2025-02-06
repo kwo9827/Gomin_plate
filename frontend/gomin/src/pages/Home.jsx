@@ -103,12 +103,12 @@ const Home = () => {
       {/* 위에 쌓을 컴포넌트 */}
       <div>
         <div className="home-container">
-          {/* <div className="control-buttons">
+          <div className="control-buttons">
             <button onClick={openModal}>닉네임 모달 열기</button>
             <button onClick={openSushiUnlock}>해금 초밥 열기</button>
             <PostSushiBell onClick={openPostSushi} />
             <NotificationBell onClick={openNotification} />
-          </div> */}
+          </div>
 
           <Modal isOpen={isModalOpen} onClose={closeModal} />
 

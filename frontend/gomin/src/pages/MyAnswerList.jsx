@@ -8,73 +8,71 @@ import SushiAnswerCard from "../components/SushiAnswerCard";
  * 2. 디자인 수정 (MySushiList 스타일 재사용)
  */
 const MyAnswerList = () => {
-    const dispatch = useDispatch();
-    const { myAnswers = [], status } = useSelector((state) => state.answer);
-    const isLoading = status === "loading";
+  const dispatch = useDispatch();
+  const { myAnswers = [], status } = useSelector((state) => state.answer);
+  const isLoading = status === "loading";
 
-    // 실제 API 데이터가 없을 경우 더미 데이터 사용
-    const answerData = Array.isArray(myAnswers.content) ? myAnswers.content : []; // 배열인지 체크 후 사용
+  // 실제 API 데이터가 없을 경우 더미 데이터 사용
+  const answerData = Array.isArray(myAnswers.content) ? myAnswers.content : []; // 배열인지 체크 후 사용
 
-    useEffect(() => {
-        dispatch(fetchMyAnswers()); // 본인 답변 리스트 가져오기
-    }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchMyAnswers()); // 본인 답변 리스트 가져오기
+  }, [dispatch]);
 
-    console.log(myAnswers.content);
+  console.log(myAnswers.content);
 
-    return (
-        <div style={backgroundStyle}>
-            <div style={listContainerStyle}>
-                {/* '나의 답변' 타이틀 박스 */}
-                <div style={outerBoxStyle}>
-                    <div style={innerBoxStyle}>나의 답변</div>
-                </div>
-
-                {isLoading ? (
-                    <p style={loadingTextStyle}>불러오는 중...</p>
-                ) : answerData.length === 0 ? (
-                    <p style={emptyTextStyle}>등록된 답변이 없습니다.</p>
-                ) : (
-                    <ul style={listStyle}>
-                        {answerData.map((answer) => (
-                            <li key={answer.sushiId} style={listItemStyle}>
-                                <SushiAnswerCard
-                                    id={answer.sushiId}
-                                    category={answer.category}
-                                    title={answer.title}
-                                    content={answer.content}
-                                    showHeart={answer.isLiked || answer.getLike}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
+  return (
+    <div style={styles.background}>
+      <div style={styles.listContainer}>
+        {/* '나의 답변' 타이틀 박스 */}
+        <div style={styles.outerBox}>
+          <div style={styles.innerBox}>나의 답변</div>
         </div>
-    );
+
+        {isLoading ? (
+          <p style={styles.loadingText}>불러오는 중...</p>
+        ) : answerData.length === 0 ? (
+          <p style={styles.emptyText}>등록된 답변이 없습니다.</p>
+        ) : (
+          <ul style={styles.list}>
+            {answerData.map((answer) => (
+              <li key={answer.sushiId} style={styles.listItem}>
+                <SushiAnswerCard
+                  id={answer.sushiId}
+                  category={answer.category}
+                  title={answer.title}
+                  content={answer.content}
+                  showHeart={answer.isLiked || answer.getLike}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
 };
 
-/* 전체 배경 스타일 */
-const backgroundStyle = {
-    backgroundColor: "#FDFCC8",
-    minHeight: "100vh",
-    height: "100%",
-    width: "100vw",
-    padding: "20px",
-    boxSizing: "border-box",
-    overflowX: "hidden",
-};
-
-/* 리스트 전체 */
-const listContainerStyle = {
+const styles = {
+  /**배경 스타일 */
+  background: {
+    position: "relative",
+    height: "100vh",
     width: "100%",
-    maxWidth: "600px",
-    margin: "0 auto",
-    padding: "20px",
-    boxSizing: "border-box",
-};
-
-/* '나의 답변' 박스 */
-const outerBoxStyle = {
+    overflow: "hidden",
+  },
+  /**리스트 감싸는 스타일 */
+  listContainer: {
+    // position: "relatvie",
+    // zindex: 2,
+    // width: "100%",
+    // maxWidth: "600px",
+    // margin: "0 auto",
+    // padding: "20px",
+    // boxSizing: "border-box",
+  },
+  /**나의 답변 외부 박스 */
+  outerBox: {
     width: "100%",
     maxWidth: "250px",
     margin: "20px auto",
@@ -83,10 +81,9 @@ const outerBoxStyle = {
     backgroundColor: "#B2975C",
     padding: "6px",
     boxSizing: "border-box",
-};
-
-/* '나의 답변' 내부 박스 */
-const innerBoxStyle = {
+  },
+  /**나의 답변 내부 박스 */
+  innerBox: {
     width: "100%",
     border: "2px solid #906C48",
     borderRadius: "4px",
@@ -97,34 +94,31 @@ const innerBoxStyle = {
     fontWeight: "bold",
     padding: "6px 0",
     boxSizing: "border-box",
-};
-
-/* 리스트 스타일 */
-const listStyle = {
+  },
+  /**리스트 스타일 */
+  list: {
     listStyle: "none",
     padding: 0,
     margin: 0,
-};
-
-/* 리스트 항목 스타일 */
-const listItemStyle = {
+  },
+  /**리스트아이템 스타일 */
+  listItem: {
     marginBottom: "10px",
-};
-
-/* 로딩 중 텍스트 스타일 */
-const loadingTextStyle = {
+  },
+  /**로딩 텍스트 */
+  loadingText: {
     textAlign: "center",
     color: "#8B6B3E",
     fontSize: "1.2rem",
     marginTop: "20px",
-};
-
-/* 빈 리스트 텍스트 스타일 */
-const emptyTextStyle = {
+  },
+  /**아무것도 없을때 */
+  emptyText: {
     textAlign: "center",
     color: "#8B6B3E",
     fontSize: "1.2rem",
     marginTop: "20px",
+  },
 };
 
 export default MyAnswerList;
