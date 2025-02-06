@@ -23,7 +23,7 @@ export const socialLogin = createAsyncThunk(
       console.log(response.data.data); // 실제 필요한 데이터 확인
       dispatch(setAuthData(response.data.data));
       localStorage.setItem("accessToken", response.data.data.accessToken);
-      dispatch(updateNicknameState(response.data.data.user.nickname));
+      // dispatch(updateNicknameState(response.data.data.user.nickname));
       console.log("sociallogin 호출됐다고 !!");
       return response.data;
     } catch (error) {
