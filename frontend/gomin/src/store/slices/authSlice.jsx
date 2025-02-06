@@ -23,7 +23,7 @@ export const socialLogin = createAsyncThunk(
       console.log(response.data.data); // 실제 필요한 데이터 확인
       dispatch(setAuthData(response.data.data));
       localStorage.setItem("accessToken", response.data.data.accessToken);
-      // dispatch(updateNicknameState(response.data.data.user.nickname));
+      dispatch(updateNicknameState(response.data.data.user.nickname));
       console.log("sociallogin 호출됐다고 !!");
       return response.data;
     } catch (error) {
@@ -48,15 +48,17 @@ export const logoutApi = createAsyncThunk(
 /** 닉네임 수정 API */
 export const updateNickname = createAsyncThunk(
   "auth/updateNickname",
-  async (nickname, { dispatch }) => {
-    const response = await api.put("/user/nickname", { nickname });
-
-    // `memberSlice`에도 업데이트 적용
-    dispatch(updateNicknameState(response.data.data.nickname));
-
-    return response.data;
+  async (nickname, { rejectWithValue }) => {
+    try {
+      const response = await api.put("/user/nickname", { nickname });
+      return response.data.data.nickname; // 닉네임만 반환
+    } catch (error) {
+      console.error("닉네임 변경 실패:", error);
+      return rejectWithValue("닉네임 변경 실패");
+    }
   }
 );
+
 
 export const deleteAccount = createAsyncThunk(
   "auth/deleteAccount",
