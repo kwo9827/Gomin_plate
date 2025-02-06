@@ -20,7 +20,11 @@ const EditModal = ({ isOpen, onClose }) => {
     }
     try {
       await dispatch(updateNickname(nickname)).unwrap();
-      dispatch(updateNicknameState(nickname));
+      if (response.data.data.user?.nickname) {
+        dispatch(updateNicknameState(response.data.data.user.nickname));
+      } else {
+        console.warn("닉네임이 없습니다. updateNicknameState 실행 안 함.");
+      }
       alert("닉네임이 성공적으로 변경되었습니다.");
       onClose();
     } catch (err) {
