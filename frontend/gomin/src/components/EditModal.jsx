@@ -19,10 +19,13 @@ const EditModal = ({ isOpen, onClose }) => {
       return;
     }
     try {
-      await dispatch(updateNickname(nickname)).unwrap();
+      // 디버깅용 로그 추가
+      const result = await dispatch(updateNickname(nickname)).unwrap();
+      console.log("변경 성공:", result);
       alert("닉네임이 성공적으로 변경되었습니다.");
       onClose();
     } catch (err) {
+      console.log("변경 실패:", err);
       setError("닉네임 변경에 실패했습니다. 다시 시도해주세요.");
     }
   };

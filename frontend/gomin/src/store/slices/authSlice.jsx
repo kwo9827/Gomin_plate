@@ -50,10 +50,14 @@ export const updateNickname = createAsyncThunk(
   async (nickname, { rejectWithValue }) => {
     try {
       const response = await api.put("/user/nickname", { nickname });
-      return response.data.data.nickname; // 닉네임만 반환
+      return response.data.data.nickname;
     } catch (error) {
-      console.error("닉네임 변경 실패:", error);
-      return rejectWithValue("닉네임 변경 실패");
+      // 디버깅을 위한 자세한 에러 로깅
+      console.error("에러 타입:", error.name);
+      console.error("에러 메시지:", error.message);
+      console.error("전체 에러 객체:", error);
+
+      return rejectWithValue(error.message || "닉네임 변경 실패");
     }
   }
 );
