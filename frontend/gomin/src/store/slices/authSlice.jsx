@@ -111,6 +111,7 @@ const authSlice = createSlice({
       .addCase(updateNickname.fulfilled, (state, action) => {
         if (state.user) {
           state.user.nickname = action.payload.data.nickname;
+          localStorage.setItem('userNickname', action.payload.data.nickname);
         }
       })
       .addCase(deleteAccount.fulfilled, (state) => {

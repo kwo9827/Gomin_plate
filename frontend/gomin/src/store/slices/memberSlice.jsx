@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-  nickname: "방구맨",
+  nickname: localStorage.getItem('userNickname') || '',
   email: "",
   likesReceived: 0,
   accessToken: "",
