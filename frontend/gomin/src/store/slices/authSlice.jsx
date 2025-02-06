@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axios";
-import { clearMemberData, setAuthData, updateNicknameState } from "./memberSlice";
+import { clearMemberData, setAuthData } from "./memberSlice";
 
 export const kakaoLogin = createAsyncThunk(
   "auth/kakaoLogin",
