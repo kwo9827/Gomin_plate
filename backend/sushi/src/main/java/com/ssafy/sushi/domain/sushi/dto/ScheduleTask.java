@@ -9,6 +9,5 @@ import java.time.Instant;
 @AllArgsConstructor
 public class ScheduleTask {
     private Integer sushiId;
-    private Instant currentTime;
     private Instant expirationTime;
 }

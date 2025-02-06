@@ -33,12 +33,11 @@ public class RedisService {
 
     public List<ScheduleTask> findAllPendingTasks() {
         Set<String> keys = redisTemplate.keys("sushi:schedule:*");
-        if (keys == null || keys.isEmpty()) {
+        if (keys.isEmpty()) {
             return Collections.emptyList();
         }
 
         List<ScheduleTask> tasks = new ArrayList<>();
-        Instant now = Instant.now();
 
         for (String key : keys) {
             String expiredAtStr = redisTemplate.opsForValue().get(key);
@@ -47,7 +46,7 @@ public class RedisService {
             Integer sushiId = extractSushiId(key);
             Instant expiredAt = Instant.ofEpochSecond(Long.parseLong(expiredAtStr));
 
-            tasks.add(new ScheduleTask(sushiId, now, expiredAt));
+            tasks.add(new ScheduleTask(sushiId, expiredAt));
         }
 
         return tasks;

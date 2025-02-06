@@ -45,14 +45,21 @@ public class ScheduleService {
     @PostConstruct
     public void initializeScheduledTasks() {
         List<ScheduleTask> tasks = redisService.findAllPendingTasks();
+        Instant now = Instant.now();
 
         for (ScheduleTask task : tasks) {
-            if (task.getCurrentTime().isAfter(task.getExpirationTime())) {
-                executeSushiEndTask(task.getSushiId());
-                redisService.cancelSchedule(task.getSushiId());
-            } else {
+            if (now.isAfter(task.getExpirationTime())) {  // 현재시간 > 유통기한
+                try {
+                    executeSushiEndTask(task.getSushiId());
+                } catch (CustomException e) {
+                    log.error("Failed to execute sushi end task during initialization. SushiId: {}, Error: {}",
+                            task.getSushiId(), e.getMessage());
+                } finally {
+                    redisService.cancelSchedule(task.getSushiId());
+                }
+            } else { // 현재시간 < 유통기한
                 Duration remainingTime = Duration.between(
-                        task.getCurrentTime(),
+                        now,
                         task.getExpirationTime()
                 );
                 scheduleEndTask(task.getSushiId(), remainingTime);
@@ -64,8 +71,14 @@ public class ScheduleService {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
         executorService.schedule(() -> {
             if (redisService.hasSchedule(sushiId)) {
-                executeSushiEndTask(sushiId);
-                redisService.cancelSchedule(sushiId);
+                try {
+                    executeSushiEndTask(sushiId);
+                } catch (Exception e) {
+                    log.error("Failed to execute scheduled task. SushiId: {}, Error: {}",
+                            sushiId, e.getMessage());
+                } finally {
+                    redisService.cancelSchedule(sushiId);
+                }
             }
         }, delay.toSeconds(), TimeUnit.SECONDS);
     }
