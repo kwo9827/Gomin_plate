@@ -76,30 +76,30 @@ const SushiDetail = () => {
   };
 
   return (
-    <div style={outsideStyle}>
-      <div style={outerContainerStyle}>
+    <div style={styles.background}>
+      <div style={styles.outerContainer}>
         {/* 뒤로 가기 버튼 */}
-        <button onClick={() => navigate(-1)} style={backButtonStyle}>
+        <button onClick={() => navigate(-1)} style={styles.backButton}>
           ◀
         </button>
 
         {/* 제목 */}
-        <h2 style={titleStyle}>{title}</h2>
-        <hr style={dividerStyle} />
+        <h2 style={styles.title}>{title}</h2>
+        <hr style={styles.divider} />
 
         {/* 날짜 */}
-        <p style={dateStyle}>{new Date(expirationTime).toLocaleString()}</p>
+        <p style={styles.date}>{new Date(expirationTime).toLocaleString()}</p>
 
         {/* 본문 내용 */}
-        <div style={contentBoxStyle}>
-          <p style={contentStyle}>{content}</p>
+        <div style={styles.contentBox}>
+          <p style={styles.content}>{content}</p>
         </div>
 
-        <hr style={dividerStyle} />
+        <hr style={styles.divider} />
 
         {/* 답변 목록(포스트잇 들어갈 자리) */}
-        <div style={postItWrapperStyle}>
-          <div style={postItRowStyle}>
+        <div style={styles.postItOuterBox}>
+          <div style={styles.postItRow}>
             {answer
               .slice(
                 currentPage * answersPerPage,
@@ -109,8 +109,9 @@ const SushiDetail = () => {
                 <div
                   key={item.answerId}
                   style={{
-                    ...postItStyle,
-                    backgroundColor: postItColors[index % postItColors.length],
+                    ...styles.postIt,
+                    backgroundColor:
+                      styles.postItColors[index % styles.postItColors.length],
                   }}
                   onClick={() => openModal(item)}
                 >
@@ -118,7 +119,7 @@ const SushiDetail = () => {
                 </div>
               ))}
           </div>
-          <div style={postItRowStyle}>
+          <div style={styles.postItRow}>
             {answer
               .slice(
                 currentPage * answersPerPage + 3,
@@ -128,8 +129,11 @@ const SushiDetail = () => {
                 <div
                   key={item.answerId}
                   style={{
-                    ...postItStyle,
-                    backgroundColor: postItColors[index % postItColors.length],
+                    ...styles.postIt,
+                    backgroundColor:
+                      styles.postItColors[
+                        index % styles.styles.postItColors.length
+                      ],
                   }}
                   onClick={() => openModal(item)}
                 >
@@ -140,14 +144,14 @@ const SushiDetail = () => {
         </div>
 
         {/* 양 옆으로 슬라이드 버튼 */}
-        <div style={arrowContainerStyle}>
+        <div style={styles.arrowContainer}>
           {currentPage > 0 && (
-            <button onClick={prevPage} style={arrowLeftStyle}>
+            <button onClick={prevPage} style={styles.arrowLeft}>
               ◀
             </button>
           )}
           {currentPage < totalPages - 1 && (
-            <button onClick={nextPage} style={arrowRightStyle}>
+            <button onClick={nextPage} style={styles.arrowRight}>
               ▶
             </button>
           )}
@@ -168,149 +172,126 @@ const SushiDetail = () => {
   );
 };
 
-const stlyes = {
-  outside: {},
-  outerContainer: {},
-  backButton: {},
-  title: {},
-  date: {},
-  contentBox: {},
-  content: {},
-  divider: {},
-  postItOuterBox: {},
-  postItRow: {},
-  postIt: {},
-  postItColors: {},
-  arrowContainer: {},
-  arrowLeft: {},
-  arrowRight: {},
-  loading: {},
-  error: {},
-};
-
-/* 스타일들 */
-const outsideStyle = {
-  backgroundColor: "#FDFCC8",
-  minHeight: "100vh",
-  height: "100%",
-  width: "100vw",
-  boxSizing: "border-box",
-  padding: "20px",
-};
-
-const outerContainerStyle = {
-  backgroundColor: "#FFFFF0",
-  minHeight: "100vh",
-  padding: "20px",
-  textAlign: "center",
-  position: "relative",
-  border: "6px solid #8B6B3E",
-  borderRadius: "12px",
-  boxSizing: "border-box",
-  margin: "10px",
-};
-
-const backButtonStyle = {
-  position: "absolute",
-  top: "20px",
-  left: "20px",
-  fontSize: "24px",
-  background: "none",
-  border: "none",
-  cursor: "pointer",
-};
-
-const titleStyle = {
-  fontSize: "2rem",
-  fontWeight: "bold",
-  marginBottom: "10px",
-  color: "#5D4A37",
-};
-
-const dateStyle = {
-  fontSize: "1rem",
-  color: "#8D7B7B",
-  marginBottom: "20px",
-};
-
-const contentBoxStyle = {
-  backgroundColor: "#FFFFF0",
-  padding: "15px",
-  borderRadius: "8px",
-  maxWidth: "90%",
-  margin: "0 auto",
-  border: "4px solid #B2975C",
-};
-
-const contentStyle = {
-  fontSize: "1.1rem",
-  color: "#5D4A37",
-  lineHeight: "1.6",
-  textAlign: "left",
-};
-
-const dividerStyle = {
-  width: "90%",
-  margin: "20px auto",
-  border: "1px solid #B2975C",
-};
-
-const postItWrapperStyle = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: "10px",
-  marginTop: "20px",
-};
-
-const postItRowStyle = {
-  display: "flex",
-  justifyContent: "center",
-  gap: "10px",
-};
-
-const postItStyle = {
-  width: "100px",
-  height: "100px",
-  padding: "10px",
-  fontSize: "0.9rem",
-  color: "#5D4A37",
-  fontWeight: "bold",
-  textAlign: "center",
-  borderRadius: "6px",
-  boxShadow: "3px 3px 5px rgba(0,0,0,0.2)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-};
-
-const postItColors = ["#FFD700", "#FFA07A", "#87CEFA", "#98FB98", "#F0E68C"];
-
-const arrowContainerStyle = {
-  display: "flex",
-  justifyContent: "center",
-  marginTop: "10px",
-};
-
-const arrowLeftStyle = { marginRight: "10px", cursor: "pointer" };
-const arrowRightStyle = { marginLeft: "10px", cursor: "pointer" };
-
-const loadingStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100vh",
-  fontSize: "1.5rem",
-  color: "#5D4A37",
-};
-
-const errorStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100vh",
-  fontSize: "1.5rem",
-  color: "red",
+const styles = {
+  /** 배경 스타일*/
+  background: {
+    // backgroundColor: "#FDFCC8",
+    position: "relative",
+    height: "100vh",
+    width: "100%",
+    overflow: "hidden",
+    boxSizing: "border-box",
+  },
+  /** */
+  outerContainer: {
+    backgroundColor: "#FFFEEC",
+    position: "relatvie",
+    zindex: 2,
+    width: "90%",
+    maxWidth: "600px",
+    heigth: "90vh", // 화면 높이의 90% 사용
+    margin: "0 auto",
+    padding: "20px",
+    boxSizing: "border-box",
+    border: "6px solid #8B6B3E",
+    borderRadius: "12px",
+  },
+  backButton: {
+    position: "absolute",
+    top: "20px",
+    left: "20px",
+    fontSize: "24px",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+  },
+  title: {
+    fontSize: "1.5rem",
+    flexGrow: 1,
+    textAlign: "center",
+  },
+  date: {
+    fontSize: "1rem",
+    color: "#8D7B7B",
+    marginBottom: "20px",
+    justifyContent: "right",
+  },
+  contentBox: {
+    flexGrow: 4,
+    overflowY: "auto",
+    padding: "10px",
+    borderRadius: "8px",
+    border: "4px solid #B2975C",
+  },
+  content: {
+    fontSize: "1.1rem",
+    color: "#5D4A37",
+    lineHeight: "1.6",
+    textAlign: "left",
+  },
+  divider: {
+    width: "90%",
+    margin: "20px auto",
+    border: "1px solid #B2975C",
+  },
+  /**포스트잇 감싸는 박스 */
+  postItOuterBox: {
+    flexGrow: 5,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "10px",
+    overflow: "auto",
+  },
+  postItRow: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "10px",
+  },
+  postIt: {
+    width: "100px",
+    height: "100px",
+    padding: "10px",
+    fontSize: "0.9rem",
+    color: "#5D4A37",
+    fontWeight: "bold",
+    textAlign: "center",
+    borderRadius: "6px",
+    boxShadow: "3px 3px 5px rgba(0,0,0,0.2)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  postItColors: ["#FFD700", "#FFA07A", "#87CEFA", "#98FB98", "#F0E68C"],
+  arrowContainer: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "10px",
+  },
+  arrowLeft: {
+    marginRight: "10px",
+    cursor: "pointer",
+  },
+  arrowRight: {
+    marginLeft: "10px",
+    cursor: "pointer",
+  },
+  loading: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    fontSize: "1.5rem",
+    color: "#5D4A37",
+  },
+  error: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    fontSize: "1.5rem",
+    color: "red",
+  },
 };
 
 export default SushiDetail;
