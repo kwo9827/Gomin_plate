@@ -43,8 +43,10 @@ const MySushiList = () => {
     <div style={styles.background}>
       {/* 나의 고민 박스 */}
       <div style={styles.listContainer}>
-        <div style={styles.outerBox}>
-          <div style={styles.innerBox}>나의 고민</div>
+        <div style={styles.position}>
+          <div style={styles.outerBox}>
+            <div style={styles.innerBox}>나의 고민</div>
+          </div>
         </div>
 
         {/* 검색창 */}
@@ -91,23 +93,31 @@ const styles = {
     position: "relative",
     height: "100vh",
     width: "100%",
-    overflow: "hidden",
+    overflowY: "auto",
+    scrollbarWidth: "none",
   },
   /**리스트 감싸는 스타일 */
   listContainer: {
-    // position: "relative",
-    // zIndex: 2,
-    // width: "100%",
-    // maxWidth: "600px",
-    // margin: "0 auto",
-    // padding: "20px",
-    // boxSizing: "border-box",
+    position: "relative",
+    zIndex: 2,
+    width: "100%",
+    maxWidth: "600px",
+    margin: "0 auto",
+    padding: "20px",
+    boxSizing: "border-box",
+    // overflowY: "auto",
+  },
+  position: {
+    // position: "sticky",
+    // zIndex: 1000,
+    // top: "0px",
+    // padding: "10px",
   },
   /**나의 고민 외부 박스 */
   outerBox: {
     width: "100%",
     maxWidth: "250px",
-    margin: "20px auto",
+    margin: "0px auto 10px",
     border: "4px solid #8B6B3E",
     borderRadius: "8px",
     backgroundColor: "#B2975C",
@@ -165,5 +175,16 @@ const styles = {
     margin: 0,
   },
 };
+
+// Chrome, Safari에서 스크롤바 숨기기
+document.addEventListener("DOMContentLoaded", function () {
+  const style = document.createElement("style");
+  style.innerHTML = `
+    .listContainer::-webkit-scrollbar {
+      display: none;
+    }
+  `;
+  document.head.appendChild(style);
+});
 
 export default MySushiList;
