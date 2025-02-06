@@ -4,7 +4,6 @@ import { fetchUnreadExists } from "../store/slices/notificationSlice";
 
 import Rail from "../components/Rail";
 import Modal from "../components/EditModal";
-import EditModal from "../components/EditModal";
 import PostSushiBell from "../components/PostSushiBell";
 import NotificationBell from "../components/NotificationBell";
 import NotificationModal from "../components/NotificationModal";
@@ -95,7 +94,6 @@ const Home = () => {
             </div>
 
             <Modal isOpen={isModalOpen} onClose={closeModal} />
-            <EditModal isOpen={isModalOpen} onClose={closeModal} />
 
             <SushiUnlock
               isOpen={isSushiUnlockOpen}
