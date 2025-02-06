@@ -1,8 +1,11 @@
 package com.ssafy.sushi.global.security.jwt;
 
 
+import com.ssafy.sushi.domain.auth.dto.TokenError;
+import com.ssafy.sushi.domain.auth.dto.TokenValidationResult;
 import com.ssafy.sushi.global.security.UserPrincipal;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -24,7 +27,9 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private final long tokenValidTime = 24 * 60 * 60 * 1000L; // 24시간
+    private final long accessTokenValidTime = 24 * 60 * 60 * 1000L; // 24시간
+    private final long refreshTokenValidTime = 14 * 24 * 60 * 60 * 1000L; // 14일
+
 
     // SecretKey 생성
     private SecretKey getSigningKey() {
@@ -33,20 +38,25 @@ public class JwtTokenProvider {
     }
 
     // 기존 토큰 생성 메소드 유지
-    public String createToken(String userId) {
+    public String createToken(String userId, long validityTime) {
         Date now = new Date();
 
         return Jwts.builder()
                 .subject(userId)
                 .issuedAt(now)
-                .expiration(new Date(now.getTime() + tokenValidTime))
+                .expiration(new Date(now.getTime() + validityTime))
                 .signWith(getSigningKey())
                 .compact();
     }
 
-    // Security 인증을 위한 토큰 생성 메소드 추가
-    public String createToken(UserPrincipal userPrincipal) {
-        return createToken(userPrincipal.getName());
+    // Refresh Token 생성
+    public String createAccessToken(String userId) {
+        return createToken(userId, accessTokenValidTime);
+    }
+
+    // Refresh Token 생성
+    public String createRefreshToken(String userId) {
+        return createToken(userId, refreshTokenValidTime);
     }
 
     // 토큰에서 회원 정보 추출
@@ -64,12 +74,14 @@ public class JwtTokenProvider {
     }
 
     // 토큰 유효성 + 만료일자 확인
-    public boolean validateToken(String token) {
+    public TokenValidationResult validateToken(String token) {
         try {
-            extractAllClaims(token);
-            return true;
+            Claims claims = extractAllClaims(token);
+            return new TokenValidationResult(true, null);
+        } catch (ExpiredJwtException e) {
+            return new TokenValidationResult(false, TokenError.EXPIRED);
         } catch (Exception e) {
-            return false;
+            return new TokenValidationResult(false, TokenError.INVALID);
         }
     }
 

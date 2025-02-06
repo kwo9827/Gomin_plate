@@ -1,4 +1,4 @@
-package com.ssafy.sushi.domain.auth.dto;
+package com.ssafy.sushi.domain.auth.dto.response;
 
 import com.ssafy.sushi.domain.user.entity.User;
 import lombok.Builder;
