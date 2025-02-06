@@ -21,7 +21,7 @@ export const socialLogin = createAsyncThunk(
       const response = await api.post(`/oauth/${provider}`, { code });
       console.log(response.data); // 응답 구조 확인
       console.log(response.data.data); // 실제 필요한 데이터 확인
-      // dispatch(setAuthData(response.data.data));
+      dispatch(setAuthData(response.data.data));
       localStorage.setItem("accessToken", response.data.data.accessToken);
       console.log("sociallogin 호출됐다고 !!");
       return response.data;
