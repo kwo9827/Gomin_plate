@@ -15,10 +15,10 @@ const SushiDetail = () => {
 
   // 구조 분해 할당으로 안전하게 데이터 추출
   const {
-    title = '',
-    content = '',
+    title = "",
+    content = "",
     expirationTime = new Date(),
-    answer = []
+    answer = [],
   } = currentSushi || {};
 
   /* 모달 관련 상태 추가 */
@@ -49,11 +49,11 @@ const SushiDetail = () => {
   const totalPages = Math.ceil(answer.length / answersPerPage);
 
   // 로딩 및 오류 상태 처리
-  if (status === 'loading') {
+  if (status === "loading") {
     return <div style={loadingStyle}>로딩 중...</div>;
   }
 
-  if (status === 'failed') {
+  if (status === "failed") {
     return <div style={errorStyle}>데이터를 불러오는 데 실패했습니다.</div>;
   }
 
@@ -100,36 +100,56 @@ const SushiDetail = () => {
         {/* 답변 목록(포스트잇 들어갈 자리) */}
         <div style={postItWrapperStyle}>
           <div style={postItRowStyle}>
-            {answer.slice(currentPage * answersPerPage, currentPage * answersPerPage + 3).map((item, index) => (
-              <div
-                key={item.answerId}
-                style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
-                onClick={() => openModal(item)}
-              >
-                <p>{item.content}</p>
-              </div>
-            ))}
+            {answer
+              .slice(
+                currentPage * answersPerPage,
+                currentPage * answersPerPage + 3
+              )
+              .map((item, index) => (
+                <div
+                  key={item.answerId}
+                  style={{
+                    ...postItStyle,
+                    backgroundColor: postItColors[index % postItColors.length],
+                  }}
+                  onClick={() => openModal(item)}
+                >
+                  <p>{item.content}</p>
+                </div>
+              ))}
           </div>
           <div style={postItRowStyle}>
-            {answer.slice(currentPage * answersPerPage + 3, (currentPage + 1) * answersPerPage).map((item, index) => (
-              <div
-                key={item.answerId}
-                style={{ ...postItStyle, backgroundColor: postItColors[index % postItColors.length] }}
-                onClick={() => openModal(item)}
-              >
-                <p>{item.content}</p>
-              </div>
-            ))}
+            {answer
+              .slice(
+                currentPage * answersPerPage + 3,
+                (currentPage + 1) * answersPerPage
+              )
+              .map((item, index) => (
+                <div
+                  key={item.answerId}
+                  style={{
+                    ...postItStyle,
+                    backgroundColor: postItColors[index % postItColors.length],
+                  }}
+                  onClick={() => openModal(item)}
+                >
+                  <p>{item.content}</p>
+                </div>
+              ))}
           </div>
         </div>
 
         {/* 양 옆으로 슬라이드 버튼 */}
         <div style={arrowContainerStyle}>
           {currentPage > 0 && (
-            <button onClick={prevPage} style={arrowLeftStyle}>◀</button>
+            <button onClick={prevPage} style={arrowLeftStyle}>
+              ◀
+            </button>
           )}
           {currentPage < totalPages - 1 && (
-            <button onClick={nextPage} style={arrowRightStyle}>▶</button>
+            <button onClick={nextPage} style={arrowRightStyle}>
+              ▶
+            </button>
           )}
         </div>
       </div>
@@ -146,6 +166,26 @@ const SushiDetail = () => {
       )}
     </div>
   );
+};
+
+const stlyes = {
+  outside: {},
+  outerContainer: {},
+  backButton: {},
+  title: {},
+  date: {},
+  contentBox: {},
+  content: {},
+  divider: {},
+  postItOuterBox: {},
+  postItRow: {},
+  postIt: {},
+  postItColors: {},
+  arrowContainer: {},
+  arrowLeft: {},
+  arrowRight: {},
+  loading: {},
+  error: {},
 };
 
 /* 스타일들 */
@@ -256,21 +296,21 @@ const arrowLeftStyle = { marginRight: "10px", cursor: "pointer" };
 const arrowRightStyle = { marginLeft: "10px", cursor: "pointer" };
 
 const loadingStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100vh',
-  fontSize: '1.5rem',
-  color: '#5D4A37'
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
+  fontSize: "1.5rem",
+  color: "#5D4A37",
 };
 
 const errorStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100vh',
-  fontSize: '1.5rem',
-  color: 'red'
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
+  fontSize: "1.5rem",
+  color: "red",
 };
 
 export default SushiDetail;
