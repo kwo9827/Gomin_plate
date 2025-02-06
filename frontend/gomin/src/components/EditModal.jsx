@@ -4,7 +4,8 @@ import { updateNickname, deleteAccount } from "../store/slices/authSlice";
 
 const EditModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
-  const currentNickname = useSelector((state) => state.member?.nickname || "");
+  // const currentNickname = useSelector((state) => state.member?.nickname || "");
+  const currentNickname = localStorage.getItem('userNickname');
 
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
