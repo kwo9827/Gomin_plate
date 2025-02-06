@@ -84,7 +84,31 @@ const Home = () => {
             transform: "translateX(0) translateY(-46%)",
           }}
         ></div>
+        {/* 위에 쌓을 컴포넌트 */}
+        <div style={{ position: "absolute", zIndex: "10" }}>
+          <div className="home-container">
+            <div className="control-buttons">
+              <button onClick={openModal}>닉네임 모달 열기</button>
+              <button onClick={openSushiUnlock}>해금 초밥 열기</button>
+              <PostSushiBell onClick={openPostSushi} />
+              <NotificationBell onClick={openNotification} />
+            </div>
 
+            <Modal isOpen={isModalOpen} onClose={closeModal} />
+
+            <SushiUnlock
+              isOpen={isSushiUnlockOpen}
+              onClose={closeSushiUnlock}
+            />
+
+            {isPostSushiOpen && <PostSushi onClose={closePostSushi} />}
+
+            <NotificationModal
+              isOpen={isNotificationOpen}
+              onClose={closeNotification}
+            />
+          </div>
+        </div>
         {/* 책상과 Rail */}
         <div style={styles.deskContainer}>
           {/* 책상 */}
@@ -99,28 +123,6 @@ const Home = () => {
         {/* 주문벨 */}
 
         {/* 해금요소 */}
-      </div>
-      {/* 위에 쌓을 컴포넌트 */}
-      <div>
-        <div className="home-container">
-          <div className="control-buttons">
-            <button onClick={openModal}>닉네임 모달 열기</button>
-            <button onClick={openSushiUnlock}>해금 초밥 열기</button>
-            <PostSushiBell onClick={openPostSushi} />
-            <NotificationBell onClick={openNotification} />
-          </div>
-
-          <Modal isOpen={isModalOpen} onClose={closeModal} />
-
-          <SushiUnlock isOpen={isSushiUnlockOpen} onClose={closeSushiUnlock} />
-
-          {isPostSushiOpen && <PostSushi onClose={closePostSushi} />}
-
-          <NotificationModal
-            isOpen={isNotificationOpen}
-            onClose={closeNotification}
-          />
-        </div>
       </div>
     </>
   );
