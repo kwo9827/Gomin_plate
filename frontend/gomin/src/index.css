@@ -1,10 +1,12 @@
 html,
 body,
 #root {
-  margin: 0 auto;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
-  background-color: #fdfcc8;
+  align-items: center;
+  background-color: #000000;
   width: 100%;
   height: 100vh;
   overflow: hidden;
@@ -13,12 +15,10 @@ body,
 .container {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  min-width: 350px;
-  max-width: 430px;
-  height: auto;
-  min-height: 570px;
-  max-height: 950px;
-  overflow: hidden;
+  width: 50vh; /* height의 40%를 width로 설정 */
+  height: 100%;
   box-sizing: border-box;
+  background-color: #fdfcc8; /* 배경색 추가 (선택 사항) */
+  border-radius: 10px; /* 모서리 둥글게 (선택 사항) */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 (선택 사항) */
 }
