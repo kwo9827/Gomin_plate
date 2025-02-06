@@ -20,7 +20,7 @@ const EditModal = ({ isOpen, onClose }) => {
     }
     try {
       await dispatch(updateNickname(nickname)).unwrap();
-      updateNicknameState(nickname);
+      dispatch(updateNicknameState(nickname));
       alert("닉네임이 성공적으로 변경되었습니다.");
       onClose();
     } catch (err) {
