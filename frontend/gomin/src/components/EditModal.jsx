@@ -6,6 +6,7 @@ import { updateNicknameState } from "../store/slices/memberSlice";
 const EditModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const currentNickname = useSelector((state) => state.member?.nickname || "");
+
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
 
