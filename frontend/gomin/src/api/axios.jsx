@@ -15,7 +15,7 @@ api.interceptors.request.use((config) => {
     //     config.headers.Authorization = `Bearer test`;
     // }
 
-    console.log(token);
+    console.log("axios 파일에서의 토큰 찍기 : ", token);
 
     config.headers.Authorization = `Bearer ${token}`;
 
