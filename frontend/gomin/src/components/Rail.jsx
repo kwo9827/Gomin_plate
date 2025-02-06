@@ -66,7 +66,7 @@ const Rail = () => {
           style={{
             position: "absolute",
             left: "0px",
-            animation: `slide 15s linear forwards`,
+            animation: `slide 10s linear forwards`,
             top: "50%",
             transform: "translateY(-50%)",
           }}
