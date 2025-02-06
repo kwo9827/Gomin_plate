@@ -101,7 +101,7 @@ const Home = () => {
         {/* 해금요소 */}
       </div>
       {/* 위에 쌓을 컴포넌트 */}
-      <div>
+      {/* <div>
         <div className="home-container">
           <div className="control-buttons">
             <button onClick={openModal}>닉네임 모달 열기</button>
@@ -121,7 +121,7 @@ const Home = () => {
             onClose={closeNotification}
           />
         </div>
-      </div>
+      </div> */}
     </>
   );
 };
