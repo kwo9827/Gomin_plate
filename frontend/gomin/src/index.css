@@ -15,7 +15,7 @@ body,
 .container {
   display: flex;
   flex-direction: column;
-  width: 50vh; /* height의 40%를 width로 설정 */
+  width: 62vh; /* height의 40%를 width로 설정 */
   height: 100%;
   box-sizing: border-box;
   background-color: #fdfcc8; /* 배경색 추가 (선택 사항) */
