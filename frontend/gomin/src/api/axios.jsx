@@ -15,6 +15,8 @@ api.interceptors.request.use((config) => {
     //     config.headers.Authorization = `Bearer test`;
     // }
 
+    console.log(token);
+
     config.headers.Authorization = `Bearer ${token}`;
 
     // config.headers.Authorization = `Bearer test`;
