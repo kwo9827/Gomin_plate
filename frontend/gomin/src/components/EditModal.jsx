@@ -5,7 +5,8 @@ import { updateNicknameState } from "../store/slices/memberSlice";
 
 const EditModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
-  const currentNickname = useSelector((state) => state.member?.nickname || "");
+  // const currentNickname = useSelector((state) => state.member?.nickname || "");
+  const currentNickname = localStorage.getItem("nickname");
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
 
@@ -20,7 +21,8 @@ const EditModal = ({ isOpen, onClose }) => {
     }
     try {
       await dispatch(updateNickname(nickname)).unwrap();
-      dispatch(updateNicknameState(nickname));
+      // dispatch(updateNicknameState(nickname));
+      localStorage.setItem("nickname", nickname);
       alert("닉네임이 성공적으로 변경되었습니다.");
       onClose();
     } catch (err) {
