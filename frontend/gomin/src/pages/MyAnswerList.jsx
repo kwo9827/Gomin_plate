@@ -63,6 +63,7 @@ const styles = {
   },
   /**리스트 감싸는 스타일 */
   listContainer: {
+    overflowY: "auto",
     // position: "relatvie",
     // zindex: 2,
     // width: "100%",
