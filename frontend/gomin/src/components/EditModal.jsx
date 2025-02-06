@@ -20,12 +20,24 @@ const EditModal = ({ isOpen, onClose }) => {
       return;
     }
     try {
-      await dispatch(updateNickname(nickname)).unwrap();
-      // dispatch(updateNicknameState(nickname));
-      localStorage.setItem("nickname", nickname);
-      alert("닉네임이 성공적으로 변경되었습니다.");
-      onClose();
+      const response = await dispatch(updateNickname(nickname)).unwrap();
+
+      console.log("닉네임 변경 응답:", response);
+
+      if (response?.data?.nickname) {
+        // Redux 상태 업데이트
+        dispatch(updateNicknameState(response.data.nickname));
+
+        // localStorage에 저장
+        localStorage.setItem("nickname", response.data.nickname);
+
+        alert("닉네임이 성공적으로 변경되었습니다.");
+        onClose();
+      } else {
+        throw new Error("서버 응답에 닉네임이 없습니다.");
+      }
     } catch (err) {
+      console.error("닉네임 변경 오류:", err);
       setError("닉네임 변경에 실패했습니다. 다시 시도해주세요.");
     }
   };
