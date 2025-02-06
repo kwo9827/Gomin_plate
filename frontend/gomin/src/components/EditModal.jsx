@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateNickname, deleteAccount } from "../store/slices/authSlice";
-import { updateNicknameState } from "../store/slices/memberSlice";
 
 const EditModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
