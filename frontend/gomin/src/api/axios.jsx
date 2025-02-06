@@ -8,6 +8,9 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
 
     const token = useSelector((state) => state.member?.accessToken || "");
+    if (token == null) {
+        token = 'test'
+    }
 
     // if (token) {
     //     config.headers.Authorization = `Bearer ${token}`;
