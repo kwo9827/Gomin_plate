@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:5173", domain)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("Authorization", "Content-Type", "X-Requested-With",
-//                        "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials",
+                        "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials",
                         "Accept", "Origin", "Cookie", "Set-Cookie")  // 헤더 추가
                 .exposedHeaders("Set-Cookie")  // 쿠키 노출 허용
                 .allowCredentials(true)
