@@ -21,7 +21,7 @@ spring:
       mode: never  # 모든 데이터베이스로 초기화 대상 변경
 
 logging.level:
-  org.hibernate.SQL: info
+  org.hibernate.SQL: debug
 
 oauth:
   kakao:
