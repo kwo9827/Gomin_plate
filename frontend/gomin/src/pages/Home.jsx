@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
+import { useNavigate } from "react-router-dom";
 
 import Rail from "../components/Rail";
 import Modal from "../components/EditModal";
