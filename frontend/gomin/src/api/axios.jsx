@@ -7,7 +7,7 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
 
-    const token = useSelector((state) => state.member?.accessToken || "test");
+    // const token = useSelector((state) => state.member?.accessToken || "test");
 
     // if (token) {
     //     config.headers.Authorization = `Bearer ${token}`;
@@ -17,9 +17,9 @@ api.interceptors.request.use((config) => {
 
     console.log("axios 파일에서의 토큰 찍기 : ", token);
 
-    config.headers.Authorization = `Bearer ${token}`;
+    // config.headers.Authorization = `Bearer ${token}`;
 
-    // config.headers.Authorization = `Bearer test`;
+    config.headers.Authorization = `Bearer test`;
 
     return config;
 });
