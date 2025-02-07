@@ -11,6 +11,7 @@ import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,8 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    private final String host = "http://localhost:5173/";
+    @Value("${app.domain}")
+    private String host;
 
     @Transactional
     public void sendNotification(User user, NotificationType notificationType, Integer parameter) {
