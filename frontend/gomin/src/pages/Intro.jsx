@@ -1,5 +1,6 @@
 import React from "react";
 import KakaoLoginButton from "../components/KakaoLoginButton";
+import GoogleLoginButton from '../components/GoogleLoginButton'
 import introImage from "../assets/intro.webp";
 
 const Intro = () => {
@@ -14,6 +15,7 @@ const Intro = () => {
         }}
       ></div>
       <KakaoLoginButton />
+      <GoogleLoginButton />
     </div>
   );
 };

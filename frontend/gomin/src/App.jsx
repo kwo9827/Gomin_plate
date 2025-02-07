@@ -41,6 +41,7 @@ function App() {
         <Route path="/postsushi" element={<PostSushi />} />
         <Route path="/sushianswerdetail" element={<SushiAnswerDetail />} />
         <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
+        <Route path="/oauth/google/callback" element={<OAuthCallback />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </div>
