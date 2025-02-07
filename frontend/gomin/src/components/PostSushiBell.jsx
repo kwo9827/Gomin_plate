@@ -15,7 +15,7 @@ const PostSushiBell = ({ onClick }) => {
           bottom: "-25%",
           right: "20%",
           cursor: "pointer",
-          width: "7vw",
+          width: "8vh",
           height: "7vh",
           objectFit: "cover",
         }}

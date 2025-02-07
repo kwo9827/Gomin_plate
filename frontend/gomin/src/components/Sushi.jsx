@@ -106,8 +106,8 @@ const Sushi = ({
       <div
         style={{
           position: "relative",
-          width: "19vw",
-          height: "15vh",
+          width: "19vh",
+          height: "18vh",
           overflow: "hidden",
         }}
       >
@@ -116,8 +116,8 @@ const Sushi = ({
             src={plateImage}
             alt={`Plate for ${categoryName}`}
             style={{
-              width: "18vw",
-              height: "auto",
+              width: "18vh",
+              height: "17vh",
               position: "absolute",
               top: "45%",
               left: "50%",
@@ -133,14 +133,14 @@ const Sushi = ({
             src={sushiName.image}
             alt={sushiName.name}
             style={{
-              width: "15vw",
+              width: "13vh",
               height: "10vh",
               overflow: "hidden", // 넘치는 부분 숨기기
               objectFit: "cover",
               objectPosition: "center",
               position: "absolute",
-              top: "50%",
-              left: "48%",
+              top: "48%",
+              left: "49%",
               transform: "translate(-50%, -50%) scale(3.7)",
             }}
           />

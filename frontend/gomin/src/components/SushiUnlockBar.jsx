@@ -47,7 +47,7 @@ const SushiUnlockBar = ({ onClick }) => {
         <div
           style={{
             ...styles.progressBar,
-            width: progressPercentage > 0 ? `${progressPercentage}%` : "0.2vw",
+            width: progressPercentage > 0 ? `${progressPercentage}%` : "0.2vh",
           }}
         />
       </div>
@@ -64,7 +64,7 @@ const styles = {
   container: {
     position: "relative",
     display: "block",
-    width: "20vw",
+    width: "20vh",
     height: "10vh",
     justifyContent: "center",
     alignItems: "center",
@@ -81,14 +81,14 @@ const styles = {
 
   progressContainer: {
     position: "absolute",
-    bottom: "30%",
+    bottom: "37%",
     left: "64%",
     transform: "translateX(-50%)",
-    width: "10.5vw",
-    height: "1.2vh",
+    width: "10vh",
+    height: "1.3vh",
     backgroundColor: "#e0e0e0",
-    borderRadius: "10px",
-    border: "0.1vw solid #aaa",
+    borderRadius: "10vh",
+    border: "0.1vh solid #aaa",
     overflow: "hidden",
   },
   progressBar: {
