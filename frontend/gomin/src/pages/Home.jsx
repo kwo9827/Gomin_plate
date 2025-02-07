@@ -16,7 +16,6 @@ import bgImg from "../assets/home/back.webp";
 import deskImg from "../assets/home/desk.webp";
 import masterImg from "../assets/home/master.webp";
 import SushiUnlockBar from "../components/SushiUnlockBar";
-import Sushi from "../components/Sushi";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -115,7 +114,6 @@ const Home = () => {
         {/* 모달 */}
         <div>
           <div style={{ position: "absolute", zIndex: "10" }}>
-            <Sushi sushiType={3} />
             <button onClick={openModal}>닉네임 모달 열기</button>
 
             <Modal isOpen={isModalOpen} onClose={closeModal} />
