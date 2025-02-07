@@ -55,8 +55,8 @@ const Rail = () => {
       className="rail-container"
       style={{
         position: "relative",
-        width: "100%",
-        height: "200px",
+        width: "100vh",
+        height: "30vh",
         overflow: "hidden",
       }}
     >
@@ -83,10 +83,10 @@ const Rail = () => {
       <style>{`
                 @keyframes slide {
                     from {
-                        transform: translateX(-100%);
+                        transform: translateX(-38vh);
                     }
                     to {
-                        transform: translateX(calc(100vw + 100%));
+                        transform: translateX(calc(100vw + 19vh));
                     }
                 }
             `}</style>

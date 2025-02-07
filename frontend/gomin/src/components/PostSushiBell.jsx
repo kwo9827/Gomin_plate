@@ -9,11 +9,14 @@ const PostSushiBell = ({ onClick }) => {
     <div onClick={onClick} style={{ cursor: "pointer" }}>
       <img
         src={bellImg}
-        alt="Desk"
+        alt="Post Sushi Bell"
         style={{
+          position: "absolute",
+          bottom: "-25%",
+          right: "20%",
           cursor: "pointer",
-          width: "48px",
-          height: "48px",
+          width: "7vw",
+          height: "7vh",
           objectFit: "cover",
         }}
       />
