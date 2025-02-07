@@ -12,8 +12,6 @@ import Navbar from "./components/NavBar";
 import OAuthCallback from "./components/OAuthCallback";
 import ErrorPage from "./pages/ErrorPage";
 
-import { useSelector } from "react-redux";
-
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,14 +19,13 @@ function App() {
   // Navbar 표시 여부 결정
   const shouldShowNavbar = location.pathname !== "/";
 
-  // ✅ useSelector는 useEffect 내부가 아니라 최상위에서 호출해야 함
-  const accessToken = useSelector((state) => state.member.accessToken);
-
   useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+
     if (!accessToken && location.pathname !== "/") {
       navigate("/", { replace: true });
     }
-  }, [accessToken, location.pathname, navigate]);
+  }, [location.pathname, navigate]);
 
   return (
     <div className="container">
