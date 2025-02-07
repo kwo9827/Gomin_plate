@@ -13,10 +13,12 @@ const OAuthCallback = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get("code");
 
-      console.log("kakao code : ", code);
+      const provider = location.pathname.split('/')[2];
+      
+      console.log(`Provider: ${provider}, Code: ${code}`);
 
       if (code) {
-        dispatch(socialLogin({ provider: "kakao", code }))
+        dispatch(socialLogin({ provider, code }))
           .then(() => {
             navigate("/home"); // 로그인 후 홈으로 이동
           })
