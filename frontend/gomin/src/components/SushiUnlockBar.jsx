@@ -60,7 +60,7 @@ const SushiUnlockBar = () => {
         <div
           style={{
             ...styles.progressBar,
-            width: progressPercentage > 0 ? `${progressPercentage}%` : "50px",
+            width: progressPercentage > 0 ? `${progressPercentage}%` : "1px",
           }}
         />
       </div>
