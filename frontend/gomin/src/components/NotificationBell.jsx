@@ -20,7 +20,7 @@ const NotificationBell = ({ onClick, hasUnread }) => {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
 
-        width: "50vw",
+        width: "50vh",
         height: "100%",
 
         zIndex: 2,
@@ -31,13 +31,13 @@ const NotificationBell = ({ onClick, hasUnread }) => {
         onClick={onClick}
         style={{
           position: "absolute",
-          top: "62%",
+          top: "61%",
           right: "2%",
           transform: "translate(-50%, -50%)",
           // 클릭 가능 영역 조정
           width: "12%",
-          height: "14%",
-          backgroundColor: "rgb(0, 0, 0, 0)",
+          height: "12%",
+          backgroundColor: "rgb(0, 0, 0, 0.5)",
           cursor: "pointer",
         }}
       ></div>

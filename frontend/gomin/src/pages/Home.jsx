@@ -189,7 +189,7 @@ const styles = {
   unlock: {
     position: "absolute",
     left: "20%",
-    bottom: "24%",
+    bottom: "23%",
     zIndex: 5,
   },
 };
