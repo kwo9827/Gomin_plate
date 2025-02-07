@@ -38,7 +38,10 @@ function App() {
         <Route path="/sushidetail/:sushiId" element={<SushiDetail />} />
         <Route path="/sushiview" element={<SushiView />} />
         <Route path="/postsushi" element={<PostSushi />} />
-        <Route path="/sushianswerdetail/:sushiId" element={<SushiAnswerDetail />} />
+        <Route
+          path="/sushianswerdetail/:sushiId"
+          element={<SushiAnswerDetail />}
+        />
         <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
         <Route path="/oauth/google/callback" element={<OAuthCallback />} />
         <Route path="*" element={<ErrorPage />} />

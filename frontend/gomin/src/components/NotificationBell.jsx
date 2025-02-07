@@ -37,7 +37,7 @@ const NotificationBell = ({ onClick, hasUnread }) => {
           // 클릭 가능 영역 조정
           width: "12%",
           height: "12%",
-          backgroundColor: "rgb(0, 0, 0, 0.5)",
+          backgroundColor: "rgb(0, 0, 0, 0)",
           cursor: "pointer",
         }}
       ></div>
