@@ -1,12 +1,15 @@
-package com.ssafy.sushi.domain.auth;
+package com.ssafy.sushi.domain.auth.service;
 
-import com.ssafy.sushi.domain.auth.dto.OAuthLoginResponse;
+import com.ssafy.sushi.domain.auth.dto.LoginResult;
 import com.ssafy.sushi.domain.auth.dto.OAuthUserInfo;
-import com.ssafy.sushi.domain.auth.dto.UserInfoResponse;
-import com.ssafy.sushi.domain.auth.strategy.OAuthStrategy;
+import com.ssafy.sushi.domain.auth.dto.TokenValidationResult;
+import com.ssafy.sushi.domain.auth.dto.response.OAuthLoginResponse;
+import com.ssafy.sushi.domain.auth.dto.response.TokenRefreshResponse;
+import com.ssafy.sushi.domain.auth.dto.response.UserInfoResponse;
+import com.ssafy.sushi.domain.auth.service.strategy.OAuthStrategy;
 import com.ssafy.sushi.domain.user.entity.User;
-import com.ssafy.sushi.domain.user.UserRepository;
 import com.ssafy.sushi.domain.user.enums.Provider;
+import com.ssafy.sushi.domain.user.repository.UserRepository;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
 import com.ssafy.sushi.global.security.jwt.JwtTokenProvider;
@@ -26,8 +29,9 @@ public class OAuthService {
     private final Map<Provider, OAuthStrategy> oAuthStrategyMap;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final AuthRedisService authRedisService;
 
-    public OAuthLoginResponse handleOAuthLogin(Provider provider, String code) {
+    public LoginResult handleOAuthLogin(Provider provider, String code) {
 
         // 1. 전략 가져오기
         OAuthStrategy strategy = oAuthStrategyMap.get(provider);
@@ -51,16 +55,18 @@ public class OAuthService {
 
             Boolean isNew = existingUser.isEmpty();
             User user = existingUser.orElseGet(() ->  createUser(userInfo, provider));
+            String userId = user.getId().toString();
 
-            String accessToken = jwtTokenProvider.createToken(user.getId().toString());
-            String refreshToken = "temp";
+            String accessToken = jwtTokenProvider.createAccessToken(userId);
+            String refreshToken = jwtTokenProvider.createRefreshToken(userId);
 
-            // refresh token 생성 및 redis 사용 코드 작성 필요
+            // Redis에 RefreshToken 저장
+            authRedisService.saveRefreshToken(userId, refreshToken);
 
             UserInfoResponse userInfoResponse = UserInfoResponse.of(user, isNew);
+            OAuthLoginResponse oAuthLoginResponse = OAuthLoginResponse.of(accessToken, userInfoResponse);
 
-            return OAuthLoginResponse.of(accessToken, refreshToken, userInfoResponse);
-
+            return LoginResult.of(oAuthLoginResponse, refreshToken);
 
         } catch (Exception e) {
             log.error("Failed to process OAuth login for provider: {}", provider, e);
@@ -76,5 +82,26 @@ public class OAuthService {
                 .build();
 
         return userRepository.save(newUser);
+    }
+
+    public TokenRefreshResponse refreshToken(String refreshToken) {
+        // 1. Refresh 토큰 유효성 검증
+        TokenValidationResult validationResult = jwtTokenProvider.validateToken(refreshToken);
+        if (!validationResult.isValid()) {
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        // 2. Redis에 저장된 Refresh 토큰과 비교
+        String userId = jwtTokenProvider.getUserId(refreshToken).toString();
+        String savedRefreshToken = authRedisService.getRefreshToken(userId);
+
+        if (savedRefreshToken == null || !savedRefreshToken.equals(refreshToken)) {
+            throw new CustomException(ErrorCode.REFRESH_TOKEN_MISMATCH);
+        }
+
+        // 3. 새로운 Access 토큰 발급
+        String newAccessToken = jwtTokenProvider.createAccessToken(userId);
+
+        return new TokenRefreshResponse(newAccessToken);
     }
 }

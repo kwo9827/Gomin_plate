@@ -1,4 +1,4 @@
-package com.ssafy.sushi.domain.user;
+package com.ssafy.sushi.domain.user.repository;
 
 import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.domain.user.enums.Provider;

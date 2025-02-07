@@ -10,7 +10,7 @@ import com.ssafy.sushi.domain.notification.enums.NotificationType;
 import com.ssafy.sushi.domain.notification.service.NotificationService;
 import com.ssafy.sushi.domain.sushi.entity.Sushi;
 import com.ssafy.sushi.domain.sushi.repository.SushiRepository;
-import com.ssafy.sushi.domain.user.UserRepository;
+import com.ssafy.sushi.domain.user.repository.UserRepository;
 import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;

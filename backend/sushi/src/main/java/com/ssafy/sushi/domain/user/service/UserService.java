@@ -1,5 +1,6 @@
-package com.ssafy.sushi.domain.user;
+package com.ssafy.sushi.domain.user.service;
 
+import com.ssafy.sushi.domain.user.repository.UserRepository;
 import com.ssafy.sushi.domain.user.dto.request.UpdateNicknameRequest;
 import com.ssafy.sushi.domain.user.dto.response.UserLikeNumResponse;
 import com.ssafy.sushi.domain.user.dto.response.UserNicknameChangeResponse;

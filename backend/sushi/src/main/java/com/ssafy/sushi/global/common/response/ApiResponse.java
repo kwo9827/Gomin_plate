@@ -4,7 +4,9 @@ import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.ErrorResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 
 @Getter
@@ -31,6 +33,13 @@ public class ApiResponse<T> {
         return ResponseEntity
                 .status(status)
                 .body(new ApiResponse<>(true, null, null));
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> success(T data, ResponseCookie cookie) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(new ApiResponse<>(true, data, null));
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> error(ErrorCode error) {
