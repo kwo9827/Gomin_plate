@@ -1,13 +1,9 @@
 package com.ssafy.sushi.global.security.jwt;
 
-import com.ssafy.sushi.domain.auth.dto.TokenError;
 import com.ssafy.sushi.domain.auth.dto.TokenValidationResult;
-import com.ssafy.sushi.domain.auth.dto.response.TokenRefreshResponse;
-import com.ssafy.sushi.domain.auth.service.OAuthService;
 import com.ssafy.sushi.global.common.util.TestUserMaker;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -24,7 +20,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final OAuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
 
     private static final String TEST_TOKEN = "test";
@@ -50,29 +45,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     if (validationResult.isValid()) {
                         Authentication authentication = jwtTokenProvider.getAuthentication(token);
                         SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
-                    // 토큰이 만료된 경우
-                    else if (validationResult.getError() == TokenError.EXPIRED) {
-                        String refreshToken = extractRefreshToken(request);
-                        if (refreshToken != null) {
-                            try {
-                                // 토큰 갱신 시도
-                                TokenRefreshResponse refreshResponse = authService.refreshToken(refreshToken);
-                                String newAccessToken = refreshResponse.getAccessToken();
-
-                                // 새 토큰으로 인증 처리
-                                Authentication authentication = jwtTokenProvider.getAuthentication(newAccessToken);
-                                SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                                // 응답 헤더에 새 토큰 추가
-                                response.setHeader("Authorization", "Bearer " + newAccessToken);
-                            } catch (Exception e) {
-                                log.error("Token refresh failed", e);
-                                // 갱신 실패 시 401 응답
-                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                                return;
-                            }
-                        }
+                    } else {
+                        // 토큰이 유효하지 않으면 401 응답
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        return;
                     }
                 }
             }
@@ -92,30 +68,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return bearerToken.substring(7);
         }
 
-
-//        쿠키 사용하는 경우
-//        Cookie[] cookies = request.getCookies();
-//
-//        if (cookies != null) {
-//            for (Cookie cookie : cookies) {
-//                if ("accessToken".equals(cookie.getName())) {
-//                    return cookie.getValue();
-//                }
-//            }
-//        }
-
-        return null;
-    }
-
-    private String extractRefreshToken(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("refresh_token".equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
         return null;
     }
 
