@@ -9,7 +9,7 @@ const SushiAnswerCard = ({ id, title, content, showHeart = false }) => {
       console.log("sushiId가 존재하지 않습니다.", { id });
       return;
     }
-    navigate(`/sushidetail/${id}`);
+    navigate(`/sushianswerdetail/${id}`);
   };
 
   return (

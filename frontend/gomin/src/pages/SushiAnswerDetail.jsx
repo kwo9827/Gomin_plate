@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAnswerDetail } from "../store/slices/answerSlice";
 import PostItModal from "../components/PostItModal";
@@ -41,16 +41,16 @@ const SushiAnswerDetail = () => {
     dispatch(fetchAnswerDetail(sushiId)); // API 호출
   }, [sushiId, dispatch, navigate]);
 
-  // /* 모달 열기 */
-  // const openModal = (answer) => {
-  //   setSelectedAnswer(answer);
-  //   setModalOpen(true);
-  // };
+  /* 모달 열기 */
+  const openModal = (answer) => {
+    setSelectedAnswer(answer);
+    setModalOpen(true);
+  };
 
-  // /* 모달 닫기 */
-  // const closeModal = () => {
-  //   setModalOpen(false);
-  // };
+  /* 모달 닫기 */
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   const answersPerPage = 5;
   const totalPages = Math.ceil(1 / answersPerPage); // answer가 하나만 있으므로 페이지는 1로 고정

@@ -18,8 +18,10 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Navbar 표시 여부 결정
   const shouldShowNavbar = location.pathname !== "/";
 
+  // ✅ useSelector는 useEffect 내부가 아니라 최상위에서 호출해야 함
   const accessToken = useSelector((state) => state.member.accessToken);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ function App() {
         <Route path="/sushidetail/:sushiId" element={<SushiDetail />} />
         <Route path="/sushiview" element={<SushiView />} />
         <Route path="/postsushi" element={<PostSushi />} />
-        <Route path="/sushianswerdetail" element={<SushiAnswerDetail />} />
+        <Route path="/sushianswerdetail/:sushiId" element={<SushiAnswerDetail />} />
         <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
