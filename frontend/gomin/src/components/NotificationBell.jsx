@@ -11,7 +11,7 @@ const NotificationBell = ({ onClick, hasUnread }) => {
   return (
     <div
       style={{
-        backgroundImage: `url("${hasUnread ? alarmFalseImg : alarmTrueImg}")`,
+        backgroundImage: `url("${hasUnread ? alarmTrueImg : alarmFalseImg}")`,
 
         position: "absolute",
         top: "-49%",
