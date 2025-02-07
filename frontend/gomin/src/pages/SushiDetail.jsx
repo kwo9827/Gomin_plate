@@ -36,15 +36,15 @@ const SushiDetail = () => {
     dispatch(fetchMySushiDetail(sushiId));
   }, [sushiId, dispatch, navigate]);
 
-  // /* 모달 열기 */
-  // const openModal = (answer) => {
-  //   setSelectedAnswer(answer);
-  //   setModalOpen(true);
-  // };
-  // /* 모달 닫기 */
-  // const closeModal = () => {
-  //   setModalOpen(false);
-  // };
+  /* 모달 열기 */
+  const openModal = (answer) => {
+    setSelectedAnswer(answer);
+    setModalOpen(true);
+  };
+  /* 모달 닫기 */
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   const answersPerPage = 5;
   const totalPages = Math.ceil(answer.length / answersPerPage);
@@ -133,7 +133,7 @@ const SushiDetail = () => {
                     ...styles.postIt,
                     backgroundColor:
                       styles.postItColors[
-                        index % styles.styles.postItColors.length
+                      index % styles.styles.postItColors.length
                       ],
                   }}
                   onClick={() => openModal(item)}
