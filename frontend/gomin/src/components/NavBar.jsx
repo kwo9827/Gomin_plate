@@ -9,7 +9,7 @@ const Navbar = () => {
       <div style={contentWrapperStyle}>
         <div style={logoStyle}>
           <Link to="/Home" style={linkStyle}>
-            로고
+            홈
           </Link>
         </div>
         <div style={buttonContainerStyle}>

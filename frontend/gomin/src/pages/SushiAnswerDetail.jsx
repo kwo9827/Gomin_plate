@@ -6,21 +6,24 @@ import PostItModal from "../components/PostItModal";
 import PostItAnswerModal from "../components/PostItAnswerModal";
 
 const SushiAnswerDetail = () => {
+  //  const { id } = location.state || {};
+  /**sushiId useparams로 가져오기 */
+  const { sushiId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { id } = location.state || {};
+
   const currentSushi = useSelector((state) => state.answer.answerDetail);
   const status = useSelector((state) => state.answer.status);
   const [currentPage, setCurrentPage] = useState(0);
 
   // 구조 분해 할당으로 안전하게 데이터 추출
   const {
-    title = '',
-    content = '',
+    title = "",
+    content = "",
     expirationTime = new Date(),
-    answer = '',
-    isLiked = new Boolean()
+    answer = "",
+    isLiked = new Boolean(),
   } = currentSushi || {};
 
   console.log(currentSushi); // 데이터를 잘 추출하고 있는지 확인
@@ -31,37 +34,37 @@ const SushiAnswerDetail = () => {
   const [likedAnswerId, setLikedAnswerId] = useState(null);
 
   useEffect(() => {
-    if (!id) {
+    if (!sushiId) {
       navigate("/home");
       return;
     }
-    dispatch(fetchAnswerDetail(id)); // API 호출
-  }, [id, dispatch, navigate]);
+    dispatch(fetchAnswerDetail(sushiId)); // API 호출
+  }, [sushiId, dispatch, navigate]);
 
-  /* 모달 열기 */
-  const openModal = (answer) => {
-    setSelectedAnswer(answer);
-    setModalOpen(true);
-  };
+  // /* 모달 열기 */
+  // const openModal = (answer) => {
+  //   setSelectedAnswer(answer);
+  //   setModalOpen(true);
+  // };
 
-  /* 모달 닫기 */
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+  // /* 모달 닫기 */
+  // const closeModal = () => {
+  //   setModalOpen(false);
+  // };
 
   const answersPerPage = 5;
   const totalPages = Math.ceil(1 / answersPerPage); // answer가 하나만 있으므로 페이지는 1로 고정
 
   // 로딩 및 오류 상태 처리
-  if (status === 'loading') {
+  if (status === "loading") {
     return <div style={loadingStyle}>로딩 중...</div>;
   }
 
-  if (status === 'failed') {
+  if (status === "failed") {
     return <div style={errorStyle}>데이터를 불러오는 데 실패했습니다.</div>;
   }
 
-  if (!currentSushi || !id) {
+  if (!currentSushi || !sushiId) {
     navigate("/home");
     return null;
   }
@@ -75,15 +78,17 @@ const SushiAnswerDetail = () => {
         </button>
 
         {/* 제목 */}
-        <h2 style={titleStyle}>{title || '제목이 없습니다'}</h2>
+        <h2 style={titleStyle}>{title || "제목이 없습니다"}</h2>
         <hr style={dividerStyle} />
 
         {/* 날짜 */}
-        <p style={dateStyle}>{new Date(expirationTime).toLocaleString() || '날짜 정보 없음'}</p>
+        <p style={dateStyle}>
+          {new Date(expirationTime).toLocaleString() || "날짜 정보 없음"}
+        </p>
 
         {/* 본문 내용 */}
         <div style={contentBoxStyle}>
-          <p style={contentStyle}>{content || '본문 내용이 없습니다'}</p>
+          <p style={contentStyle}>{content || "본문 내용이 없습니다"}</p>
         </div>
 
         <hr style={dividerStyle} />
@@ -95,7 +100,7 @@ const SushiAnswerDetail = () => {
               style={{ ...postItStyle, backgroundColor: postItColors[0] }}
               onClick={() => openModal(answer)}
             >
-              <p>{answer || '답변 내용 없음'}</p>
+              <p>{answer || "답변 내용 없음"}</p>
             </div>
           </div>
         </div>
@@ -104,10 +109,20 @@ const SushiAnswerDetail = () => {
         <div style={arrowContainerStyle}>
           {/* 버튼은 현재 페이지가 0일 때는 왼쪽으로 슬라이드 버튼 비활성화 */}
           {currentPage > 0 && (
-            <button onClick={() => setCurrentPage(currentPage - 1)} style={arrowLeftStyle}>◀</button>
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              style={arrowLeftStyle}
+            >
+              ◀
+            </button>
           )}
           {currentPage < totalPages - 1 && (
-            <button onClick={() => setCurrentPage(currentPage + 1)} style={arrowRightStyle}>▶</button>
+            <button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              style={arrowRightStyle}
+            >
+              ▶
+            </button>
           )}
         </div>
       </div>
@@ -233,21 +248,21 @@ const arrowLeftStyle = { marginRight: "10px", cursor: "pointer" };
 const arrowRightStyle = { marginLeft: "10px", cursor: "pointer" };
 
 const loadingStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100vh',
-  fontSize: '1.5rem',
-  color: '#5D4A37'
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
+  fontSize: "1.5rem",
+  color: "#5D4A37",
 };
 
 const errorStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100vh',
-  fontSize: '1.5rem',
-  color: 'red'
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
+  fontSize: "1.5rem",
+  color: "red",
 };
 
 export default SushiAnswerDetail;

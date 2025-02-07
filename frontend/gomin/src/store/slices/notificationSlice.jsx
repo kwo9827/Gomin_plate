@@ -6,17 +6,17 @@ const dummyNotifications = [
     notificationId: 1,
     title: "초밥 답변 도착",
     content: "'민승용은 차은우' 글에 댓글이 달렸어요.",
-    redirectUrl: "/sushiview",
+    redirectUrl: "/sushdetail",
     createdAt: "2024-01-31T10:00:00",
-    sushiId: 123,
+    sushiId: 36,
   },
   {
     notificationId: 2,
     title: "리뷰 연결 답변!",
     content: "'이상호'는 캐리아' 글에 댓글이 달렸어요.",
-    redirectUrl: "/sushiview",
+    redirectUrl: "/sushidetail",
     createdAt: "2024-01-31T09:30:00",
-    sushiId: 456,
+    sushiId: 33,
   },
 ];
 

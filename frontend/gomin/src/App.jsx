@@ -27,10 +27,10 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/mysushilist" element={<MySushiList />} />
         <Route path="/myanswerlist" element={<MyAnswerList />} />
-        <Route path="/sushidetail" element={<SushiDetail />} />
+        <Route path="/sushidetail/:sushiId" element={<SushiDetail />} />
         <Route path="/sushiview" element={<SushiView />} />
         <Route path="/postsushi" element={<PostSushi />} />
-        <Route path="/sushidetail" element={<SushiDetail />} />
+        {/* <Route path="/sushidetail" element={<SushiDetail />} /> */}
         <Route path="/sushianswerdetail" element={<SushiAnswerDetail />} />
         <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
         <Route path="*" element={<ErrorPage />} />{" "}

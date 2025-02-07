@@ -22,7 +22,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
 
   const handleNotificationClick = (notification) => {
     dispatch(markAsRead(notification.notificationId));
-    navigate("/sushiview", { state: { id: notification.sushiId } });
+    navigate(`/sushidetail/${notification.sushiId}`);
     onClose();
   };
 

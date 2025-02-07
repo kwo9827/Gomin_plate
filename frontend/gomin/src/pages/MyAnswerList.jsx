@@ -71,7 +71,7 @@ const styles = {
     margin: "0 auto",
     padding: "20px",
     boxSizing: "border-box",
-    overflowY: "auto",
+    // overflowY: "auto",
   },
   /**나의 답변 외부 박스 */
   outerBox: {
