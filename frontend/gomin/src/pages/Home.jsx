@@ -12,13 +12,10 @@ import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 
 //이미지 파일
-import alarmTrueImg from "../assets/home/alarmON.webp";
-import alarmFalseImg from "../assets/home/alarmOFF.webp";
 import bgImg from "../assets/home/back.webp";
-import bellImg from "../assets/home/bell.webp";
 import deskImg from "../assets/home/desk.webp";
-import openssImg from "../assets/home/open.webp";
 import masterImg from "../assets/home/master.webp";
+import SushiUnlockBar from "../components/SushiUnlockBar";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -93,24 +90,31 @@ const Home = () => {
           }}
         ></div>
         {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
-        <div
-          style={{
-            ...styles.backgroundLayer,
-            backgroundImage: `url("${hasUnread ? alarmFalseImg : alarmTrueImg
-              }")`,
-            zIndex: 2,
-            transform: "translateX(0) translateY(-46%)",
-          }}
-        ></div>
-        {/* 위에 쌓을 컴포넌트 */}
-        <div style={{ position: "absolute", zIndex: "10" }}>
-          <div className="home-container">
-            <div className="control-buttons">
-              <button onClick={openModal}>닉네임 모달 열기</button>
-              <button onClick={openSushiUnlock}>해금 초밥 열기</button>
-              <PostSushiBell onClick={openPostSushi} />
-              <NotificationBell onClick={openNotification} />
-            </div>
+        <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
+
+        {/* 책상과 그 위의 요소들 */}
+        <div style={styles.deskContainer}>
+          {/* 책상 */}
+          <img src={deskImg} alt="Desk" style={styles.deskImage} />
+
+          {/* Rail */}
+          <div style={styles.rail}>
+            <Rail />
+          </div>
+          {/* 주문벨 */}
+          <div style={styles.bell}>
+            <PostSushiBell onClick={openPostSushi} style={{ zIndex: 5 }} />
+          </div>
+          {/* 해금요소 */}
+          <div onClick={openSushiUnlock} style={styles.unlock}>
+            <SushiUnlockBar style={{ zIndex: 5 }} />
+          </div>
+        </div>
+
+        {/* 모달 */}
+        <div>
+          <div style={{ position: "absolute", zIndex: "10" }}>
+            <button onClick={openModal}>닉네임 모달 열기</button>
 
             <Modal isOpen={isModalOpen} onClose={closeModal} />
 
@@ -127,20 +131,6 @@ const Home = () => {
             />
           </div>
         </div>
-        {/* 책상과 Rail */}
-        <div style={styles.deskContainer}>
-          {/* 책상 */}
-          <img src={deskImg} alt="Desk" style={styles.deskImage} />
-
-          {/* Rail */}
-          <div style={styles.rail}>
-            <Rail />
-          </div>
-        </div>
-
-        {/* 주문벨 */}
-
-        {/* 해금요소 */}
       </div>
     </>
   );
@@ -184,23 +174,24 @@ const styles = {
   },
   rail: {
     position: "absolute",
-    bottom: "60%", // 책상 위에 배치
+    bottom: "60%",
     left: "50%",
     width: "100%",
     transform: "translateX(-50%)",
     zIndex: 4,
   },
-  // content: {
-  //   width: "100%",
-  //   height: "100vh",
-  //   position: "absolute",
-  //   top: "50%",
-  //   left: "50%",
-  //   transform: "translate(-50%, -50%)",
-  //   color: "white",
-  //   textAlign: "center",
-  //   zIndex: 10,
-  // },
+  bell: {
+    position: "absolute",
+    right: "5%",
+    bottom: "25%",
+    zIndex: 5,
+  },
+  unlock: {
+    position: "absolute",
+    left: "5%",
+    bottom: "25%",
+    zIndex: 5,
+  },
 };
 
 export default Home;
