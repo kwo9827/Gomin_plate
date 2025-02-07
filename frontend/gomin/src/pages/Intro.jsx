@@ -4,29 +4,38 @@ import introImage from "../assets/intro.webp";
 
 const Intro = () => {
   return (
-    <div 
-      style={{
-        backgroundImage: `url(${introImage})`,
-        backgroundSize: "contain",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        width: "100vw",
-        height: "100vh",
-        position: "relative",
-      }}
-    >
-      <div 
+    <div style={styles.backgroundContainer}>
+      <div
         style={{
-          position: "absolute",
-          bottom: "33%",
-          left: "50%",
-          transform: "translateX(80%)", // 이 부분을 추가하여 가로 중앙 정렬
+          ...styles.backgroundLayer,
+          backgroundImage: `url("${introImage}")`,
+          zIndex: 1,
+          transform: "translateX(0) translateY(3%)",
         }}
-      >
-        <KakaoLoginButton />
-      </div>
+      ></div>
+      <KakaoLoginButton />
     </div>
   );
+};
+
+const styles = {
+  backgroundContainer: {
+    position: "relative",
+    height: "100vh",
+    width: "100%",
+    overflow: "hidden",
+  },
+  backgroundLayer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    scale: "1.1",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+  },
 };
 
 export default Intro;

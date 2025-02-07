@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
+import { useNavigate } from "react-router-dom";
 
 import Rail from "../components/Rail";
 import Modal from "../components/EditModal";
@@ -46,8 +47,26 @@ const Home = () => {
     dispatch(fetchUnreadExists());
   }, [dispatch]);
 
-  const token = useSelector((state) => state.member?.accessToken || "");
-  console.log("사용자의 accessToken : ", token);
+  /** 로그인 상태가 아니면 인트로 페이지로 리다이렉트 */
+  const navigate = useNavigate();
+  const accessToken = useSelector((state) => state.member?.accessToken);
+
+  useEffect(() => {
+    if (!accessToken) {
+      navigate('/', { replace: true });
+    }
+  }, [accessToken, navigate]);
+  /** 여기 까지 */
+
+  /** 신규 유저는 닉네임 세팅을 해야함 */
+  const isNew = useSelector((state) => state.member?.isNew);
+
+  useEffect(() => {
+    /** 새로운 유저거나, 닉네임이 없으면 모달 오픈 */
+    if (isNew) {
+      openModal();
+    }
+  }, [isNew]);
 
   return (
     <>

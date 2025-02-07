@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axios";
-import { clearMemberData, setAuthData, updateNicknameState } from "./memberSlice";
+import { clearMemberData, setAuthData } from "./memberSlice";
 
 export const kakaoLogin = createAsyncThunk(
   "auth/kakaoLogin",
@@ -21,8 +21,9 @@ export const socialLogin = createAsyncThunk(
       const response = await api.post(`/oauth/${provider}`, { code });
       console.log(response.data); // 응답 구조 확인
       console.log(response.data.data); // 실제 필요한 데이터 확인
-      // dispatch(setAuthData(response.data.data));
+      dispatch(setAuthData(response.data.data));
       localStorage.setItem("accessToken", response.data.data.accessToken);
+      localStorage.setItem("userNickname", response.data.data.user.nickname);
       console.log("sociallogin 호출됐다고 !!");
       return response.data;
     } catch (error) {
@@ -47,15 +48,17 @@ export const logoutApi = createAsyncThunk(
 /** 닉네임 수정 API */
 export const updateNickname = createAsyncThunk(
   "auth/updateNickname",
-  async (nickname, { dispatch }) => {
-    const response = await api.put("/user/nickname", { nickname });
-
-    // `memberSlice`에도 업데이트 적용
-    dispatch(updateNicknameState(response.data.data.nickname));
-
-    return response.data;
+  async (nickname, { rejectWithValue }) => {
+    try {
+      const response = await api.put("/user/nickname", { nickname });
+      return response.data;  // 서버 응답 전체를 반환 ({success, data, error})
+    } catch (error) {
+      console.error("닉네임 변경 실패:", error);
+      return rejectWithValue("닉네임 변경 실패");
+    }
   }
 );
+
 
 export const deleteAccount = createAsyncThunk(
   "auth/deleteAccount",
@@ -109,6 +112,7 @@ const authSlice = createSlice({
       .addCase(updateNickname.fulfilled, (state, action) => {
         if (state.user) {
           state.user.nickname = action.payload.data.nickname;
+          localStorage.setItem('userNickname', action.payload.data.nickname);
         }
       })
       .addCase(deleteAccount.fulfilled, (state) => {
