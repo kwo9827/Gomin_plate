@@ -1,4 +1,4 @@
-package com.ssafy.sushi.domain.auth.strategy;
+package com.ssafy.sushi.domain.auth.service.strategy;
 
 import com.ssafy.sushi.domain.auth.dto.OAuthUserInfo;
 import com.ssafy.sushi.global.infra.oauth.client.GoogleOAuthClient;

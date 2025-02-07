@@ -1,4 +1,4 @@
-package com.ssafy.sushi.domain.auth.dto;
+package com.ssafy.sushi.domain.auth.dto.request;
 
 
 import lombok.Getter;

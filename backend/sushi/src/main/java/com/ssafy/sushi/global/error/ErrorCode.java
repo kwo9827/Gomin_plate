@@ -15,6 +15,9 @@ public enum ErrorCode {
     // AUTH
     OAUTH_SERVER_ERROR(500, "A001", "OAuth 서버 오류가 발생했습니다"),
     INVALID_OAUTH_PROVIDER(400, "A002", "지원하지 않는 OAuth 제공자입니다"),
+    INVALID_REFRESH_TOKEN(401, "A003", "Invalid refresh token"),
+    REFRESH_TOKEN_NOT_FOUND(401, "A004", "Refresh token not found"),
+    REFRESH_TOKEN_MISMATCH(401, "A005", "Refresh token mismatch"),
 
     // USER
     USER_NOT_FOUND(404, "U001", "유저를 찾을 수 없습니다."),

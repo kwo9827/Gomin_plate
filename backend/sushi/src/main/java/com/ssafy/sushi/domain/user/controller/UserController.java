@@ -1,5 +1,6 @@
-package com.ssafy.sushi.domain.user;
+package com.ssafy.sushi.domain.user.controller;
 
+import com.ssafy.sushi.domain.user.service.UserService;
 import com.ssafy.sushi.domain.user.dto.request.UpdateNicknameRequest;
 import com.ssafy.sushi.domain.user.dto.response.UserInfoResponse;
 import com.ssafy.sushi.domain.user.dto.response.UserLikeNumResponse;
@@ -24,8 +25,12 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<UserInfoResponse>> createUser(
-            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @CookieValue(name = "refreshToken", required = false) String refreshToken) {
         Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
+
+        System.out.println("yaho");
+        System.out.println(refreshToken);
 
         return ApiResponse.success(userService.getUserInfo(userId));
     }
