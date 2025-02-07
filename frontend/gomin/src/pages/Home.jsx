@@ -47,6 +47,17 @@ const Home = () => {
     dispatch(fetchUnreadExists());
   }, [dispatch]);
 
+  /** 로그인 상태가 아니면 인트로 페이지로 리다이렉트 */
+  const navigate = useNavigate();
+  const accessToken = useSelector((state) => state.member?.accessToken);
+
+  useEffect(() => {
+    if (!accessToken) {
+      navigate("/", { replace: true });
+    }
+  }, [accessToken, navigate]);
+  /** 여기 까지 */
+
   /** 신규 유저는 닉네임 세팅을 해야함 */
   const isNew = useSelector((state) => state.member?.isNew);
 
@@ -66,7 +77,7 @@ const Home = () => {
             ...styles.backgroundLayer,
             backgroundImage: `url("${bgImg}")`,
             zIndex: 1,
-            transform: "translateX(0) translateY(3%)",
+            transform: "translateX(0) translateY(6%)",
           }}
         ></div>
         {/* 고양이마스터 */}
@@ -75,7 +86,7 @@ const Home = () => {
             ...styles.backgroundLayer,
             backgroundImage: `url("${masterImg}")`,
             zIndex: 2,
-            transform: "translateX(0) translateY(0) scale(1.1)",
+            transform: "translateX(0) translateY(0) scale(1.2)",
           }}
         ></div>
         {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
@@ -95,8 +106,8 @@ const Home = () => {
             <PostSushiBell onClick={openPostSushi} style={{ zIndex: 5 }} />
           </div>
           {/* 해금요소 */}
-          <div onClick={openSushiUnlock} style={styles.unlock}>
-            <SushiUnlockBar style={{ zIndex: 5 }} />
+          <div style={styles.unlock}>
+            <SushiUnlockBar onClick={openSushiUnlock} style={{ zIndex: 5 }} />
           </div>
         </div>
 
@@ -148,8 +159,8 @@ const styles = {
     bottom: 0,
     left: "50%",
     transform: "translateX(-50%)",
-    width: "100%",
-    height: "35%", // 책상의 높이 설정
+    width: "auto%",
+    height: "28vh", // 책상의 높이 설정
     zIndex: 3,
     display: "flex",
     flexDirection: "column",
@@ -171,14 +182,14 @@ const styles = {
   },
   bell: {
     position: "absolute",
-    right: "5%",
+    right: "23%",
     bottom: "25%",
     zIndex: 5,
   },
   unlock: {
     position: "absolute",
-    left: "5%",
-    bottom: "25%",
+    left: "20%",
+    bottom: "24%",
     zIndex: 5,
   },
 };

@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 /** 홈 화면에서 누르면 초밥해금 화면으로 넘어가는 컴포넌트
  *  1. 클릭 시 부모 컴포넌트에서 전달한 `onClick` 실행
  */
-const SushiUnlockBar = () => {
+const SushiUnlockBar = ({ onClick }) => {
   const likesReceived = useSelector((state) => state.member.likesReceived);
 
   const MAX_LIKES = 36; // 최대 좋아요 개수
@@ -35,7 +35,7 @@ const SushiUnlockBar = () => {
       : nextUnlockableSushiType;
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} onClick={onClick}>
       <img
         src={unlockssImg}
         alt="Unlock Sushi"
@@ -43,24 +43,11 @@ const SushiUnlockBar = () => {
       />
 
       {/* 진행 바 */}
-      {/* <div style={styles.progressBar}>
-        <div
-          style={{
-            ...styles.progressFill,
-            width: `${progressPercentage}%`,
-          }}
-        />
-        <span style={styles.progressText}>
-          {likesReceived} / {MAX_LIKES}
-        </span>
-      </div> */}
-
-      {/* 진행 바 */}
       <div style={styles.progressContainer}>
         <div
           style={{
             ...styles.progressBar,
-            width: progressPercentage > 0 ? `${progressPercentage}%` : "1px",
+            width: progressPercentage > 0 ? `${progressPercentage}%` : "0.2vw",
           }}
         />
       </div>
@@ -77,13 +64,15 @@ const styles = {
   container: {
     position: "relative",
     display: "block",
-    width: "50%",
-    height: "auto",
+    width: "20vw",
+    height: "10vh",
     justifyContent: "center",
     alignItems: "center",
+    cursor: "pointer",
+    pointerEvents: "auto",
   },
   backgroundImage: {
-    position: "relative",
+    position: "absolute",
     top: "0",
     left: "0",
     width: "100%",
@@ -92,14 +81,14 @@ const styles = {
 
   progressContainer: {
     position: "absolute",
-    bottom: "34%",
+    bottom: "30%",
     left: "64%",
     transform: "translateX(-50%)",
-    width: "53%",
-    height: "10px",
+    width: "10.5vw",
+    height: "1.2vh",
     backgroundColor: "#e0e0e0",
-    borderRadius: "5px",
-    border: "1px solid #aaa",
+    borderRadius: "10px",
+    border: "0.1vw solid #aaa",
     overflow: "hidden",
   },
   progressBar: {
@@ -112,6 +101,7 @@ const styles = {
     top: "48%",
     left: "22%",
     transform: "translate(-50%, -50%) scale(0.33)",
+    pointerEvents: "none",
   },
 };
 

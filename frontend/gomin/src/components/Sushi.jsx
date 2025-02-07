@@ -92,7 +92,7 @@ const Sushi = ({
   return (
     <div
       className="sushi"
-      onClick={handleSushiClick}
+      // onClick={handleSushiClick}
       style={{
         cursor: "pointer",
         textAlign: "center",
@@ -106,8 +106,8 @@ const Sushi = ({
       <div
         style={{
           position: "relative",
-          width: "180px",
-          height: "100px",
+          width: "19vw",
+          height: "15vh",
           overflow: "hidden",
         }}
       >
@@ -116,8 +116,8 @@ const Sushi = ({
             src={plateImage}
             alt={`Plate for ${categoryName}`}
             style={{
-              width: "150px",
-              height: "150px",
+              width: "18vw",
+              height: "auto",
               position: "absolute",
               top: "45%",
               left: "50%",
@@ -129,11 +129,12 @@ const Sushi = ({
 
         {sushiName.image && (
           <img
+            onClick={handleSushiClick}
             src={sushiName.image}
             alt={sushiName.name}
             style={{
-              width: "100px",
-              height: "100px",
+              width: "15vw",
+              height: "10vh",
               overflow: "hidden", // 넘치는 부분 숨기기
               objectFit: "cover",
               objectPosition: "center",
