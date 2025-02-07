@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+
 import {
   fetchNotifications,
   markAsRead,
@@ -9,20 +9,20 @@ import {
 
 const NotificationModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { notifications } = useSelector((state) => state.notification);
-  const status = useSelector((state) => state.notification.status);
+  const { notifications, status } = useSelector((state) => state.notification);
 
   useEffect(() => {
     if (isOpen) {
-      dispatch(fetchNotifications());
+      dispatch(fetchNotifications({ page: 1, size: 10 }));
       dispatch(fetchUnreadExists());
     }
   }, [isOpen, dispatch]);
 
   const handleNotificationClick = (notification) => {
     dispatch(markAsRead(notification.notificationId));
-    navigate(`/sushidetail/${notification.sushiId}`);
+    if (notification.redirectUrl) {
+      window.location.href = notification.redirectUrl;
+    }
     onClose();
   };
 
@@ -31,22 +31,14 @@ const NotificationModal = ({ isOpen, onClose }) => {
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
-        <>
-          {/* 고민 박스 */}
-          <div style={outerBoxStyle}>
-            <div style={innerBoxStyle}>알림</div>
-            {/* 닫기 버튼 */}
-            <button style={cancelButtonStyle} onClick={onClose}>
-              ✖
-            </button>
-          </div>
-        </>
-        {/* <hr style={dividerStyle} /> */}
+        <div style={outerBoxStyle}>
+          <div style={innerBoxStyle}>알림</div>
+          <button style={cancelButtonStyle} onClick={onClose}>✖</button>
+        </div>
 
-        {/* 알림 리스트 */}
         <div>
           {status === "loading" ? (
-            <p style={loadingTextStyle}>로딩 중...</p>
+            <p>로딩 중...</p>
           ) : notifications.length > 0 ? (
             <ul style={listStyle}>
               {notifications.map((notification) => (
@@ -55,11 +47,9 @@ const NotificationModal = ({ isOpen, onClose }) => {
                   style={listItemStyle}
                   onClick={() => handleNotificationClick(notification)}
                 >
-                  {/* 알림 카드 */}
                   <div style={outerContainerStyle}>
                     <div style={middleContainerStyle}>
                       <div style={innerContainerStyle}>
-                        {/* 초밥 이미지 */}
                         <div style={sushiImageStyle}>
                           <img
                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpL734zj0BQG4VtmIwh5Ql0tRFW4HIVMQIg&s"
@@ -68,12 +58,11 @@ const NotificationModal = ({ isOpen, onClose }) => {
                           />
                         </div>
 
-                        {/* 알림 텍스트 */}
                         <div style={textContainerStyle}>
-                          <div style={titleStyle}>{notification.title}</div>
+                          <div style={titleStyle}>{notification.message}</div>
                           <hr style={dividerStyle} />
                           <div style={contentTextStyle}>
-                            {notification.content}
+                            {notification.message}
                           </div>
                           <div style={timeStyle}>
                             {new Date(notification.createdAt).toLocaleString()}
@@ -94,7 +83,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
   );
 };
 
-// 모달 오버레이 스타일
+// Styles
 const overlayStyle = {
   position: "fixed",
   top: 0,
@@ -109,7 +98,6 @@ const overlayStyle = {
   backdropFilter: "blur(10px)",
 };
 
-// 모달 스타일
 const modalStyle = {
   backgroundColor: "#fdf5e6",
   padding: "0px",
@@ -125,7 +113,6 @@ const modalStyle = {
   boxSizing: "border-box",
 };
 
-// 닫기 버튼
 const cancelButtonStyle = {
   position: "absolute",
   top: "10px",
@@ -139,7 +126,6 @@ const cancelButtonStyle = {
   fontWeight: "bold",
 };
 
-// '알림' 외부 박스
 const outerBoxStyle = {
   width: "100%",
   maxWidth: "250px",
@@ -151,7 +137,6 @@ const outerBoxStyle = {
   boxSizing: "border-box",
 };
 
-// '알림' 내부 박스
 const innerBoxStyle = {
   width: "100%",
   border: "2px solid #906C48",
@@ -165,7 +150,6 @@ const innerBoxStyle = {
   boxSizing: "border-box",
 };
 
-// 리스트 스타일
 const listStyle = {
   listStyle: "none",
   padding: 0,
@@ -173,14 +157,12 @@ const listStyle = {
   width: "100%",
 };
 
-// 리스트 아이템 스타일
 const listItemStyle = {
   display: "flex",
   justifyContent: "center",
   width: "100%",
 };
 
-// 알림 카드 외부 박스
 const outerContainerStyle = {
   position: "relative",
   display: "flex",
@@ -195,7 +177,6 @@ const outerContainerStyle = {
   boxSizing: "border-box",
 };
 
-// 알림 중간 박스
 const middleContainerStyle = {
   width: "100%",
   backgroundColor: "#B2975C",
@@ -204,7 +185,6 @@ const middleContainerStyle = {
   boxSizing: "border-box",
 };
 
-// 알림 카드 내부 박스
 const innerContainerStyle = {
   position: "relative",
   width: "100%",
@@ -217,7 +197,6 @@ const innerContainerStyle = {
   alignItems: "center",
 };
 
-// 초밥 이미지 스타일
 const sushiImageStyle = {
   width: "90px",
   height: "90px",
@@ -231,12 +210,10 @@ const imageStyle = {
   height: "100%",
 };
 
-// 텍스트 컨테이너
 const textContainerStyle = {
   flex: 1,
 };
 
-// 제목 스타일
 const titleStyle = {
   fontSize: "1.2rem",
   fontWeight: "bold",
@@ -244,7 +221,6 @@ const titleStyle = {
   marginBottom: "8px",
 };
 
-// 알림 내용 스타일
 const contentTextStyle = {
   fontSize: "1rem",
   color: "#8D7B7B",
@@ -255,20 +231,17 @@ const contentTextStyle = {
   overflow: "hidden",
 };
 
-// 구분선 스타일
 const dividerStyle = {
   width: "100%",
   border: "0.5px solid #BCBCBC",
   margin: "8px 0",
 };
 
-// 알림 시간 스타일
 const timeStyle = {
   fontSize: "12px",
   color: "#666",
 };
 
-// 알림 아무것도 없을 때 스타일
 const emptyTextStyle = {
   textAlign: "center",
   color: "#666",
