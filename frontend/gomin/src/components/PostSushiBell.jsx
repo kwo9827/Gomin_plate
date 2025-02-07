@@ -1,4 +1,5 @@
 import React from "react";
+import bellImg from "../assets/home/bell.webp";
 
 /** 홈 화면에서 누르면 초밥(질문)을 등록하는 화면으로 넘어가는 컴포넌트
  *  1. 클릭 시 부모 컴포넌트에서 전달한 `onClick` 실행
@@ -6,7 +7,16 @@ import React from "react";
 const PostSushiBell = ({ onClick }) => {
   return (
     <div onClick={onClick} style={{ cursor: "pointer" }}>
-      초밥 등록하기 벨임
+      <img
+        src={bellImg}
+        alt="Desk"
+        style={{
+          cursor: "pointer",
+          width: "48px",
+          height: "48px",
+          objectFit: "cover",
+        }}
+      />
     </div>
   );
 };
