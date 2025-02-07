@@ -5,7 +5,11 @@ const SushiAnswerCard = ({ id, title, content, showHeart = false }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/sushianswerdetail", { state: { id } });
+    if (!id) {
+      console.log("sushiId가 존재하지 않습니다.", { id });
+      return;
+    }
+    navigate(`/sushidetail/${id}`);
   };
 
   return (
@@ -26,9 +30,7 @@ const SushiAnswerCard = ({ id, title, content, showHeart = false }) => {
           <div style={textContainerStyle}>
             <div style={titleStyle}>{title}</div>
             <hr style={dividerStyle} />
-            <div style={contentStyle}>
-              {content}
-            </div>
+            <div style={contentStyle}>{content}</div>
           </div>
         </div>
       </div>

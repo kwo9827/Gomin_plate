@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMySushiDetail } from "../store/slices/sushiSlice";
 import PostItModal from "../components/PostItModal";
 
 const SushiDetail = () => {
+  // const { id } = location.state || {};
+  /**sushiId useparams로 가져오기 */
+  const { sushiId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { id } = location.state || {};
   const currentSushi = useSelector((state) => state.sushi.currentSushi);
   const status = useSelector((state) => state.sushi.status);
   const [currentPage, setCurrentPage] = useState(0);
@@ -27,23 +29,22 @@ const SushiDetail = () => {
   const [likedAnswerId, setLikedAnswerId] = useState(null);
 
   useEffect(() => {
-    if (!id) {
+    if (!sushiId) {
       navigate("/home");
       return;
     }
-    dispatch(fetchMySushiDetail(id));
-  }, [id, dispatch, navigate]);
+    dispatch(fetchMySushiDetail(sushiId));
+  }, [sushiId, dispatch, navigate]);
 
-  /* 모달 열기 */
-  const openModal = (answer) => {
-    setSelectedAnswer(answer);
-    setModalOpen(true);
-  };
-
-  /* 모달 닫기 */
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+  // /* 모달 열기 */
+  // const openModal = (answer) => {
+  //   setSelectedAnswer(answer);
+  //   setModalOpen(true);
+  // };
+  // /* 모달 닫기 */
+  // const closeModal = () => {
+  //   setModalOpen(false);
+  // };
 
   const answersPerPage = 5;
   const totalPages = Math.ceil(answer.length / answersPerPage);
@@ -57,7 +58,7 @@ const SushiDetail = () => {
     return <div style={errorStyle}>데이터를 불러오는 데 실패했습니다.</div>;
   }
 
-  if (!currentSushi || !id) {
+  if (!currentSushi || !sushiId) {
     navigate("/home");
     return null;
   }
