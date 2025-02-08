@@ -48,14 +48,14 @@ const Home = () => {
   }, [dispatch]);
 
   /** 로그인 상태가 아니면 인트로 페이지로 리다이렉트 */
-  // const navigate = useNavigate();
-  // const accessToken = useSelector((state) => state.member?.accessToken);
+  const navigate = useNavigate();
+  const accessToken = useSelector((state) => state.member?.accessToken);
 
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     navigate("/", { replace: true });
-  //   }
-  // }, [accessToken, navigate]);
+  useEffect(() => {
+    if (!accessToken) {
+      navigate("/", { replace: true });
+    }
+  }, [accessToken, navigate]);
   /** 여기 까지 */
 
   // /** 신규 유저는 닉네임 세팅을 해야함 */
