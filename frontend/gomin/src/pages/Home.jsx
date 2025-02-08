@@ -48,25 +48,25 @@ const Home = () => {
   }, [dispatch]);
 
   /** 로그인 상태가 아니면 인트로 페이지로 리다이렉트 */
-  const navigate = useNavigate();
-  const accessToken = useSelector((state) => state.member?.accessToken);
+  // const navigate = useNavigate();
+  // const accessToken = useSelector((state) => state.member?.accessToken);
 
-  useEffect(() => {
-    if (!accessToken) {
-      navigate("/", { replace: true });
-    }
-  }, [accessToken, navigate]);
+  // useEffect(() => {
+  //   if (!accessToken) {
+  //     navigate("/", { replace: true });
+  //   }
+  // }, [accessToken, navigate]);
   /** 여기 까지 */
 
-  /** 신규 유저는 닉네임 세팅을 해야함 */
-  const isNew = useSelector((state) => state.member?.isNew);
+  // /** 신규 유저는 닉네임 세팅을 해야함 */
+  // const isNew = useSelector((state) => state.member?.isNew);
 
-  useEffect(() => {
-    /** 새로운 유저거나, 닉네임이 없으면 모달 오픈 */
-    if (isNew) {
-      openModal();
-    }
-  }, [isNew]);
+  // useEffect(() => {
+  //   /** 새로운 유저거나, 닉네임이 없으면 모달 오픈 */
+  //   if (isNew) {
+  //     openModal();
+  //   }
+  // }, [isNew]);
 
   return (
     <>
@@ -114,9 +114,9 @@ const Home = () => {
         {/* 모달 */}
         <div>
           <div style={{ position: "absolute", zIndex: "10" }}>
-            <button onClick={openModal}>닉네임 모달 열기</button>
+            {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
 
-            <Modal isOpen={isModalOpen} onClose={closeModal} />
+            {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
 
             <SushiUnlock
               isOpen={isSushiUnlockOpen}

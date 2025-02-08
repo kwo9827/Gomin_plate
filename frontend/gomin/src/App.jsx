@@ -20,7 +20,8 @@ function App() {
   const shouldShowNavbar = location.pathname !== "/";
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
+    // const accessToken = localStorage.getItem("accessToken");
+    const accessToken = "123";
 
     if (!accessToken && location.pathname !== "/") {
       navigate("/", { replace: true });
