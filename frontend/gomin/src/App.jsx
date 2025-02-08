@@ -21,6 +21,7 @@ function App() {
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
+    // const accessToken = "123";
 
     if (!accessToken && location.pathname !== "/") {
       navigate("/", { replace: true });
