@@ -27,6 +27,15 @@ const Navbar = () => {
     }
   }, [isNew]);
 
+  //미리 로드
+  useEffect(() => {
+    const preloadImages = [navHomeImg, navSushiImg, navAnswerImg];
+    preloadImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   useEffect(() => {
     switch (location.pathname) {
       case "/Home":
@@ -70,8 +79,8 @@ const Navbar = () => {
 
         {/* My 메뉴 (닉네임 모달) */}
         <div style={styles.navItem} onClick={openModal}></div>
-        {isModalOpen && <Modal isOpen={isModalOpen} onClose={closeModal} />}
       </div>
+      {isModalOpen && <Modal isOpen={isModalOpen} onClose={closeModal} />}
     </nav>
   );
 };
