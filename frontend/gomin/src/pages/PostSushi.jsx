@@ -13,16 +13,16 @@ import octopus from "../assets/sushi/octopus.webp";
 import salmon from "../assets/sushi/salmon.webp";
 import shrimp from "../assets/sushi/shrimp.webp";
 import wagyu from "../assets/sushi/wagyu.webp";
-import 갈리비초밥 from "../assets/sushi/가리비초밥.webp";
-import 광어초밥 from "../assets/sushi/광어초밥.webp";
-import 성게알초밥 from "../assets/sushi/성게알초밥.webp";
-import 참치초밥 from "../assets/sushi/참치초밥.webp";
+import scallop from "../assets/sushi/가리비초밥.webp";
+import flatfish from "../assets/sushi/광어초밥.webp";
+import uni from "../assets/sushi/성게알초밥.webp";
+import tuna from "../assets/sushi/참치초밥.webp";
 
 const settings = {
   className: "center",
   centerMode: true,
   infinite: true,
-  centerPadding: "60px",
+  centerPadding: "0vh",
   slidesToShow: 3,
   speed: 500,
 };
@@ -47,17 +47,17 @@ const PostSushi = ({ onClose }) => {
   };
 
   const sushiImages = [
-    { id: 1, src: cuttle, name: "갑오징어초밥" },
-    { id: 2, src: eel, name: "장어초밥" },
-    { id: 3, src: egg, name: "계란초밥" },
-    { id: 4, src: octopus, name: "문어초밥" },
-    { id: 5, src: salmon, name: "연어초밥" },
-    { id: 6, src: shrimp, name: "새우초밥" },
+    { id: 1, src: egg, name: "계란초밥" },
+    { id: 2, src: salmon, name: "연어초밥" },
+    { id: 3, src: shrimp, name: "새우초밥" },
+    { id: 4, src: cuttle, name: "한치초밥" },
+    { id: 5, src: octopus, name: "문어초밥" },
+    { id: 6, src: eel, name: "장어초밥" },
     { id: 7, src: wagyu, name: "와규초밥" },
-    { id: 8, src: 갈리비초밥, name: "가리비초밥" },
-    { id: 9, src: 광어초밥, name: "광어초밥" },
-    { id: 10, src: 성게알초밥, name: "성게알초밥" },
-    { id: 11, src: 참치초밥, name: "참치초밥" },
+    { id: 8, src: scallop, name: "가리비초밥" },
+    { id: 9, src: flatfish, name: "광어초밥" },
+    { id: 10, src: uni, name: "성게알초밥" },
+    { id: 11, src: tuna, name: "참치초밥" },
   ];
 
   const handleCategoryChange = (e) => {
@@ -237,7 +237,7 @@ const PostSushi = ({ onClose }) => {
                   <hr style={divider} />
                   <div style={pageSelect}>
                     <button style={nextBtn} onClick={handleNext}>
-                      고민 작성 &gt;
+                      고민작성 &gt;
                     </button>
                   </div>
                 </div>
@@ -320,10 +320,9 @@ const overlayStyle = {
 
 const modalStyle = {
   position: "relative",
-  top: "5vh",
+  top: "6vh",
   height: "80vh",
-  width: "90%",
-  maxWidth: "53vh",
+  width: "46vh",
 };
 
 const orderForm = {
@@ -333,67 +332,66 @@ const orderForm = {
 };
 
 const orderFormHeader = {
-  height: "18%",
+  height: "14.3vh",
 };
 
 const orderFormHeaderTop = {
   display: "flex",
-  height: "70%",
+  height: "10vh",
 };
 
 const orderTitle = {
-  margin: "0rem",
-  padding: "1rem",
-  letterSpacing: "0.06rem",
-  fontSize: "32px",
+  margin: "0",
+  padding: "2vh",
+  letterSpacing: "0.1vh",
+  fontSize: "4vh",
 };
 
 const closeBtn = {
-  margin: "0.4rem",
-  marginTop: "0.7rem",
   marginLeft: "auto",
-  width: "2.5rem",
-  height: "2.5rem",
+  padding: "0vh",
+  width: "8vh",
+  height: "8vh",
   border: "0",
   backgroundColor: "transparent",
   cursor: "pointer",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "30px",
+  fontSize: "3.5vh",
 };
 
 const orderExplain = {
-  margin: "0rem",
-  height: "30%",
-  paddingRight: "0.5rem",
-  fontSize: "16px",
+  margin: "0",
+  height: "4vh",
+  paddingRight: "1vh",
+  fontSize: "1.55vh",
   textAlign: "right",
 };
 
 const orderFormBody = {
-  height: "82%",
+  height: "65.7vh",
 };
 
 const divider = {
-  margin: "0rem",
+  margin: "0",
   border: "solid 0.1rem #595959",
 };
 
 const orderSet = {
-  margin: "0rem",
-  padding: "1rem",
-  fontSize: "24px",
+  margin: "0",
+  padding: "1vh",
+  fontSize: "2.3vh",
 };
 
 const radioContainer = {
   margin: "0",
-  paddingLeft: "0.5rem",
-  paddingBottom: "1rem",
+  paddingLeft: "0.5vh",
+  paddingBottom: "2vh",
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "space-around",
-  gap: "0.7rem",
+  gap: "1vh",
   accentColor: "black",
-  fontSize: "20px",
+  fontSize: "1.95vh",
 };
 
 const radioBtn = {
@@ -402,37 +400,35 @@ const radioBtn = {
 };
 
 const rangeInput = {
-  width: "92%",
+  width: "43vh",
   margin: "0 auto",
+  marginTop: "1vh",
   display: "block",
   accentColor: "#404040",
 };
 
 const presentPerson = {
   margin: "0",
-  padding: "0.5rem",
-  paddingRight: "1rem",
+  padding: "1vh",
   textAlign: "right",
-  fontSize: "20px",
+  fontSize: "1.95vh",
 };
 
 const sliderContainer = {
-  justifyContent: "center",
-  alignItems: "center",
-  width: "80%",
-  margin: "0 auto",
+  width: "44vh",
+  height: "26.5vh",
 };
 
 const sliderSushi = {
+  justifyContent: "center",
   height: "10rem",
 };
 
 const orderFormFooter = {
   position: "absolute",
   bottom: "0",
-  left: "0",
-  width: "100%",
-  boxShadow: "0 -2px 5px rgba(0,0,0,0.1)", // 상단 그림자 추가
+  height: "4.4vh",
+  width: "45vh",
 };
 
 const pageSelect = {
@@ -440,13 +436,13 @@ const pageSelect = {
 };
 
 const nextBtn = {
-  margin: "0.4rem",
+  margin: "0.6vh",
   marginLeft: "auto",
   border: "0",
   backgroundColor: "transparent",
   cursor: "pointer",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "24px",
+  fontSize: "3vh",
 };
 
 const titleText = {
@@ -454,8 +450,11 @@ const titleText = {
   border: 0,
   outline: "none",
   resize: "none",
+  scrollbarWidth: "none",
+  msOverflowStyle: "none",
+  width: "44vh",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "24px",
+  fontSize: "2.3vh",
 };
 
 const contentText = {
@@ -463,36 +462,39 @@ const contentText = {
   border: 0,
   outline: "none",
   resize: "none",
+  scrollbarWidth: "none",
+  msOverflowStyle: "none",
+  height: "43vh",
+  width: "44vh",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "24px",
+  fontSize: "2.3vh",
 };
 
 const backBtn = {
-  margin: "0.4rem",
-  marginRight: "auto",
+  margin: "0.6vh",
   border: "0",
   backgroundColor: "transparent",
   cursor: "pointer",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "24px",
+  fontSize: "3vh",
 };
 
 const submitBtn = {
-  margin: "0.4rem",
+  margin: "0.6vh",
   marginLeft: "auto",
   border: "0",
   backgroundColor: "transparent",
   cursor: "pointer",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "24px",
+  fontSize: "3vh",
 };
 
 const submitModalStyle = {
-  position: "fixed",
+  position: "absolute",
   top: 0,
   left: 0,
-  width: "100%",
-  height: "100%",
+  width: "46vh",
+  height: "81.6vh",
   backgroundColor: "rgba(0, 0, 0, 0.5)",
   display: "flex",
   justifyContent: "center",
@@ -502,51 +504,42 @@ const submitModalStyle = {
 
 const submitModalContent = {
   backgroundColor: "#fdf5e6",
-  padding: "20px",
-  borderRadius: "10px",
-  width: "70%",
-  maxWidth: "600px",
-  position: "relative",
+  padding: "2vh",
+  borderRadius: "1vh",
+  width: "38vh",
   textAlign: "center",
-  border: "8px solid #906C48",
-  outline: "2px solid #67523E",
-  fontSize: "24px",
+  border: "1vh solid #906C48",
+  outline: "1vh solid #67523E",
+  fontSize: "3vh",
 };
 
 const buttonContainer = {
   display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  width: "100%",
-  marginBottom: "30px",
+  justifyContent: "space-around",
 };
 
 const confirmButtonStyle = {
-  padding: "8px 0",
-  border: "none",
-  borderRadius: "5px",
+  borderTop: "none",
+  borderLeft: "none",
+  borderRadius: "1vh",
   backgroundColor: "#dc3545",
   color: "white",
   cursor: "pointer",
-  width: "40%",
-  whiteSpace: "nowrap",
-  lineHeight: "1",
+  width: "15vh",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "24px",
+  fontSize: "4vh",
 };
 
 const cancelButtonStyle = {
-  padding: "8px 0",
-  border: "none",
-  borderRadius: "5px",
+  borderTop: "none",
+  borderLeft: "none",
+  borderRadius: "1vh",
   backgroundColor: "#808080",
   color: "white",
   cursor: "pointer",
-  width: "40%",
-  whiteSpace: "nowrap",
-  lineHeight: "1",
+  width: "15vh",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "24px",
+  fontSize: "4vh",
 };
 
 export default PostSushi;
