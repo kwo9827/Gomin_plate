@@ -20,7 +20,7 @@ const SushiDetail = () => {
     content = "",
     expirationTime = new Date(),
     answer = [],
-  } = currentSushi === 'loading' ? {} : (currentSushi || {});
+  } = currentSushi === "loading" ? {} : currentSushi || {};
 
   /* 모달 관련 상태 추가 */
   const [modalOpen, setModalOpen] = useState(false);
@@ -49,7 +49,7 @@ const SushiDetail = () => {
   const totalPages = Math.ceil(answer.length / answersPerPage);
 
   // 로딩 상태 처리
-  if (currentSushi === 'loading') {
+  if (currentSushi === "loading") {
     return <div style={styles.loading}>로딩 중...</div>;
   }
 
@@ -132,7 +132,7 @@ const SushiDetail = () => {
                     ...styles.postIt,
                     backgroundColor:
                       styles.postItColors[
-                      (index + 3) % styles.postItColors.length
+                        (index + 3) % styles.postItColors.length
                       ],
                   }}
                   onClick={() => openModal(item)}
@@ -222,7 +222,7 @@ const styles = {
   contentBox: {
     flexGrow: 4,
     overflowY: "auto",
-    padding: "10px",
+    padding: "0px",
     /**디테일창 내용 박스 전체 비율 수정할때 수정하시오
      * 현재는 화면의 20%로 설정되어있음.
      */
@@ -230,12 +230,15 @@ const styles = {
     /**여기까지 */
     borderRadius: "8px",
     border: "4px solid #B2975C",
+    scrollbarWidth: "none",
   },
   content: {
     fontSize: "1.1rem",
     color: "#5D4A37",
     lineHeight: "1.6",
     textAlign: "left",
+    margin: "0px",
+    padding: "0px",
   },
   divider: {
     width: "90%",
