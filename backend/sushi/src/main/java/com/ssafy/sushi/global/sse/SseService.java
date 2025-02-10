@@ -7,7 +7,6 @@ import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@Service
+//@Service
 @RequiredArgsConstructor
 public class SseService {
 
@@ -49,9 +48,9 @@ public class SseService {
                     .name("notification")
                     .data(event));
 
-            // log.info("알림 SSE 연결 완료");
+            log.info("알림 SSE 연결 완료");
         } catch (IOException e) {
-            // log.error("SSE 초기화 중 에러 발생: {}", e.getMessage());
+            log.error("SSE 초기화 중 에러 발생: {}", e.getMessage());
             emitter.completeWithError(e);
             return emitter;
         }
@@ -63,9 +62,9 @@ public class SseService {
 //                        .name("heartbeat")
                         .name("hhhhh")
                         .data("ping"));
-                // log.info("알림 Heartbeat sent to userId: {}", userId);
+                log.info("알림 Heartbeat sent to userId: {}", userId);
             } catch (IOException e) {
-                // log.warn("알림 Heartbeat 전송 실패 - userId: {}: {}", userId, e.getMessage());
+                log.warn("알림 Heartbeat 전송 실패 - userId: {}: {}", userId, e.getMessage());
                 scheduler.shutdown();
                 emitters.remove(userId);
                 emitter.completeWithError(e);
@@ -75,20 +74,20 @@ public class SseService {
         emitter.onCompletion(() -> {
             scheduler.shutdown();
             emitters.remove(userId);
-            // log.info("알림 SSE 해제 - userId: {}", userId);
+            log.info("알림 SSE 해제 - userId: {}", userId);
         });
 
         emitter.onTimeout(() -> {
             scheduler.shutdown();
             emitter.complete();
             emitters.remove(userId);
-            // log.info("SSE 연결 시간 초과 - userId: {}", userId);
+            log.info("SSE 연결 시간 초과 - userId: {}", userId);
         });
 
         emitter.onError((e) -> {
             scheduler.shutdown();
             emitters.remove(userId);
-            // log.error("SSE 에러 발생 - userId: {}: {}", userId, e.getMessage());
+            log.error("SSE 에러 발생 - userId: {}: {}", userId, e.getMessage());
         });
 
         emitters.put(userId, emitter);
@@ -102,10 +101,10 @@ public class SseService {
                 emitter.send(SseEmitter.event()
                         .name("notification")
                         .data(event));
-                // log.info("SSE 송신: {}", event);
+                log.info("SSE 송신: {}", event);
             } catch (IOException e) {
                 emitters.remove(userId);
-                // log.error("SSE 송신 에러: {}", e.getMessage());
+                log.error("SSE 송신 에러: {}", e.getMessage());
             }
         }
     }
@@ -129,9 +128,9 @@ public class SseService {
                     .name("likeCount")
                     .data(event));
 
-            // log.info("좋아요 SSE 연결 완료 - userId: {}", userId);
+            log.info("좋아요 SSE 연결 완료 - userId: {}", userId);
         } catch (IOException e) {
-            // log.error("좋아요 SSE 초기화 중 에러 발생: {}", e.getMessage());
+            log.error("좋아요 SSE 초기화 중 에러 발생: {}", e.getMessage());
             emitter.completeWithError(e);
             return emitter;
         }
@@ -143,9 +142,9 @@ public class SseService {
 //                        .name("heartbeat")
                         .name("hhhhh")
                         .data("ping"));
-                // log.info("좋아요 Heartbeat sent to userId: {}", userId);
+                log.info("좋아요 Heartbeat sent to userId: {}", userId);
             } catch (IOException e) {
-                // log.warn("좋아요 Heartbeat 전송 실패 - userId: {}: {}", userId, e.getMessage());
+                log.warn("좋아요 Heartbeat 전송 실패 - userId: {}: {}", userId, e.getMessage());
                 scheduler.shutdown();
                 likeCountEmitters.remove(userId);
                 emitter.completeWithError(e);
@@ -155,20 +154,20 @@ public class SseService {
         emitter.onCompletion(() -> {
             scheduler.shutdown();
             likeCountEmitters.remove(userId);
-            // log.info("좋아요 SSE 해제 - userId: {}", userId);
+            log.info("좋아요 SSE 해제 - userId: {}", userId);
         });
 
         emitter.onTimeout(() -> {
             scheduler.shutdown();
             likeCountEmitters.remove(userId);
             emitter.complete();
-            // log.info("좋아요 SSE 연결 시간 초과 - userId: {}", userId);
+            log.info("좋아요 SSE 연결 시간 초과 - userId: {}", userId);
         });
 
         emitter.onError((e) -> {
             scheduler.shutdown();
             likeCountEmitters.remove(userId);
-            // log.error("좋아요 SSE 에러 발생 - userId: {}: {}", userId, e.getMessage());
+            log.error("좋아요 SSE 에러 발생 - userId: {}: {}", userId, e.getMessage());
         });
 
         likeCountEmitters.put(userId, emitter);
