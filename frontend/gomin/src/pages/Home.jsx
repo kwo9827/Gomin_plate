@@ -16,6 +16,7 @@ import SushiUnlockBar from "../components/SushiUnlockBar";
 import bgImg from "../assets/home/back.webp";
 import deskImg from "../assets/home/desk.webp";
 import masterImg from "../assets/home/master.webp";
+import SushiView from "./SushiView";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,13 @@ const Home = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isSushiUnlockOpen, setIsSushiUnlockOpen] = useState(false);
   const [isPostSushiOpen, setIsPostSushiOpen] = useState(false);
+  const [isSushiViewOpen, setIsSushiViewOpen] = useState(false);
+  const [selectedSushiData, setSelectedSushiData] = useState(null);
+
+  const handleSushiClick = (sushiData) => {
+    setSelectedSushiData(sushiData);
+    setIsSushiViewOpen(true);
+  };
 
   const [imagesLoaded, setImagesLoaded] = useState({
     bg: false,
@@ -76,14 +84,14 @@ const Home = () => {
   const allImagesLoaded = Object.values(imagesLoaded).every((loaded) => loaded);
 
   /** 로그인 상태가 아니면 인트로 페이지로 리다이렉트 */
-  // const navigate = useNavigate();
-  // const accessToken = useSelector((state) => state.member?.accessToken);
+  const navigate = useNavigate();
+  const accessToken = useSelector((state) => state.member?.accessToken);
 
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     navigate("/", { replace: true });
-  //   }
-  // }, [accessToken, navigate]);
+  useEffect(() => {
+    if (!accessToken) {
+      navigate("/", { replace: true });
+    }
+  }, [accessToken, navigate]);
   /** 여기 까지 */
 
   return (
@@ -128,12 +136,8 @@ const Home = () => {
           />
 
           {/* Rail */}
-          <div
-            style={{
-              ...styles.rail,
-            }}
-          >
-            <Rail />
+          <div style={styles.rail}>
+            <Rail onSushiClick={handleSushiClick} />
           </div>
           {/* 주문벨 */}
           <div style={styles.bell}>
@@ -155,6 +159,18 @@ const Home = () => {
                 <p> 초밥집에 입장하는 중..</p>
               </div>
             )}
+            {selectedSushiData && (
+              <SushiView
+                isOpen={isSushiViewOpen}
+                onClose={() => setIsSushiViewOpen(false)}
+                sushiId={selectedSushiData.sushiId}
+                category={selectedSushiData.category}
+                sushiType={selectedSushiData.sushiType}
+                remainingAnswers={selectedSushiData.remainingAnswers}
+                expirationTime={selectedSushiData.expirationTime}
+              />
+            )}
+
             <SushiUnlock
               isOpen={isSushiUnlockOpen}
               onClose={closeSushiUnlock}

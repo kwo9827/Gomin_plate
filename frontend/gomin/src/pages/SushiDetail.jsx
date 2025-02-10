@@ -155,12 +155,12 @@ const SushiDetail = () => {
         <div style={styles.arrowContainer}>
           {currentPage > 0 && (
             <button onClick={prevPage} style={styles.arrowLeft}>
-              ◀
+              &lt
             </button>
           )}
           {currentPage < totalPages - 1 && (
             <button onClick={nextPage} style={styles.arrowRight}>
-              ▶
+              &gt
             </button>
           )}
         </div>
@@ -194,10 +194,14 @@ const styles = {
     backgroundColor: "#FFFEEC",
     position: "relative",
     zIndex: 2,
-    width: "90%",
+    width: "100%",
     maxWidth: "600px",
-    height: "90vh",
-    margin: "0 auto",
+    /**디테일창 화면 전체 비율 수정할때 수정하시오
+     * 현재는 화면의 80%로 설정되어있음.
+     */
+    height: "80vh",
+    /**여기까지 */
+    margin: "-5px auto",
     padding: "20px",
     boxSizing: "border-box",
     border: "6px solid #8B6B3E",

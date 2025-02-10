@@ -6,7 +6,7 @@ import { fetchRailSushi } from "../store/slices/sushiSlice";
 const INITIAL_BUFFER_SIZE = 10;
 const BUFFER_THRESHOLD = 3;
 
-const Rail = () => {
+const Rail = ({ onSushiClick }) => {
   const dispatch = useDispatch();
   const sushiList = useSelector((state) => state.sushi.railSushi);
   const [bufferSushi, setBufferSushi] = useState([]);
@@ -77,6 +77,7 @@ const Rail = () => {
             sushiType={sushi.sushiType}
             remainingAnswers={sushi.remainingAnswers}
             expirationTime={sushi.expirationTime}
+            onSushiClick={onSushiClick}
           />
         </div>
       ))}
