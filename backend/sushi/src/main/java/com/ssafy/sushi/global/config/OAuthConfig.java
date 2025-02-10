@@ -1,8 +1,8 @@
 package com.ssafy.sushi.global.config;
 
-import com.ssafy.sushi.domain.auth.strategy.GoogleOAuthStrategy;
-import com.ssafy.sushi.domain.auth.strategy.KakaoOAuthStrategy;
-import com.ssafy.sushi.domain.auth.strategy.OAuthStrategy;
+import com.ssafy.sushi.domain.auth.service.strategy.GoogleOAuthStrategy;
+import com.ssafy.sushi.domain.auth.service.strategy.KakaoOAuthStrategy;
+import com.ssafy.sushi.domain.auth.service.strategy.OAuthStrategy;
 import com.ssafy.sushi.domain.user.enums.Provider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

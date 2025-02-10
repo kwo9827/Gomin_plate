@@ -1,4 +1,4 @@
-package com.ssafy.sushi.domain.auth.dto;
+package com.ssafy.sushi.domain.auth.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,13 +7,11 @@ import lombok.Getter;
 @Builder
 public class OAuthLoginResponse {
     private String accessToken;
-    private String refreshToken;
     private UserInfoResponse user;
 
-    public static OAuthLoginResponse of(String accessToken, String refreshToken, UserInfoResponse userInfoResponse) {
+    public static OAuthLoginResponse of(String accessToken, UserInfoResponse userInfoResponse) {
         return OAuthLoginResponse.builder()
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
                 .user(userInfoResponse)
                 .build();
     }
