@@ -85,8 +85,16 @@ const sushiSlice = createSlice({
       .addCase(fetchSushiDetail.fulfilled, (state, action) => {
         state.currentSushi = action.payload.data;
       })
+      .addCase(fetchMySushiDetail.pending, (state) => {
+        state.currentSushi = 'loading';
+      })
       .addCase(fetchMySushiDetail.fulfilled, (state, action) => {
+        state.status = 'idle';
         state.currentSushi = action.payload.data;
+      })
+      .addCase(fetchMySushiDetail.rejected, (state, action) => {
+        state.state = 'failed';
+        state.error = action.error.message;
       });
   },
 });
