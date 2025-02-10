@@ -354,22 +354,61 @@ const PostSushi = ({ onClose }) => {
             <div style={submitModalStyle}>
               <div style={submitModalContent}>
                 <h3>제출이 완료되었습니다!</h3>
+
+                <button
+                  style={confirmButtonStyle}
+                  onClick={handleCompleteClose}
+                >
+                  확인
+                </button>
+
+                <p>공유하기</p>
+
                 <div style={buttonContainer}>
+                  {/* 카카오톡 공유 아이콘 */}
                   <button
-                    style={shareButtonStyle}
+                    style={iconButtonStyle}
                     onClick={() => {
-                      // 공유 기능 구현
-                      console.log("공유하기");
+                      if (!window.Kakao.isInitialized()) {
+                        window.Kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_ID);
+                      }
+
+                      window.Kakao.Link.sendCustom({
+                        templateId: 117216, // 본인 템플릿 ID
+                      });
+                      console.log("카카오톡 공유하기");
                     }}
                   >
-                    공유하기
+                    <img
+                      src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
+                      alt="카카오톡 아이콘"
+                      style={iconStyle}
+                    />
                   </button>
+
+                  {/* 페이스북 공유 아이콘 */}
                   <button
-                    style={confirmButtonStyle}
-                    onClick={handleCompleteClose}
+                    style={iconButtonStyle}
+                    onClick={() => {
+                      window.open(
+                        `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
+                        "_blank"
+                      );
+                      console.log("페이스북 공유하기");
+                    }}
                   >
-                    확인
+                    <i className="fab fa-facebook-f" style={iconStyle}></i>
                   </button>
+
+                  {/* X (구 트위터) 공유 아이콘 */}
+                  <a
+                    href="https://x.com/intent/tweet"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={iconButtonStyle}
+                  >
+                    <i className="fab fa-x twitter-icon" style={iconStyle}></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -593,11 +632,29 @@ const submitModalContent = {
 
 const buttonContainer = {
   display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
+  justifyContent: "center",  // 버튼들이 가운데로 정렬되게 설정
+  alignItems: "center",  // 버튼들이 세로로 중앙 정렬되게 설정
   width: "100%",
   marginTop: "3vh",
   marginBottom: "1vh",
+  gap: "1.5vh",  // 버튼들 간의 간격을 설정
+};
+
+const iconButtonStyle = {
+  background: "none",
+  border: "none",
+  padding: 0,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
+const iconStyle = {
+  fontSize: "30px", // 아이콘 크기 일관성
+  color: "#333", // 아이콘 색상
+  width: "40px", // 동일한 크기로 지정
+  height: "40px", // 동일한 크기로 지정
+  display: "inline-block",
 };
 
 const confirmButtonStyle = {
@@ -607,7 +664,7 @@ const confirmButtonStyle = {
   backgroundColor: "#dc3545",
   color: "white",
   cursor: "pointer",
-  width: "40%",
+  width: "30%",
   whiteSpace: "nowrap",
   lineHeight: "1",
   fontFamily: "Ownglyph, Ownglyph",

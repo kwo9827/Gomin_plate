@@ -7,6 +7,12 @@ import { store } from "./store/index.jsx";
 import "./styles/global.css";
 import "./index.css";
 
+// 카카오 SDK 초기화 코드 추가
+window.Kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_ID); // .env에 설정한 키 사용
+if (window.Kakao.isInitialized()) {
+  console.log("카카오 SDK 초기화 완료");
+}
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
