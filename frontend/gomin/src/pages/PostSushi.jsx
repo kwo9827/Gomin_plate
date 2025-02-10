@@ -28,6 +28,7 @@ const PostSushi = ({ onClose }) => {
   const [category, setCategory] = useState(0);
   const [sushiType, setSushiType] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
 
   const categoryMapping = {
     연애: 1,
@@ -136,6 +137,12 @@ const PostSushi = ({ onClose }) => {
     };
     console.log("등록된 내용:", sushiData);
     dispatch(createSushi(sushiData));
+    setShowModal(false);
+    setShowCompleteModal(true);
+  };
+
+  const handleCompleteClose = () => {
+    setShowCompleteModal(false);
     onClose();
   };
 
@@ -337,6 +344,31 @@ const PostSushi = ({ onClose }) => {
                     onClick={handleCancelSubmit}
                   >
                     취소
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showCompleteModal && (
+            <div style={submitModalStyle}>
+              <div style={submitModalContent}>
+                <h3>제출이 완료되었습니다!</h3>
+                <div style={buttonContainer}>
+                  <button
+                    style={shareButtonStyle}
+                    onClick={() => {
+                      // 공유 기능 구현
+                      console.log("공유하기");
+                    }}
+                  >
+                    공유하기
+                  </button>
+                  <button
+                    style={confirmButtonStyle}
+                    onClick={handleCompleteClose}
+                  >
+                    확인
                   </button>
                 </div>
               </div>
@@ -549,15 +581,14 @@ const submitModalStyle = {
 
 const submitModalContent = {
   backgroundColor: "#fdf5e6",
-  padding: "20px",
-  borderRadius: "10px",
-  width: "70%",
-  maxWidth: "600px",
+  padding: "3vh",
+  borderRadius: "2vh",
+  width: "40vh",
   position: "relative",
   textAlign: "center",
-  border: "8px solid #906C48",
-  outline: "2px solid #67523E",
-  fontSize: "24px",
+  border: "1vh solid #906C48",
+  outline: "0.3vh solid #67523E",
+  fontSize: "2.8vh",
 };
 
 const buttonContainer = {
@@ -565,13 +596,14 @@ const buttonContainer = {
   justifyContent: "space-between",
   alignItems: "center",
   width: "100%",
-  marginBottom: "30px",
+  marginTop: "3vh",
+  marginBottom: "1vh",
 };
 
 const confirmButtonStyle = {
-  padding: "8px 0",
+  padding: "1vh 0",
   border: "none",
-  borderRadius: "5px",
+  borderRadius: "1vh",
   backgroundColor: "#dc3545",
   color: "white",
   cursor: "pointer",
@@ -579,13 +611,13 @@ const confirmButtonStyle = {
   whiteSpace: "nowrap",
   lineHeight: "1",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "24px",
+  fontSize: "2.8vh",
 };
 
 const cancelButtonStyle = {
-  padding: "8px 0",
+  padding: "1vh 0",
   border: "none",
-  borderRadius: "5px",
+  borderRadius: "1vh",
   backgroundColor: "#808080",
   color: "white",
   cursor: "pointer",
@@ -593,7 +625,7 @@ const cancelButtonStyle = {
   whiteSpace: "nowrap",
   lineHeight: "1",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "24px",
+  fontSize: "2.8vh",
 };
 
 const textCounter = {
@@ -602,6 +634,20 @@ const textCounter = {
   textAlign: "right",
   fontSize: "1.8vh",
   color: "#595959",
+};
+
+const shareButtonStyle = {
+  padding: "1vh 0",
+  border: "none",
+  borderRadius: "1vh",
+  backgroundColor: "#4267B2", // 페이스북 블루 색상
+  color: "white",
+  cursor: "pointer",
+  width: "40%",
+  whiteSpace: "nowrap",
+  lineHeight: "1",
+  fontFamily: "Ownglyph, Ownglyph",
+  fontSize: "2.8vh",
 };
 
 export default PostSushi;
