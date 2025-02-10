@@ -10,12 +10,12 @@ import NotificationBell from "../components/NotificationBell";
 import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
+import SushiUnlockBar from "../components/SushiUnlockBar";
 
 //이미지 파일
 import bgImg from "../assets/home/back.webp";
 import deskImg from "../assets/home/desk.webp";
 import masterImg from "../assets/home/master.webp";
-import SushiUnlockBar from "../components/SushiUnlockBar";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -57,16 +57,6 @@ const Home = () => {
     }
   }, [accessToken, navigate]);
   /** 여기 까지 */
-
-  // /** 신규 유저는 닉네임 세팅을 해야함 */
-  // const isNew = useSelector((state) => state.member?.isNew);
-
-  // useEffect(() => {
-  //   /** 새로운 유저거나, 닉네임이 없으면 모달 오픈 */
-  //   if (isNew) {
-  //     openModal();
-  //   }
-  // }, [isNew]);
 
   return (
     <>

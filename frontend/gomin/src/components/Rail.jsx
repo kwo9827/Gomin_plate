@@ -83,10 +83,10 @@ const Rail = () => {
       <style>{`
                 @keyframes slide {
                     from {
-                        transform: translateX(-38vh);
+                        transform: translateX(-40vh);
                     }
                     to {
-                        transform: translateX(calc(100vw + 19vh));
+                        transform: translateX(calc(100vw + 40vh));
                     }
                 }
             `}</style>
