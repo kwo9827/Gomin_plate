@@ -18,7 +18,7 @@ const SushiAnswerDetail = () => {
     title = "",
     content = "",
     expirationTime = new Date(),
-    answer = "",
+    answer = [],
     isLiked = new Boolean(),
   } = currentSushi || {};
 
@@ -124,6 +124,7 @@ const styles = {
   /**배경 스타일 */
   background: {
     // backgroundColor: "#FDFCC8",
+    padding: "20px",
     position: "relative",
     height: "100vh",
     width: "100%",
@@ -134,9 +135,13 @@ const styles = {
     backgroundColor: "#FFFEEC",
     position: "relative",
     zIndex: 2,
-    width: "90%", // 화면 높이의 90% 사용
+    width: "90%",
     maxWidth: "600px",
-    height: "90vh",
+    /**디테일창 화면 전체 비율 수정할때 수정하시오
+     * 현재는 화면의 80%로 설정되어있음.
+     */
+    height: "80vh",
+    /**여기까지 */
     margin: "0 auto",
     padding: "20px",
     boxSizing: "border-box",
@@ -149,7 +154,7 @@ const styles = {
     left: "20px",
     fontSize: "24px",
     background: "none",
-    border: "none",
+    border: "1px solid",
     cursor: "pointer",
   },
   title: {
@@ -164,6 +169,11 @@ const styles = {
   contentBox: {
     overflowY: "auto",
     padding: "10px",
+    /**디테일창 내용 박스 비율 수정할때 수정하시오
+     * 현재는 화면의 20%로 설정되어있음.
+     */
+    height: "20vh",
+    /**여기까지 */
     borderRadius: "8px",
     border: "4px solid #B2975C",
   },
