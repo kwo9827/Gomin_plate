@@ -38,10 +38,6 @@ const SushiCard = ({ id, title, content, showHeart = false }) => {
   );
 };
 
-SushiCard.defaultProps = {
-  showHeart: false, // 기본값 false 설정
-};
-
 const heartIconStyle = {
   position: "absolute",
   top: "8px",

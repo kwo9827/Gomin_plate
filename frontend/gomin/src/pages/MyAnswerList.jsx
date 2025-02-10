@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMyAnswers } from "../store/slices/answerSlice";
 import SushiAnswerCard from "../components/SushiAnswerCard";
@@ -10,17 +10,80 @@ import SushiAnswerCard from "../components/SushiAnswerCard";
 
 const MyAnswerList = () => {
   const dispatch = useDispatch();
-  const { myAnswers = [], status } = useSelector((state) => state.answer);
+  const answerState = useSelector((state) => state.answer) || {
+    myAnswers: [],
+    status: "idle",
+  };
+  const { myAnswers, status } = answerState;
   const isLoading = status === "loading";
 
-  // 실제 API 데이터가 없을 경우 더미 데이터 사용
-  const answerData = Array.isArray(myAnswers.content) ? myAnswers.content : []; // 배열인지 체크 후 사용
+  /** 무한 스크롤 */
+  const [hasMore, setHasMore] = useState(true); // 추가 데이터가 있는지 여부
+  const observerRef = useRef(null); // Intersection Observer를 위한 ref
+  const [sushiAnswerList, setSushiAnswerList] = useState([]); // 화면에 표시될 초밥 리스트
+  const [page, setPage] = useState(1); // 페이지 상태
+  const isInitialLoad = useRef(true); // 최초 로딩인지 확인
 
   useEffect(() => {
-    dispatch(fetchMyAnswers()); // 본인 답변 리스트 가져오기
-  }, [dispatch]);
+    console.log("Redux State:", answerState);
+  }, [answerState]);
 
-  console.log(myAnswers.content);
+  useEffect(() => {
+    if (isInitialLoad.current) {
+      isInitialLoad.current = false;
+      return;
+    }
+
+    console.log("현재 페이지", { page });
+
+    dispatch(fetchMyAnswers({ page, size: 10 }))
+      .then((result) => {
+        const data = result.payload?.data ?? { content: [], last: true };
+
+        console.log("가져온 데이터의 수", data.content.length);
+
+        setSushiAnswerList((prev) => {
+          // 중복 데이터 방지
+          const ids = new Set(prev.map((answer) => answer.sushiId));
+          const uniqueData = data.content.filter(
+            (answer) => !ids.has(answer.sushiId)
+          );
+
+          // 기존 데이터 유지하면서 새로운 데이터 추가
+          return page === 1 && prev.length === 0
+            ? uniqueData
+            : [...prev, ...uniqueData];
+        });
+
+        if (data.content.length === 0 || data.last) {
+          setHasMore(false);
+        }
+      })
+      .catch((error) => {
+        console.error("데이터 로드 중 오류 발생:", error);
+      });
+  }, [page]);
+
+  useEffect(() => {
+    console.log("현재 내 SushAnsweriList 상태:", sushiAnswerList);
+  }, [sushiAnswerList]);
+
+  useEffect(() => {
+    if (!observerRef.current || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          console.log("마지막 답변인가요?");
+          setPage((prevPage) => prevPage + 1);
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    observer.observe(observerRef.current);
+    return () => observer.disconnect();
+  }, [hasMore, sushiAnswerList]);
 
   return (
     <div style={styles.background}>
@@ -32,12 +95,16 @@ const MyAnswerList = () => {
 
         {isLoading ? (
           <p style={styles.loadingText}>불러오는 중...</p>
-        ) : answerData.length === 0 ? (
+        ) : sushiAnswerList.length === 0 ? (
           <p style={styles.emptyText}>등록된 답변이 없습니다.</p>
         ) : (
           <ul style={styles.list}>
-            {answerData.map((answer) => (
-              <li key={answer.sushiId} style={styles.listItem}>
+            {sushiAnswerList.map((answer, index) => (
+              <li
+                key={`${answer.sushiId}-${index}`}
+                style={styles.listItem}
+                ref={index === sushiAnswerList.length - 1 ? observerRef : null}
+              >
                 <SushiAnswerCard
                   id={answer.sushiId}
                   category={answer.category}
@@ -65,8 +132,8 @@ const styles = {
   },
   /**리스트 감싸는 스타일 */
   listContainer: {
-    position: "relatvie",
-    zindex: 2,
+    position: "relative",
+    zIndex: 2,
     width: "100%",
     maxWidth: "600px",
     margin: "0 auto",
