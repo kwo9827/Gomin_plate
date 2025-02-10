@@ -1,4 +1,4 @@
-package com.ssafy.sushi.domain.user.dto.response;
+package com.ssafy.sushi.global.sse;
 
 import com.ssafy.sushi.domain.user.entity.User;
 import lombok.Builder;
@@ -6,17 +6,18 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserLikeNumResponse {
+public class SseLikeCountEvent {
+
     private Integer totalLikes;
 
-    public static UserLikeNumResponse of(User user) {
-        return UserLikeNumResponse.builder()
+    public static SseLikeCountEvent of(User user) {
+        return SseLikeCountEvent.builder()
                 .totalLikes(user.getTotalLikes())
                 .build();
     }
 
-    public static UserLikeNumResponse of(Integer totalLikes) {
-        return UserLikeNumResponse.builder()
+    public static SseLikeCountEvent of(Integer totalLikes) {
+        return SseLikeCountEvent.builder()
                 .totalLikes(totalLikes)
                 .build();
     }
