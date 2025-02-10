@@ -14,20 +14,20 @@ export const createAnswer = createAsyncThunk(
 
 /* 답변에 대한 좋아요를 누르는 API */
 export const toggleLike = createAsyncThunk(
-  "answer/toggleLike",
-  async (answerId) => {
-    const response = await api.post(`/answer/${answerId}/like`);
-    return { answerId, data: response.data };
-  }
+    "answer/toggleLike",
+    async (answerId) => {
+        const response = await api.post(`/answer/${answerId}/like`);
+        return { answerId, data: response.data };
+    }
 );
 
 /* 본인이 단 답변에 대한 초밥 리스트를 불러오는 API */
 export const fetchMyAnswers = createAsyncThunk(
-  "answer/fetchMyAnswers",
-  async () => {
-    const response = await api.get("/answer");
-    return response.data;
-  }
+    "answer/fetchMyAnswers",
+    async () => {
+        const response = await api.get("/answer");
+        return response.data;
+    }
 );
 
 /* 본인 답변에 대한 본 초밥의 상세 페이지 API */

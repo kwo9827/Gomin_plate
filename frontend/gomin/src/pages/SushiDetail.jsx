@@ -5,8 +5,6 @@ import { fetchMySushiDetail } from "../store/slices/sushiSlice";
 import PostItModal from "../components/PostItModal";
 
 const SushiDetail = () => {
-  // const { id } = location.state || {};
-  /**sushiId useparams로 가져오기 */
   const { sushiId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,7 +20,7 @@ const SushiDetail = () => {
     content = "",
     expirationTime = new Date(),
     answer = [],
-  } = currentSushi || {};
+  } = currentSushi === 'loading' ? {} : (currentSushi || {});
 
   /* 모달 관련 상태 추가 */
   const [modalOpen, setModalOpen] = useState(false);
@@ -50,13 +48,13 @@ const SushiDetail = () => {
   const answersPerPage = 5;
   const totalPages = Math.ceil(answer.length / answersPerPage);
 
-  // 로딩 및 오류 상태 처리
-  if (status === "loading") {
-    return <div style={loadingStyle}>로딩 중...</div>;
+  // 로딩 상태 처리
+  if (currentSushi === 'loading') {
+    return <div style={styles.loading}>로딩 중...</div>;
   }
 
   if (status === "failed") {
-    return <div style={errorStyle}>데이터를 불러오는 데 실패했습니다.</div>;
+    return <div style={styles.error}>데이터를 불러오는 데 실패했습니다.</div>;
   }
 
   if (!currentSushi || !sushiId) {
@@ -134,7 +132,7 @@ const SushiDetail = () => {
                     ...styles.postIt,
                     backgroundColor:
                       styles.postItColors[
-                        index % styles.styles.postItColors.length
+                      (index + 3) % styles.postItColors.length
                       ],
                   }}
                   onClick={() => openModal(item)}
@@ -175,7 +173,6 @@ const SushiDetail = () => {
 };
 
 const styles = {
-  /** 배경 스타일*/
   background: {
     // backgroundColor: "#FDFCC8",
     padding: "20px",
@@ -245,7 +242,6 @@ const styles = {
     margin: "20px auto",
     border: "1px solid #B2975C",
   },
-  /**포스트잇 감싸는 박스 */
   postItOuterBox: {
     flexGrow: 5,
     display: "flex",
@@ -274,7 +270,6 @@ const styles = {
     alignItems: "center",
   },
   postItColors: ["#FFD700", "#FFA07A", "#87CEFA", "#98FB98", "#F0E68C"],
-
   arrowContainer: {
     display: "flex",
     justifyContent: "center",
