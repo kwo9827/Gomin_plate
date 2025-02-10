@@ -27,7 +27,7 @@ public class Answer extends BaseEntity {
     @JoinColumn(name = "sushi_id")
     private Sushi sushi;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "is_liked", nullable = false)
