@@ -30,7 +30,7 @@ public class Sushi extends BaseEntity {
     @Column(nullable = false)
     private String title; //제목
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content; //내용
 
     @Column(name = "expire_time", nullable = false)
