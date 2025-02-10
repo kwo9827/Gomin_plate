@@ -8,10 +8,13 @@ export const useNotificationSSE = () => {
   const eventSourceRef = useRef(null);
   const reconnectTimeoutRef = useRef(null);
 
-  const connectSSE = useCallback(() => {
+  const connectSSE = useCallback(async () => {
+    // 기존 연결이 있다면 정리
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
       eventSourceRef.current = null;
+      // 연결 해제가 완료될 때까지 짧게 대기
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
 
     const token = localStorage.getItem("accessToken");
@@ -36,32 +39,23 @@ export const useNotificationSSE = () => {
       dispatch(updateHasUnread(data.hasUnread));
     });
 
-    eventSourceRef.current.addEventListener('hhhhh', (event) => {
-      console.log('알림 Heartbeat received:', event.data);
-    });
-
     eventSourceRef.current.onopen = () => {
       console.log('SSE 연결 성공');
-      if (reconnectTimeoutRef.current) {
-        clearTimeout(reconnectTimeoutRef.current);
-        reconnectTimeoutRef.current = null;
-      }
     };
 
+    // eventSourceRef.current.addEventListener('heartbeat', (event) => {
+    //   console.log('알림 Heartbeat received:', event.data);
+    // });
+
     eventSourceRef.current.onerror = (error) => {
-      console.error('SSE Error:', error.message, 'Code:', error.code);
-      
-      // 인증 에러 처리
-      if (error.code === 401 || error.code === 403) {
-        console.log('Authentication failed, attempting to reconnect...');
+      console.error('알림 SSE Error:', error);
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+        eventSourceRef.current = null;
       }
-
-      eventSourceRef.current.close();
-      eventSourceRef.current = null;
-
+      // 재연결 시도
       if (!reconnectTimeoutRef.current) {
         reconnectTimeoutRef.current = setTimeout(() => {
-          console.log('SSE 재연결 시도...');
           connectSSE();
           reconnectTimeoutRef.current = null;
         }, 3000);
@@ -70,16 +64,7 @@ export const useNotificationSSE = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    connectSSE();
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        console.log('페이지 포커스 감지, SSE 재연결 시도');
-        connectSSE();
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    connectSSE().catch(console.error);
 
     return () => {
       if (eventSourceRef.current) {
@@ -89,7 +74,6 @@ export const useNotificationSSE = () => {
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
       }
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [connectSSE]);
 };

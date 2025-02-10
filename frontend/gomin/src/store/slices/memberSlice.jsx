@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from '../../api/axios';
 
 const initialState = {
   nickname: localStorage.getItem("userNickname") || "",
@@ -18,7 +19,6 @@ export const countLike = createAsyncThunk("member/countLike", async () => {
   } catch (error) {
     console.log("API 요청 실패", error);
   }
-  return response.data;
 });
 
 const memberSlice = createSlice({
@@ -52,6 +52,15 @@ const memberSlice = createSlice({
       state.refreshToken = "";
       state.isNew = false;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(countLike.fulfilled, (state, action) => {
+        state.likesReceived = action.payload.totalLikes;
+      })
+      .addCase(countLike.rejected, (state, action) => {
+        console.error('좋아요 수 조회 실패:', action.error);
+      });
   },
 });
 
