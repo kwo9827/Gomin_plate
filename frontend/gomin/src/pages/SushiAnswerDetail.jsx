@@ -174,12 +174,15 @@ const styles = {
     /**여기까지 */
     borderRadius: "8px",
     border: "4px solid #B2975C",
+    scrollbarWidth: "none",
   },
   content: {
     fontSize: "1.1rem",
     color: "#5D4A37",
     lineHeight: "1.6",
     textAlign: "left",
+    margin: "0px",
+    padding: "0px",
   },
   divider: {
     width: "90%",
