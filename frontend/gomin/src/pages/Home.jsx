@@ -59,8 +59,8 @@ const Home = () => {
     (state) => state.notification.status === "loading"
   );
 
-  useLikeCountSSE();
-  useNotificationSSE();
+  // useLikeCountSSE();
+  // useNotificationSSE();
 
   // useEffect(() => {
   //   dispatch(fetchUnreadExists());
