@@ -85,7 +85,6 @@ const SushiView = ({
     const contentElement = contentRef.current;
     if (contentElement) {
       contentElement.addEventListener("scroll", handleScroll);
-      // 초기 상태 설정
       handleScroll();
     }
     return () => {
@@ -93,6 +92,14 @@ const SushiView = ({
         contentElement.removeEventListener("scroll", handleScroll);
       }
     };
+  }, []);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.style.overflow = "auto";
+      contentRef.current.style.scrollbarWidth = "none"; // Firefox
+      contentRef.current.style.msOverflowStyle = "none"; // IE, Edge
+    }
   }, []);
 
   const handleOpenAnswerInput = () => {
@@ -135,6 +142,30 @@ const SushiView = ({
     }
   };
 
+  const handleClose = () => {
+    setShowAnswerInput(false);
+    onClose();
+  };
+
+  // 스크롤바 숨기기 위한 스타일 동적 추가
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+    .content::-webkit-scrollbar {
+      display: none;
+    }
+    .content {
+      scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
+    }
+  `;
+    document.head.appendChild(style);
+
+    // Cleanup on component unmount
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   if (!isOpen) return null;
 
   return (
@@ -149,7 +180,10 @@ const SushiView = ({
               {" "}
               &lt;
             </div>
-            <div style={{ width: "3vh", cursor: "pointer" }} onClick={onClose}>
+            <div
+              style={{ width: "3vh", cursor: "pointer" }}
+              onClick={handleClose}
+            >
               {" "}
               X{" "}
             </div>
@@ -283,6 +317,8 @@ const styles = {
     bottom: 0,
     overflowY: "scroll",
     margin: "2vh",
+    scrollbarWidth: "none", // Firefox
+    msOverflowStyle: "none", // IE, Edge
   },
   text: {
     margin: "3vh 0",
