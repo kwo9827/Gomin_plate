@@ -36,8 +36,9 @@ const Sushi = ({
   sushiType,
   remainingAnswers,
   expirationTime,
+  onSushiClick,
 }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // 고민 카테고리 매핑
   const categories = {
@@ -83,9 +84,12 @@ const Sushi = ({
   const plateImage = plates[category] || whiteImg;
 
   const handleSushiClick = () => {
-    // SushiView로 state를 전달
-    navigate("/sushiview", {
-      state: { sushiId, category, sushiType, remainingAnswers, expirationTime },
+    onSushiClick({
+      sushiId,
+      category,
+      sushiType,
+      remainingAnswers,
+      expirationTime,
     });
   };
 

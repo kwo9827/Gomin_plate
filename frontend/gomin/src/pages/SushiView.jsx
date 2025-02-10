@@ -1,42 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSushiDetail } from "../store/slices/sushiSlice";
 import { createAnswer } from "../store/slices/answerSlice";
 
-const SushiView = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { sushiId, category, sushiType, remainingAnswers, expirationTime } =
-    location.state || {}; // state에서 값 가져오기
-
+const SushiView = ({
+  isOpen,
+  onClose,
+  sushiId,
+  category,
+  sushiType,
+  remainingAnswers,
+  expirationTime,
+}) => {
   const [sushiData, setSushiData] = useState(null);
   const [content, setContent] = useState("");
-  const [showAnswerInput, setShowAnswerInput] = useState(false); // 답변 입력창 표시 여부
+  const [showAnswerInput, setShowAnswerInput] = useState(false);
   const [titleShadowColor, setTitleShadowColor] = useState(
     "rgba(255, 255, 255, 0.4)"
   );
+  const [showTopFade, setShowTopFade] = useState(false);
+  const [showBottomFade, setShowBottomFade] = useState(true);
+  const contentRef = useRef(null);
 
-  // fetch해온 초밥 데이터 관리
   const dispatch = useDispatch();
   const currentSushi = useSelector((state) => state.sushi.currentSushi);
 
-  useEffect(() => {
-    dispatch(fetchSushiDetail(sushiId));
-  }, [dispatch, sushiId]);
-
-  // 답변 작성 슬라이스 관리
-  const answers = useSelector((state) => state.answer.answers);
-
-  // 접시 타입에 따른 형광펜 색상 매핑
+  // 카테고리별 형광펜 색상
   const titleShadowColors = {
-    1: "rgba(255, 0, 0, 0.4)", // 사랑 -> 빨간색
-    2: "rgba(255, 255, 0, 0.4)", // 우정 -> 노란색
-    3: "rgba(0, 179, 255, 0.4)", // 건강 -> 파란색
-    4: "rgba(83, 178, 0, 0.4)", // 진로 -> 초록색
-    5: "rgba(183, 6, 227, 0.4)", // 가족 -> 보라색
-    6: "rgba(157, 157, 157, 0.4)", // 기타 -> 회색
+    1: "rgba(255, 0, 0, 0.4)", // 사랑
+    2: "rgba(255, 255, 0, 0.4)", // 우정
+    3: "rgba(0, 179, 255, 0.4)", // 건강
+    4: "rgba(83, 178, 0, 0.4)", // 진로
+    5: "rgba(183, 6, 227, 0.4)", // 가족
+    6: "rgba(157, 157, 157, 0.4)", // 기타
   };
+
+  useEffect(() => {
+    if (isOpen && sushiId) {
+      dispatch(fetchSushiDetail(sushiId));
+    }
+  }, [dispatch, sushiId, isOpen]);
 
   useEffect(() => {
     setTitleShadowColor(
@@ -44,25 +47,7 @@ const SushiView = () => {
     );
   }, [category]);
 
-  const dummySushi = {
-    sushiId,
-    title: "12",
-    content: "12",
-    plateType: `${category}`,
-    sushiType,
-    maxAnswers: 5,
-    remainingAnswers,
-    expirationTime,
-  };
-
   useEffect(() => {
-    if (!sushiId) {
-      alert("초밥 ID가 없습니다. 홈으로 이동합니다.");
-      navigate("/Home");
-      return;
-    }
-
-    // currentSushi의 데이터를 dummySushi에 반영
     if (currentSushi) {
       setSushiData({
         sushiId: currentSushi.sushiId,
@@ -74,10 +59,41 @@ const SushiView = () => {
         remainingAnswers: currentSushi.remainingAnswers,
         expirationTime: currentSushi.expirationTime,
       });
-    } else {
-      setSushiData(dummySushi); // currentSushi가 없을 경우 더미 데이터 사용
     }
-  }, [sushiId, currentSushi, navigate, category]);
+  }, [currentSushi, category]);
+
+  // 스크롤 이벤트 핸들러
+  const handleScroll = () => {
+    if (!contentRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+    const isScrollable = scrollHeight > clientHeight;
+
+    if (isScrollable) {
+      // 스크롤이 10px 이상 내려갔을 때 상단 페이드 표시
+      setShowTopFade(scrollTop > 10);
+
+      // 스크롤이 바닥에서 10px 이상 떨어져있을 때 하단 페이드 표시
+      setShowBottomFade(scrollTop < scrollHeight - clientHeight - 10);
+    } else {
+      setShowTopFade(false);
+      setShowBottomFade(false);
+    }
+  };
+
+  useEffect(() => {
+    const contentElement = contentRef.current;
+    if (contentElement) {
+      contentElement.addEventListener("scroll", handleScroll);
+      // 초기 상태 설정
+      handleScroll();
+    }
+    return () => {
+      if (contentElement) {
+        contentElement.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
 
   const handleOpenAnswerInput = () => {
     setShowAnswerInput(true);
@@ -88,24 +104,22 @@ const SushiView = () => {
       alert("답변 내용을 입력해주세요!");
       return;
     }
-
-    if (sushiData.remainingAnswers <= 0) {
-      alert("더 이상 답변을 작성할 수 없습니다.");
+    if (content.length > 500) {
+      alert("최대 500자까지 입력 가능해요!");
       return;
     }
 
-    console.log("작성된 답변 데이터:", {
-      sushiId: sushiData.sushiId,
-      content,
-    });
+    if (sushiData.remainingAnswers <= 0) {
+      alert("답변이 마감된 초밥이에요!");
+      return;
+    }
 
-    // createAnswer API 호출
     try {
       await dispatch(createAnswer({ sushiId: sushiData.sushiId, content }));
-      setShowAnswerInput(false); // 제출 후 입력창 닫기
-      setContent(""); // 입력 내용 초기화
+      setShowAnswerInput(false);
+      setContent("");
       alert("답변이 제출되었습니다!");
-      navigate("/Home"); // 제출 후 홈으로 이동
+      onClose();
     } catch (error) {
       console.error("답변 제출 실패:", error);
       alert("답변 제출에 실패했습니다.");
@@ -114,71 +128,89 @@ const SushiView = () => {
 
   const handleBack = () => {
     if (showAnswerInput) {
-      // 답변 작성 중이면 다시 원래 화면으로 돌아가기
       setShowAnswerInput(false);
       setContent("");
     } else {
-      // 기본 뒤로가기 기능 (홈으로 이동)
-      navigate("/Home");
+      onClose();
     }
   };
 
-  if (!sushiData) {
-    return <p>로딩 중...</p>;
-  }
+  if (!isOpen) return null;
 
   return (
-    <div style={{ backgroundColor: "#fdfcc8", padding: "0 10px" }}>
-      <div style={styles.container}>
-        {/* 상단 나무판 */}
-        <div style={styles.outerBoxWrapper}>
-          <div style={styles.outerBox}>
-            <div style={styles.innerBox}>누군가의 고민 초밥</div>
-          </div>
-        </div>
-
-        {/* 메인 컨텐츠 */}
-        {!showAnswerInput ? (
-          <>
-            <h3
-              style={{
-                ...styles.title,
-                boxShadow: `0 4px 0px ${titleShadowColor}`,
-              }}
+    <div style={styles.modalOverlay}>
+      <div style={styles.modalContent}>
+        <div style={styles.container}>
+          <div style={styles.buttonRow}>
+            <div
+              style={{ width: "3vh", cursor: "pointer" }}
+              onClick={handleBack}
             >
-              {sushiData.title}
-            </h3>
-
-            <div style={styles.contentContainer}>
-              <p style={styles.content}>{sushiData.content}</p>
-              <div style={styles.fadeEffect}></div>
+              {" "}
+              &lt;
             </div>
-          </>
-        ) : (
-          <>
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="고민에 대한 의견을 나눠주세요"
-              style={styles.textarea}
-            />
-          </>
-        )}
-
-        {/* 버튼 컨테이너 (메인 내용 아래로 이동) */}
-        <div style={styles.buttonContainer}>
-          <button onClick={handleBack} style={styles.button}>
-            &lt; 뒤로 가기
-          </button>
+            <div style={{ width: "3vh", cursor: "pointer" }} onClick={onClose}>
+              {" "}
+              X{" "}
+            </div>
+          </div>
+          {/* 메인 컨텐츠 */}
           {!showAnswerInput ? (
-            <button onClick={handleOpenAnswerInput} style={styles.button}>
-              답변 작성 &gt;
-            </button>
+            <>
+              <h3
+                style={{
+                  ...styles.title,
+                  boxShadow: `0 4px 0px ${titleShadowColor}`,
+                }}
+              >
+                {sushiData?.title}
+              </h3>
+              <div style={styles.contentContainer}>
+                <div style={styles.contentWrapper}>
+                  {showTopFade && <div style={styles.fadeIn} />}
+                  <div
+                    ref={contentRef}
+                    style={styles.content}
+                    onScroll={handleScroll}
+                  >
+                    <p style={styles.text}>{sushiData?.content}</p>
+                  </div>
+                  {showBottomFade && <div style={styles.fadeOut} />}
+                </div>
+              </div>
+            </>
           ) : (
-            <button onClick={handleSubmit} style={styles.button}>
-              제출하기 &gt;
-            </button>
+            <>
+              <h3
+                style={{
+                  ...styles.title,
+                  boxShadow: `0 4px 0px ${titleShadowColor}`,
+                }}
+              >
+                {sushiData?.title}
+              </h3>
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="고민에 대한 의견을 나눠주세요"
+                maxLength={500}
+                style={styles.textarea}
+              />
+              <div style={styles.charCount}>{content.length} / 500</div>
+            </>
           )}
+          {/* 버튼 */}
+          <>
+            {!showAnswerInput ? (
+              <button onClick={handleOpenAnswerInput} style={styles.button}>
+                답변 작성
+              </button>
+            ) : (
+              <button onClick={handleSubmit} style={styles.button}>
+                제출하기
+              </button>
+            )}
+          </>
         </div>
       </div>
     </div>
@@ -186,44 +218,47 @@ const SushiView = () => {
 };
 
 const styles = {
+  buttonRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
+    padding: "0.3vh",
+  },
+  modalOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10,
+  },
+  modalContent: {
+    position: "relative",
+    top: "6vh",
+    height: "80vh",
+    width: "46vh",
+  },
   container: {
     width: "100%",
-    height: "calc(100vh - 95px)",
+    height: "70vh",
     background: "#FFFEEC",
     border: "8px #906C48 solid",
     position: "relative",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: "17px",
+    padding: "2vh",
     boxSizing: "border-box",
-  },
-  outerBoxWrapper: {
-    position: "relative",
-    zIndex: 10,
-  },
-  outerBox: {
-    display: "inline-block",
-    border: "4px solid #8B6B3E",
     borderRadius: "4px",
-    backgroundColor: "#B2975C",
-    padding: "6px",
-    textAlign: "center",
-    whiteSpace: "nowrap",
-  },
-  innerBox: {
-    border: "3px solid #906C48",
-    borderRadius: "2px",
-    backgroundColor: "#B2975C",
-    color: "#5D4A37",
-    fontSize: "1.1rem",
-    fontWeight: "bold",
-    padding: "6px 12px",
-    whiteSpace: "nowrap",
+    overflow: "hidden",
   },
   title: {
     display: "inline",
-    margin: "20px 10px",
+    margin: "0 2vh 1vh",
     padding: "0 10px",
     fontWeight: "bold",
     color: "#5D4A37",
@@ -231,39 +266,57 @@ const styles = {
   },
   contentContainer: {
     position: "relative",
+    width: "100%",
+    flex: 1,
+    overflow: "hidden",
+  },
+  contentWrapper: {
+    position: "relative",
+    height: "100%",
+    overflow: "hidden",
   },
   content: {
-    maxHeight: "60vh",
-    overflowY: "auto",
-    padding: "0 15px",
-    margin: "0",
-    borderRadius: "6px",
-    fontSize: "1rem",
-    lineHeight: "1.5",
-    wordBreak: "break-word", // 긴 단어 줄바꿈
-    position: "relative", // 가상 요소와 겹치지 않도록 설정
-  },
-  fadeEffect: {
     position: "absolute",
-    bottom: "0",
-    left: "0",
-    width: "100%",
-    height: "40px",
-    background:
-      "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgb(255, 253, 236, 1) 100%)",
-    pointerEvents: "none", // 클릭 방지
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflowY: "scroll",
+    margin: "2vh",
   },
-  expiration: {
-    width: "100%",
-    textAlign: "right",
+  text: {
+    margin: "3vh 0",
     fontSize: "1rem",
-    margin: "0 20px 0 0",
+    lineHeight: "1.3",
+    wordBreak: "break-word",
+  },
+  fadeIn: {
+    position: "absolute",
+    top: "2vh",
+    left: 0,
+    right: 0,
+    height: "5vh",
+    background:
+      "linear-gradient(to top, rgba(255, 254, 236, 0), rgba(255, 254, 236, 1))",
+    pointerEvents: "none",
+    zIndex: 1,
+  },
+  fadeOut: {
+    position: "absolute",
+    bottom: "2vh",
+    left: 0,
+    right: 0,
+    height: "5vh",
+    background:
+      "linear-gradient(to bottom, rgba(255, 254, 236, 0), rgba(255, 254, 236, 1))",
+    pointerEvents: "none",
+    zIndex: 1,
   },
   textarea: {
-    width: "100%",
-    height: "70vh",
-    padding: "12px",
-    marginTop: "20px",
+    width: "35vh",
+    flex: 1,
+    padding: "1vh",
+    marginTop: "2vh",
     borderRadius: "6px",
     border: "4px solid #B2975C",
     fontFamily: "inherit",
@@ -271,11 +324,10 @@ const styles = {
     lineHeight: "1.5",
     resize: "none",
   },
-  buttonContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "30px",
-    width: "100%",
+  charCount: {
+    fontSize: "0.8rem",
+    textAlign: "right",
+    padding: "0.5vh",
   },
   button: {
     border: "none",
@@ -283,9 +335,11 @@ const styles = {
     backgroundColor: "#B2975C",
     color: "#5D4A37",
     fontSize: "1rem",
-    padding: "12px 25px",
+    padding: "1vh 2vh",
+    margin: "0",
     cursor: "pointer",
     transition: "background-color 0.3s",
+    fontFamily: "inherit",
   },
 };
 
