@@ -16,11 +16,11 @@ export const createAnswer = createAsyncThunk(
 
 /* 답변에 대한 좋아요를 누르는 API */
 export const toggleLike = createAsyncThunk(
-  "answer/toggleLike",
-  async (answerId) => {
-    const response = await api.post(`/answer/${answerId}/like`);
-    return { answerId, data: response.data };
-  }
+    "answer/toggleLike",
+    async (answerId) => {
+        const response = await api.post(`/answer/${answerId}/like`);
+        return { answerId, data: response.data };
+    }
 );
 
 /* 본인이 단 답변에 대한 초밥 리스트를 불러오는 API */

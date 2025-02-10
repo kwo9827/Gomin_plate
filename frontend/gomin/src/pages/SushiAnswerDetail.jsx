@@ -22,8 +22,6 @@ const SushiAnswerDetail = () => {
     isLiked = new Boolean(),
   } = currentSushi || {};
 
-  console.log(currentSushi);
-
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [likedAnswerId, setLikedAnswerId] = useState(null);
