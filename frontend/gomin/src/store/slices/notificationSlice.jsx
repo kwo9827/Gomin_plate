@@ -42,7 +42,8 @@ const notificationSlice = createSlice({
       pageSize: 10,
       first: true,
       last: false
-    }
+    },
+    // eventSource: null, // SSE 연결 객체 저장
   },
   reducers: {
     clearNotifications: (state) => {
@@ -55,6 +56,9 @@ const notificationSlice = createSlice({
         first: true,
         last: false
       };
+    },
+    updateHasUnread: (state, action) => {
+      state.hasUnread = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -92,5 +96,5 @@ const notificationSlice = createSlice({
   },
 });
 
-export const { clearNotifications } = notificationSlice.actions;
+export const { clearNotifications,updateHasUnread } = notificationSlice.actions;
 export default notificationSlice.reducer;

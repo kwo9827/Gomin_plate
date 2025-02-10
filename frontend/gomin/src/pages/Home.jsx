@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUnreadExists } from "../store/slices/notificationSlice";
+// import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { useNavigate } from "react-router-dom";
+import { useNotificationSSE } from "../hooks/useNotificationSSE";
+import { useLikeCountSSE } from "../hooks/useLikeCountSSE";
 
 import Rail from "../components/Rail";
 import Modal from "../components/EditModal";
@@ -57,9 +59,12 @@ const Home = () => {
     (state) => state.notification.status === "loading"
   );
 
-  useEffect(() => {
-    dispatch(fetchUnreadExists());
-  }, [dispatch]);
+  useLikeCountSSE();
+  useNotificationSSE();
+
+  // useEffect(() => {
+  //   dispatch(fetchUnreadExists());
+  // }, [dispatch]);
 
   // 이미지 로드 후 상태 업데이트
   const handleImageLoad = (image) => {
