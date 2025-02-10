@@ -140,7 +140,7 @@ const SushiDetail = () => {
                     ...styles.postIt,
                     backgroundColor:
                       styles.postItColors[
-                        (index + 3) % styles.postItColors.length
+                      (index + 3) % styles.postItColors.length
                       ],
                   }}
                   onClick={() => openModal(item)}
@@ -226,16 +226,12 @@ const styles = {
   contentBox: {
     flexGrow: 4,
     overflowY: "auto",
-<<<<<<< HEAD
-    padding: "10px",
-=======
     padding: "0px",
     /**디테일창 내용 박스 전체 비율 수정할때 수정하시오
      * 현재는 화면의 20%로 설정되어있음.
      */
     height: "20vh",
     /**여기까지 */
->>>>>>> a77057a4179ff9faee8d64d14b5711c17fe5a002
     borderRadius: "8px",
     border: "4px solid #B2975C",
     scrollbarWidth: "none",
