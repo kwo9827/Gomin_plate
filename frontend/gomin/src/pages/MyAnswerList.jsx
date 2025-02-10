@@ -7,6 +7,7 @@ import SushiAnswerCard from "../components/SushiAnswerCard";
  * 1. API 연결 되어있는 상태
  * 2. 디자인 수정 (MySushiList 스타일 재사용)
  */
+
 const MyAnswerList = () => {
   const dispatch = useDispatch();
   const { myAnswers = [], status } = useSelector((state) => state.answer);
