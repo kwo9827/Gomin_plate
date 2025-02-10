@@ -179,11 +179,10 @@ const styles = {
 // Chrome, Safari에서 스크롤바 숨기기
 document.addEventListener("DOMContentLoaded", function () {
   const style = document.createElement("style");
-  style.innerHTML = `
-    .listContainer::-webkit-scrollbar {
+  style.innerHTML = `.listContainer::-webkit-scrollbar {
       display: none;
-    }
-  `;
+}`;
+
   document.head.appendChild(style);
 });
 

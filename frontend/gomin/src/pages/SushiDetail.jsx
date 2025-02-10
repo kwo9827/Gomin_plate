@@ -5,8 +5,6 @@ import { fetchMySushiDetail } from "../store/slices/sushiSlice";
 import PostItModal from "../components/PostItModal";
 
 const SushiDetail = () => {
-  // const { id } = location.state || {};
-  /**sushiId useparams로 가져오기 */
   const { sushiId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,12 +20,20 @@ const SushiDetail = () => {
     content = "",
     expirationTime = new Date(),
     answer = [],
-  } = currentSushi || {};
+  } = currentSushi === "loading" ? {} : currentSushi || {};
 
   /* 모달 관련 상태 추가 */
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [likedAnswerId, setLikedAnswerId] = useState(null);
+
+  const [seletedAnswerIsLiked, setSelectedAnswerIsLiked] = useState(null);
+
+  useEffect(() => {
+    if (selectedAnswer) {
+      setSelectedAnswerIsLiked(selectedAnswer.isLiked);
+    }
+  }, [selectedAnswer]);
 
   useEffect(() => {
     if (!sushiId) {
@@ -50,13 +56,13 @@ const SushiDetail = () => {
   const answersPerPage = 5;
   const totalPages = Math.ceil(answer.length / answersPerPage);
 
-  // 로딩 및 오류 상태 처리
-  if (status === "loading") {
-    return <div style={loadingStyle}>로딩 중...</div>;
+  // 로딩 상태 처리
+  if (currentSushi === "loading") {
+    return <div style={styles.loading}>로딩 중...</div>;
   }
 
   if (status === "failed") {
-    return <div style={errorStyle}>데이터를 불러오는 데 실패했습니다.</div>;
+    return <div style={styles.error}>데이터를 불러오는 데 실패했습니다.</div>;
   }
 
   if (!currentSushi || !sushiId) {
@@ -134,7 +140,7 @@ const SushiDetail = () => {
                     ...styles.postIt,
                     backgroundColor:
                       styles.postItColors[
-                        index % styles.styles.postItColors.length
+                      (index + 3) % styles.postItColors.length
                       ],
                   }}
                   onClick={() => openModal(item)}
@@ -168,6 +174,8 @@ const SushiDetail = () => {
           answer={selectedAnswer}
           likedAnswerId={likedAnswerId}
           setLikedAnswerId={setLikedAnswerId}
+          seletedAnswerIsLiked={seletedAnswerIsLiked}
+          setSeletedAnswerIsLiked={setSelectedAnswerIsLiked}
         />
       )}
     </div>
@@ -175,10 +183,7 @@ const SushiDetail = () => {
 };
 
 const styles = {
-  /** 배경 스타일*/
   background: {
-    // backgroundColor: "#FDFCC8",
-    padding: "20px",
     position: "relative",
     height: "100vh",
     width: "100%",
@@ -208,7 +213,7 @@ const styles = {
     left: "20px",
     fontSize: "24px",
     background: "none",
-    border: "1px solid",
+    border: "none",
     cursor: "pointer",
   },
   title: {
@@ -225,7 +230,7 @@ const styles = {
   contentBox: {
     flexGrow: 4,
     overflowY: "auto",
-    padding: "10px",
+    padding: "0px",
     /**디테일창 내용 박스 전체 비율 수정할때 수정하시오
      * 현재는 화면의 20%로 설정되어있음.
      */
@@ -233,19 +238,21 @@ const styles = {
     /**여기까지 */
     borderRadius: "8px",
     border: "4px solid #B2975C",
+    scrollbarWidth: "none",
   },
   content: {
     fontSize: "1.1rem",
     color: "#5D4A37",
     lineHeight: "1.6",
     textAlign: "left",
+    margin: "0px",
+    padding: "0px",
   },
   divider: {
     width: "90%",
     margin: "20px auto",
     border: "1px solid #B2975C",
   },
-  /**포스트잇 감싸는 박스 */
   postItOuterBox: {
     flexGrow: 5,
     display: "flex",
@@ -274,7 +281,6 @@ const styles = {
     alignItems: "center",
   },
   postItColors: ["#FFD700", "#FFA07A", "#87CEFA", "#98FB98", "#F0E68C"],
-
   arrowContainer: {
     display: "flex",
     justifyContent: "center",

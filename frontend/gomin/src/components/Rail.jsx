@@ -66,7 +66,7 @@ const Rail = ({ onSushiClick }) => {
           style={{
             position: "absolute",
             left: "0px",
-            animation: `slide 10s linear forwards`,
+            animation: `slide 17s linear forwards`,
             top: "50%",
             transform: "translateY(-50%)",
           }}

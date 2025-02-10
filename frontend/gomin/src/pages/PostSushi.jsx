@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, Component } from "react";
 import { useDispatch } from "react-redux";
 import { createSushi } from "../store/slices/sushiSlice";
 import Slider from "react-slick";
+import "../styles/slider.css";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -18,15 +19,6 @@ import flatfish from "../assets/sushi/광어초밥.webp";
 import uni from "../assets/sushi/성게알초밥.webp";
 import tuna from "../assets/sushi/참치초밥.webp";
 
-const settings = {
-  className: "center",
-  centerMode: true,
-  infinite: true,
-  centerPadding: "0vh",
-  slidesToShow: 3,
-  speed: 500,
-};
-
 const PostSushi = ({ onClose }) => {
   const dispatch = useDispatch();
   const [step, setStep] = useState(1);
@@ -36,6 +28,7 @@ const PostSushi = ({ onClose }) => {
   const [category, setCategory] = useState(0);
   const [sushiType, setSushiType] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
 
   const categoryMapping = {
     연애: 1,
@@ -59,6 +52,36 @@ const PostSushi = ({ onClose }) => {
     { id: 10, src: uni, name: "성게알초밥" },
     { id: 11, src: tuna, name: "참치초밥" },
   ];
+
+  const settings = {
+    className: "center",
+    centerMode: true,
+    infinite: true,
+    centerPadding: "0vh",
+    slidesToShow: 3,
+    speed: 500,
+    afterChange: (current) => {
+      const sushiId = sushiImages[current % sushiImages.length].id;
+      setSushiType(sushiId);
+    },
+    initialSlide: 0,
+    swipeToSlide: true,
+    focusOnSelect: false,
+    slidesToScroll: 1,
+    draggable: true,
+    accessibility: true,
+    responsive: [
+      {
+        breakpoint: 9999,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true,
+          centerMode: true,
+        },
+      },
+    ],
+  };
 
   const handleCategoryChange = (e) => {
     setCategory(Number(e.target.value));
@@ -89,6 +112,18 @@ const PostSushi = ({ onClose }) => {
   };
 
   const handleSubmit = () => {
+    if (title.length === 0 || content.length === 0) {
+      alert("제목과 내용을 모두 입력해주세요.");
+      return;
+    }
+    if (title.length > 30) {
+      alert("제목은 30자 이내로 입력해주세요.");
+      return;
+    }
+    if (content.length > 500) {
+      alert("내용은 500자 이내로 입력해주세요.");
+      return;
+    }
     setShowModal(true);
   };
 
@@ -102,12 +137,22 @@ const PostSushi = ({ onClose }) => {
     };
     console.log("등록된 내용:", sushiData);
     dispatch(createSushi(sushiData));
+    setShowModal(false);
+    setShowCompleteModal(true);
+  };
+
+  const handleCompleteClose = () => {
+    setShowCompleteModal(false);
     onClose();
   };
 
   const handleCancelSubmit = () => {
     setShowModal(false);
   };
+
+  React.useEffect(() => {
+    setSushiType(sushiImages[0].id);
+  }, []);
 
   return (
     <div style={overlayStyle}>
@@ -220,6 +265,7 @@ const PostSushi = ({ onClose }) => {
                   <Slider {...settings}>
                     {sushiImages.map((sushi) => (
                       <div
+                        className="slider"
                         key={sushi.id}
                         onClick={() => handleSushiTypeChange(sushi.id)}
                       >
@@ -228,7 +274,7 @@ const PostSushi = ({ onClose }) => {
                           src={sushi.src}
                           alt={sushi.name}
                         />
-                        <p>{sushi.name}</p>
+                        {/* <p className="sushiName">{sushi.name}</p> */}
                       </div>
                     ))}
                   </Slider>
@@ -250,8 +296,10 @@ const PostSushi = ({ onClose }) => {
                   style={titleText}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="고민의 제목을 입력하세요"
+                  placeholder="고민의 제목을 입력하세요 (30자 이내)"
+                  maxLength={30}
                 />
+                <p style={textCounter}>{title.length} / 30</p>
                 <hr style={divider} />
                 <p style={orderSet}>내용</p>
                 <hr style={divider} />
@@ -259,8 +307,10 @@ const PostSushi = ({ onClose }) => {
                   style={contentText}
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  placeholder="고민의 내용을 입력하세요"
+                  placeholder="고민의 내용을 입력하세요 (500자 이내)"
+                  maxLength={500}
                 />
+                <p style={textCounter}>{content.length} / 500</p>
                 <div style={orderFormFooter}>
                   <hr style={divider} />
                   <div style={pageSelect}>
@@ -295,6 +345,70 @@ const PostSushi = ({ onClose }) => {
                   >
                     취소
                   </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showCompleteModal && (
+            <div style={submitModalStyle}>
+              <div style={submitModalContent}>
+                <h3>제출이 완료되었습니다!</h3>
+
+                <button
+                  style={confirmButtonStyle}
+                  onClick={handleCompleteClose}
+                >
+                  확인
+                </button>
+
+                <p>공유하기</p>
+
+                <div style={buttonContainer}>
+                  {/* 카카오톡 공유 아이콘 */}
+                  <button
+                    style={iconButtonStyle}
+                    onClick={() => {
+                      if (!window.Kakao.isInitialized()) {
+                        window.Kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_ID);
+                      }
+
+                      window.Kakao.Link.sendCustom({
+                        templateId: 117216, // 본인 템플릿 ID
+                      });
+                      console.log("카카오톡 공유하기");
+                    }}
+                  >
+                    <img
+                      src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
+                      alt="카카오톡 아이콘"
+                      style={iconStyle}
+                    />
+                  </button>
+
+                  {/* 페이스북 공유 아이콘 */}
+                  <button
+                    style={iconButtonStyle}
+                    onClick={() => {
+                      window.open(
+                        `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
+                        "_blank"
+                      );
+                      console.log("페이스북 공유하기");
+                    }}
+                  >
+                    <i className="fab fa-facebook-f" style={iconStyle}></i>
+                  </button>
+
+                  {/* X (구 트위터) 공유 아이콘 */}
+                  <a
+                    href="https://x.com/intent/tweet"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={iconButtonStyle}
+                  >
+                    <i className="fab fa-x twitter-icon" style={iconStyle}></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -400,6 +514,7 @@ const radioBtn = {
 };
 
 const rangeInput = {
+  height: "3vh",
   width: "43vh",
   margin: "0 auto",
   marginTop: "1vh",
@@ -415,13 +530,14 @@ const presentPerson = {
 };
 
 const sliderContainer = {
-  width: "44vh",
+  width: "44.54vh",
   height: "26.5vh",
 };
 
 const sliderSushi = {
   justifyContent: "center",
   height: "10rem",
+  pointerEvents: "none",
 };
 
 const orderFormFooter = {
@@ -464,7 +580,7 @@ const contentText = {
   resize: "none",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
-  height: "43vh",
+  height: "36.8vh",
   width: "44vh",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
@@ -490,11 +606,11 @@ const submitBtn = {
 };
 
 const submitModalStyle = {
-  position: "absolute",
+  position: "fixed",
   top: 0,
   left: 0,
-  width: "46vh",
-  height: "81.6vh",
+  width: "100%",
+  height: "100%",
   backgroundColor: "rgba(0, 0, 0, 0.5)",
   display: "flex",
   justifyContent: "center",
@@ -504,42 +620,91 @@ const submitModalStyle = {
 
 const submitModalContent = {
   backgroundColor: "#fdf5e6",
-  padding: "2vh",
-  borderRadius: "1vh",
-  width: "38vh",
+  padding: "3vh",
+  borderRadius: "2vh",
+  width: "40vh",
+  position: "relative",
   textAlign: "center",
   border: "1vh solid #906C48",
-  outline: "1vh solid #67523E",
-  fontSize: "3vh",
+  outline: "0.3vh solid #67523E",
+  fontSize: "2.8vh",
 };
 
 const buttonContainer = {
   display: "flex",
-  justifyContent: "space-around",
+  justifyContent: "center",  // 버튼들이 가운데로 정렬되게 설정
+  alignItems: "center",  // 버튼들이 세로로 중앙 정렬되게 설정
+  width: "100%",
+  marginTop: "3vh",
+  marginBottom: "1vh",
+  gap: "1.5vh",  // 버튼들 간의 간격을 설정
+};
+
+const iconButtonStyle = {
+  background: "none",
+  border: "none",
+  padding: 0,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
+const iconStyle = {
+  fontSize: "30px", // 아이콘 크기 일관성
+  color: "#333", // 아이콘 색상
+  width: "40px", // 동일한 크기로 지정
+  height: "40px", // 동일한 크기로 지정
+  display: "inline-block",
 };
 
 const confirmButtonStyle = {
-  borderTop: "none",
-  borderLeft: "none",
+  padding: "1vh 0",
+  border: "none",
   borderRadius: "1vh",
   backgroundColor: "#dc3545",
   color: "white",
   cursor: "pointer",
-  width: "15vh",
+  width: "30%",
+  whiteSpace: "nowrap",
+  lineHeight: "1",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "4vh",
+  fontSize: "2.8vh",
 };
 
 const cancelButtonStyle = {
-  borderTop: "none",
-  borderLeft: "none",
+  padding: "1vh 0",
+  border: "none",
   borderRadius: "1vh",
   backgroundColor: "#808080",
   color: "white",
   cursor: "pointer",
-  width: "15vh",
+  width: "40%",
+  whiteSpace: "nowrap",
+  lineHeight: "1",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "4vh",
+  fontSize: "2.8vh",
+};
+
+const textCounter = {
+  margin: "0",
+  padding: "0.5vh",
+  textAlign: "right",
+  fontSize: "1.8vh",
+  color: "#595959",
+};
+
+const shareButtonStyle = {
+  padding: "1vh 0",
+  border: "none",
+  borderRadius: "1vh",
+  backgroundColor: "#4267B2", // 페이스북 블루 색상
+  color: "white",
+  cursor: "pointer",
+  width: "40%",
+  whiteSpace: "nowrap",
+  lineHeight: "1",
+  fontFamily: "Ownglyph, Ownglyph",
+  fontSize: "2.8vh",
 };
 
 export default PostSushi;
