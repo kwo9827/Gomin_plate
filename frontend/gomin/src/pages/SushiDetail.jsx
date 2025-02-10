@@ -27,6 +27,14 @@ const SushiDetail = () => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [likedAnswerId, setLikedAnswerId] = useState(null);
 
+  const [seletedAnswerIsLiked, setSelectedAnswerIsLiked] = useState(null);
+
+  useEffect(() => {
+    if (selectedAnswer) {
+      setSelectedAnswerIsLiked(selectedAnswer.isLiked);
+    }
+  }, [selectedAnswer]);
+
   useEffect(() => {
     if (!sushiId) {
       navigate("/home");
@@ -166,6 +174,8 @@ const SushiDetail = () => {
           answer={selectedAnswer}
           likedAnswerId={likedAnswerId}
           setLikedAnswerId={setLikedAnswerId}
+          seletedAnswerIsLiked={seletedAnswerIsLiked}
+          setSeletedAnswerIsLiked={setSelectedAnswerIsLiked}
         />
       )}
     </div>
@@ -174,8 +184,6 @@ const SushiDetail = () => {
 
 const styles = {
   background: {
-    // backgroundColor: "#FDFCC8",
-    padding: "20px",
     position: "relative",
     height: "100vh",
     width: "100%",
@@ -188,11 +196,7 @@ const styles = {
     zIndex: 2,
     width: "90%",
     maxWidth: "600px",
-    /**디테일창 화면 전체 비율 수정할때 수정하시오
-     * 현재는 화면의 80%로 설정되어있음.
-     */
-    height: "80vh",
-    /**여기까지 */
+    height: "90vh",
     margin: "0 auto",
     padding: "20px",
     boxSizing: "border-box",
@@ -205,7 +209,7 @@ const styles = {
     left: "20px",
     fontSize: "24px",
     background: "none",
-    border: "1px solid",
+    border: "none",
     cursor: "pointer",
   },
   title: {
@@ -223,11 +227,6 @@ const styles = {
     flexGrow: 4,
     overflowY: "auto",
     padding: "10px",
-    /**디테일창 내용 박스 전체 비율 수정할때 수정하시오
-     * 현재는 화면의 20%로 설정되어있음.
-     */
-    height: "20vh",
-    /**여기까지 */
     borderRadius: "8px",
     border: "4px solid #B2975C",
   },

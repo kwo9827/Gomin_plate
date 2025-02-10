@@ -1,30 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { toggleLike } from "../store/slices/answerSlice";
 
-const PostItModal = ({
-  isOpen,
-  onClose,
-  answer,
-  likedAnswerId,
-  setLikedAnswerId,
-}) => {
+const PostItModal = ({ isOpen, onClose, answer, likedAnswerId, setLikedAnswerId, seletedAnswerIsLiked, setSeletedAnswerIsLiked }) => {
   if (!isOpen || !answer) return null;
 
-  /* 좋아요 버튼 */
-  const toggleLike = () => {
-    setLikedAnswerId((prev) =>
-      prev === answer.answerId ? null : answer.answerId
-    );
+  const dispatch = useDispatch();
+
+  console.log(seletedAnswerIsLiked)
+
+  // 여기서 모달을 껐다 다시 켯을때도 하트가
+
+  useEffect(() => {
+    setLikedAnswerId(seletedAnswerIsLiked ? answer.answerId : null); // 초기 상태 설정
+  }, [answer, setLikedAnswerId]);
+
+  const handleToggleLike = () => {
+    if (likedAnswerId === answer.answerId) {
+      return; // 이미 좋아요가 눌려있으면 아무 작업도 하지 않음
+    }
+    setLikedAnswerId(answer.answerId); // UI 즉시 반영
+    setSeletedAnswerIsLiked(true);
+    dispatch(toggleLike(answer.answerId)); // 서버 상태 업데이트
   };
 
   return (
     <div style={overlayStyle} onClick={onClose}>
       <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
-        <div style={closeButtonStyle} onClick={onClose}>
-          ✖
-        </div>
+        <div style={closeButtonStyle} onClick={onClose}>✖</div>
         <div style={contentStyle}>{answer.content}</div>
-        <div style={heartStyle} onClick={toggleLike}>
-          {likedAnswerId === answer.answerId ? "❤️" : "🤍"}
+        <div style={heartStyle} onClick={handleToggleLike}>
+          {seletedAnswerIsLiked || (likedAnswerId === answer.answerId) ? "❤️" : "🤍"}
         </div>
       </div>
     </div>
@@ -47,20 +53,14 @@ const overlayStyle = {
 
 const modalStyle = {
   backgroundColor: "#FFF7B8",
-  padding: "2rem",
+  padding: "40px",
   borderRadius: "15px",
   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
   position: "relative",
-  width: "70%",
-  maxWidth: "400px",
-  minWidth: "280px",
+  width: "300px",
   textAlign: "center",
+  fontFamily: "'Nanum Pen Script', cursive",
   fontSize: "1.2rem",
-
-  /**모달창 높이 수정할때 건드시오 */
-  //   height: "auto",
-  //   maxHeight: "90vh", // 화면 높이의 90% 이상 넘지 않도록
-  //   overflowY: "auto", // 내용이 넘치면 스크롤
 };
 
 const closeButtonStyle = {
