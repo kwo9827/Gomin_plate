@@ -142,6 +142,7 @@ const Sushi = ({
               top: "48%",
               left: "49%",
               transform: "translate(-50%, -50%) scale(3.7)",
+              willChange: "transform", // 모바일 최적화
             }}
           />
         )}
