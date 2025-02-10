@@ -24,6 +24,12 @@ const Home = () => {
   const [isSushiUnlockOpen, setIsSushiUnlockOpen] = useState(false);
   const [isPostSushiOpen, setIsPostSushiOpen] = useState(false);
 
+  const [imagesLoaded, setImagesLoaded] = useState({
+    bg: false,
+    desk: false,
+    master: false,
+  });
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -47,6 +53,39 @@ const Home = () => {
     dispatch(fetchUnreadExists());
   }, [dispatch]);
 
+  // 이미지 로드 후 상태 업데이트
+  const handleImageLoad = (image) => {
+    setImagesLoaded((prevState) => ({ ...prevState, [image]: true }));
+  };
+
+  // 배경 이미지 로드 완료 처리
+  useEffect(() => {
+    const bgImage = new Image();
+    bgImage.src = bgImg;
+    bgImage.onload = () => handleImageLoad("bg");
+
+    const masterImage = new Image();
+    masterImage.src = masterImg;
+    masterImage.onload = () => handleImageLoad("master");
+
+    const deskImage = new Image();
+    deskImage.src = deskImg;
+    deskImage.onload = () => handleImageLoad("desk");
+  }, []);
+
+  const allImagesLoaded = Object.values(imagesLoaded).every((loaded) => loaded);
+
+  /** 로그인 상태가 아니면 인트로 페이지로 리다이렉트 */
+  // const navigate = useNavigate();
+  // const accessToken = useSelector((state) => state.member?.accessToken);
+
+  // useEffect(() => {
+  //   if (!accessToken) {
+  //     navigate("/", { replace: true });
+  //   }
+  // }, [accessToken, navigate]);
+  /** 여기 까지 */
+
   return (
     <>
       {/* 배경 이미지 */}
@@ -57,7 +96,9 @@ const Home = () => {
             backgroundImage: `url("${bgImg}")`,
             zIndex: 1,
             transform: "translateX(0) translateY(6%)",
+            opacity: allImagesLoaded ? 1 : 0,
           }}
+          onLoad={() => handleImageLoad("bg")}
         ></div>
         {/* 고양이마스터 */}
         <div
@@ -66,7 +107,9 @@ const Home = () => {
             backgroundImage: `url("${masterImg}")`,
             zIndex: 2,
             transform: "translateX(0) translateY(0) scale(1.2)",
+            opacity: allImagesLoaded ? 1 : 0,
           }}
+          onLoad={() => handleImageLoad("master")}
         ></div>
         {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
         <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
@@ -74,10 +117,22 @@ const Home = () => {
         {/* 책상과 그 위의 요소들 */}
         <div style={styles.deskContainer}>
           {/* 책상 */}
-          <img src={deskImg} alt="Desk" style={styles.deskImage} />
+          <img
+            src={deskImg}
+            alt="Desk"
+            style={{
+              ...styles.deskImage,
+              opacity: allImagesLoaded ? 1 : 0,
+            }}
+            onLoad={() => handleImageLoad("desk")}
+          />
 
           {/* Rail */}
-          <div style={styles.rail}>
+          <div
+            style={{
+              ...styles.rail,
+            }}
+          >
             <Rail />
           </div>
           {/* 주문벨 */}
@@ -94,16 +149,17 @@ const Home = () => {
         <div>
           <div style={{ position: "absolute", zIndex: "10" }}>
             {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
-
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
-
+            {!allImagesLoaded && (
+              <div>
+                <p> 초밥집에 입장하는 중..</p>
+              </div>
+            )}
             <SushiUnlock
               isOpen={isSushiUnlockOpen}
               onClose={closeSushiUnlock}
             />
-
             {isPostSushiOpen && <PostSushi onClose={closePostSushi} />}
-
             <NotificationModal
               isOpen={isNotificationOpen}
               onClose={closeNotification}

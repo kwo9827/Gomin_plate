@@ -133,7 +133,7 @@ const Sushi = ({
             src={sushiName.image}
             alt={sushiName.name}
             style={{
-              width: "13vh",
+              width: "48vh",
               height: "10vh",
               overflow: "hidden", // 넘치는 부분 숨기기
               objectFit: "cover",
@@ -141,10 +141,9 @@ const Sushi = ({
               position: "absolute",
               top: "48%",
               left: "49%",
-              transform: "translate3d(-50%, -50%, 0) scale(3.7)",
+              transform: "translate(-50%, -50%)",
               willChange: "transform", // 모바일 최적화
-              backfaceVisibility: "hidden",
-              imageRendering: "pixelated",
+              imageRendering: "crisp-edges", // 이미지 흐려짐 방지
             }}
           />
         )}
