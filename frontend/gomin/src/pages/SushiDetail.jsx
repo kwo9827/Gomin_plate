@@ -11,6 +11,7 @@ const SushiDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const currentSushi = useSelector((state) => state.sushi.currentSushi);
   const status = useSelector((state) => state.sushi.status);
   const [currentPage, setCurrentPage] = useState(0);
@@ -133,7 +134,7 @@ const SushiDetail = () => {
                     ...styles.postIt,
                     backgroundColor:
                       styles.postItColors[
-                      index % styles.styles.postItColors.length
+                        index % styles.styles.postItColors.length
                       ],
                   }}
                   onClick={() => openModal(item)}
@@ -183,7 +184,6 @@ const styles = {
     overflow: "hidden",
     boxSizing: "border-box",
   },
-  /** */
   outerContainer: {
     backgroundColor: "#FFFEEC",
     position: "relatvie",
@@ -264,6 +264,7 @@ const styles = {
     alignItems: "center",
   },
   postItColors: ["#FFD700", "#FFA07A", "#87CEFA", "#98FB98", "#F0E68C"],
+
   arrowContainer: {
     display: "flex",
     justifyContent: "center",
