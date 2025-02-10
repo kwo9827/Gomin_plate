@@ -1,4 +1,4 @@
-package com.ssafy.sushi.domain.sushi;
+package com.ssafy.sushi.domain.sushi.controller;
 
 import com.ssafy.sushi.domain.answer.dto.request.CreateAnswerRequest;
 import com.ssafy.sushi.domain.answer.dto.response.CreateAnswerResponse;

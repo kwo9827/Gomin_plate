@@ -15,7 +15,12 @@ spring:
       mode: always
 
 logging.level:
-  org.hibernate.SQL: debug
+  org.hibernate.SQL: info
+
+logging:
+    level:
+      com.zaxxer.hikari.HikariConfig: DEBUG
+      com.zaxxer.hikari: TRACE
 
 oauth:
   kakao:

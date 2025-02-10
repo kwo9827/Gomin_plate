@@ -10,6 +10,8 @@ import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
+import com.ssafy.sushi.global.sse.SseNotificationEvent;
+import com.ssafy.sushi.global.sse.SseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -22,22 +24,26 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class NotificationService {
 
+    private final SseService sseService;
     private final NotificationRepository notificationRepository;
 
     @Value("${app.domain}")
     private String host;
 
     @Transactional
-    public void sendNotification(User user, NotificationType notificationType, Integer parameter) {
+    public void sendNotification(User receiveUser, NotificationType notificationType, Integer parameter) {
 
         Notification notification = Notification.builder()
-                .user(user)
+                .user(receiveUser)
                 .notificationType(notificationType)
                 .message(notificationType.getMessage())
                 .redirectUrl(host + notificationType.getRedirectUrl() + parameter.toString())
                 .build();
 
         notificationRepository.save(notification);
+
+        SseNotificationEvent event = SseNotificationEvent.of(true);
+        sseService.notify(receiveUser.getId(), event);
     }
 
     public CustomPage<MyNotificationListResponse> getMyNotificationList(Integer userId, Pageable pageable) {

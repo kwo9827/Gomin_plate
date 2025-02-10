@@ -1,6 +1,7 @@
 package com.ssafy.sushi.domain.sushi;
 
 import com.ssafy.sushi.domain.answer.service.AnswerService;
+import com.ssafy.sushi.domain.sushi.controller.SushiController;
 import com.ssafy.sushi.domain.sushi.dto.response.MySushiListResponse;
 import com.ssafy.sushi.domain.sushi.service.SushiService;
 import com.ssafy.sushi.global.common.CustomPage;

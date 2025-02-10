@@ -1,4 +1,4 @@
-package com.ssafy.sushi.domain.notification;
+package com.ssafy.sushi.domain.notification.controller;
 
 import com.ssafy.sushi.domain.notification.dto.response.HasUnreadNotificationResponse;
 import com.ssafy.sushi.domain.notification.dto.response.MyNotificationListResponse;
@@ -7,14 +7,17 @@ import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.common.response.ApiResponse;
 import com.ssafy.sushi.global.common.util.AuthenticationUtil;
 import com.ssafy.sushi.global.security.UserPrincipal;
+import com.ssafy.sushi.global.sse.SseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class NotificationController {
 
     private final NotificationService notificationService;
     private final AuthenticationUtil authenticationUtil;
+    private final SseService sseService;
 
     @GetMapping("")
     public ResponseEntity<ApiResponse<CustomPage<MyNotificationListResponse>>> getMyNotificationList(
@@ -31,6 +35,12 @@ public class NotificationController {
         Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(notificationService.getMyNotificationList(userId, pageable));
+    }
+
+    @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter subscribe(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
+        return sseService.subscribe(userId);
     }
 
     @GetMapping("/unread-exists")

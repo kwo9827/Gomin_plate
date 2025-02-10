@@ -63,8 +63,9 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization", "Content-Type", "X-Requested-With",
-                "Access-Control-Allow-Credentials", "Access-Control-Allow-Origin",
-                "Accept", "Origin", "Cookie", "Set-Cookie"
+                "Access-Control-Allow-Credentials", "Access-Control-Allow-Origin","Access-Control-Allow-Headers",
+                "Accept", "Origin", "Cookie", "Set-Cookie",
+                "Cache-Control", "Connection"
         ));
         configuration.setExposedHeaders(List.of("Set-Cookie"));  // 쿠키 노출 허용
         configuration.setAllowCredentials(true);

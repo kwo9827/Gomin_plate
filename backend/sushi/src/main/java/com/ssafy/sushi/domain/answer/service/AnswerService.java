@@ -10,11 +10,13 @@ import com.ssafy.sushi.domain.notification.enums.NotificationType;
 import com.ssafy.sushi.domain.notification.service.NotificationService;
 import com.ssafy.sushi.domain.sushi.entity.Sushi;
 import com.ssafy.sushi.domain.sushi.repository.SushiRepository;
-import com.ssafy.sushi.domain.user.repository.UserRepository;
 import com.ssafy.sushi.domain.user.entity.User;
+import com.ssafy.sushi.domain.user.repository.UserRepository;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
+import com.ssafy.sushi.global.sse.SseLikeCountEvent;
+import com.ssafy.sushi.global.sse.SseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,7 @@ public class AnswerService {
     private final UserRepository userRepository;
     private final SushiRepository sushiRepository;
     private final NotificationService notificationService;
+    private final SseService sseService;
 
     /**
      * 답변 등록
@@ -100,6 +103,8 @@ public class AnswerService {
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
 
+
+
         if (answer.getIsLiked()) {
             throw new CustomException(ErrorCode.ANSWER_ALREADY_LIKED);
         }
@@ -116,6 +121,9 @@ public class AnswerService {
         notificationService.sendNotification(
                 respondent,
                 NotificationType.ANS_LIKE,
-                answerId);
+                answer.getSushi().getId());
+
+        SseLikeCountEvent event = SseLikeCountEvent.of(respondent.getTotalLikes());
+        sseService.notifyLikeCount(respondent.getId(), event);
     }
 }
