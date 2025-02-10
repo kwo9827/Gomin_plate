@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, Component } from "react";
 import { useDispatch } from "react-redux";
 import { createSushi } from "../store/slices/sushiSlice";
 import Slider from "react-slick";
+import "../styles/slider.css";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -17,15 +18,6 @@ import scallop from "../assets/sushi/가리비초밥.webp";
 import flatfish from "../assets/sushi/광어초밥.webp";
 import uni from "../assets/sushi/성게알초밥.webp";
 import tuna from "../assets/sushi/참치초밥.webp";
-
-const settings = {
-  className: "center",
-  centerMode: true,
-  infinite: true,
-  centerPadding: "0vh",
-  slidesToShow: 3,
-  speed: 500,
-};
 
 const PostSushi = ({ onClose }) => {
   const dispatch = useDispatch();
@@ -59,6 +51,20 @@ const PostSushi = ({ onClose }) => {
     { id: 10, src: uni, name: "성게알초밥" },
     { id: 11, src: tuna, name: "참치초밥" },
   ];
+
+  const settings = {
+    className: "center",
+    centerMode: true,
+    infinite: true,
+    centerPadding: "0vh",
+    slidesToShow: 3,
+    speed: 500,
+    afterChange: (current) => {
+      const sushiId = sushiImages[current % sushiImages.length].id;
+      setSushiType(sushiId);
+    },
+    initialSlide: 0,
+  };
 
   const handleCategoryChange = (e) => {
     setCategory(Number(e.target.value));
@@ -108,6 +114,10 @@ const PostSushi = ({ onClose }) => {
   const handleCancelSubmit = () => {
     setShowModal(false);
   };
+
+  React.useEffect(() => {
+    setSushiType(sushiImages[0].id);
+  }, []);
 
   return (
     <div style={overlayStyle}>
@@ -220,6 +230,7 @@ const PostSushi = ({ onClose }) => {
                   <Slider {...settings}>
                     {sushiImages.map((sushi) => (
                       <div
+                        className="slider"
                         key={sushi.id}
                         onClick={() => handleSushiTypeChange(sushi.id)}
                       >
@@ -228,7 +239,7 @@ const PostSushi = ({ onClose }) => {
                           src={sushi.src}
                           alt={sushi.name}
                         />
-                        <p>{sushi.name}</p>
+                        {/* <p className="sushiName">{sushi.name}</p> */}
                       </div>
                     ))}
                   </Slider>
@@ -400,6 +411,7 @@ const radioBtn = {
 };
 
 const rangeInput = {
+  height: "3vh",
   width: "43vh",
   margin: "0 auto",
   marginTop: "1vh",
@@ -415,7 +427,7 @@ const presentPerson = {
 };
 
 const sliderContainer = {
-  width: "44vh",
+  width: "44.54vh",
   height: "26.5vh",
 };
 
@@ -490,11 +502,11 @@ const submitBtn = {
 };
 
 const submitModalStyle = {
-  position: "absolute",
+  position: "fixed",
   top: 0,
   left: 0,
-  width: "46vh",
-  height: "81.6vh",
+  width: "100%",
+  height: "100%",
   backgroundColor: "rgba(0, 0, 0, 0.5)",
   display: "flex",
   justifyContent: "center",
@@ -504,42 +516,51 @@ const submitModalStyle = {
 
 const submitModalContent = {
   backgroundColor: "#fdf5e6",
-  padding: "2vh",
-  borderRadius: "1vh",
-  width: "38vh",
+  padding: "20px",
+  borderRadius: "10px",
+  width: "70%",
+  maxWidth: "600px",
+  position: "relative",
   textAlign: "center",
-  border: "1vh solid #906C48",
-  outline: "1vh solid #67523E",
-  fontSize: "3vh",
+  border: "8px solid #906C48",
+  outline: "2px solid #67523E",
+  fontSize: "24px",
 };
 
 const buttonContainer = {
   display: "flex",
-  justifyContent: "space-around",
+  justifyContent: "space-between",
+  alignItems: "center",
+  width: "100%",
+  marginBottom: "30px",
 };
 
 const confirmButtonStyle = {
-  borderTop: "none",
-  borderLeft: "none",
-  borderRadius: "1vh",
+  padding: "8px 0",
+  border: "none",
+  borderRadius: "5px",
   backgroundColor: "#dc3545",
   color: "white",
   cursor: "pointer",
-  width: "15vh",
+  width: "40%",
+  whiteSpace: "nowrap",
+  lineHeight: "1",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "4vh",
+  fontSize: "24px",
 };
 
 const cancelButtonStyle = {
-  borderTop: "none",
-  borderLeft: "none",
-  borderRadius: "1vh",
+  padding: "8px 0",
+  border: "none",
+  borderRadius: "5px",
   backgroundColor: "#808080",
   color: "white",
   cursor: "pointer",
-  width: "15vh",
+  width: "40%",
+  whiteSpace: "nowrap",
+  lineHeight: "1",
   fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "4vh",
+  fontSize: "24px",
 };
 
 export default PostSushi;
