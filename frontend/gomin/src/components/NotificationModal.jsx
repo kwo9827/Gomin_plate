@@ -33,7 +33,9 @@ const NotificationModal = ({ isOpen, onClose }) => {
       <div style={modalStyle}>
         <div style={outerBoxStyle}>
           <div style={innerBoxStyle}>알림</div>
-          <button style={cancelButtonStyle} onClick={onClose}>✖</button>
+          <button style={cancelButtonStyle} onClick={onClose}>
+            ✖
+          </button>
         </div>
 
         <div>
@@ -111,6 +113,7 @@ const modalStyle = {
   outline: "2px solid #67523E",
   overflowY: "auto",
   boxSizing: "border-box",
+  scrollbarWidth: "none",
 };
 
 const cancelButtonStyle = {
