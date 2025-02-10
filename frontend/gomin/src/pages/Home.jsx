@@ -76,14 +76,14 @@ const Home = () => {
   const allImagesLoaded = Object.values(imagesLoaded).every((loaded) => loaded);
 
   /** 로그인 상태가 아니면 인트로 페이지로 리다이렉트 */
-  const navigate = useNavigate();
-  const accessToken = useSelector((state) => state.member?.accessToken);
+  // const navigate = useNavigate();
+  // const accessToken = useSelector((state) => state.member?.accessToken);
 
-  useEffect(() => {
-    if (!accessToken) {
-      navigate("/", { replace: true });
-    }
-  }, [accessToken, navigate]);
+  // useEffect(() => {
+  //   if (!accessToken) {
+  //     navigate("/", { replace: true });
+  //   }
+  // }, [accessToken, navigate]);
   /** 여기 까지 */
 
   return (
@@ -97,7 +97,6 @@ const Home = () => {
             zIndex: 1,
             transform: "translateX(0) translateY(6%)",
             opacity: allImagesLoaded ? 1 : 0,
-            transition: "opacity 1.5s ease-in-out",
           }}
           onLoad={() => handleImageLoad("bg")}
         ></div>
@@ -109,7 +108,6 @@ const Home = () => {
             zIndex: 2,
             transform: "translateX(0) translateY(0) scale(1.2)",
             opacity: allImagesLoaded ? 1 : 0,
-            transition: "opacity 1s ease-in-out",
           }}
           onLoad={() => handleImageLoad("master")}
         ></div>
@@ -125,7 +123,6 @@ const Home = () => {
             style={{
               ...styles.deskImage,
               opacity: allImagesLoaded ? 1 : 0,
-              transition: "opacity 0.5s ease-in-out",
             }}
             onLoad={() => handleImageLoad("desk")}
           />
@@ -134,8 +131,6 @@ const Home = () => {
           <div
             style={{
               ...styles.rail,
-              opacity: allImagesLoaded ? 1 : 0,
-              transition: "opacity 1s ease-in-out",
             }}
           >
             <Rail />
@@ -156,8 +151,8 @@ const Home = () => {
             {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
             {!allImagesLoaded && (
-              <div style={styles.loadingText}>
-                <span> 초밥집에 입장하는 중..</span>
+              <div>
+                <p> 초밥집에 입장하는 중..</p>
               </div>
             )}
             <SushiUnlock
@@ -177,13 +172,6 @@ const Home = () => {
 };
 
 const styles = {
-  loadingText: {
-    position: "absolute",
-    top: "10vh",
-    left: "26vh",
-    fontSize: "2rem",
-    color: "#000",
-  },
   backgroundContainer: {
     position: "relative",
     height: "100vh",
