@@ -5,7 +5,7 @@ import SushiAnswerCard from "../components/SushiAnswerCard";
 
 const MyAnswerList = () => {
   const dispatch = useDispatch();
-  const myAnswers = useSelector((state) => state.answer.myAnswers || {});
+  const myAnswers = useSelector((state) => state.answer.myAnswers || {}); // 객체 초기화
 
   useEffect(() => {
     dispatch(
@@ -22,6 +22,7 @@ const MyAnswerList = () => {
     console.log("현재 내 답변 상태:", myAnswers);
   }, [myAnswers]);
 
+  // `myAnswers.content`가 존재하지 않으면 빈 배열을 기본값으로 설정
   const answerList = myAnswers.content || [];
 
   return (
@@ -35,19 +36,23 @@ const MyAnswerList = () => {
         </div>
 
         {/* 답변 리스트 */}
-        {myAnswers.content.length > 0 ? (
+        {answerList.length > 0 ? ( // answerList.length로 변경
           <ul style={styles.list}>
-            {myAnswers.content.map((answer) => (
-              <li key={answer.sushiId} style={styles.listItem}>
-                <SushiAnswerCard
-                  id={answer.sushiId}
-                  category={answer.category}
-                  title={answer.title}
-                  content={answer.content}
-                  showHeart={answer.isLiked || answer.getLike}
-                />
-              </li>
-            ))}
+            {answerList.map(
+              (
+                answer // answerList.map으로 변경
+              ) => (
+                <li key={answer.sushiId} style={styles.listItem}>
+                  <SushiAnswerCard
+                    id={answer.sushiId}
+                    category={answer.category}
+                    title={answer.title}
+                    content={answer.content}
+                    showHeart={answer.isLiked || answer.getLike}
+                  />
+                </li>
+              )
+            )}
           </ul>
         ) : (
           <div style={styles.noResult}>등록된 답변이 없습니다.</div>
