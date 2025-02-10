@@ -1,7 +1,7 @@
 import React from "react";
 import KakaoLoginButton from "../components/KakaoLoginButton";
-import GoogleLoginButton from '../components/GoogleLoginButton'
-import introImage from "../assets/intro.webp";
+import GoogleLoginButton from "../components/GoogleLoginButton";
+import introImage from "../assets/introoooo.webp";
 
 const Intro = () => {
   return (
@@ -14,8 +14,11 @@ const Intro = () => {
           transform: "translateX(0) translateY(3%)",
         }}
       ></div>
-      <KakaoLoginButton />
-      <GoogleLoginButton />
+      <div style={styles.buttoncontainer}>
+        <h2 style={{ marginBottom: "1vh", fontSize: "4.5vh" }}>로그인</h2>
+        <KakaoLoginButton />
+        <GoogleLoginButton />
+      </div>
     </div>
   );
 };
@@ -32,11 +35,18 @@ const styles = {
     top: 0,
     left: 0,
     width: "100%",
-    height: "100%",
+    height: "105vh",
     scale: "1.1",
-    backgroundSize: "contain",
+    backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
+  },
+  buttoncontainer: {
+    position: "absolute",
+    zIndex: 2,
+    color: "#fff",
+    right: "12vh",
+    bottom: "35vh",
   },
 };
 

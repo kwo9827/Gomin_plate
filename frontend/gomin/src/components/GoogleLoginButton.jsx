@@ -18,17 +18,13 @@ const GoogleLoginButton = () => {
         position: "absolute",
         left: "calc(50% + 5vh)", // 잠시 오른쪽으로
         background: "white",
-        height: "5vh", // 화면 세로 크기에 비례하도록 설정
-        width: "5vh", // 가로 크기도 세로와 동일하게 설정
-        maxWidth: "60px", // 최대 크기 제한
-        maxHeight: "60px",
-        minWidth: "40px", // 최소 크기 제한
-        minHeight: "40px",
+        height: "7vh", // 화면 세로 크기에 비례하도록 설정
+        width: "7vh", // 가로 크기도 세로와 동일하게 설정
         border: "none",
         borderRadius: "50%", // 원형으로 만들기
         color: "#000",
         fontWeight: "bold",
-        fontSize: "1rem", // 반응형 폰트 크기
+        fontSize: "3vh", // 반응형 폰트 크기
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
