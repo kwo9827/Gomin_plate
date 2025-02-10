@@ -64,6 +64,22 @@ const PostSushi = ({ onClose }) => {
       setSushiType(sushiId);
     },
     initialSlide: 0,
+    swipeToSlide: true,
+    focusOnSelect: false,
+    slidesToScroll: 1,
+    draggable: true,
+    accessibility: true,
+    responsive: [
+      {
+        breakpoint: 9999,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true,
+          centerMode: true,
+        },
+      },
+    ],
   };
 
   const handleCategoryChange = (e) => {
@@ -434,6 +450,7 @@ const sliderContainer = {
 const sliderSushi = {
   justifyContent: "center",
   height: "10rem",
+  pointerEvents: "none",
 };
 
 const orderFormFooter = {
