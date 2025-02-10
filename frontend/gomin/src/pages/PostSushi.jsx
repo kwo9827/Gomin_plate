@@ -111,6 +111,18 @@ const PostSushi = ({ onClose }) => {
   };
 
   const handleSubmit = () => {
+    if (title.length === 0 || content.length === 0) {
+      alert("제목과 내용을 모두 입력해주세요.");
+      return;
+    }
+    if (title.length > 30) {
+      alert("제목은 30자 이내로 입력해주세요.");
+      return;
+    }
+    if (content.length > 500) {
+      alert("내용은 500자 이내로 입력해주세요.");
+      return;
+    }
     setShowModal(true);
   };
 
@@ -277,8 +289,10 @@ const PostSushi = ({ onClose }) => {
                   style={titleText}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="고민의 제목을 입력하세요"
+                  placeholder="고민의 제목을 입력하세요 (30자 이내)"
+                  maxLength={30}
                 />
+                <p style={textCounter}>{title.length} / 30</p>
                 <hr style={divider} />
                 <p style={orderSet}>내용</p>
                 <hr style={divider} />
@@ -286,8 +300,10 @@ const PostSushi = ({ onClose }) => {
                   style={contentText}
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  placeholder="고민의 내용을 입력하세요"
+                  placeholder="고민의 내용을 입력하세요 (500자 이내)"
+                  maxLength={500}
                 />
+                <p style={textCounter}>{content.length} / 500</p>
                 <div style={orderFormFooter}>
                   <hr style={divider} />
                   <div style={pageSelect}>
@@ -493,7 +509,7 @@ const contentText = {
   resize: "none",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
-  height: "43vh",
+  height: "36.8vh",
   width: "44vh",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
@@ -578,6 +594,14 @@ const cancelButtonStyle = {
   lineHeight: "1",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "24px",
+};
+
+const textCounter = {
+  margin: "0",
+  padding: "0.5vh",
+  textAlign: "right",
+  fontSize: "1.8vh",
+  color: "#595959",
 };
 
 export default PostSushi;
