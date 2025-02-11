@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ERROR_MESSAGES } from '../constants/errorMessages';
 
 const api = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
@@ -14,5 +15,34 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+
+    // 프론트엔드 단 에러러
+    if (!error.response) {
+      alert("서버와의 연결이 끊겼습니다.");
+      window.location.href = '/';
+      return Promise.reject(error);
+    }
+
+    // 에러 코드에 따른 alert 발생
+    const errorCode = error.response?.data?.error?.code;
+    alert(ERROR_MESSAGES[errorCode] || ERROR_MESSAGES.DEFAULT);
+
+    
+
+    // 페이지 이동이 필요한 에러 (인증, 권한)
+    if (['U001', 'A001', 'A002', 'A003', 'A004', 'A005'].includes(errorCode)) {
+      window.location.href = '/';
+    } 
+    // 단순 알림만 필요한 에러 (좋아요, 답변 관련)
+    // R003(이미 좋아요 누름), R004(자신의 답변 좋아요) 등
+    
+    // 그 외 에러는 Promise.reject로 전달하여 각 컴포넌트에서 처리할 수 있도록 함
+    return Promise.reject(error);
+  }
+);
 
 export default api;
