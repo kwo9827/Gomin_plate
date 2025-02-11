@@ -36,7 +36,10 @@ public enum ErrorCode {
     SELF_LIKE_DENIED(400, "R004", "자신의 답변에는 좋아요를 누를 수 없습니다."),
 
     // NOTIFICATION
-    NOTIFICATION_NOT_FOUND(404, "N001", "알림을 찾을 수 없습니다.");
+    NOTIFICATION_NOT_FOUND(404, "N001", "알림을 찾을 수 없습니다."),
+
+    // TOKEN
+    TOKEN_NOT_FOUND(404, "T001", "토큰을 찾을 수 없습니다.");
 
     private final int status;
     private final String code;

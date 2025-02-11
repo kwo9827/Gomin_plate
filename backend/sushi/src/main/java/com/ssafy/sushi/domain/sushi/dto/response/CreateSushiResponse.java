@@ -19,8 +19,9 @@ public class CreateSushiResponse {
     private LocalDateTime expirationTime;
     private Integer maxAnswers;
     private Integer remainingAnswers;
+    private String token;
 
-    public static CreateSushiResponse of(Sushi sushi) {
+    public static CreateSushiResponse of(Sushi sushi, String token) {
         return CreateSushiResponse.builder()
                 .sushiId(sushi.getId())
                 .title(sushi.getTitle())
@@ -31,6 +32,7 @@ public class CreateSushiResponse {
                 .expirationTime(sushi.getExpirationTime())
                 .maxAnswers(sushi.getMaxAnswers())
                 .remainingAnswers(sushi.getRemainingAnswers())
+                .token(token)
                 .build();
     }
 }

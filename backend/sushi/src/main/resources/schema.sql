@@ -13,4 +13,9 @@ VALUES ('EGG', 0),
        ('CUTTLEFISH', 3),
        ('OCTOPUS', 6),
        ('EEL', 10),
-       ('WAGYU', 10);
+       ('WAGYU', 15),
+       ('SCALLOP', 20),
+       ('FLATFISH', 30),
+       ('UNI', 50),
+       ('TUNA', 80),
+       ('SALMONROE', 100);
