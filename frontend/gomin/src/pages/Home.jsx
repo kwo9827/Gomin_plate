@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { countLike } from "../store/slices/memberSlice";
+import { fetchSushiByToken } from "../store/slices/sushiSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useNotificationSSE } from "../hooks/useNotificationSSE";
 import { useLikeCountSSE } from "../hooks/useLikeCountSSE";
@@ -26,6 +27,7 @@ const Home = () => {
   const location = useLocation();
   const [showLoadingScreen, setShowLoadingScreen] = useState(true);
   const [hasRefreshed, setHasRefreshed] = useState(false);
+  const [token, setToken] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -66,6 +68,31 @@ const Home = () => {
 
   useLikeCountSSE();
   useNotificationSSE();
+
+  useEffect(() => {
+    // 현재 URL 경로에서 '/share/' 뒤의 값을 추출
+    const pathParts = location.pathname.split("/");
+
+    // URL이 '/share/{token}' 형식인지 확인
+    if (pathParts[1] === "share" && pathParts.length > 2) {
+      const tokenFromUrl = pathParts[2]; // 'share' 뒤에 오는 값이 토큰
+      setToken(tokenFromUrl);
+    }
+  }, [location]);
+
+  // 토큰을 사용하여 초밥 데이터 불러오기
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchSushiByToken(token)).then((response) => {
+        console.log("Fetched Sushi Data:", response.payload); // 데이터 확인
+        // 초밥 데이터가 성공적으로 불러와졌다면 모달 열기
+        if (response.payload) {
+          setSelectedSushiData(response.payload.data);  // 불러온 초밥 데이터를 상태에 저장
+          setIsSushiViewOpen(true);  // 모달 열기
+        }
+      });
+    }
+  }, [token, dispatch]);
 
   useEffect(() => {
     dispatch(fetchUnreadExists());
