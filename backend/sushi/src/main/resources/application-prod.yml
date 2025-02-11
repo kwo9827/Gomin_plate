@@ -4,8 +4,8 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        format_sql: false
-    defer-datasource-initialization: false # hibernate 초기화 이후 schema.sql 실행
+        format_sql: true
+    defer-datasource-initialization: true # hibernate 초기화 이후 schema.sql 실행
   datasource:
     hikari:
       max-lifetime: 177000
