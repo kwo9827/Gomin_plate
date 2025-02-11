@@ -38,6 +38,9 @@ const SushiView = ({
   useEffect(() => {
     if (isOpen && sushiId) {
       dispatch(fetchSushiDetail(sushiId));
+      if (currentSushi === 'loading') {
+        return <div style={styles.loading}>로딩 중...</div>;
+      }
     }
   }, [dispatch, sushiId, isOpen]);
 
@@ -144,6 +147,7 @@ const SushiView = ({
 
   const handleClose = () => {
     setShowAnswerInput(false);
+    setContent("");
     onClose();
   };
 
@@ -376,6 +380,14 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.3s",
     fontFamily: "inherit",
+  },
+  loading: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    fontSize: "1.5rem",
+    color: "#5D4A37",
   },
 };
 
