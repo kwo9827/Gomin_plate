@@ -92,8 +92,6 @@ const Home = () => {
 
   const allImagesLoaded = Object.values(imagesLoaded).every((loaded) => loaded);
 
-<<<<<<< Updated upstream
-=======
   /** 로그인 상태가 아니면 인트로 페이지로 리다이렉트 */
   // const navigate = useNavigate();
   // const accessToken = useSelector((state) => state.member?.accessToken);
@@ -105,7 +103,6 @@ const Home = () => {
   // }, [accessToken, navigate]);
   /** 여기 까지 */
 
->>>>>>> Stashed changes
   return (
     <>
       {/* 배경 이미지 */}
