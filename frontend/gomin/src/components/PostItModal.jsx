@@ -1,26 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { toggleLike } from "../store/slices/answerSlice";
 
-const PostItModal = ({ isOpen, onClose, answer, likedAnswerId, setLikedAnswerId, seletedAnswerIsLiked, setSeletedAnswerIsLiked }) => {
+const PostItModal = ({ isOpen, onClose, answer, likedAnswerId, setLikedAnswerId }) => {
   if (!isOpen || !answer) return null;
 
   const dispatch = useDispatch();
-
-  console.log(seletedAnswerIsLiked)
-
-  // 여기서 모달을 껐다 다시 켯을때도 하트가
-
-  useEffect(() => {
-    setLikedAnswerId(seletedAnswerIsLiked ? answer.answerId : null); // 초기 상태 설정
-  }, [answer, setLikedAnswerId]);
 
   const handleToggleLike = () => {
     if (likedAnswerId === answer.answerId) {
       return; // 이미 좋아요가 눌려있으면 아무 작업도 하지 않음
     }
     setLikedAnswerId(answer.answerId); // UI 즉시 반영
-    setSeletedAnswerIsLiked(true);
     dispatch(toggleLike(answer.answerId)); // 서버 상태 업데이트
   };
 
@@ -30,7 +21,7 @@ const PostItModal = ({ isOpen, onClose, answer, likedAnswerId, setLikedAnswerId,
         <div style={closeButtonStyle} onClick={onClose}>✖</div>
         <div style={contentStyle}>{answer.content}</div>
         <div style={heartStyle} onClick={handleToggleLike}>
-          {seletedAnswerIsLiked || (likedAnswerId === answer.answerId) ? "❤️" : "🤍"}
+          {likedAnswerId === answer.answerId ? "❤️" : "🤍"}
         </div>
       </div>
     </div>

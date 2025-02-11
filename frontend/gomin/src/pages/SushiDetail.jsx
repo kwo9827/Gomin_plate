@@ -20,20 +20,12 @@ const SushiDetail = () => {
     content = "",
     expirationTime = new Date(),
     answer = [],
-  } = currentSushi === "loading" ? {} : currentSushi || {};
+  } = currentSushi === 'loading' ? {} : (currentSushi || {});
 
   /* 모달 관련 상태 추가 */
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [likedAnswerId, setLikedAnswerId] = useState(null);
-
-  const [seletedAnswerIsLiked, setSelectedAnswerIsLiked] = useState(null);
-
-  useEffect(() => {
-    if (selectedAnswer) {
-      setSelectedAnswerIsLiked(selectedAnswer.isLiked);
-    }
-  }, [selectedAnswer]);
 
   useEffect(() => {
     if (!sushiId) {
@@ -57,7 +49,7 @@ const SushiDetail = () => {
   const totalPages = Math.ceil(answer.length / answersPerPage);
 
   // 로딩 상태 처리
-  if (currentSushi === "loading") {
+  if (currentSushi === 'loading') {
     return <div style={styles.loading}>로딩 중...</div>;
   }
 
@@ -155,12 +147,12 @@ const SushiDetail = () => {
         <div style={styles.arrowContainer}>
           {currentPage > 0 && (
             <button onClick={prevPage} style={styles.arrowLeft}>
-              &lt
+              ◀
             </button>
           )}
           {currentPage < totalPages - 1 && (
             <button onClick={nextPage} style={styles.arrowRight}>
-              &gt
+              ▶
             </button>
           )}
         </div>
@@ -174,8 +166,6 @@ const SushiDetail = () => {
           answer={selectedAnswer}
           likedAnswerId={likedAnswerId}
           setLikedAnswerId={setLikedAnswerId}
-          seletedAnswerIsLiked={seletedAnswerIsLiked}
-          setSeletedAnswerIsLiked={setSelectedAnswerIsLiked}
         />
       )}
     </div>
@@ -194,14 +184,10 @@ const styles = {
     backgroundColor: "#FFFEEC",
     position: "relative",
     zIndex: 2,
-    width: "100%",
+    width: "90%",
     maxWidth: "600px",
-    /**디테일창 화면 전체 비율 수정할때 수정하시오
-     * 현재는 화면의 80%로 설정되어있음.
-     */
-    height: "80vh",
-    /**여기까지 */
-    margin: "-5px auto",
+    height: "90vh",
+    margin: "0 auto",
     padding: "20px",
     boxSizing: "border-box",
     border: "6px solid #8B6B3E",
@@ -230,23 +216,15 @@ const styles = {
   contentBox: {
     flexGrow: 4,
     overflowY: "auto",
-    padding: "0px",
-    /**디테일창 내용 박스 전체 비율 수정할때 수정하시오
-     * 현재는 화면의 20%로 설정되어있음.
-     */
-    height: "20vh",
-    /**여기까지 */
+    padding: "10px",
     borderRadius: "8px",
     border: "4px solid #B2975C",
-    scrollbarWidth: "none",
   },
   content: {
     fontSize: "1.1rem",
     color: "#5D4A37",
     lineHeight: "1.6",
     textAlign: "left",
-    margin: "0px",
-    padding: "0px",
   },
   divider: {
     width: "90%",
