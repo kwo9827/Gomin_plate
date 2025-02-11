@@ -30,8 +30,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+        String token = resolveToken(request);
+
+        // 토큰이 없고 SSE 연결 요청일 때만 패스
+        if (token == null &&
+                (path.equals("/api/notification/subscribe") || path.equals("/api/user/my-like/subscribe"))) {
+            filterChain.doFilter(request, response);
+            log.error("SSE Access Denied catch");
+            return;
+        }
+
+
         try {
-            String token = resolveToken(request);
+//            String token = resolveToken(request);
 
             if (StringUtils.hasText(token)) {
                 // test 계정 처리
