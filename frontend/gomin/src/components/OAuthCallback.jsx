@@ -19,11 +19,13 @@ const OAuthCallback = () => {
 
       if (code) {
         dispatch(socialLogin({ provider, code }))
+          .unwrap()
           .then(() => {
             navigate("/home"); // 로그인 후 홈으로 이동
           })
           .catch((error) => {
             console.error("소셜 로그인 실패:", error);
+            navigate("/");
           });
       }
       isFirstRender.current = false;
