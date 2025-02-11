@@ -1,38 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import unlockssImg from "../assets/home/open.webp";
 import Sushi from "./Sushi";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { countLike } from "../store/slices/memberSlice";
 
 /** 홈 화면에서 누르면 초밥해금 화면으로 넘어가는 컴포넌트
  *  1. 클릭 시 부모 컴포넌트에서 전달한 `onClick` 실행
  */
 const SushiUnlockBar = ({ onClick }) => {
+  const dispatch = useDispatch();
   const likesReceived = useSelector((state) => state.member.likesReceived);
 
-  const MAX_LIKES = 36; // 최대 좋아요 개수
+  // 컴포넌트 마운트 시 좋아요 수 가져오기
+  useEffect(() => {
+    dispatch(countLike());
+  }, [dispatch]);
 
-  // 초밥 해금 비율 계산 (남은 좋아요 수 기준)
-  const nextUnlockableSushiType = Math.floor(likesReceived / 3) + 1;
+  // 상수 정의
+  const LIKES_PER_SUSHI = 3; // 초밥 1개 해금에 필요한 좋아요 수
+  const MAX_SUSHI = 12; // 최대 초밥 개수
 
-  // 초밥 해금에 필요한 최소 좋아요 수 계산
-  const nextUnlockableSushi = {
-    likesRequired: nextUnlockableSushiType * 3,
-  };
+  // 현재 해금된 초밥 개수 계산
+  const unlockedSushiCount = Math.min(
+    Math.floor(likesReceived / LIKES_PER_SUSHI),
+    MAX_SUSHI
+  );
 
-  // 진행 바 비율 계산 (획득한 좋아요 수 기준)
-  const progressPercentage = nextUnlockableSushiType
-    ? Math.min(
-        ((likesReceived - (nextUnlockableSushi.likesRequired - 3)) / 3) * 100,
-        100
-      )
-    : 0;
+  // 다음 초밥 해금까지 남은 좋아요 수 계산
+  const remainingLikes = LIKES_PER_SUSHI - (likesReceived % LIKES_PER_SUSHI);
 
-  // 최대 해금된 초밥 수를 넘지 않도록 처리
-  const totalSushiTypes = 12;
-  const sushiTypeToShow =
-    nextUnlockableSushiType > totalSushiTypes
-      ? totalSushiTypes
-      : nextUnlockableSushiType;
+  // 현재 단계의 진행률 계산 (0-100%)
+  const currentProgress =
+    ((likesReceived % LIKES_PER_SUSHI) / LIKES_PER_SUSHI) * 100;
+
+  // 다음 해금할 초밥 타입 (1-12 사이)
+  const nextSushiType = Math.min(unlockedSushiCount + 1, MAX_SUSHI);
 
   return (
     <div style={styles.container} onClick={onClick}>
@@ -47,14 +49,14 @@ const SushiUnlockBar = ({ onClick }) => {
         <div
           style={{
             ...styles.progressBar,
-            width: progressPercentage > 0 ? `${progressPercentage}%` : "0.2vh",
+            width: `${currentProgress}%`,
           }}
         />
       </div>
 
-      {/* 해금되지 않은 초밥 이미지 */}
+      {/* 해금될 초밥 이미지 */}
       <div style={styles.sushiContainer}>
-        <Sushi sushiType={sushiTypeToShow} />
+        <Sushi sushiType={nextSushiType} />
       </div>
     </div>
   );

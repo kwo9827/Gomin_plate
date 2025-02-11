@@ -5,8 +5,12 @@ import searchIcon from "../assets/search.png";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMySushi } from "../store/slices/sushiSlice";
 
+import "../styles/font.css";
+
 const MySushiList = () => {
   const [search, setSearch] = useState("");
+  const [displaySushi, setDisplaySushi] = useState([]);
+
   const onChange = (e) => {
     const searchValue = e.target.value;
     setSearch(searchValue);
@@ -23,20 +27,37 @@ const MySushiList = () => {
         size: 10,
       })
     ).then((result) => {
-      console.log("내 초밥 리스트:", result.payload.data.sushi);
+      console.log("내 초밥 리스트:", result.payload.data.content);
+      setDisplaySushi(result.payload.data.content);
     });
   }, [dispatch]);
 
   useEffect(() => {
     console.log("현재 내 초밥 상태:", mySushi);
-  }, [mySushi]);
 
-  const filteredSushi = mySushi.filter((sushi) =>
-    sushi.title.toLowerCase().includes(search.toLowerCase())
-  );
+    if (!search.trim()) {
+      setDisplaySushi(mySushi);
+    }
+  }, [mySushi, search]);
 
   const onSearch = () => {
     console.log("현재 검색 상태:", search);
+    dispatch(
+      fetchMySushi({
+        search: search,
+        page: 1,
+        size: 10,
+      })
+    ).then((result) => {
+      const apiResult = result.payload.data.content;
+      console.log("API 검색 결과: ", apiResult);
+
+      const filtered = apiResult.filter((sushi) =>
+        sushi.title.toLowerCase().includes(search.toLowerCase())
+      );
+      console.log("검색 결과:", filtered);
+      setDisplaySushi(filtered);
+    });
   };
 
   return (
@@ -51,30 +72,33 @@ const MySushiList = () => {
 
         {/* 검색창 */}
         <div style={styles.searchContainer}>
-          <input
-            type="text"
-            value={search}
-            onChange={onChange}
-            placeholder="고민을 검색해주세요."
-            style={styles.searchInput}
-          />
-          <img
-            src={searchIcon}
-            alt="검색 버튼"
-            onClick={onSearch}
-            style={styles.searchImage}
-          />
+          <div style={styles.inputWrapper}>
+            <input
+              type="text"
+              value={search}
+              onChange={onChange}
+              placeholder="고민을 검색해주세요."
+              style={styles.searchInput}
+              className="custom-placeholder"
+            />
+            <i
+              className="fas fa-search"
+              style={styles.searchIcon}
+              onClick={onSearch}
+            ></i>
+          </div>
         </div>
 
         {/* 고민 리스트 */}
-        {filteredSushi.length > 0 ? (
+        {displaySushi && displaySushi.length > 0 ? (
           <ul style={styles.list}>
-            {filteredSushi.map((sushi) => (
-              <li key={sushi.id}>
+            {displaySushi.map((sushi) => (
+              <li key={sushi.sushiId}>
                 <SushiCard
                   id={sushi.sushiId}
                   title={sushi.title}
                   content={sushi.content}
+                  sushiType={sushi.sushiType}
                 />
               </li>
             ))}
@@ -137,30 +161,46 @@ const styles = {
     padding: "6px 0",
     boxSizing: "border-box",
   },
+
   /**검색창 컨테이너 스타일 */
   searchContainer: {
     display: "flex",
     justifyContent: "center",
-    gap: "5px",
+    // gap: "5px",
     marginBottom: "10px",
   },
+
+  /**돋보기 감싸는거 */
+  inputWrapper: {
+    position: "relative",
+    width: "90%",
+    maxWidth: "330px",
+  },
+
   /**검색창 내부 스타일 */
   searchInput: {
-    width: "100%",
+    width: "80%",
     maxWidth: "330px",
     height: "36px",
     fontSize: "1rem",
     textAlign: "center",
-    padding: "0 10px",
+    padding: "0 40px 0 10px",
     border: "2px solid #906C48",
     borderRadius: "6px",
     outline: "none",
   },
-  searchImage: {
-    width: "36px",
-    height: "36px",
+
+  /** 입력창 내부 돋보기 아이콘 */
+  searchIcon: {
+    position: "absolute",
+    right: "20px", // 오른쪽에 배치
+    top: "50%",
+    transform: "translateY(-50%)", // 세로 중앙 정렬
+    fontSize: "1.5rem",
+    color: "#906C48",
     cursor: "pointer",
   },
+
   /**검색 결과 없을때 */
   noResult: {
     textAlign: "center",

@@ -49,6 +49,7 @@ const MyAnswerList = () => {
                     title={answer.title}
                     content={answer.content}
                     showHeart={answer.isLiked || answer.getLike}
+                    sushiType={answer.sushiType}
                   />
                 </li>
               )
