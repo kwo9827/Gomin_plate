@@ -70,7 +70,7 @@ const MySushiList = () => {
         {filteredSushi.length > 0 ? (
           <ul style={styles.list}>
             {filteredSushi.map((sushi) => (
-              <li key={sushi.id}>
+              <li key={sushi.sushiId}>
                 <SushiCard
                   id={sushi.sushiId}
                   title={sushi.title}
