@@ -5,7 +5,7 @@ export const ERROR_MESSAGES = {
   C003: "잠시 후 다시 시도해 주세요",
  
   // Authorization
-  A001: "로그인 후 이용해 주세요",
+  A001: "로그인 후 이용하라냥",
   A002: "접근 권한이 없어요",
 
   // OAuth
