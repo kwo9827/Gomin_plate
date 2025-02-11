@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateNickname, deleteAccount } from "../store/slices/authSlice";
+import { clearMemberData } from "../store/slices/memberSlice";
+import { useNavigate } from "react-router-dom";
 
 const EditModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
-  // const currentNickname = useSelector((state) => state.member?.nickname || "");
   const currentNickname = localStorage.getItem('userNickname');
 
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setNickname(currentNickname);
@@ -20,9 +23,9 @@ const EditModal = ({ isOpen, onClose }) => {
       return;
     }
     try {
-      // 디버깅용 로그 추가
       const result = await dispatch(updateNickname(nickname)).unwrap();
       console.log("변경 성공:", result);
+      localStorage.setItem("userNickname", nickname);
       alert("닉네임이 성공적으로 변경되었습니다.");
       onClose();
     } catch (err) {
@@ -42,6 +45,23 @@ const EditModal = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userNickname");
+    dispatch(clearMemberData());
+    navigate("/");
+    onClose();
+    console.log("로그아웃 버튼이 클릭되었습니다.");
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    if (value.length <= 7) {
+      setNickname(value);
+      setError("");
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -52,10 +72,7 @@ const EditModal = ({ isOpen, onClose }) => {
           <input
             type="text"
             value={nickname}
-            onChange={(e) => {
-              setNickname(e.target.value);
-              setError("");
-            }}
+            onChange={handleInputChange}
             placeholder="answer"
             style={inputStyle}
           />
@@ -71,9 +88,14 @@ const EditModal = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        <button onClick={handleDeleteAccount} style={deleteAccountStyle}>
-          회원탈퇴
-        </button>
+        <div style={bottomButtonContainer}>
+          <button onClick={handleDeleteAccount} style={bottomButtonStyle}>
+            회원탈퇴
+          </button>
+          <button onClick={handleLogout} style={bottomButtonStyle}>
+            로그아웃
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -96,7 +118,7 @@ const modalStyle = {
   backgroundColor: "#fdf5e6",
   padding: "20px",
   borderRadius: "10px",
-  width: "70%",
+  width: "40vh",
   maxWidth: "600px",
   position: "relative",
   border: "8px solid #906C48",
@@ -161,10 +183,15 @@ const cancelButtonStyle = {
   lineHeight: "1",
 };
 
-const deleteAccountStyle = {
+const bottomButtonContainer = {
   position: "absolute",
   bottom: "10px",
   right: "10px",
+  display: "flex",
+  gap: "10px",
+};
+
+const bottomButtonStyle = {
   background: "none",
   border: "none",
   color: "#666",
