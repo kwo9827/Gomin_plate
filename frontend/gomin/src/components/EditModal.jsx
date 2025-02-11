@@ -23,6 +23,7 @@ const EditModal = ({ isOpen, onClose }) => {
       // 디버깅용 로그 추가
       const result = await dispatch(updateNickname(nickname)).unwrap();
       console.log("변경 성공:", result);
+      localStorage.setItem("userNickname", nickname);
       alert("닉네임이 성공적으로 변경되었습니다.");
       onClose();
     } catch (err) {
