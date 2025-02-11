@@ -77,10 +77,11 @@ public class SseService {
                     .data("connected!"));
             log.info("알림 SSE 연결 완료 - userId: {}", userId);
         } catch (IOException e) {
-            emitter.completeWithError(e);
+            emitters.remove(userId);  // Map에서 제거만 하고
             log.error("알림 SSE 더미 이벤트 전송 실패: {}", e.getMessage());
             return emitter;
         } catch (IllegalStateException e) {
+            emitters.remove(userId);  // Map에서 제거만 하고
             log.warn("SSE 이미 완료됨 - userId: {}", userId);
         }
 
@@ -104,21 +105,21 @@ public class SseService {
 
     public SseEmitter subscribeLikeCount(Integer userId) {
 
-        SseEmitter emitter = emitters.computeIfAbsent(userId, key -> {
+        SseEmitter emitter = likeCountEmitters.computeIfAbsent(userId, key -> {
             SseEmitter newEmitter = new SseEmitter(TIMEOUT);
 
             newEmitter.onCompletion(() -> {
-                emitters.remove(userId);
+                likeCountEmitters.remove(userId);
                 log.info("좋아요 SSE 해제 - userId: {}", userId);
             });
 
             newEmitter.onTimeout(() -> {
-                emitters.remove(userId);
+                likeCountEmitters.remove(userId);
                 log.info("좋아요 SSE 연결 시간 초과 - userId: {}", userId);
             });
 
             newEmitter.onError((e) -> {
-                emitters.remove(userId);
+                likeCountEmitters.remove(userId);
                 log.error("좋아요 SSE 에러 발생 - userId: {}: {}", userId, e.getMessage());
             });
 
@@ -156,11 +157,12 @@ public class SseService {
                     .data("connected!"));
             log.info("좋아요 SSE 연결 완료 - userId: {}", userId);
         } catch (IOException e) {
-            emitter.completeWithError(e);
+            likeCountEmitters.remove(userId);  // Map에서 제거만 하고
             log.error("좋아요 SSE 더미 이벤트 전송 실패: {}", e.getMessage());
             return emitter;
         } catch (IllegalStateException e) {
-            log.warn("SSE 이미 완료됨 - userId: {}", userId);
+            likeCountEmitters.remove(userId);  // Map에서 제거만 하고
+            log.warn("좋아요 SSE 이미 완료됨 - userId: {}", userId);
         }
 
         return emitter;
@@ -196,7 +198,6 @@ public class SseService {
             } catch (IOException e) {
                 log.warn("알림 Heartbeat 전송 실패 - userId: {}: {}", userId, e.getMessage());
                 emitters.remove(userId);
-                emitter.completeWithError(e);
             }
         });
 
