@@ -40,6 +40,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ApiResponse<Object>> handleException(Exception e) {
         // SSE 관련 예외는 위의 핸들러들에서 처리되므로 여기서는 다른 예외들만 처리
         if (e instanceof IOException && e.getMessage() != null &&
+                e.getMessage().contains("Broken pipe") ||
                 e.getMessage().contains("연결은 사용자의 호스트 시스템의 소프트웨어의 의해 중단되었습니다")) {
             log.info("SSE Connection closed by client");
             return null;
