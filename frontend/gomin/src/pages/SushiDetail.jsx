@@ -33,7 +33,7 @@ const SushiDetail = () => {
       return;
     }
     dispatch(fetchMySushiDetail(sushiId));
-  }, [sushiId, dispatch, navigate]);
+  }, [sushiId, dispatch, navigate, modalOpen]);
 
   /* 모달 열기 */
   const openModal = (answer) => {
