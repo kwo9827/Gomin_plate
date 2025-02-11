@@ -120,8 +120,8 @@ const Sushi = ({
             src={plateImage}
             alt={`Plate for ${categoryName}`}
             style={{
-              width: "18vh",
-              height: "17vh",
+              width: "16vh",
+              height: "15vh",
               position: "absolute",
               top: "45%",
               left: "50%",
@@ -137,13 +137,13 @@ const Sushi = ({
             src={sushiName.image}
             alt={sushiName.name}
             style={{
-              width: "48vh",
+              width: "46vh",
               height: "10vh",
               overflow: "hidden", // 넘치는 부분 숨기기
               objectFit: "cover",
               objectPosition: "center",
               position: "absolute",
-              top: "48%",
+              top: "47.8%",
               left: "49%",
               transform: "translate(-50%, -50%)",
               willChange: "transform", // 모바일 최적화
