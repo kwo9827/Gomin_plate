@@ -9,6 +9,8 @@ import "../styles/font.css";
 
 const MySushiList = () => {
   const [search, setSearch] = useState("");
+  const [displaySushi, setDisplaySushi] = useState([]);
+
   const onChange = (e) => {
     const searchValue = e.target.value;
     setSearch(searchValue);
@@ -25,20 +27,37 @@ const MySushiList = () => {
         size: 10,
       })
     ).then((result) => {
-      console.log("내 초밥 리스트:", result.payload.data.sushi);
+      console.log("내 초밥 리스트:", result.payload.data.content);
+      setDisplaySushi(result.payload.data.content);
     });
   }, [dispatch]);
 
   useEffect(() => {
     console.log("현재 내 초밥 상태:", mySushi);
-  }, [mySushi]);
 
-  const filteredSushi = mySushi.filter((sushi) =>
-    sushi.title.toLowerCase().includes(search.toLowerCase())
-  );
+    if (!search.trim()) {
+      setDisplaySushi(mySushi);
+    }
+  }, [mySushi, search]);
 
   const onSearch = () => {
     console.log("현재 검색 상태:", search);
+    dispatch(
+      fetchMySushi({
+        search: search,
+        page: 1,
+        size: 10,
+      })
+    ).then((result) => {
+      const apiResult = result.payload.data.content;
+      console.log("API 검색 결과: ", apiResult);
+
+      const filtered = apiResult.filter((sushi) =>
+        sushi.title.toLowerCase().includes(search.toLowerCase())
+      );
+      console.log("검색 결과:", filtered);
+      setDisplaySushi(filtered);
+    });
   };
 
   return (
@@ -62,15 +81,18 @@ const MySushiList = () => {
               style={styles.searchInput}
               className="custom-placeholder"
             />
-            {/** 돋보기 아이콘을 입력창 내부에 배치 */}
-            <i className="fas fa-search" style={styles.searchIcon}></i>
+            <i
+              className="fas fa-search"
+              style={styles.searchIcon}
+              onClick={onSearch}
+            ></i>
           </div>
         </div>
 
         {/* 고민 리스트 */}
-        {filteredSushi.length > 0 ? (
+        {displaySushi && displaySushi.length > 0 ? (
           <ul style={styles.list}>
-            {filteredSushi.map((sushi) => (
+            {displaySushi.map((sushi) => (
               <li key={sushi.sushiId}>
                 <SushiCard
                   id={sushi.sushiId}
