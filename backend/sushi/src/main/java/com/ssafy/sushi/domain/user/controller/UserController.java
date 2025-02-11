@@ -33,7 +33,6 @@ public class UserController {
             @CookieValue(name = "refreshToken", required = false) String refreshToken) {
         Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
-        System.out.println("yaho");
         System.out.println(refreshToken);
 
         return ApiResponse.success(userService.getUserInfo(userId));
