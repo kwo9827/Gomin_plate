@@ -68,7 +68,7 @@ const styles = {
   background: {
     position: "relative",
     height: "100vh",
-    width: "100%",
+    width: "55vh",
     overflowY: "auto",
     scrollbarWidth: "none",
   },
@@ -76,43 +76,41 @@ const styles = {
   listContainer: {
     position: "relative",
     zIndex: 2,
-    width: "100%",
-    maxWidth: "600px",
+    width: "55vh",
     margin: "0 auto",
-    padding: "20px",
+    padding: "3vh",
     boxSizing: "border-box",
   },
   position: {},
   /** 나의 답변 외부 박스 */
   outerBox: {
-    width: "100%",
-    maxWidth: "250px",
-    margin: "0px auto 10px",
-    border: "4px solid #8B6B3E",
-    borderRadius: "8px",
+    width: "35vh",
+    margin: "0 auto 1.5vh",
+    border: "0.7vh solid #8B6B3E",
+    borderRadius: "1.2vh",
     backgroundColor: "#B2975C",
-    padding: "6px",
+    padding: "1vh",
     boxSizing: "border-box",
   },
   /** 나의 답변 내부 박스 */
   innerBox: {
     width: "100%",
-    border: "2px solid #906C48",
-    borderRadius: "4px",
+    border: "0.3vh solid #906C48",
+    borderRadius: "0.6vh",
     backgroundColor: "#B2975C",
     textAlign: "center",
     color: "#5D4A37",
-    fontSize: "1.5rem",
+    fontSize: "3.8vh",
     fontWeight: "bold",
-    padding: "6px 0",
+    padding: "0.7vh 0",
     boxSizing: "border-box",
   },
   /** 검색 결과 없을 때 */
   noResult: {
     textAlign: "center",
     color: "#8B6B3E",
-    fontSize: "1.2rem",
-    marginTop: "20px",
+    fontSize: "2.8vh",
+    marginTop: "3.5vh",
   },
   /** 글 리스트 스타일 */
   list: {
@@ -121,7 +119,7 @@ const styles = {
     margin: 0,
   },
   listItem: {
-    marginBottom: "10px",
+    marginBottom: "1vh",
   },
 };
 

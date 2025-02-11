@@ -48,9 +48,9 @@ const SushiAnswerCard = ({
 
 const heartIconStyle = {
   position: "absolute",
-  top: "8px",
-  right: "8px",
-  fontSize: "1.3rem",
+  top: "1vh",
+  right: "1vh",
+  fontSize: "2.7vh",
 };
 
 const outerContainerStyle = {
@@ -58,28 +58,27 @@ const outerContainerStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  width: "100%",
-  maxWidth: "420px",
-  margin: "10px auto",
-  padding: "6px",
+  width: "49vh",
+  margin: "1.5vh auto",
+  padding: "0.8vh",
   backgroundColor: "#906C48",
-  borderRadius: "10px",
+  borderRadius: "1.3vh",
   boxSizing: "border-box",
 };
 
 const middleContainerStyle = {
-  width: "100%",
+  width: "47.5vh",
   backgroundColor: "#B2975C",
-  borderRadius: "4px",
-  padding: "8px",
+  borderRadius: "0.8vh",
+  padding: "1.1vh",
   boxSizing: "border-box",
 };
 
 const innerContainerStyle = {
   position: "relative",
-  width: "100%",
+  width: "45.3vh",
   backgroundColor: "#FFFFF0",
-  borderRadius: "4px",
+  borderRadius: "0.6vh",
   padding: "0px",
   boxSizing: "border-box",
   display: "flex",
@@ -95,7 +94,7 @@ const sushiOuterImageStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  borderRadius: "10px",
+  borderRadius: "2vh",
   // backgroundColor: "#F5F5DC",
 };
 
@@ -106,7 +105,7 @@ const sushiImageStyle = {
   width: "20vh",
   height: "20vh",
   overflow: "hidden",
-  transform: "translate(-2vh, 1vh) scale(0.8)",
+  transform: "translate(-0.8vh, 1vh) scale(0.8)",
 };
 
 // const sushiImageStyle = {
@@ -125,7 +124,7 @@ const textContainerStyle = {
 
 const titleStyle = {
   width: "20vh",
-  fontSize: "1.2rem",
+  fontSize: "3vh",
   fontWeight: "bold",
   color: "#5A4628",
   margin: "1vh 0",
@@ -133,10 +132,9 @@ const titleStyle = {
   overflow: "hidden",
   textOverflow: "ellipsis",
 };
-
 const contentStyle = {
   width: "23vh",
-  fontSize: "1rem",
+  fontSize: "2.5vh",
   color: "#8D7B7B",
   lineHeight: "1.4",
   display: "-webkit-box",
