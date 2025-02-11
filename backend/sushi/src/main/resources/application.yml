@@ -7,3 +7,6 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true  # 페이징 0부터가 아닌 1부터
+
+  jpa:
+    open-in-view: false
