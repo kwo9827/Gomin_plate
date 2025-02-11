@@ -16,6 +16,7 @@ import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
 import com.ssafy.sushi.global.sse.SseLikeCountEvent;
+import com.ssafy.sushi.global.sse.SseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,7 @@ public class AnswerService {
     private final UserRepository userRepository;
     private final SushiRepository sushiRepository;
     private final NotificationService notificationService;
-//    private final SseService sseService;
+    private final SseService sseService;
 
     /**
      * 답변 등록
@@ -123,6 +124,6 @@ public class AnswerService {
                 answer.getSushi().getId());
 
         SseLikeCountEvent event = SseLikeCountEvent.of(respondent.getTotalLikes());
-//        sseService.notifyLikeCount(respondent.getId(), event);
+        sseService.notifyLikeCount(respondent.getId(), event);
     }
 }

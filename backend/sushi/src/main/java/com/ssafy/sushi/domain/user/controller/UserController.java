@@ -8,19 +8,22 @@ import com.ssafy.sushi.domain.user.service.UserService;
 import com.ssafy.sushi.global.common.response.ApiResponse;
 import com.ssafy.sushi.global.common.util.AuthenticationUtil;
 import com.ssafy.sushi.global.security.UserPrincipal;
+import com.ssafy.sushi.global.sse.SseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
 
-//    private final SseService sseService;
+    private final SseService sseService;
     private final AuthenticationUtil authenticationUtil;
     private final UserService userService;
 
@@ -46,11 +49,11 @@ public class UserController {
         return ApiResponse.success(HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/my-like/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-//    public SseEmitter likeSubscribe(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-//        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
-//        return sseService.subscribeLikeCount(userId);
-//    }
+    @GetMapping(value = "/my-like/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter likeSubscribe(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
+        return sseService.subscribeLikeCount(userId);
+    }
 
     @GetMapping("/my-like")
     public ResponseEntity<ApiResponse<UserLikeNumResponse>> getUserLikeNum(
