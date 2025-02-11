@@ -15,6 +15,7 @@ import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 import SushiUnlockBar from "../components/SushiUnlockBar";
+import Tutorial from "../components/tutorial";
 
 //이미지 파일
 import bgImg from "../assets/home/back.webp";
@@ -66,6 +67,12 @@ const Home = () => {
     (state) => state.notification.status === "loading"
   );
 
+  const dialogues = [
+    "어서오세요! 튜토리얼을 시작할게요!",
+    "이곳에서 다양한 기능을 경험할 수 있어요",
+    "준비가 되면 화면을 눌러 진행하세요!",
+  ];
+
   useLikeCountSSE();
   useNotificationSSE();
 
@@ -87,8 +94,8 @@ const Home = () => {
         console.log("Fetched Sushi Data:", response.payload); // 데이터 확인
         // 초밥 데이터가 성공적으로 불러와졌다면 모달 열기
         if (response.payload) {
-          setSelectedSushiData(response.payload.data);  // 불러온 초밥 데이터를 상태에 저장
-          setIsSushiViewOpen(true);  // 모달 열기
+          setSelectedSushiData(response.payload.data); // 불러온 초밥 데이터를 상태에 저장
+          setIsSushiViewOpen(true); // 모달 열기
         }
       });
     }
@@ -230,6 +237,18 @@ const Home = () => {
 
             {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
+            <h2>튜토리얼 테스트</h2>
+            <div
+              style={{
+                position: "absolute",
+                top: "11vh",
+                left: "28vh",
+                width: "25vh",
+              }}
+            >
+              <Tutorial dialogues={dialogues} />
+            </div>
+
             {!allImagesLoaded && (
               <div>
                 <p> 초밥집에 입장하는 중..</p>
