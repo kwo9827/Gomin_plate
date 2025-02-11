@@ -1,11 +1,11 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
-        format_sql: true
-    defer-datasource-initialization: true # hibernate 초기화 이후 schema.sql 실행
+        format_sql: false
+    defer-datasource-initialization: false # hibernate 초기화 이후 schema.sql 실행
   datasource:
     hikari:
       max-lifetime: 177000
@@ -16,7 +16,7 @@ spring:
 
   sql:
     init:
-      mode: always  # 모든 데이터베이스로 초기화 대상 변경
+      mode: never  # 모든 데이터베이스로 초기화 대상 변경
 
 logging.level:
   org.hibernate.SQL: info
