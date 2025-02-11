@@ -42,11 +42,11 @@ export const useLikeCountSSE = () => {
     // });
 
     eventSourceRef.current.onopen = () => {
-      console.log('좋아요 SSE 연결 성공');
+      // console.log('좋아요 SSE 연결 성공');
     };
 
     eventSourceRef.current.onerror = (error) => {
-      console.error('좋아요 SSE Error:', error);
+      // console.error('좋아요 SSE Error:', error);
       if (eventSourceRef.current) {
         eventSourceRef.current.close();
         eventSourceRef.current = null;

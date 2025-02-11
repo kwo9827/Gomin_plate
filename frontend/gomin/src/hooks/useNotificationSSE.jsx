@@ -35,12 +35,12 @@ export const useNotificationSSE = () => {
 
     eventSourceRef.current.addEventListener('notification', (event) => {
       const data = JSON.parse(event.data);
-      console.log("알림 수신: ", data.hasUnread);
+      // console.log("알림 수신: ", data.hasUnread);
       dispatch(updateHasUnread(data.hasUnread));
     });
 
     eventSourceRef.current.onopen = () => {
-      console.log('SSE 연결 성공');
+      // console.log('SSE 연결 성공');
     };
 
     // eventSourceRef.current.addEventListener('heartbeat', (event) => {
@@ -48,7 +48,7 @@ export const useNotificationSSE = () => {
     // });
 
     eventSourceRef.current.onerror = (error) => {
-      console.error('알림 SSE Error:', error);
+      // console.error('알림 SSE Error:', error);
       if (eventSourceRef.current) {
         eventSourceRef.current.close();
         eventSourceRef.current = null;
