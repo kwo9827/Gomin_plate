@@ -1,7 +1,40 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const SushiAnswerCard = ({ id, title, content, showHeart = false }) => {
+/**초밥 사진 추가할때 여기다 해주세용 */
+import eggImg from "../assets/sushi/egg.webp";
+import salmonImg from "../assets/sushi/salmon.webp";
+import shrimpImg from "../assets/sushi/shrimp.webp";
+import cuttleImg from "../assets/sushi/cuttle.webp";
+import eelImg from "../assets/sushi/eel.webp";
+import octopusImg from "../assets/sushi/octopus.webp";
+import wagyuImg from "../assets/sushi/wagyu.webp";
+import scallopImg from "../assets/sushi/가리비초밥.webp";
+import tunaImg from "../assets/sushi/참치초밥.webp";
+import uniImg from "../assets/sushi/성게알초밥.webp";
+import flatfighImg from "../assets/sushi/광어초밥.webp";
+
+const sushiTypes = {
+  1: { name: "계란", image: eggImg },
+  2: { name: "연어", image: salmonImg },
+  3: { name: "새우", image: shrimpImg },
+  4: { name: "한치", image: cuttleImg },
+  5: { name: "문어", image: octopusImg },
+  6: { name: "장어", image: eelImg },
+  7: { name: "와규", image: wagyuImg },
+  8: { name: "가리비", image: scallopImg },
+  9: { name: "광어", image: flatfighImg },
+  10: { name: "성게알", image: uniImg },
+  11: { name: "참치", image: tunaImg },
+};
+
+const SushiAnswerCard = ({
+  id,
+  title,
+  content,
+  sushiType,
+  showHeart = false,
+}) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -12,19 +45,31 @@ const SushiAnswerCard = ({ id, title, content, showHeart = false }) => {
     navigate(`/sushianswerdetail/${id}`);
   };
 
+  const sushiData = sushiTypes[sushiType] || {
+    name: "기본 초밥",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpL734zj0BQG4VtmIwh5Ql0tRFW4HIVMQIg&s",
+  };
+
+  /**초밥 타입 콘솔창 확인 */
+  // console.log("sushiType 값 확인:", sushiType);
+  // console.log("sushiData 확인:", sushiData);
+
   return (
     <div style={outerContainerStyle} onClick={handleClick}>
       <div style={middleContainerStyle}>
         <div style={innerContainerStyle}>
           {showHeart && <span style={heartIconStyle}>❤️</span>}
 
-          <div style={sushiImageStyle}>
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpL734zj0BQG4VtmIwh5Ql0tRFW4HIVMQIg&s"
-              alt="초밥사진"
-              width="100%"
-              height="100%"
-            />
+          <div style={sushiOuterImageStyle}>
+            <div style={sushiImageStyle}>
+              <img
+                src={sushiData.image}
+                alt={sushiData.name}
+                width="100%"
+                height="100%"
+              />
+            </div>
           </div>
 
           <div style={textContainerStyle}>
@@ -72,20 +117,42 @@ const innerContainerStyle = {
   width: "100%",
   backgroundColor: "#FFFFF0",
   borderRadius: "4px",
-  padding: "10px",
+  padding: "0px",
   boxSizing: "border-box",
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
 };
 
-const sushiImageStyle = {
-  width: "90px",
-  height: "90px",
-  marginRight: "10px",
-  borderRadius: "4px",
-  objectFit: "cover",
+/**스시 이미지 감싸는 테두리 */
+const sushiOuterImageStyle = {
+  width: "100px",
+  height: "100px",
+  overflow: "hidden", // 이미지가 컨테이너를 벗어나지 않도록 설정
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: "10px",
+  // backgroundColor: "#F5F5DC",
 };
+
+/**스시 사진 크기 조절 */
+/**이 부분을 수정해주세요. */
+const sushiImageStyle = {
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  transform: "scale(2.8)",
+};
+
+// const sushiImageStyle = {
+//   width: "90px",
+//   height: "90px",
+//   transform: "scale(1.5)",
+//   marginRight: "10px",
+//   borderRadius: "8px",
+//   objectFit: "cover",
+// };
 
 const textContainerStyle = {
   flex: 1,
