@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { fetchUnreadExists } from "../store/slices/notificationSlice";
+import { fetchUnreadExists } from "../store/slices/notificationSlice";
+import { countLike } from "../store/slices/memberSlice";
 import { useNavigate } from "react-router-dom";
 import { useNotificationSSE } from "../hooks/useNotificationSSE";
 import { useLikeCountSSE } from "../hooks/useLikeCountSSE";
@@ -59,12 +60,15 @@ const Home = () => {
     (state) => state.notification.status === "loading"
   );
 
-  // useLikeCountSSE();
-  // useNotificationSSE();
+  useLikeCountSSE();
+  useNotificationSSE();
 
-  // useEffect(() => {
-  //   dispatch(fetchUnreadExists());
-  // }, [dispatch]);
+  useEffect(() => {
+    // 알림 상태 조회
+    dispatch(fetchUnreadExists());
+    // 좋아요 수 조회
+    dispatch(countLike());
+  }, [dispatch]);
 
   // 이미지 로드 후 상태 업데이트
   const handleImageLoad = (image) => {
@@ -87,17 +91,6 @@ const Home = () => {
   }, []);
 
   const allImagesLoaded = Object.values(imagesLoaded).every((loaded) => loaded);
-
-  /** 로그인 상태가 아니면 인트로 페이지로 리다이렉트 */
-  const navigate = useNavigate();
-  const accessToken = useSelector((state) => state.member?.accessToken);
-
-  useEffect(() => {
-    if (!accessToken) {
-      navigate("/", { replace: true });
-    }
-  }, [accessToken, navigate]);
-  /** 여기 까지 */
 
   return (
     <>
