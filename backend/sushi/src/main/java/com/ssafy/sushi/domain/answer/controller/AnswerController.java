@@ -26,7 +26,7 @@ public class AnswerController {
     private final AuthenticationUtil authenticationUtil;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse<CustomPage<MyAnswerListResponse>>> getMySushiList(
+    public ResponseEntity<ApiResponse<CustomPage<MyAnswerListResponse>>> getMyAnswerList(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestParam(required = false) String keyword,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -36,7 +36,7 @@ public class AnswerController {
     }
 
     @GetMapping("/{sushiId}")
-    public ResponseEntity<ApiResponse<MyAnswerDetailResponse>> getMySushiDetail(
+    public ResponseEntity<ApiResponse<MyAnswerDetailResponse>> getMyAnswerDetail(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("sushiId") @Positive Integer sushiId) {
         Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);

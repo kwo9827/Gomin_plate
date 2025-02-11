@@ -15,7 +15,7 @@ public class AuthenticationUtil {
 
     public Integer getCurrentUserId(UserPrincipal userPrincipal) {
         if (userPrincipal == null || userPrincipal.getId() == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(ErrorCode.UNAUTHORIZED_ACCESS);
         }
 
         userRepository.findById(userPrincipal.getId())
