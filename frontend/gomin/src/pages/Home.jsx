@@ -17,7 +17,7 @@ import SushiUnlockBar from "../components/SushiUnlockBar";
 
 //이미지 파일
 import bgImg from "../assets/home/back.webp";
-import deskImg from "../assets/home/desk.webp";
+import deskImg from "../assets/home/rail.webp";
 import masterImg from "../assets/home/master.webp";
 import SushiView from "./SushiView";
 
@@ -92,6 +92,20 @@ const Home = () => {
 
   const allImagesLoaded = Object.values(imagesLoaded).every((loaded) => loaded);
 
+<<<<<<< Updated upstream
+=======
+  /** 로그인 상태가 아니면 인트로 페이지로 리다이렉트 */
+  // const navigate = useNavigate();
+  // const accessToken = useSelector((state) => state.member?.accessToken);
+
+  // useEffect(() => {
+  //   if (!accessToken) {
+  //     navigate("/", { replace: true });
+  //   }
+  // }, [accessToken, navigate]);
+  /** 여기 까지 */
+
+>>>>>>> Stashed changes
   return (
     <>
       {/* 배경 이미지 */}
@@ -223,7 +237,7 @@ const styles = {
   },
   rail: {
     position: "absolute",
-    bottom: "60%",
+    bottom: "56%",
     left: "50%",
     width: "100%",
     transform: "translateX(-50%)",
