@@ -12,12 +12,17 @@ public enum ErrorCode {
     RESOURCE_NOT_FOUND(404, "C002", "요청한 리소스를 찾을 수 없습니다"),
     INTERNAL_SERVER_ERROR(500, "C003", "서버 내부 오류가 발생했습니다"),
 
-    // AUTH
-    OAUTH_SERVER_ERROR(500, "A001", "OAuth 서버 오류가 발생했습니다"),
-    INVALID_OAUTH_PROVIDER(400, "A002", "지원하지 않는 OAuth 제공자입니다"),
-    INVALID_REFRESH_TOKEN(401, "A003", "Invalid refresh token"),
-    REFRESH_TOKEN_NOT_FOUND(401, "A004", "Refresh token not found"),
-    REFRESH_TOKEN_MISMATCH(401, "A005", "Refresh token mismatch"),
+
+    // Authorization
+    UNAUTHORIZED_ACCESS(401, "A001", "로그인이 필요한 서비스입니다"),
+    FORBIDDEN_ACCESS(403, "A002", "접근 권한이 없습니다"),
+
+    // OAUTH
+    OAUTH_SERVER_ERROR(500, "O001", "OAuth 서버 오류가 발생했습니다"),
+    INVALID_OAUTH_PROVIDER(400, "O002", "지원하지 않는 OAuth 제공자입니다"),
+    INVALID_REFRESH_TOKEN(401, "O003", "Invalid refresh token"),
+    REFRESH_TOKEN_NOT_FOUND(401, "O004", "Refresh token not found"),
+    REFRESH_TOKEN_MISMATCH(401, "O005", "Refresh token mismatch"),
 
     // USER
     USER_NOT_FOUND(404, "U001", "유저를 찾을 수 없습니다."),
