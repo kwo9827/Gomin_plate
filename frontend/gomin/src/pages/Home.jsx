@@ -97,21 +97,21 @@ const Home = () => {
   useEffect(() => {
     const hasVisited = sessionStorage.getItem("hasVisitedHome");
 
-    if (!hasVisited && !hasRefreshed) {
-      //방문 기록 저장
-      sessionStorage.setItem("hasVisitedHome", "true");
-      setTimeout(() => {
-        setHasRefreshed(true);
-        window.location.reload();
-      }, 100);
-    } else {
-      // fade out
-      const timer = setTimeout(() => {
-        setShowLoadingScreen(false);
-      }, 500);
+    // if (!hasVisited && !hasRefreshed) {
+    //방문 기록 저장
+    // sessionStorage.setItem("hasVisitedHome", "true");
+    setTimeout(() => {
+      setHasRefreshed(true);
+      window.location.reload();
+    }, 100);
+    // } else {
+    // fade out
+    const timer = setTimeout(() => {
+      setShowLoadingScreen(false);
+    }, 500);
 
-      return () => clearTimeout(timer);
-    }
+    return () => clearTimeout(timer);
+    // }
   }, [hasRefreshed]);
 
   return (
