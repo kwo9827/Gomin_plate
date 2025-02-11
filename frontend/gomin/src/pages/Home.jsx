@@ -15,7 +15,7 @@ import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 import SushiUnlockBar from "../components/SushiUnlockBar";
-import Tutorial from "../components/tutorial";
+import Tutorial from "../components/Tutorial";
 
 //이미지 파일
 import bgImg from "../assets/home/back.webp";
@@ -237,7 +237,8 @@ const Home = () => {
 
             {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
-            <h2>튜토리얼 테스트</h2>
+            
+            {/* <h2>튜토리얼 테스트</h2>
             <div
               style={{
                 position: "absolute",
@@ -247,7 +248,7 @@ const Home = () => {
               }}
             >
               <Tutorial dialogues={dialogues} />
-            </div>
+            </div> */}
 
             {!allImagesLoaded && (
               <div>
