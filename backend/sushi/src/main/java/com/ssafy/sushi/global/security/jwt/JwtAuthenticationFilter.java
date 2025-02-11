@@ -22,8 +22,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private static final String TEST_TOKEN = "test";
-
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -41,13 +39,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-
         try {
 //            String token = resolveToken(request);
+            String testToken1 = "test";
+            String testToken2 = "test2";
 
             if (StringUtils.hasText(token)) {
                 // test 계정 처리
-                if (TEST_TOKEN.equals(token)) {
+                if (testToken1.equals(token) || testToken2.equals(token)) {
                     Authentication authentication = TestUserMaker.getAuthentication(token);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 } else {

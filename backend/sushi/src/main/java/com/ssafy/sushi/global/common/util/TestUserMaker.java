@@ -16,10 +16,17 @@ public class TestUserMaker {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private final long tokenValidTime = 24 * 60 * 60 * 1000L; // 24시간
+//    private final long tokenValidTime = 24 * 60 * 60 * 1000L; // 24시간
 
     public static Authentication getAuthentication(String token) {
-        Integer userId = 1;
+        Integer userId;
+        if ("test".equals(token)) {
+            userId = 1;
+        } else if ("test2".equals(token)) {
+            userId = 2;
+        } else {
+            return null;
+        }
 
         UserPrincipal userPrincipal = UserPrincipal.builder()
                 .id(userId)
