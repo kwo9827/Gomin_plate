@@ -166,7 +166,7 @@ const PostSushi = ({ onClose }) => {
                 적는 고민 작성서
               </p>
               <button style={closeBtn} onClick={onClose}>
-                X
+                ✖
               </button>
             </div>
             <p style={orderExplain}>
@@ -423,15 +423,17 @@ const orderTitle = {
 };
 
 const closeBtn = {
-  marginLeft: "auto",
-  padding: "0vh",
-  width: "8vh",
-  height: "8vh",
-  border: "0",
+  position: "absolute",
+  top: "1.2vh",
+  right: "1.2vh",
+  width: "5vh",
+  height: "5vh",
+  border: "none",
   backgroundColor: "transparent",
+  color: "#595959",
+  fontSize: "2.5vh",
   cursor: "pointer",
-  fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "3.5vh",
+  fontWeight: "bold",
 };
 
 const orderExplain = {
