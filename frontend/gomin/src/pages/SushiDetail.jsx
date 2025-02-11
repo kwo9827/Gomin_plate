@@ -20,7 +20,7 @@ const SushiDetail = () => {
     content = "",
     expirationTime = new Date(),
     answer = [],
-  } = currentSushi === 'loading' ? {} : (currentSushi || {});
+  } = currentSushi === "loading" ? {} : currentSushi || {};
 
   /* 모달 관련 상태 추가 */
   const [modalOpen, setModalOpen] = useState(false);
@@ -49,7 +49,7 @@ const SushiDetail = () => {
   const totalPages = Math.ceil(answer.length / answersPerPage);
 
   // 로딩 상태 처리
-  if (currentSushi === 'loading') {
+  if (currentSushi === "loading") {
     return <div style={styles.loading}>로딩 중...</div>;
   }
 
@@ -97,6 +97,20 @@ const SushiDetail = () => {
 
         <hr style={styles.divider} />
 
+        {/* 마감되지 않았을때 경고문 */}
+        {!currentSushi.isClosed && (
+          <p style={styles.catMessage}>아직 답변이 마감되지 않았다냥 🐱</p>
+        )}
+
+        {/* 댓글 보기 */}
+        <div
+          style={{
+            ...styles.postItOuterBox,
+            filter: !currentSushi.isClosed ? "blur(5px)" : "none",
+            pointerEvents: !currentSushi.isClosed ? "none" : "auto",
+          }}
+        ></div>
+
         {/* 답변 목록(포스트잇 들어갈 자리) */}
         <div style={styles.postItOuterBox}>
           <div style={styles.postItRow}>
@@ -132,7 +146,7 @@ const SushiDetail = () => {
                     ...styles.postIt,
                     backgroundColor:
                       styles.postItColors[
-                      (index + 3) % styles.postItColors.length
+                        (index + 3) % styles.postItColors.length
                       ],
                   }}
                   onClick={() => openModal(item)}
@@ -174,6 +188,8 @@ const SushiDetail = () => {
 
 const styles = {
   background: {
+    // backgroundColor: "#FDFCC8",
+    padding: "20px",
     position: "relative",
     height: "100vh",
     width: "100%",
@@ -186,8 +202,12 @@ const styles = {
     zIndex: 2,
     width: "90%",
     maxWidth: "600px",
-    height: "90vh",
-    margin: "0 auto",
+    /**디테일창 화면 전체 비율 수정할때 수정하시오
+     * 현재는 화면의 80%로 설정되어있음.
+     */
+    height: "80vh",
+    /**여기까지 */
+    margin: "-5px auto",
     padding: "20px",
     boxSizing: "border-box",
     border: "6px solid #8B6B3E",
@@ -195,8 +215,8 @@ const styles = {
   },
   backButton: {
     position: "absolute",
-    top: "20px",
-    left: "20px",
+    top: "10px",
+    left: "10px",
     fontSize: "24px",
     background: "none",
     border: "none",
@@ -204,35 +224,40 @@ const styles = {
   },
   title: {
     fontSize: "1.5rem",
-    flexGrow: 1,
     textAlign: "center",
   },
   date: {
     fontSize: "1rem",
     color: "#8D7B7B",
     marginBottom: "20px",
-    justifyContent: "right",
   },
   contentBox: {
-    flexGrow: 4,
     overflowY: "auto",
     padding: "10px",
+    /**디테일창 내용 박스 비율 수정할때 수정하시오
+     * 현재는 화면의 20%로 설정되어있음.
+     */
+    height: "20vh",
+    /**여기까지 */
     borderRadius: "8px",
     border: "4px solid #B2975C",
+    scrollbarWidth: "none",
   },
   content: {
     fontSize: "1.1rem",
     color: "#5D4A37",
     lineHeight: "1.6",
     textAlign: "left",
+    margin: "0px",
+    padding: "0px",
   },
   divider: {
     width: "90%",
     margin: "20px auto",
     border: "1px solid #B2975C",
   },
+  /**포스트잇 감싸는 박스 */
   postItOuterBox: {
-    flexGrow: 5,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -287,6 +312,13 @@ const styles = {
     height: "100vh",
     fontSize: "1.5rem",
     color: "red",
+  },
+  catMessage: {
+    textAlign: "center",
+    fontSize: "1.3rem",
+    fontWeight: "bold",
+    color: "#8B6B3E",
+    marginBottom: "20px",
   },
 };
 

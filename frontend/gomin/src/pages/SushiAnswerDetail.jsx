@@ -148,11 +148,11 @@ const styles = {
   },
   backButton: {
     position: "absolute",
-    top: "20px",
-    left: "20px",
+    top: "10px",
+    left: "10px",
     fontSize: "24px",
     background: "none",
-    border: "1px solid",
+    border: "none",
     cursor: "pointer",
   },
   title: {
