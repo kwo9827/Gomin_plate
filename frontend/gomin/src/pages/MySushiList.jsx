@@ -97,6 +97,7 @@ const MySushiList = () => {
                 <SushiCard
                   id={sushi.sushiId}
                   title={sushi.title}
+                  category={sushi.category}
                   content={sushi.content}
                   sushiType={sushi.sushiType}
                 />
