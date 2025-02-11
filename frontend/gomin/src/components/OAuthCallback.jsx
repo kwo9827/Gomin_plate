@@ -13,8 +13,8 @@ const OAuthCallback = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get("code");
 
-      const provider = location.pathname.split('/')[2];
-      
+      const provider = location.pathname.split("/")[2];
+
       console.log(`Provider: ${provider}, Code: ${code}`);
 
       if (code) {
