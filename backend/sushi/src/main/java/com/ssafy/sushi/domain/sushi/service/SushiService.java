@@ -2,6 +2,8 @@ package com.ssafy.sushi.domain.sushi.service;
 
 import com.ssafy.sushi.domain.answer.entity.Answer;
 import com.ssafy.sushi.domain.answer.repository.AnswerRepository;
+import com.ssafy.sushi.domain.share.entity.ShareToken;
+import com.ssafy.sushi.domain.share.repository.ShareTokenRepository;
 import com.ssafy.sushi.domain.sushi.dto.request.CreateSushiRequest;
 import com.ssafy.sushi.domain.sushi.dto.response.*;
 import com.ssafy.sushi.domain.sushi.entity.Category;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
@@ -40,6 +43,7 @@ public class SushiService {
     private final UserRepository userRepository;
     private final SushiExposureRepository sushiExposureRepository;
     private final AnswerRepository answerRepository;
+    private final ShareTokenRepository shareTokenRepository;
 
     private final ScheduleService scheduleService;
 
@@ -99,7 +103,17 @@ public class SushiService {
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Sushi sushi = request.toEntity(request, user, category, sushiType);
-        CreateSushiResponse response = CreateSushiResponse.of(sushiRepository.save(sushi));
+
+        // 공유 토큰 생성
+        String token = UUID.randomUUID().toString();
+        CreateSushiResponse response = CreateSushiResponse.of(sushiRepository.save(sushi), token);
+
+        // 토큰과 초밥 연결하여 저장
+        ShareToken shareToken = ShareToken.builder()
+                .sushi(sushi)
+                .token(token)
+                .build();
+        shareTokenRepository.save(shareToken);
 
         scheduleService.sushiEnd(sushi);
 
