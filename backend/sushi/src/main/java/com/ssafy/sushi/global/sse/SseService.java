@@ -1,5 +1,6 @@
 package com.ssafy.sushi.global.sse;
 
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -127,5 +128,50 @@ public class SseService {
                 likeCountEmitters.remove(userId);
             }
         }
+    }
+
+    @PreDestroy
+    public void destroy() {
+        // 일반 알림 emitters 정리
+        log.info("Closing all SSE connections");
+        emitters.forEach((userId, emitter) -> {
+            try {
+                // 종료 이벤트를 보내고
+                emitter.send(SseEmitter.event()
+                        .name("shutdown")
+                        .data("Server shutting down"));
+
+                log.info("Successfully sent shutdown event to user {}", userId);
+
+                Thread.sleep(100); // 잠깐 대기 후
+                emitter.complete();
+            } catch (Exception e) {
+                log.error("Error during emitter shutdown for user {}", userId, e);
+            }
+        });
+        emitters.clear();
+
+        // 좋아요 알림 emitters 정리
+        likeCountEmitters.forEach((userId, emitter) -> {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("shutdown")
+                        .data("Server shutting down"));
+                Thread.sleep(100);
+                emitter.complete();
+            } catch (Exception e) {
+                log.error("Error during likeCount emitter shutdown for user {}", userId, e);
+            }
+        });
+        likeCountEmitters.clear();
+
+        // 모든 연결이 정리되도록 잠시 대기
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        log.info("All SSE connections have been closed");
     }
 }
