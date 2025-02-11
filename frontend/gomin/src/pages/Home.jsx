@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { countLike } from "../store/slices/memberSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useNotificationSSE } from "../hooks/useNotificationSSE";
 import { useLikeCountSSE } from "../hooks/useLikeCountSSE";
 
@@ -23,6 +23,10 @@ import SushiView from "./SushiView";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const [showLoadingScreen, setShowLoadingScreen] = useState(true);
+  const [hasRefreshed, setHasRefreshed] = useState(false);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isSushiUnlockOpen, setIsSushiUnlockOpen] = useState(false);
@@ -64,13 +68,10 @@ const Home = () => {
   useNotificationSSE();
 
   useEffect(() => {
-    // 알림 상태 조회
     dispatch(fetchUnreadExists());
-    // 좋아요 수 조회
     dispatch(countLike());
   }, [dispatch]);
 
-  // 이미지 로드 후 상태 업데이트
   const handleImageLoad = (image) => {
     setImagesLoaded((prevState) => ({ ...prevState, [image]: true }));
   };
@@ -91,6 +92,27 @@ const Home = () => {
   }, []);
 
   const allImagesLoaded = Object.values(imagesLoaded).every((loaded) => loaded);
+
+  // 홈화면 새로고침 처리
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem("hasVisitedHome");
+
+    if (!hasVisited && !hasRefreshed) {
+      //방문 기록 저장
+      sessionStorage.setItem("hasVisitedHome", "true");
+      setTimeout(() => {
+        setHasRefreshed(true);
+        window.location.reload();
+      }, 100);
+    } else {
+      // fade out
+      const timer = setTimeout(() => {
+        setShowLoadingScreen(false);
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [hasRefreshed]);
 
   return (
     <>
@@ -150,6 +172,35 @@ const Home = () => {
         {/* 모달 */}
         <div>
           <div style={{ position: "absolute", zIndex: "10" }}>
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                pointerEvents: showLoadingScreen ? "auto" : "none",
+              }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  top: "10.4vh",
+                  height: "90vh",
+                  width: "55vh",
+
+                  backgroundColor: "#fdfcc8",
+                  zIndex: 9999,
+                  opacity: showLoadingScreen ? 1 : 0,
+                  transition: "opacity 1s ease-out",
+                  pointerEvents: showLoadingScreen ? "auto" : "none",
+                }}
+              />
+            </div>
+
             {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
             {!allImagesLoaded && (
