@@ -37,9 +37,20 @@ export const useLikeCountSSE = () => {
       dispatch(updateLikesReceived(data.totalLikes));
     });
 
-    // eventSourceRef.current.addEventListener('heartbeat', (event) => {
-    //   console.log('좋아요 Heartbeat received:', event.data);
-    // });
+    eventSourceRef.current.addEventListener('shutdown', (event) => {
+      console.log('좋아요 SSE shutdown');
+      eventSourceRef.current.close();
+
+      // 이건 알림에서 
+
+      // 서버가 재시작하는데 시간이 걸릴 수 있으므로 5초 후 재연결 시도
+      // setTimeout(() => {
+      //   console.log('타임아웃 뒤');
+      //   // 여기서 SSE 연결을 다시 시작하는 함수를 호출
+      //   // 예: connectSSE() 또는 페이지 새로고침
+      //   window.location.reload();
+      // }, 5000);
+    });
 
     eventSourceRef.current.onopen = () => {
       // console.log('좋아요 SSE 연결 성공');
