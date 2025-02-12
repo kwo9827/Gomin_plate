@@ -50,6 +50,7 @@ const EditModal = ({ isOpen, onClose }) => {
     if (window.confirm("정말로 탈퇴하시겠습니까?")) {
       try {
         await dispatch(deleteAccount()).unwrap();
+        navigate("/");
         onClose();
       } catch (err) {
         setError("회원탈퇴에 실패했습니다. 다시 시도해주세요.");
