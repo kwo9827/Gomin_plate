@@ -130,20 +130,22 @@ const overlayStyle = {
   left: 0,
   width: "100%",
   height: "100%",
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
+  backgroundColor: "rgba(0, 0, 0, 0.6)",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  zIndex: 1000,
-  backdropFilter: "blur(10px)",
+  // backdropFilter: "blur(10px)",
 };
 
 const modalStyle = {
   backgroundColor: "#fdf5e6",
   padding: "2.5vh",
+  paddingTop: "2vh",
   position: "relative",
+  top: "6vh",
   height: "80vh",
-  width: "46vh",
+  width: "50vh",
+  maxWidth: "90vw",
   border: "1vh solid #906C48",
   outline: "0.25vh solid #67523E",
   overflowY: "auto",
@@ -155,6 +157,7 @@ const modalStyle = {
   display: "flex", // 추가
   flexDirection: "column", // 추가
   alignItems: "center",
+  boxSizing: "border-box",
 };
 
 const outerBoxStyle = {
@@ -216,16 +219,16 @@ const progressBar = {
   position: "absolute",
   width: "calc(100% - 6vh)",
   height: "2vh",
-  backgroundColor: "#ddd",
   border: "0.2vh solid #906C48",
   overflow: "hidden",
   left: "3vh",
   right: "3vh",
+  backgroundColor: "#e0e0e0",
 };
 
 const progressFill = {
   height: "100%",
-  backgroundColor: "#FF6F61",
+  backgroundColor: "#4BBE0E",
   borderRadius: "2vh",
   transition: "width 0.5s ease-in-out",
 };
