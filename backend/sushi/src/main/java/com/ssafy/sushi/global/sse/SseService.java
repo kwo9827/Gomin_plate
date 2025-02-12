@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -191,11 +193,42 @@ public class SseService {
     public void cleanupStaleConnections() {
         log.info("Checking for stale SSE connections...");
 
-        // 일반 알림 emitters 체크
-        cleanupEmitterMap(emitters, "notification");
+        // 각 emitter를 독립적으로 처리하고 예외도 독립적으로 처리
+        cleanEmittersWithRetry(emitters, "notification");
+        cleanEmittersWithRetry(likeCountEmitters, "like count");
+    }
 
-        // 좋아요 알림 emitters 체크
-        cleanupEmitterMap(likeCountEmitters, "like count");
+    private void cleanEmittersWithRetry(Map<Integer, SseEmitter> emitterMap, String type) {
+        Set<Integer> toRemove = new HashSet<>();
+
+        // 먼저 체크만 수행
+        emitterMap.forEach((userId, emitter) -> {
+            try {
+                // 최소한의 데이터로 연결 상태만 확인
+                emitter.send(SseEmitter.event().comment(""));  // comment는 클라이언트에 표시되지 않음
+            } catch (Exception e) {
+                toRemove.add(userId);
+            }
+        });
+
+        // 제거 작업은 별도로 수행
+        toRemove.forEach(userId -> {
+            SseEmitter emitter = emitterMap.remove(userId);
+            if (emitter != null) {
+                try {
+                    emitter.complete();
+                } catch (Exception e) {
+                    // 이미 완료된 경우 무시
+                    log.trace("Emitter already completed for user: {}", userId);
+                }
+            }
+        });
+
+        // 실제로 제거된 연결이 있을 때만 로그
+        if (!toRemove.isEmpty()) {
+            log.debug("Cleaned up {} stale {} connections. Current active: {}",
+                    toRemove.size(), type, emitterMap.size());
+        }
     }
 
     private void cleanupEmitterMap(Map<Integer, SseEmitter> emitterMap, String type) {
