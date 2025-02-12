@@ -172,18 +172,19 @@ const styles = {
   /**돋보기 감싸는거 */
   inputWrapper: {
     position: "relative",
-    width: "44.2vh",
+    width: "45vh",
   },
 
   /**검색창 내부 스타일 */
   searchInput: {
-    width: "43vh",
+    width: "45vh",
     height: "5.8vh",
     fontSize: "1.8vh",
     textAlign: "center",
     border: "0.3vh solid #906C48",
     borderRadius: "1vh",
     outline: "none",
+    boxSizing: "border-box", // border를 width에 포함시키기 위해 추가
   },
 
   /** 입력창 내부 돋보기 아이콘 */
