@@ -1,5 +1,5 @@
 import React, { useState, Component } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createSushi } from "../store/slices/sushiSlice";
 import Slider from "react-slick";
 import "../styles/slider.css";
@@ -21,6 +21,7 @@ import tuna from "../assets/sushi/참치초밥.webp";
 
 const PostSushi = ({ onClose }) => {
   const dispatch = useDispatch();
+  const likesReceived = useSelector((state) => state.member.likesReceived);
   const [step, setStep] = useState(1);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -40,17 +41,17 @@ const PostSushi = ({ onClose }) => {
   };
 
   const sushiImages = [
-    { id: 1, src: egg, name: "계란초밥" },
-    { id: 2, src: salmon, name: "연어초밥" },
-    { id: 3, src: shrimp, name: "새우초밥" },
-    { id: 4, src: cuttle, name: "한치초밥" },
-    { id: 5, src: octopus, name: "문어초밥" },
-    { id: 6, src: eel, name: "장어초밥" },
-    { id: 7, src: wagyu, name: "와규초밥" },
-    { id: 8, src: scallop, name: "가리비초밥" },
-    { id: 9, src: flatfish, name: "광어초밥" },
-    { id: 10, src: uni, name: "성게알초밥" },
-    { id: 11, src: tuna, name: "참치초밥" },
+    { id: 1, src: egg, name: "계란초밥", requiredLikes: 0 },
+    { id: 2, src: salmon, name: "연어초밥", requiredLikes: 1 },
+    { id: 3, src: shrimp, name: "새우초밥", requiredLikes: 2 },
+    { id: 4, src: cuttle, name: "한치초밥", requiredLikes: 3 },
+    { id: 5, src: octopus, name: "문어초밥", requiredLikes: 6 },
+    { id: 6, src: eel, name: "장어초밥", requiredLikes: 10 },
+    { id: 7, src: wagyu, name: "와규초밥", requiredLikes: 15 },
+    { id: 8, src: scallop, name: "가리비초밥", requiredLikes: 20 },
+    { id: 9, src: flatfish, name: "광어초밥", requiredLikes: 30 },
+    { id: 10, src: uni, name: "성게알초밥", requiredLikes: 50 },
+    { id: 11, src: tuna, name: "참치초밥", requiredLikes: 80 },
   ];
 
   const settings = {
@@ -61,7 +62,10 @@ const PostSushi = ({ onClose }) => {
     slidesToShow: 3,
     speed: 500,
     afterChange: (current) => {
-      const sushiId = sushiImages[current % sushiImages.length].id;
+      const filteredSushi = sushiImages.filter(
+        (sushi) => sushi.requiredLikes <= likesReceived
+      );
+      const sushiId = filteredSushi[current].id;
       setSushiType(sushiId);
     },
     initialSlide: 0,
@@ -76,7 +80,7 @@ const PostSushi = ({ onClose }) => {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
-          infinite: true,
+          infinite: false,
           centerMode: true,
         },
       },
@@ -190,7 +194,7 @@ const PostSushi = ({ onClose }) => {
                       checked={category === categoryMapping["연애"]}
                       onChange={handleCategoryChange}
                     />
-                    연애
+                    <span style={radioLabel}>연애</span>
                   </label>
                   <label style={radioBtn}>
                     <input
@@ -201,7 +205,7 @@ const PostSushi = ({ onClose }) => {
                       checked={category === categoryMapping["우정"]}
                       onChange={handleCategoryChange}
                     />
-                    우정
+                    <span style={radioLabel}>우정</span>
                   </label>
                   <label style={radioBtn}>
                     <input
@@ -212,7 +216,7 @@ const PostSushi = ({ onClose }) => {
                       checked={category === categoryMapping["진로"]}
                       onChange={handleCategoryChange}
                     />
-                    진로
+                    <span style={radioLabel}>진로</span>
                   </label>
                   <label style={radioBtn}>
                     <input
@@ -223,7 +227,7 @@ const PostSushi = ({ onClose }) => {
                       checked={category === categoryMapping["건강"]}
                       onChange={handleCategoryChange}
                     />
-                    건강
+                    <span style={radioLabel}>건강</span>
                   </label>
                   <label style={radioBtn}>
                     <input
@@ -234,7 +238,7 @@ const PostSushi = ({ onClose }) => {
                       checked={category === categoryMapping["가족"]}
                       onChange={handleCategoryChange}
                     />
-                    가족
+                    <span style={radioLabel}>가족</span>
                   </label>
                   <label style={radioBtn}>
                     <input
@@ -245,7 +249,7 @@ const PostSushi = ({ onClose }) => {
                       checked={category === categoryMapping["기타"]}
                       onChange={handleCategoryChange}
                     />
-                    기타
+                    <span style={radioLabel}>기타</span>
                   </label>
                 </div>
                 <hr style={divider} />
@@ -263,20 +267,22 @@ const PostSushi = ({ onClose }) => {
                 <p style={orderSet}>초밥 종류 선택</p>
                 <div style={sliderContainer}>
                   <Slider {...settings}>
-                    {sushiImages.map((sushi) => (
-                      <div
-                        className="slider"
-                        key={sushi.id}
-                        onClick={() => handleSushiTypeChange(sushi.id)}
-                      >
-                        <img
-                          style={sliderSushi}
-                          src={sushi.src}
-                          alt={sushi.name}
-                        />
-                        {/* <p className="sushiName">{sushi.name}</p> */}
-                      </div>
-                    ))}
+                    {sushiImages
+                      .filter((sushi) => sushi.requiredLikes <= likesReceived)
+                      .map((sushi) => (
+                        <div
+                          className="slider"
+                          key={sushi.id}
+                          onClick={() => handleSushiTypeChange(sushi.id)}
+                        >
+                          <img
+                            style={sliderSushi}
+                            src={sushi.src}
+                            alt={sushi.name}
+                          />
+                          <p style={sliderSushiName}> {sushi.name}</p>
+                        </div>
+                      ))}
                   </Slider>
                 </div>
                 <div style={orderFormFooter}>
@@ -370,7 +376,9 @@ const PostSushi = ({ onClose }) => {
                     style={iconButtonStyle}
                     onClick={() => {
                       if (!window.Kakao.isInitialized()) {
-                        window.Kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_ID);
+                        window.Kakao.init(
+                          import.meta.env.VITE_KAKAO_JAVASCRIPT_ID
+                        );
                       }
 
                       window.Kakao.Link.sendCustom({
@@ -436,12 +444,13 @@ const modalStyle = {
   position: "relative",
   top: "6vh",
   height: "80vh",
-  width: "46vh",
+  width: "50vh",
+  maxWidth: "90vw",
 };
 
 const orderForm = {
   backgroundColor: "#F4F4F4",
-  border: "solid 0.3rem #595959",
+  border: "solid 0.3rem #454545",
   height: "80vh",
 };
 
@@ -459,6 +468,7 @@ const orderTitle = {
   padding: "2vh",
   letterSpacing: "0.1vh",
   fontSize: "4vh",
+  color: "#454545",
 };
 
 const closeBtn = {
@@ -469,7 +479,7 @@ const closeBtn = {
   height: "5vh",
   border: "none",
   backgroundColor: "transparent",
-  color: "#595959",
+  color: "#454545",
   fontSize: "2.5vh",
   cursor: "pointer",
   fontWeight: "bold",
@@ -481,6 +491,7 @@ const orderExplain = {
   paddingRight: "1vh",
   fontSize: "1.55vh",
   textAlign: "right",
+  color: "#454545",
 };
 
 const orderFormBody = {
@@ -489,18 +500,19 @@ const orderFormBody = {
 
 const divider = {
   margin: "0",
-  border: "solid 0.1rem #595959",
+  border: "solid 0.1rem #454545",
 };
 
 const orderSet = {
   margin: "0",
   padding: "1vh",
   fontSize: "2.3vh",
+  color: "#454545",
 };
 
 const radioContainer = {
   margin: "0",
-  paddingLeft: "0.5vh",
+  paddingTop: "0.5vh",
   paddingBottom: "2vh",
   display: "flex",
   flexWrap: "wrap",
@@ -513,15 +525,22 @@ const radioContainer = {
 const radioBtn = {
   flexBasis: "calc(33.33% - 1rem)",
   textAlign: "left",
+  display: "flex",
+  gap: "0.5vh",
+};
+
+const radioLabel = {
+  marginTop: "0.5vh",
+  color: "#454545",
 };
 
 const rangeInput = {
   height: "3vh",
-  width: "43vh",
+  width: "96%",
   margin: "0 auto",
   marginTop: "1vh",
   display: "block",
-  accentColor: "#404040",
+  accentColor: "#454545",
 };
 
 const presentPerson = {
@@ -529,24 +548,35 @@ const presentPerson = {
   padding: "1vh",
   textAlign: "right",
   fontSize: "1.95vh",
+  color: "#454545",
 };
 
 const sliderContainer = {
-  width: "44.54vh",
   height: "26.5vh",
+  width: "100%",
 };
 
 const sliderSushi = {
   justifyContent: "center",
-  height: "10rem",
+  height: "24vh",
   pointerEvents: "none",
+  display: "block",
+  margin: "0 auto",
+  objectFit: "contain",
 };
 
+const sliderSushiName = {
+  position: "relative",
+  top: "-7vh",
+  textAlign: "center",
+  fontSize: "1.95vh",
+  color: "#454545",
+};
 const orderFormFooter = {
   position: "absolute",
   bottom: "0",
   height: "4.4vh",
-  width: "45vh",
+  width: "98%",
 };
 
 const pageSelect = {
@@ -561,6 +591,7 @@ const nextBtn = {
   cursor: "pointer",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "3vh",
+  color: "#454545",
 };
 
 const titleText = {
@@ -570,9 +601,10 @@ const titleText = {
   resize: "none",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
-  width: "44vh",
+  width: "99%",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
+  color: "#454545",
 };
 
 const contentText = {
@@ -582,10 +614,11 @@ const contentText = {
   resize: "none",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
-  height: "36.8vh",
-  width: "44vh",
+  height: "35vh",
+  width: "99%",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
+  color: "#454545",
 };
 
 const backBtn = {
@@ -595,6 +628,7 @@ const backBtn = {
   cursor: "pointer",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "3vh",
+  color: "#454545",
 };
 
 const submitBtn = {
@@ -605,6 +639,7 @@ const submitBtn = {
   cursor: "pointer",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "3vh",
+  color: "#454545",
 };
 
 const submitModalStyle = {
@@ -630,16 +665,17 @@ const submitModalContent = {
   border: "1vh solid #906C48",
   outline: "0.3vh solid #67523E",
   fontSize: "2.8vh",
+  color: "#454545",
 };
 
 const buttonContainer = {
   display: "flex",
-  justifyContent: "center",  // 버튼들이 가운데로 정렬되게 설정
-  alignItems: "center",  // 버튼들이 세로로 중앙 정렬되게 설정
+  justifyContent: "center", // 버튼들이 가운데로 정렬되게 설정
+  alignItems: "center", // 버튼들이 세로로 중앙 정렬되게 설정
   width: "100%",
   marginTop: "3vh",
   marginBottom: "1vh",
-  gap: "1.5vh",  // 버튼들 간의 간격을 설정
+  gap: "1.5vh", // 버튼들 간의 간격을 설정
 };
 
 const iconButtonStyle = {
@@ -692,21 +728,7 @@ const textCounter = {
   padding: "0.5vh",
   textAlign: "right",
   fontSize: "1.8vh",
-  color: "#595959",
-};
-
-const shareButtonStyle = {
-  padding: "1vh 0",
-  border: "none",
-  borderRadius: "1vh",
-  backgroundColor: "#4267B2", // 페이스북 블루 색상
-  color: "white",
-  cursor: "pointer",
-  width: "40%",
-  whiteSpace: "nowrap",
-  lineHeight: "1",
-  fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "2.8vh",
+  color: "#454545",
 };
 
 export default PostSushi;
