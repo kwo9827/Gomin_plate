@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMySushiDetail } from "../store/slices/sushiSlice";
+import {
+  fetchMySushiDetail,
+  clearCurrentSushi,
+} from "../store/slices/sushiSlice";
 import PostItModal from "../components/PostItModal";
 import postItImage from "../assets/PostIt.png";
+import NegativeAnswerModal from "../components/NegativeAnswerModal";
 
 const SushiDetail = () => {
   const { sushiId } = useParams();
@@ -16,6 +20,10 @@ const SushiDetail = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+  /* 부적절한 답변 여는 모달 */
+  const [negativeModalOpen, setNegativeModalOpen] = useState(false);
+  const [negativeAnswer, setNegativeAnswer] = useState(null);
 
   const {
     title = "",
@@ -30,16 +38,39 @@ const SushiDetail = () => {
       navigate("/home");
       return;
     }
-    dispatch(fetchMySushiDetail(sushiId));
-  }, [sushiId, dispatch, navigate]);
+    setTimeout(() => {
+      dispatch(clearCurrentSushi());
+    }, 5);
 
-  const openModal = (answer) => {
-    setSelectedAnswer(answer);
-    setModalOpen(true);
+    dispatch(fetchMySushiDetail(sushiId));
+  }, [sushiId, dispatch, navigate, modalOpen]);
+
+  const openAnswer = (answer) => {
+    /*부적절한 답변이면 */
+    if (answer.isNegative) {
+      console.log("부적절한 답변");
+      setNegativeAnswer(answer);
+      setNegativeModalOpen(true);
+    } else {
+      /* 정상적인 답변이면*/
+      console.log("적절한 답변");
+      setSelectedAnswer(answer);
+      setModalOpen(true);
+    }
   };
 
   const closeModal = () => {
     setModalOpen(false);
+  };
+  const closeNegativeModal = () => {
+    setNegativeModalOpen(false);
+  };
+
+  const confirmNegativeAnswer = () => {
+    closeNegativeModal();
+    setSelectedAnswer(negativeAnswer);
+    setNegativeAnswer(null);
+    setModalOpen(true);
   };
 
   /** 포스트잇(댓글) 페이징 설정 */
@@ -58,7 +89,7 @@ const SushiDetail = () => {
     }
   };
 
-  if (status === "loading") {
+  if (status === "loading" || currentSushi === null) {
     return <div style={styles.loading}>로딩 중...</div>;
   }
   if (status === "failed") {
@@ -107,8 +138,10 @@ const SushiDetail = () => {
                   style={{
                     ...styles.postItBox,
                     ...styles[`postIt${index + 1}`],
+                    filter: item.isNegative ? "blur(8px)" : "none",
+                    cursor: "pointer",
                   }}
-                  onClick={() => openModal(item)}
+                  onClick={() => openAnswer(item)}
                 >
                   {/* 포스트잇 안의 텍스트 */}
                   <div style={styles.postIt}>
@@ -142,6 +175,15 @@ const SushiDetail = () => {
           isOpen={modalOpen}
           onClose={closeModal}
           answer={selectedAnswer}
+        />
+      )}
+
+      {/* 부적절한 답변 모달 */}
+      {negativeModalOpen && (
+        <NegativeAnswerModal
+          isOpen={negativeModalOpen}
+          onClose={closeNegativeModal}
+          onConfirm={confirmNegativeAnswer}
         />
       )}
     </div>

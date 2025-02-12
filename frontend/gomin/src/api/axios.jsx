@@ -1,5 +1,4 @@
 import axios from "axios";
-import { ERROR_MESSAGES } from "../constants/errorMessages";
 
 const api = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
@@ -8,11 +7,13 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   // const token = useSelector((state) => state.member.accessToken);
 
-   const token = localStorage.getItem("accessToken");
-  // config.headers.Authorization = `Bearer ${token}`;
+  const token = localStorage.getItem("accessToken");
 
   if (token) {
+    // alert("토큰 있음. " + "path: " + config.url);
     config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    // alert("토큰 없음. " + "path: " + config.url);
   }
 
   // config.headers.Authorization = `Bearer test`;
@@ -24,11 +25,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     // 프론트엔드 단 에러
-    if (!error.response) {
-      alert("서버와의 연결이 끊겼습니다.");
-      window.location.href = "/";
-      return Promise.reject(error);
-    }
+    // if (!error.response) {
+    //   alert("서버와의 연결이 끊겼습니다.");
+    //   window.location.href = "/";
+    //   return Promise.reject(error);
+    // }
 
     // 에러 코드에 따른 alert 발생
     const errorCode = error.response?.data?.error?.code;

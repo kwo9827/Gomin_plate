@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { countLike } from "../store/slices/memberSlice";
 
@@ -18,6 +18,48 @@ import flatfighImg from "../assets/sushi/광어초밥.webp";
 const MAX_LIKES = 80; // 최대 좋아요 수 수정 (참치 해금 조건)
 const SUSHI_COUNT = 11;
 
+const keyframes = `
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      background-color: rgba(0,0,0,0.6);
+    }
+    to {
+      background-color: rgba(0,0,0,0);
+    }
+  }
+
+  @keyframes modalShow {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes modalHide {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+  }
+`;
+
 // 초밥 타입 매핑 수정 - Sushi.jsx와 동일한 방식으로 변경
 const sushiTypes = {
   1: { name: "계란초밥", image: eggImg, requiredLikes: 0 },
@@ -34,8 +76,28 @@ const sushiTypes = {
 };
 
 const SushiUnlock = ({ isOpen, onClose }) => {
+  const [isClosing, setIsClosing] = useState(false);
   const dispatch = useDispatch();
   const likesReceived = useSelector((state) => state.member.likesReceived);
+
+  // keyframes 스타일을 동적으로 추가
+  useEffect(() => {
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = keyframes;
+    document.head.appendChild(styleSheet);
+
+    return () => {
+      document.head.removeChild(styleSheet);
+    };
+  }, []);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 700);
+  };
 
   // 다음 해금될 초밥 찾기 함수 추가
   const getNextSushi = () => {
@@ -59,12 +121,25 @@ const SushiUnlock = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div style={overlayStyle}>
-      <div style={modalStyle}>
+    <div
+      style={{
+        ...overlayStyle,
+        animation: isClosing ? "fadeOut 0.7s ease-out" : "fadeIn 0.7s ease-out",
+        backgroundColor: isClosing ? "rgba(0,0,0,0)" : "rgba(0,0,0,0.6)",
+      }}
+    >
+      <div
+        style={{
+          ...modalStyle,
+          animation: isClosing
+            ? "modalHide 0.7s ease-in-out forwards"
+            : "modalShow 0.7s ease-in-out forwards",
+        }}
+      >
         <div style={outerBoxStyle}>
           <div style={innerBoxStyle}>나의 초밥</div>
         </div>
-        <button onClick={onClose} style={cancelButtonStyle}>
+        <button onClick={handleClose} style={cancelButtonStyle}>
           ✖
         </button>
 
@@ -134,6 +209,7 @@ const overlayStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  animation: "fadeIn 0.7s ease-in-out forwards",
   // backdropFilter: "blur(10px)",
 };
 
@@ -158,6 +234,9 @@ const modalStyle = {
   flexDirection: "column", // 추가
   alignItems: "center",
   boxSizing: "border-box",
+  opacity: 0,
+  transform: "translateY(20px) scale(0.95)",
+  animation: "modalShow 0.7s ease-in-out forwards",
 };
 
 const outerBoxStyle = {
