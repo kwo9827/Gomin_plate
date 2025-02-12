@@ -2,9 +2,11 @@ package com.ssafy.sushi.global.error;
 
 import com.ssafy.sushi.global.common.response.ApiResponse;
 import com.ssafy.sushi.global.error.exception.CustomException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -27,6 +29,18 @@ public class GlobalExceptionHandler {
     public void handleClientAbortException(ClientAbortException e) {
         log.info("SSE connection closed by client - Normal disconnection");
         // 클라이언트 연결 종료는 정상적인 상황이므로 별도 처리 없이 void 반환
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public void handleAuthorizationDeniedException(AuthorizationDeniedException e, HttpServletRequest request) {
+        if (request.isAsyncStarted()) {
+            log.debug("SSE connection authorization denied - closing connection");
+            try {
+                request.getAsyncContext().complete();
+            } catch (IllegalStateException ex) {
+                // 이미 완료된 경우 무시
+            }
+        }
     }
 
     @ExceptionHandler(CustomException.class)
