@@ -10,8 +10,20 @@ const EditModal = ({ isOpen, onClose }) => {
 
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
+  const [fade, setFade] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isOpen) {
+      setFade(true);
+    } else {
+      const timer = setTimeout(() => {
+        setFade(false);
+      }, 300); // 모달이 사라지는 동안 기다리는 시간 (transition duration)
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     setNickname(currentNickname);
@@ -62,11 +74,11 @@ const EditModal = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen && !fade) return null;
 
   return (
-    <div style={overlayStyle}>
-      <div style={modalStyle}>
+    <div style={{ ...overlayStyle, opacity: fade ? 1 : 0 }}>
+      <div style={{ ...modalStyle, opacity: fade ? 1 : 0 }}>
         <h3 style={titleStyle}>당신을 어떻게 부르면 될까요?</h3>
         <div style={inputContainer}>
           <input
@@ -112,17 +124,20 @@ const overlayStyle = {
   justifyContent: "center",
   alignItems: "center",
   zIndex: 1000,
+  transition: "opacity 0.3s ease-in-out", // fade-in/fade-out 효과
 };
 
 const modalStyle = {
   backgroundColor: "#fdf5e6",
   padding: "20px",
   borderRadius: "10px",
-  width: "40vh",
+  width: "49vh",
   maxWidth: "600px",
   position: "relative",
   border: "8px solid #906C48",
   outline: "2px solid #67523E",
+  boxSizing: "border-box",
+  transition: "opacity 0.3s ease-in-out", // fade-in/fade-out 효과
 };
 
 const titleStyle = {

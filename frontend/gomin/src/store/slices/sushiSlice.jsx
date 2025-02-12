@@ -91,8 +91,16 @@ const sushiSlice = createSlice({
       .addCase(fetchMySushi.fulfilled, (state, action) => {
         state.mySushi = action.payload.data.content; // 응답 구조 수정
       })
+      .addCase(fetchSushiDetail.pending, (state) => {
+        state.currentSushi = 'loading';
+      })
       .addCase(fetchSushiDetail.fulfilled, (state, action) => {
+        state.status = 'idle';
         state.currentSushi = action.payload.data;
+      })
+      .addCase(fetchSushiDetail.rejected, (state, action) => {
+        state.state = 'failed';
+        state.error = action.error.message;
       })
       .addCase(fetchMySushiDetail.pending, (state) => {
         state.currentSushi = 'loading';

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import SushiCard from "../components/SushiCard";
-import searchIcon from "../assets/search.png";
-
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMySushi } from "../store/slices/sushiSlice";
+import { useTrail, animated } from '@react-spring/web'; // react-spring 라이브러리에서 useTrail, animated 가져오기
 
 import "../styles/font.css";
 
@@ -27,21 +26,17 @@ const MySushiList = () => {
         size: 10,
       })
     ).then((result) => {
-      console.log("내 초밥 리스트:", result.payload.data.content);
       setDisplaySushi(result.payload.data.content);
     });
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("현재 내 초밥 상태:", mySushi);
-
     if (!search.trim()) {
       setDisplaySushi(mySushi);
     }
   }, [mySushi, search]);
 
   const onSearch = () => {
-    console.log("현재 검색 상태:", search);
     dispatch(
       fetchMySushi({
         search: search,
@@ -50,15 +45,20 @@ const MySushiList = () => {
       })
     ).then((result) => {
       const apiResult = result.payload.data.content;
-      console.log("API 검색 결과: ", apiResult);
-
       const filtered = apiResult.filter((sushi) =>
         sushi.title.toLowerCase().includes(search.toLowerCase())
       );
-      console.log("검색 결과:", filtered);
       setDisplaySushi(filtered);
     });
   };
+
+  // react-spring 애니메이션 효과를 위한 trail
+  const trail = useTrail(displaySushi.length, {
+    opacity: 1,
+    transform: 'translateY(0px)',
+    from: { opacity: 0, transform: 'translateY(50px)' },
+    config: { mass: 1, tension: 200, friction: 20 },
+  });
 
   return (
     <div style={styles.background}>
@@ -92,16 +92,16 @@ const MySushiList = () => {
         {/* 고민 리스트 */}
         {displaySushi && displaySushi.length > 0 ? (
           <ul style={styles.list}>
-            {displaySushi.map((sushi) => (
-              <li key={sushi.sushiId}>
+            {trail.map((style, index) => (
+              <animated.li key={displaySushi[index].sushiId} style={style}>
                 <SushiCard
-                  id={sushi.sushiId}
-                  title={sushi.title}
-                  category={sushi.category}
-                  content={sushi.content}
-                  sushiType={sushi.sushiType}
+                  id={displaySushi[index].sushiId}
+                  title={displaySushi[index].title}
+                  category={displaySushi[index].category}
+                  content={displaySushi[index].content}
+                  sushiType={displaySushi[index].sushiType}
                 />
-              </li>
+              </animated.li>
             ))}
           </ul>
         ) : (
@@ -129,7 +129,6 @@ const styles = {
     margin: "0 auto",
     padding: "3vh",
     boxSizing: "border-box",
-    // overflowY: "auto",
   },
   position: {
     // position: "sticky",
@@ -165,25 +164,25 @@ const styles = {
   searchContainer: {
     display: "flex",
     justifyContent: "center",
-    // gap: "5px",
     marginBottom: "1vh",
   },
 
   /**돋보기 감싸는거 */
   inputWrapper: {
     position: "relative",
-    width: "44.2vh",
+    width: "45vh",
   },
 
   /**검색창 내부 스타일 */
   searchInput: {
-    width: "43vh",
+    width: "45vh",
     height: "5.8vh",
     fontSize: "1.8vh",
     textAlign: "center",
     border: "0.3vh solid #906C48",
     borderRadius: "1vh",
     outline: "none",
+    boxSizing: "border-box", // border를 width에 포함시키기 위해 추가
   },
 
   /** 입력창 내부 돋보기 아이콘 */

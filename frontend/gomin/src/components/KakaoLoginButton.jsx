@@ -8,7 +8,19 @@ const KakaoLoginButton = () => {
   const handleKakaoLogin = () => {
     const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID;
     const redirectUri = "https://www.gomin.my/oauth/kakao/callback"; // 리다이렉트 URI
-    dispatch(kakaoLogin({ clientId, redirectUri }));
+
+    // URL에서 redirectUrl 파라미터 가져오기
+    const searchParams = new URLSearchParams(window.location.search);
+    const redirectUrl = searchParams.get("redirectUrl");
+
+    // state 파라미터에 redirectUrl 포함
+    const state = redirectUrl || "";
+
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
+    window.location.href = kakaoAuthUrl;
+
+    // 기존 전달 코드
+    // dispatch(kakaoLogin({ clientId, redirectUri }));
   };
 
   return (
