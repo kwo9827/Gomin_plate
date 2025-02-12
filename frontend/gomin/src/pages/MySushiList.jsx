@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import SushiCard from "../components/SushiCard";
-import searchIcon from "../assets/search.png";
-
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMySushi } from "../store/slices/sushiSlice";
+import { useTrail, animated } from '@react-spring/web'; // react-spring 라이브러리에서 useTrail, animated 가져오기
 
 import "../styles/font.css";
 
@@ -27,21 +26,17 @@ const MySushiList = () => {
         size: 10,
       })
     ).then((result) => {
-      console.log("내 초밥 리스트:", result.payload.data.content);
       setDisplaySushi(result.payload.data.content);
     });
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("현재 내 초밥 상태:", mySushi);
-
     if (!search.trim()) {
       setDisplaySushi(mySushi);
     }
   }, [mySushi, search]);
 
   const onSearch = () => {
-    console.log("현재 검색 상태:", search);
     dispatch(
       fetchMySushi({
         search: search,
@@ -50,15 +45,20 @@ const MySushiList = () => {
       })
     ).then((result) => {
       const apiResult = result.payload.data.content;
-      console.log("API 검색 결과: ", apiResult);
-
       const filtered = apiResult.filter((sushi) =>
         sushi.title.toLowerCase().includes(search.toLowerCase())
       );
-      console.log("검색 결과:", filtered);
       setDisplaySushi(filtered);
     });
   };
+
+  // react-spring 애니메이션 효과를 위한 trail
+  const trail = useTrail(displaySushi.length, {
+    opacity: 1,
+    transform: 'translateY(0px)',
+    from: { opacity: 0, transform: 'translateY(50px)' },
+    config: { mass: 1, tension: 200, friction: 20 },
+  });
 
   return (
     <div style={styles.background}>
@@ -77,7 +77,7 @@ const MySushiList = () => {
               type="text"
               value={search}
               onChange={onChange}
-              placeholder="고민을 검색해주세요."
+              placeholder="고민을 검색해주세요"
               style={styles.searchInput}
               className="custom-placeholder"
             />
@@ -92,15 +92,16 @@ const MySushiList = () => {
         {/* 고민 리스트 */}
         {displaySushi && displaySushi.length > 0 ? (
           <ul style={styles.list}>
-            {displaySushi.map((sushi) => (
-              <li key={sushi.sushiId}>
+            {trail.map((style, index) => (
+              <animated.li key={displaySushi[index].sushiId} style={style}>
                 <SushiCard
-                  id={sushi.sushiId}
-                  title={sushi.title}
-                  content={sushi.content}
-                  sushiType={sushi.sushiType}
+                  id={displaySushi[index].sushiId}
+                  title={displaySushi[index].title}
+                  category={displaySushi[index].category}
+                  content={displaySushi[index].content}
+                  sushiType={displaySushi[index].sushiType}
                 />
-              </li>
+              </animated.li>
             ))}
           </ul>
         ) : (
@@ -116,20 +117,18 @@ const styles = {
   background: {
     position: "relative",
     height: "100vh",
-    width: "100%",
+    width: "55vh",
     overflowY: "auto",
     scrollbarWidth: "none",
   },
   /**리스트 감싸는 스타일 */
   listContainer: {
-    position: "relative",
+    position: "absolute",
     zIndex: 2,
-    width: "100%",
-    maxWidth: "600px",
+    width: "55vh",
     margin: "0 auto",
-    padding: "20px",
+    padding: "3vh",
     boxSizing: "border-box",
-    // overflowY: "auto",
   },
   position: {
     // position: "sticky",
@@ -139,26 +138,25 @@ const styles = {
   },
   /**나의 고민 외부 박스 */
   outerBox: {
-    width: "100%",
-    maxWidth: "250px",
-    margin: "0px auto 10px",
-    border: "4px solid #8B6B3E",
-    borderRadius: "8px",
+    width: "35vh",
+    margin: "0 auto 1.5vh",
+    border: "0.7vh solid #8B6B3E",
+    borderRadius: "1.2vh",
     backgroundColor: "#B2975C",
-    padding: "6px",
+    padding: "1vh",
     boxSizing: "border-box",
   },
   /**나의 고민 내부 박스 */
   innerBox: {
     width: "100%",
-    border: "2px solid #906C48",
-    borderRadius: "4px",
+    border: "0.3vh solid #906C48",
+    borderRadius: "0.6vh",
     backgroundColor: "#B2975C",
     textAlign: "center",
     color: "#5D4A37",
-    fontSize: "1.5rem",
+    fontSize: "3.8vh",
     fontWeight: "bold",
-    padding: "6px 0",
+    padding: "0.7vh 0",
     boxSizing: "border-box",
   },
 
@@ -166,37 +164,34 @@ const styles = {
   searchContainer: {
     display: "flex",
     justifyContent: "center",
-    // gap: "5px",
-    marginBottom: "10px",
+    marginBottom: "1vh",
   },
 
   /**돋보기 감싸는거 */
   inputWrapper: {
     position: "relative",
-    width: "90%",
-    maxWidth: "330px",
+    width: "45vh",
   },
 
   /**검색창 내부 스타일 */
   searchInput: {
-    width: "80%",
-    maxWidth: "330px",
-    height: "36px",
-    fontSize: "1rem",
+    width: "45vh",
+    height: "5.8vh",
+    fontSize: "1.8vh",
     textAlign: "center",
-    padding: "0 40px 0 10px",
-    border: "2px solid #906C48",
-    borderRadius: "6px",
+    border: "0.3vh solid #906C48",
+    borderRadius: "1vh",
     outline: "none",
+    boxSizing: "border-box", // border를 width에 포함시키기 위해 추가
   },
 
   /** 입력창 내부 돋보기 아이콘 */
   searchIcon: {
     position: "absolute",
-    right: "20px", // 오른쪽에 배치
+    right: "2vh", // 오른쪽에 배치
     top: "50%",
     transform: "translateY(-50%)", // 세로 중앙 정렬
-    fontSize: "1.5rem",
+    fontSize: "3vh",
     color: "#906C48",
     cursor: "pointer",
   },
@@ -205,8 +200,8 @@ const styles = {
   noResult: {
     textAlign: "center",
     color: "#8B6B3E",
-    fontSize: "1.2rem",
-    marginTop: "20px",
+    fontSize: "2.8vh",
+    marginTop: "3.5vh",
   },
   /**글 리스트 스타일 */
   list: {

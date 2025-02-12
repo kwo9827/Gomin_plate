@@ -32,20 +32,14 @@ const overlayStyle = {
 
 const modalStyle = {
   backgroundColor: "#FFF7B8",
-  padding: "2rem",
+  padding: "40px",
   borderRadius: "15px",
   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
   position: "relative",
-  width: "70%",
-  maxWidth: "400px",
-  minWidth: "280px",
+  width: "49vh",
   textAlign: "center",
   fontSize: "1.2rem",
-
-  /**모달창 높이 수정할때 건드시오 */
-  //   height: "auto",
-  //   maxHeight: "90vh", // 화면 높이의 90% 이상 넘지 않도록
-  //   overflowY: "auto", // 내용이 넘치면 스크롤
+  boxSizing: "border-box",
 };
 
 const closeButtonStyle = {

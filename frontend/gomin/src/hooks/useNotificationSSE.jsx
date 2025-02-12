@@ -39,6 +39,28 @@ export const useNotificationSSE = () => {
       dispatch(updateHasUnread(data.hasUnread));
     });
 
+    eventSourceRef.current.addEventListener('shutdown', (event) => {
+      eventSourceRef.current.close();
+      
+      const checkServerAndReconnect = async () => {
+        try {
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/health`);
+          const health = await response.json();
+          
+          if (health.status === "UP") {
+            window.location.reload();
+          } else {
+            setTimeout(checkServerAndReconnect, 1000);
+          }
+        } catch (error) {
+          // 서버가 아직 준비되지 않은 경우
+          setTimeout(checkServerAndReconnect, 1000);
+        }
+      };
+    
+      setTimeout(checkServerAndReconnect, 5000);
+    });
+
     eventSourceRef.current.onopen = () => {
       // console.log('SSE 연결 성공');
     };

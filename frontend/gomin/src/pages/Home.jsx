@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { countLike } from "../store/slices/memberSlice";
-import { useNavigate } from "react-router-dom";
+import { fetchSushiByToken } from "../store/slices/sushiSlice";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useNotificationSSE } from "../hooks/useNotificationSSE";
 import { useLikeCountSSE } from "../hooks/useLikeCountSSE";
 
@@ -14,6 +15,7 @@ import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 import SushiUnlockBar from "../components/SushiUnlockBar";
+import Tutorial from "../components/Tutorial";
 
 //이미지 파일
 import bgImg from "../assets/home/back.webp";
@@ -23,6 +25,11 @@ import SushiView from "./SushiView";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const [showLoadingScreen, setShowLoadingScreen] = useState(true);
+  const [hasRefreshed, setHasRefreshed] = useState(false);
+  const [token, setToken] = useState(null);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isSushiUnlockOpen, setIsSushiUnlockOpen] = useState(false);
@@ -60,17 +67,45 @@ const Home = () => {
     (state) => state.notification.status === "loading"
   );
 
+  const dialogues = [
+    "어서오세요! 튜토리얼을 시작할게요!",
+    "이곳에서 다양한 기능을 경험할 수 있어요",
+    "준비가 되면 화면을 눌러 진행하세요!",
+  ];
+
   useLikeCountSSE();
   useNotificationSSE();
 
   useEffect(() => {
-    // 알림 상태 조회
+    // 현재 URL 경로에서 '/share/' 뒤의 값을 추출
+    const pathParts = location.pathname.split("/");
+
+    // URL이 '/share/{token}' 형식인지 확인
+    if (pathParts[1] === "share" && pathParts.length > 2) {
+      const tokenFromUrl = pathParts[2]; // 'share' 뒤에 오는 값이 토큰
+      setToken(tokenFromUrl);
+    }
+  }, [location]);
+
+  // 토큰을 사용하여 초밥 데이터 불러오기
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchSushiByToken(token)).then((response) => {
+        console.log("Fetched Sushi Data:", response.payload); // 데이터 확인
+        // 초밥 데이터가 성공적으로 불러와졌다면 모달 열기
+        if (response.payload) {
+          setSelectedSushiData(response.payload.data); // 불러온 초밥 데이터를 상태에 저장
+          setIsSushiViewOpen(true); // 모달 열기
+        }
+      });
+    }
+  }, [token, dispatch]);
+
+  useEffect(() => {
     dispatch(fetchUnreadExists());
-    // 좋아요 수 조회
     dispatch(countLike());
   }, [dispatch]);
 
-  // 이미지 로드 후 상태 업데이트
   const handleImageLoad = (image) => {
     setImagesLoaded((prevState) => ({ ...prevState, [image]: true }));
   };
@@ -92,16 +127,26 @@ const Home = () => {
 
   const allImagesLoaded = Object.values(imagesLoaded).every((loaded) => loaded);
 
-  /** 로그인 상태가 아니면 인트로 페이지로 리다이렉트 */
-  // const navigate = useNavigate();
-  // const accessToken = useSelector((state) => state.member?.accessToken);
+  // 홈화면 새로고침 처리
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem("hasVisitedHome");
 
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     navigate("/", { replace: true });
-  //   }
-  // }, [accessToken, navigate]);
-  /** 여기 까지 */
+    if (!hasVisited && !hasRefreshed) {
+      //방문 기록 저장
+      sessionStorage.setItem("hasVisitedHome", "true");
+      setTimeout(() => {
+        setHasRefreshed(true);
+        window.location.reload();
+      }, 100);
+    } else {
+      // fade out
+      const timer = setTimeout(() => {
+        setShowLoadingScreen(false);
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [hasRefreshed]);
 
   return (
     <>
@@ -161,8 +206,50 @@ const Home = () => {
         {/* 모달 */}
         <div>
           <div style={{ position: "absolute", zIndex: "10" }}>
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                pointerEvents: showLoadingScreen ? "auto" : "none",
+              }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  top: "10.4vh",
+                  height: "90vh",
+                  width: "55vh",
+
+                  backgroundColor: "#fdfcc8",
+                  zIndex: 9999,
+                  opacity: showLoadingScreen ? 1 : 0,
+                  transition: "opacity 1s ease-out",
+                  pointerEvents: showLoadingScreen ? "auto" : "none",
+                }}
+              />
+            </div>
+
             {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
+            
+            {/* <h2>튜토리얼 테스트</h2>
+            <div
+              style={{
+                position: "absolute",
+                top: "11vh",
+                left: "28vh",
+                width: "25vh",
+              }}
+            >
+              <Tutorial dialogues={dialogues} />
+            </div> */}
+
             {!allImagesLoaded && (
               <div>
                 <p> 초밥집에 입장하는 중..</p>

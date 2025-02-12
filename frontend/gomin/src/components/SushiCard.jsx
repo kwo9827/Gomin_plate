@@ -1,34 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Sushi from "./Sushi";
 
-/**초밥 사진 추가할때 여기다 해주세용 */
-import eggImg from "../assets/sushi/egg.webp";
-import salmonImg from "../assets/sushi/salmon.webp";
-import shrimpImg from "../assets/sushi/shrimp.webp";
-import cuttleImg from "../assets/sushi/cuttle.webp";
-import eelImg from "../assets/sushi/eel.webp";
-import octopusImg from "../assets/sushi/octopus.webp";
-import wagyuImg from "../assets/sushi/wagyu.webp";
-import scallopImg from "../assets/sushi/가리비초밥.webp";
-import tunaImg from "../assets/sushi/참치초밥.webp";
-import uniImg from "../assets/sushi/성게알초밥.webp";
-import flatfighImg from "../assets/sushi/광어초밥.webp";
-
-const sushiTypes = {
-  1: { name: "계란", image: eggImg },
-  2: { name: "연어", image: salmonImg },
-  3: { name: "새우", image: shrimpImg },
-  4: { name: "한치", image: cuttleImg },
-  5: { name: "문어", image: octopusImg },
-  6: { name: "장어", image: eelImg },
-  7: { name: "와규", image: wagyuImg },
-  8: { name: "가리비", image: scallopImg },
-  9: { name: "광어", image: flatfighImg },
-  10: { name: "성게알", image: uniImg },
-  11: { name: "참치", image: tunaImg },
-};
-
-const SushiCard = ({ id, title, content, sushiType, showHeart = false }) => {
+const SushiCard = ({
+  id,
+  title,
+  content,
+  category,
+  sushiType,
+  showHeart = false,
+}) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -39,15 +20,8 @@ const SushiCard = ({ id, title, content, sushiType, showHeart = false }) => {
     navigate(`/sushidetail/${id}`);
   };
 
-  const sushiData = sushiTypes[sushiType] || {
-    name: "기본 초밥",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpL734zj0BQG4VtmIwh5Ql0tRFW4HIVMQIg&s",
-  };
-
   /**초밥 타입 콘솔창 확인 */
   // console.log("sushiType 값 확인:", sushiType);
-  // console.log("sushiData 확인:", sushiData);
 
   return (
     <div style={outerContainerStyle} onClick={handleClick}>
@@ -57,12 +31,13 @@ const SushiCard = ({ id, title, content, sushiType, showHeart = false }) => {
 
           <div style={sushiOuterImageStyle}>
             <div style={sushiImageStyle}>
-              <img
+              {/* <img
                 src={sushiData.image}
                 alt={sushiData.name}
                 width="100%"
                 height="100%"
-              />
+              /> */}
+              <Sushi isushiId={id} category={category} sushiType={sushiType} />
             </div>
           </div>
 
@@ -89,28 +64,27 @@ const outerContainerStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  width: "100%",
-  maxWidth: "420px",
-  margin: "10px auto",
-  padding: "6px",
+  width: "49vh",
+  margin: "1.5vh auto",
+  padding: "0.8vh",
   backgroundColor: "#906C48",
-  borderRadius: "10px",
+  borderRadius: "1.3vh",
   boxSizing: "border-box",
 };
 
 const middleContainerStyle = {
-  width: "100%",
+  width: "47.5vh",
   backgroundColor: "#B2975C",
-  borderRadius: "4px",
-  padding: "8px",
+  borderRadius: "0.8vh",
+  padding: "1.1vh",
   boxSizing: "border-box",
 };
 
 const innerContainerStyle = {
   position: "relative",
-  width: "100%",
+  width: "45.3vh",
   backgroundColor: "#FFFFF0",
-  borderRadius: "4px",
+  borderRadius: "0.6vh",
   padding: "0px",
   boxSizing: "border-box",
   display: "flex",
@@ -120,23 +94,24 @@ const innerContainerStyle = {
 
 /**스시 이미지 감싸는 테두리 */
 const sushiOuterImageStyle = {
-  width: "100px",
-  height: "100px",
-  overflow: "hidden", // 이미지가 컨테이너를 벗어나지 않도록 설정
+  width: "18vh",
+  height: "15vh",
+  overflow: "hidden",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  borderRadius: "10px",
+  borderRadius: "2vh",
   // backgroundColor: "#F5F5DC",
 };
 
 /**스시 사진 크기 조절 */
 /**이 부분을 수정해주세요. */
 const sushiImageStyle = {
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",
-  transform: "scale(2.8)",
+  position: "absolute",
+  width: "20vh",
+  height: "20vh",
+  overflow: "hidden",
+  transform: "translate(-0.8vh, 1vh) scale(0.8)",
 };
 
 // const sushiImageStyle = {
@@ -154,17 +129,19 @@ const textContainerStyle = {
 };
 
 const titleStyle = {
-  fontSize: "1.2rem",
+  width: "20vh",
+  fontSize: "3vh",
   fontWeight: "bold",
   color: "#5A4628",
-  marginBottom: "8px",
+  margin: "1vh 0",
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
 };
 
 const contentStyle = {
-  fontSize: "1rem",
+  width: "23vh",
+  fontSize: "2.5vh",
   color: "#8D7B7B",
   lineHeight: "1.4",
   display: "-webkit-box",
@@ -174,9 +151,9 @@ const contentStyle = {
 };
 
 const dividerStyle = {
-  width: "100%",
+  width: "24vh",
   border: "0.5px solid #BCBCBC",
-  margin: "8px 0",
+  margin: "1vh 0",
 };
 
 export default SushiCard;

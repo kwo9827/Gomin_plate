@@ -75,10 +75,10 @@ const modalStyle = {
   borderRadius: "15px",
   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
   position: "relative",
-  width: "300px",
+  width: "49vh",
   textAlign: "center",
-  fontFamily: "'Nanum Pen Script', cursive",
   fontSize: "1.2rem",
+  boxSizing: "border-box",
 };
 
 const closeButtonStyle = {

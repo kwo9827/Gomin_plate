@@ -13,17 +13,19 @@ const OAuthCallback = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get("code");
 
-      const provider = location.pathname.split('/')[2];
-      
+      const provider = location.pathname.split("/")[2];
+
       console.log(`Provider: ${provider}, Code: ${code}`);
 
       if (code) {
         dispatch(socialLogin({ provider, code }))
+          .unwrap()
           .then(() => {
             navigate("/home"); // 로그인 후 홈으로 이동
           })
           .catch((error) => {
             console.error("소셜 로그인 실패:", error);
+            navigate("/");
           });
       }
       isFirstRender.current = false;

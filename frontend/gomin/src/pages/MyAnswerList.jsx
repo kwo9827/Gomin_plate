@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMyAnswers } from "../store/slices/answerSlice";
 import SushiAnswerCard from "../components/SushiAnswerCard";
+import { useTrail, animated } from "@react-spring/web";
 
 const MyAnswerList = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,14 @@ const MyAnswerList = () => {
   // `myAnswers.content`가 존재하지 않으면 빈 배열을 기본값으로 설정
   const answerList = myAnswers.content || [];
 
+  // 애니메이션을 위해 useTrail 사용
+  const trail = useTrail(answerList.length, {
+    opacity: 1,
+    transform: "translateY(0px)",
+    from: { opacity: 0, transform: "translateY(50px)" },
+    config: { tension: 250, friction: 25 }, // 애니메이션 속도 조절
+  });
+
   return (
     <div style={styles.background}>
       {/* 나의 답변 박스 */}
@@ -36,24 +45,20 @@ const MyAnswerList = () => {
         </div>
 
         {/* 답변 리스트 */}
-        {answerList.length > 0 ? ( // answerList.length로 변경
+        {answerList.length > 0 ? (
           <ul style={styles.list}>
-            {answerList.map(
-              (
-                answer // answerList.map으로 변경
-              ) => (
-                <li key={answer.sushiId} style={styles.listItem}>
-                  <SushiAnswerCard
-                    id={answer.sushiId}
-                    category={answer.category}
-                    title={answer.title}
-                    content={answer.content}
-                    showHeart={answer.isLiked || answer.getLike}
-                    sushiType={answer.sushiType}
-                  />
-                </li>
-              )
-            )}
+            {trail.map((props, index) => (
+              <animated.li key={answerList[index].sushiId} style={{ ...props, ...styles.listItem }}>
+                <SushiAnswerCard
+                  id={answerList[index].sushiId}
+                  category={answerList[index].category}
+                  title={answerList[index].title}
+                  content={answerList[index].content}
+                  showHeart={answerList[index].isLiked || answerList[index].getLike}
+                  sushiType={answerList[index].sushiType}
+                />
+              </animated.li>
+            ))}
           </ul>
         ) : (
           <div style={styles.noResult}>등록된 답변이 없습니다.</div>
@@ -68,7 +73,7 @@ const styles = {
   background: {
     position: "relative",
     height: "100vh",
-    width: "100%",
+    width: "55vh",
     overflowY: "auto",
     scrollbarWidth: "none",
   },
@@ -76,43 +81,41 @@ const styles = {
   listContainer: {
     position: "relative",
     zIndex: 2,
-    width: "100%",
-    maxWidth: "600px",
+    width: "55vh",
     margin: "0 auto",
-    padding: "20px",
+    padding: "3vh",
     boxSizing: "border-box",
   },
   position: {},
   /** 나의 답변 외부 박스 */
   outerBox: {
-    width: "100%",
-    maxWidth: "250px",
-    margin: "0px auto 10px",
-    border: "4px solid #8B6B3E",
-    borderRadius: "8px",
+    width: "35vh",
+    margin: "0 auto 1.5vh",
+    border: "0.7vh solid #8B6B3E",
+    borderRadius: "1.2vh",
     backgroundColor: "#B2975C",
-    padding: "6px",
+    padding: "1vh",
     boxSizing: "border-box",
   },
   /** 나의 답변 내부 박스 */
   innerBox: {
     width: "100%",
-    border: "2px solid #906C48",
-    borderRadius: "4px",
+    border: "0.3vh solid #906C48",
+    borderRadius: "0.6vh",
     backgroundColor: "#B2975C",
     textAlign: "center",
     color: "#5D4A37",
-    fontSize: "1.5rem",
+    fontSize: "3.8vh",
     fontWeight: "bold",
-    padding: "6px 0",
+    padding: "0.7vh 0",
     boxSizing: "border-box",
   },
   /** 검색 결과 없을 때 */
   noResult: {
     textAlign: "center",
     color: "#8B6B3E",
-    fontSize: "1.2rem",
-    marginTop: "20px",
+    fontSize: "2.8vh",
+    marginTop: "3.5vh",
   },
   /** 글 리스트 스타일 */
   list: {
@@ -121,7 +124,7 @@ const styles = {
     margin: 0,
   },
   listItem: {
-    marginBottom: "10px",
+    marginBottom: "1vh",
   },
 };
 

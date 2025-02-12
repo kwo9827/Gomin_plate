@@ -34,6 +34,15 @@ export const fetchSushiDetail = createAsyncThunk(
   }
 );
 
+/* 링크에 포함된 토큰으로로 특정 초밥에 대한 데이터를 불러오는 API */
+export const fetchSushiByToken = createAsyncThunk(
+  "sushi/fetchByToken",
+  async (token) => {
+    const response = await api.get(`/share/${token}`);
+    return response.data;
+  }
+);
+
 /* 초밥(질문)을 등록하는 API */
 export const createSushi = createAsyncThunk(
   "sushi/create",
@@ -82,8 +91,16 @@ const sushiSlice = createSlice({
       .addCase(fetchMySushi.fulfilled, (state, action) => {
         state.mySushi = action.payload.data.content; // 응답 구조 수정
       })
+      .addCase(fetchSushiDetail.pending, (state) => {
+        state.currentSushi = 'loading';
+      })
       .addCase(fetchSushiDetail.fulfilled, (state, action) => {
+        state.status = 'idle';
         state.currentSushi = action.payload.data;
+      })
+      .addCase(fetchSushiDetail.rejected, (state, action) => {
+        state.state = 'failed';
+        state.error = action.error.message;
       })
       .addCase(fetchMySushiDetail.pending, (state) => {
         state.currentSushi = 'loading';
