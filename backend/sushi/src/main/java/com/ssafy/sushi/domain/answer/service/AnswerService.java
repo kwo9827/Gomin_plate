@@ -55,6 +55,11 @@ public class AnswerService {
             throw new CustomException(ErrorCode.SUSHI_IS_CLOSED);
         }
 
+        // 본인의 초밥에 답변 금지
+        if (userId.equals(sushi.getUser().getId())) {
+            throw new CustomException(ErrorCode.SELF_ANSWER_DENIED);
+        }
+
         // 답변 생성
         Answer answer = Answer.builder()
                 .user(user)
