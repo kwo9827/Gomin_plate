@@ -44,6 +44,7 @@ public class MySushiDetailResponse {
         private final Integer answerId;
         private final String content;
         private final Boolean isLiked;
+        private final Boolean isNegative;
 
         public static List<AnswerItem> of(List<Answer> answerList) {
             return answerList.stream()
@@ -51,6 +52,7 @@ public class MySushiDetailResponse {
                             .answerId(a.getId())
                             .content(a.getContent())
                             .isLiked(a.getIsLiked())
+                            .isNegative(a.getIsNegative())
                             .build())
                     .toList();
         }
