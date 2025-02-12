@@ -64,6 +64,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
+
+            if (request.isAsyncStarted()) {
+                // 비동기 요청(SSE)인 경우 조용히 연결 종료
+                try {
+                    request.getAsyncContext().complete();
+                    return;  // 예외 전파하지 않고 여기서 종료
+                } catch (IllegalStateException ex) {
+                    // 이미 완료된 경우 무시
+                }
+            }
+
             log.error("Could not set user authentication in security context", e);
         }
 
