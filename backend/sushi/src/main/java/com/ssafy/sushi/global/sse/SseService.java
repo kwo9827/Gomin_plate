@@ -3,10 +3,12 @@ package com.ssafy.sushi.global.sse;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -173,5 +175,43 @@ public class SseService {
         }
 
         log.info("All SSE connections have been closed");
+    }
+
+    @Scheduled(fixedRate = 60000)  // 1분마다 체크
+    public void cleanupStaleConnections() {
+        log.info("Checking for stale SSE connections...");
+
+        // 일반 알림 emitters 체크
+        cleanupEmitterMap(emitters, "notification");
+
+        // 좋아요 알림 emitters 체크
+        cleanupEmitterMap(likeCountEmitters, "like count");
+    }
+
+    private void cleanupEmitterMap(Map<Integer, SseEmitter> emitterMap, String type) {
+        Iterator<Map.Entry<Integer, SseEmitter>> iterator = emitterMap.entrySet().iterator();
+        int initialSize = emitterMap.size();
+
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, SseEmitter> entry = iterator.next();
+            SseEmitter emitter = entry.getValue();
+            Integer userId = entry.getKey();
+
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("ping")
+                        .data("ping"));
+            } catch (Exception e) {
+//                log.info("Removing stale {} connection for user: {}", type, userId);
+                iterator.remove();
+                emitter.complete();
+            }
+        }
+
+        int removedCount = initialSize - emitterMap.size();
+        if (removedCount > 0) {
+            log.info("Cleaned up {} stale {} connections. Current active connections: {}",
+                    removedCount, type, emitterMap.size());
+        }
     }
 }
