@@ -237,7 +237,7 @@ const Home = () => {
 
             {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
-            
+
             {/* <h2>튜토리얼 테스트</h2>
             <div
               style={{
