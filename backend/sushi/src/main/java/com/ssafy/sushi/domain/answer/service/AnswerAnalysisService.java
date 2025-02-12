@@ -31,9 +31,9 @@ public class AnswerAnalysisService {
     private record SentimentRequest(String text) {}
 
     // 응답 DTO
-    private record SentimentResponse(Boolean negative) {
+    private record SentimentResponse(String label) {
         public Boolean isNegative() {
-            return negative;
+            return "negative".equalsIgnoreCase(label);
         }
     }
 }
