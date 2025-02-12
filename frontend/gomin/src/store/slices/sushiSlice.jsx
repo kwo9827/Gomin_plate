@@ -92,26 +92,29 @@ const sushiSlice = createSlice({
         state.mySushi = action.payload.data.content; // 응답 구조 수정
       })
       .addCase(fetchSushiDetail.pending, (state) => {
-        state.currentSushi = 'loading';
+        state.currentSushi = "loading";
       })
       .addCase(fetchSushiDetail.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = "idle";
         state.currentSushi = action.payload.data;
       })
       .addCase(fetchSushiDetail.rejected, (state, action) => {
-        state.state = 'failed';
+        state.status = "failed";
         state.error = action.error.message;
       })
       .addCase(fetchMySushiDetail.pending, (state) => {
-        state.currentSushi = 'loading';
+        state.currentSushi = "loading";
       })
       .addCase(fetchMySushiDetail.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = "idle";
         state.currentSushi = action.payload.data;
       })
       .addCase(fetchMySushiDetail.rejected, (state, action) => {
-        state.state = 'failed';
+        state.state = "failed";
         state.error = action.error.message;
+      })
+      .addCase(clearCurrentSushi, (state) => {
+        state.currentSushi = null;
       });
   },
 });
