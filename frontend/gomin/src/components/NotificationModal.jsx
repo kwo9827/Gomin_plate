@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -10,11 +10,15 @@ import {
 const NotificationModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const { notifications, status } = useSelector((state) => state.notification);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
+      setShow(true);
       dispatch(fetchNotifications({ page: 1, size: 10 }));
       dispatch(fetchUnreadExists());
+    } else {
+      setShow(false);
     }
   }, [isOpen, dispatch]);
 
@@ -26,11 +30,11 @@ const NotificationModal = ({ isOpen, onClose }) => {
     onClose();
   };
 
-  if (!isOpen) return null;
+  if (!isOpen && !show) return null;
 
   return (
-    <div style={overlayStyle}>
-      <div style={modalStyle}>
+    <div style={{ ...overlayStyle, opacity: show ? 1 : 0 }}>
+      <div style={{ ...modalStyle, transform: show ? "scale(1)" : "scale(0.9)" }}>
         <div style={outerBoxStyle}>
           <div style={innerBoxStyle}>알림</div>
           <button style={cancelButtonStyle} onClick={onClose}>
@@ -98,6 +102,7 @@ const overlayStyle = {
   alignItems: "center",
   zIndex: 1000,
   backdropFilter: "blur(10px)",
+  transition: "opacity 0.3s ease", // opacity에 애니메이션 추가
 };
 
 const modalStyle = {
@@ -114,6 +119,7 @@ const modalStyle = {
   overflowY: "auto",
   boxSizing: "border-box",
   scrollbarWidth: "none",
+  transition: "transform 0.3s ease", // scale에 애니메이션 추가
 };
 
 const cancelButtonStyle = {
