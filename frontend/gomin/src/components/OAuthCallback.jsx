@@ -11,17 +11,22 @@ const OAuthCallback = () => {
   useEffect(() => {
     if (isFirstRender.current) {
       const urlParams = new URLSearchParams(window.location.search);
+
       const code = urlParams.get("code");
-
       const provider = location.pathname.split("/")[2];
-
-      console.log(`Provider: ${provider}, Code: ${code}`);
+      const redirectUrl = urlParams.get("state"); // OAuth state 파라미터 활용
 
       if (code) {
         dispatch(socialLogin({ provider, code }))
           .unwrap()
           .then(() => {
-            navigate("/home"); // 로그인 후 홈으로 이동
+            if (redirectUrl) {
+              // 전달될 리다이렉트 URL이 있는 경우 해당 페이지로 이동
+              navigate(decodeURIComponent(redirectUrl));
+            } else {
+              // 로그인 후 홈으로 이동
+              navigate("/home");
+            }
           })
           .catch((error) => {
             console.error("소셜 로그인 실패:", error);

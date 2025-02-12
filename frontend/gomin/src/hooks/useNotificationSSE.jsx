@@ -62,7 +62,7 @@ export const useNotificationSSE = () => {
     });
 
     eventSourceRef.current.onopen = () => {
-      // console.log('SSE 연결 성공');
+      console.log('SSE 연결 성공');
     };
 
     // eventSourceRef.current.addEventListener('heartbeat', (event) => {
