@@ -10,8 +10,10 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
 
   if (token) {
-    alert("토큰 없음");
+    alert("토큰 있음. " + "path: " + config.url);
     config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    alert("토큰 없음. " + "path: " + config.url);
   }
 
   // config.headers.Authorization = `Bearer test`;
