@@ -137,7 +137,7 @@ const cancelButtonStyle = {
 };
 
 const outerBoxStyle = {
-  width: "100%",
+  width: "30vh",
   maxWidth: "250px",
   margin: "20px auto",
   border: "4px solid #8B6B3E",
