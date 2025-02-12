@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation, useNavigate, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import Intro from "./pages/Intro";
 import MyAnswerList from "./pages/MyAnswerList";
@@ -16,7 +22,9 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("accessToken")
+  );
 
   // Navbar 표시 여부 결정
   const shouldShowNavbar = location.pathname !== "/";
@@ -47,7 +55,10 @@ function App() {
         <Route path="/sushidetail/:sushiId" element={<SushiDetail />} />
         <Route path="/sushiview" element={<SushiView />} />
         <Route path="/postsushi" element={<PostSushi />} />
-        <Route path="/sushianswerdetail/:sushiId" element={<SushiAnswerDetail />} />
+        <Route
+          path="/sushianswerdetail/:sushiId"
+          element={<SushiAnswerDetail />}
+        />
         <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
         <Route path="/oauth/google/callback" element={<OAuthCallback />} />
         {/* <Route path="/share/:token" element={<Home />} /> */}
@@ -57,7 +68,9 @@ function App() {
             localStorage.getItem("accessToken") ? (
               <Home />
             ) : (
-              <Navigate to={`/?redirectUrl=${encodeURIComponent(location.pathname)}`} />
+              <Navigate
+                to={`/?redirectUrl=${encodeURIComponent(location.pathname)}`}
+              />
             )
           }
         />
