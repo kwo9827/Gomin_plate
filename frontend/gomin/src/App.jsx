@@ -11,6 +11,7 @@ import PostSushi from "./pages/PostSushi";
 import Navbar from "./components/NavBar";
 import OAuthCallback from "./components/OAuthCallback";
 import ErrorPage from "./pages/ErrorPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const location = useLocation();
@@ -24,7 +25,6 @@ function App() {
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     // const accessToken = "123";
-    setAccessToken(accessToken);
 
     if (
       !accessToken &&
@@ -41,7 +41,17 @@ function App() {
       {shouldShowNavbar && <Navbar />}
       <Routes>
         <Route path="/" element={<Intro />} />
-        <Route path="/home" element={<Home />} />
+
+        {/* <Route path="/home" element={<Home />} /> */}
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/mysushilist" element={<MySushiList />} />
         <Route path="/myanswerlist" element={<MyAnswerList />} />
         <Route path="/sushidetail/:sushiId" element={<SushiDetail />} />
