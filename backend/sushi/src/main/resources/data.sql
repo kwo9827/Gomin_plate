@@ -79,10 +79,10 @@ VALUES
 
 
 -- 답변 데이터
-INSERT INTO answer (id, user_id, sushi_id, content, is_liked, created_at, updated_at)
-VALUES (1, 2, 1, '용기내서 고백해보세요!', false, NOW(), NOW()),
-       (2, 3, 2, '먼저 연락해서 만나보는게 어떨까요?', true, NOW(), NOW()),
-       (3, 4, 5, '심호흡하고 차근차근 준비해보세요.', true, NOW(), NOW());
+INSERT INTO answer (id, user_id, sushi_id, content, is_liked, created_at, updated_at, is_negative)
+VALUES (1, 2, 1, '용기내서 고백해보세요!', false, NOW(), NOW(), false),
+       (2, 3, 2, '먼저 연락해서 만나보는게 어떨까요?', true, NOW(), NOW(), false),
+       (3, 4, 5, '심호흡하고 차근차근 준비해보세요.', true, NOW(), NOW(), false);
 
 -- 노출 이력 데이터
 INSERT INTO sushi_exposure (id, user_id, sushi_id, timestamp)
