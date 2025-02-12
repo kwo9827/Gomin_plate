@@ -20,6 +20,7 @@ const SushiView = ({
   );
   const [showTopFade, setShowTopFade] = useState(false);
   const [showBottomFade, setShowBottomFade] = useState(true);
+  const [opacity, setOpacity] = useState(0);
   const contentRef = useRef(null);
 
   const dispatch = useDispatch();
@@ -34,6 +35,13 @@ const SushiView = ({
     5: "rgba(183, 6, 227, 0.4)", // 가족
     6: "rgba(157, 157, 157, 0.4)", // 기타
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      setOpacity(0);
+      setTimeout(() => setOpacity(1), 50);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen && sushiId) {
@@ -73,10 +81,7 @@ const SushiView = ({
     const isScrollable = scrollHeight > clientHeight;
 
     if (isScrollable) {
-      // 스크롤이 10px 이상 내려갔을 때 상단 페이드 표시
       setShowTopFade(scrollTop > 10);
-
-      // 스크롤이 바닥에서 10px 이상 떨어져있을 때 하단 페이드 표시
       setShowBottomFade(scrollTop < scrollHeight - clientHeight - 10);
     } else {
       setShowTopFade(false);
@@ -100,8 +105,8 @@ const SushiView = ({
   useEffect(() => {
     if (contentRef.current) {
       contentRef.current.style.overflow = "auto";
-      contentRef.current.style.scrollbarWidth = "none"; // Firefox
-      contentRef.current.style.msOverflowStyle = "none"; // IE, Edge
+      contentRef.current.style.scrollbarWidth = "none";
+      contentRef.current.style.msOverflowStyle = "none";
     }
   }, []);
 
@@ -136,19 +141,32 @@ const SushiView = ({
     }
   };
 
+  const handleClose = () => {
+    setOpacity(0);
+    setTimeout(() => {
+      setShowAnswerInput(false);
+      setContent("");
+      setSushiData({
+        sushiId: "",
+        title: "",
+        content: "",
+        plateType: "",
+        sushiType: "",
+        maxAnswers: "",
+        remainingAnswers: "",
+        expirationTime: "",
+      });
+      onClose();
+    }, 300);
+  };
+
   const handleBack = () => {
     if (showAnswerInput) {
       setShowAnswerInput(false);
       setContent("");
     } else {
-      onClose();
+      handleClose();
     }
-  };
-
-  const handleClose = () => {
-    setShowAnswerInput(false);
-    setContent("");
-    onClose();
   };
 
   // 스크롤바 숨기기 위한 스타일 동적 추가
@@ -159,12 +177,11 @@ const SushiView = ({
       display: none;
     }
     .content {
-      scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
+      scrollbar-width: none;
     }
   `;
     document.head.appendChild(style);
 
-    // Cleanup on component unmount
     return () => {
       document.head.removeChild(style);
     };
@@ -173,8 +190,17 @@ const SushiView = ({
   if (!isOpen) return null;
 
   return (
-    <div style={styles.modalOverlay}>
-      <div style={styles.modalContent}>
+    <div style={{
+      ...styles.modalOverlay,
+      opacity,
+      transition: 'opacity 0.3s ease-in-out'
+    }}>
+      <div style={{
+        ...styles.modalContent,
+        opacity,
+        transform: `translateY(${20 - (opacity * 20)}px)`,
+        transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out'
+      }}>
         <div style={styles.container}>
           <div style={styles.buttonRow}>
             <div
@@ -192,7 +218,6 @@ const SushiView = ({
               X{" "}
             </div>
           </div>
-          {/* 메인 컨텐츠 */}
           {!showAnswerInput ? (
             <>
               <h3
@@ -237,7 +262,6 @@ const SushiView = ({
               <div style={styles.charCount}>{content.length} / 500</div>
             </>
           )}
-          {/* 버튼 */}
           <>
             {!showAnswerInput ? (
               <button onClick={handleOpenAnswerInput} style={styles.button}>
@@ -321,8 +345,8 @@ const styles = {
     bottom: 0,
     overflowY: "scroll",
     margin: "2vh",
-    scrollbarWidth: "none", // Firefox
-    msOverflowStyle: "none", // IE, Edge
+    scrollbarWidth: "none",
+    msOverflowStyle: "none",
   },
   text: {
     margin: "3vh 0",
