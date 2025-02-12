@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMyAnswers } from "../store/slices/answerSlice";
 import SushiAnswerCard from "../components/SushiAnswerCard";
+import { useTrail, animated } from "@react-spring/web";
 
 const MyAnswerList = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,14 @@ const MyAnswerList = () => {
   // `myAnswers.content`가 존재하지 않으면 빈 배열을 기본값으로 설정
   const answerList = myAnswers.content || [];
 
+  // 애니메이션을 위해 useTrail 사용
+  const trail = useTrail(answerList.length, {
+    opacity: 1,
+    transform: "translateY(0px)",
+    from: { opacity: 0, transform: "translateY(50px)" },
+    config: { tension: 250, friction: 25 }, // 애니메이션 속도 조절
+  });
+
   return (
     <div style={styles.background}>
       {/* 나의 답변 박스 */}
@@ -36,24 +45,20 @@ const MyAnswerList = () => {
         </div>
 
         {/* 답변 리스트 */}
-        {answerList.length > 0 ? ( // answerList.length로 변경
+        {answerList.length > 0 ? (
           <ul style={styles.list}>
-            {answerList.map(
-              (
-                answer // answerList.map으로 변경
-              ) => (
-                <li key={answer.sushiId} style={styles.listItem}>
-                  <SushiAnswerCard
-                    id={answer.sushiId}
-                    category={answer.category}
-                    title={answer.title}
-                    content={answer.content}
-                    showHeart={answer.isLiked || answer.getLike}
-                    sushiType={answer.sushiType}
-                  />
-                </li>
-              )
-            )}
+            {trail.map((props, index) => (
+              <animated.li key={answerList[index].sushiId} style={{ ...props, ...styles.listItem }}>
+                <SushiAnswerCard
+                  id={answerList[index].sushiId}
+                  category={answerList[index].category}
+                  title={answerList[index].title}
+                  content={answerList[index].content}
+                  showHeart={answerList[index].isLiked || answerList[index].getLike}
+                  sushiType={answerList[index].sushiType}
+                />
+              </animated.li>
+            ))}
           </ul>
         ) : (
           <div style={styles.noResult}>등록된 답변이 없습니다.</div>
