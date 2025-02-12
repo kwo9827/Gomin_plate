@@ -77,7 +77,7 @@ const MySushiList = () => {
               type="text"
               value={search}
               onChange={onChange}
-              placeholder="고민을 검색해주세요."
+              placeholder="고민을 검색해주세요"
               style={styles.searchInput}
               className="custom-placeholder"
             />
@@ -97,6 +97,7 @@ const MySushiList = () => {
                 <SushiCard
                   id={sushi.sushiId}
                   title={sushi.title}
+                  category={sushi.category}
                   content={sushi.content}
                   sushiType={sushi.sushiType}
                 />
@@ -116,18 +117,17 @@ const styles = {
   background: {
     position: "relative",
     height: "100vh",
-    width: "100%",
+    width: "55vh",
     overflowY: "auto",
     scrollbarWidth: "none",
   },
   /**리스트 감싸는 스타일 */
   listContainer: {
-    position: "relative",
+    position: "absolute",
     zIndex: 2,
-    width: "100%",
-    maxWidth: "600px",
+    width: "55vh",
     margin: "0 auto",
-    padding: "20px",
+    padding: "3vh",
     boxSizing: "border-box",
     // overflowY: "auto",
   },
@@ -139,26 +139,25 @@ const styles = {
   },
   /**나의 고민 외부 박스 */
   outerBox: {
-    width: "100%",
-    maxWidth: "250px",
-    margin: "0px auto 10px",
-    border: "4px solid #8B6B3E",
-    borderRadius: "8px",
+    width: "35vh",
+    margin: "0 auto 1.5vh",
+    border: "0.7vh solid #8B6B3E",
+    borderRadius: "1.2vh",
     backgroundColor: "#B2975C",
-    padding: "6px",
+    padding: "1vh",
     boxSizing: "border-box",
   },
   /**나의 고민 내부 박스 */
   innerBox: {
     width: "100%",
-    border: "2px solid #906C48",
-    borderRadius: "4px",
+    border: "0.3vh solid #906C48",
+    borderRadius: "0.6vh",
     backgroundColor: "#B2975C",
     textAlign: "center",
     color: "#5D4A37",
-    fontSize: "1.5rem",
+    fontSize: "3.8vh",
     fontWeight: "bold",
-    padding: "6px 0",
+    padding: "0.7vh 0",
     boxSizing: "border-box",
   },
 
@@ -167,36 +166,33 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     // gap: "5px",
-    marginBottom: "10px",
+    marginBottom: "1vh",
   },
 
   /**돋보기 감싸는거 */
   inputWrapper: {
     position: "relative",
-    width: "90%",
-    maxWidth: "330px",
+    width: "44.2vh",
   },
 
   /**검색창 내부 스타일 */
   searchInput: {
-    width: "80%",
-    maxWidth: "330px",
-    height: "36px",
-    fontSize: "1rem",
+    width: "43vh",
+    height: "5.8vh",
+    fontSize: "1.8vh",
     textAlign: "center",
-    padding: "0 40px 0 10px",
-    border: "2px solid #906C48",
-    borderRadius: "6px",
+    border: "0.3vh solid #906C48",
+    borderRadius: "1vh",
     outline: "none",
   },
 
   /** 입력창 내부 돋보기 아이콘 */
   searchIcon: {
     position: "absolute",
-    right: "20px", // 오른쪽에 배치
+    right: "2vh", // 오른쪽에 배치
     top: "50%",
     transform: "translateY(-50%)", // 세로 중앙 정렬
-    fontSize: "1.5rem",
+    fontSize: "3vh",
     color: "#906C48",
     cursor: "pointer",
   },
@@ -205,8 +201,8 @@ const styles = {
   noResult: {
     textAlign: "center",
     color: "#8B6B3E",
-    fontSize: "1.2rem",
-    marginTop: "20px",
+    fontSize: "2.8vh",
+    marginTop: "3.5vh",
   },
   /**글 리스트 스타일 */
   list: {

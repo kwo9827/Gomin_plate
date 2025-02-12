@@ -29,6 +29,7 @@ const PostSushi = ({ onClose }) => {
   const [sushiType, setSushiType] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
 
   const categoryMapping = {
     연애: 1,
@@ -136,9 +137,19 @@ const PostSushi = ({ onClose }) => {
       sushiType,
     };
     console.log("등록된 내용:", sushiData);
-    dispatch(createSushi(sushiData));
-    setShowModal(false);
-    setShowCompleteModal(true);
+    dispatch(createSushi(sushiData))
+      .then((response) => {
+        const { success, data, error } = response.payload;  // 서버에서 반환된 token
+        const { token } = data;  // 서버에서 반환된 token
+        // 공유 URL 생성 (이제 `token`을 포함한 URL을 생성)
+        const shareUrl = `share/${token}`;
+        setShareUrl(shareUrl); // shareUrl 상태 업데이트
+        console.log("공유 URL:", shareUrl);
+
+        // 모달에서 공유 URL을 활용
+        setShowModal(false);
+        setShowCompleteModal(true);
+      })
   };
 
   const handleCompleteClose = () => {
@@ -375,14 +386,17 @@ const PostSushi = ({ onClose }) => {
 
                       window.Kakao.Link.sendCustom({
                         templateId: 117216, // 본인 템플릿 ID
+                        templateArgs: {
+                          url: shareUrl,
+                        },
                       });
-                      console.log("카카오톡 공유하기");
+                      console.log("카카오톡 공유하기" + shareUrl);
                     }}
                   >
                     <img
                       src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
                       alt="카카오톡 아이콘"
-                      style={iconStyle}
+                      style={iconStyleF}
                     />
                   </button>
 
@@ -391,23 +405,24 @@ const PostSushi = ({ onClose }) => {
                     style={iconButtonStyle}
                     onClick={() => {
                       window.open(
-                        `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
+                        `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${shareUrl}`,
                         "_blank"
                       );
                       console.log("페이스북 공유하기");
                     }}
                   >
-                    <i className="fab fa-facebook-f" style={iconStyle}></i>
+                    <i className="fab fa-facebook-square" style={iconStyleF}></i>
                   </button>
 
                   {/* X (구 트위터) 공유 아이콘 */}
                   <a
-                    href="https://x.com/intent/tweet"
+                    href={`https://x.com/intent/tweet?text=Check%20out%20this%20sushi%20post!&url=${window.location.origin}/${shareUrl}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={iconButtonStyle}
                   >
-                    <i className="fab fa-x twitter-icon" style={iconStyle}></i>
+                    <i class="fab fa-brands fa-x-twitter" style={iconStyleX}></i>
+                    {/* <i className="fa-brands fa-x-twitter" style={iconStyleX}></i> */}
                   </a>
                 </div>
               </div>
@@ -651,9 +666,17 @@ const iconButtonStyle = {
   alignItems: "center",
 };
 
-const iconStyle = {
-  fontSize: "30px", // 아이콘 크기 일관성
-  color: "#333", // 아이콘 색상
+const iconStyleF = {
+  fontSize: "3em", // 아이콘 크기 일관성
+  color: "#3b5998", // 아이콘 색상
+  width: "40px", // 동일한 크기로 지정
+  height: "40px", // 동일한 크기로 지정
+  display: "inline-block",
+};
+
+const iconStyleX = {
+  fontSize: "3em", // 아이콘 크기 일관성
+  color: "#3b5998", // 아이콘 색상
   width: "40px", // 동일한 크기로 지정
   height: "40px", // 동일한 크기로 지정
   display: "inline-block",
