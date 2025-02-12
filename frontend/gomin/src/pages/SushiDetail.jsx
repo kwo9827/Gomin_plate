@@ -43,7 +43,7 @@ const SushiDetail = () => {
     }, 5);
 
     dispatch(fetchMySushiDetail(sushiId));
-  }, [sushiId, dispatch, navigate]);
+  }, [sushiId, dispatch, navigate, modalOpen]);
 
   const openAnswer = (answer) => {
     /*부적절한 답변이면 */
