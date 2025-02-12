@@ -240,6 +240,10 @@ const Home = () => {
 
             {/* <button onClick={handleSetIsNew}>튜토리얼 테스트</button> */}
 
+            <div>
+              <button>튜토리얼</button>
+            </div>
+
             {!allImagesLoaded && (
               <div>
                 <p> 초밥집에 입장하는 중..</p>
