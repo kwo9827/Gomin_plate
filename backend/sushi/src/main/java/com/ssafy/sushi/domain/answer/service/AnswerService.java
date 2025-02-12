@@ -33,6 +33,7 @@ public class AnswerService {
     private final SushiRepository sushiRepository;
     private final NotificationService notificationService;
     private final SseService sseService;
+    private final AnswerAnalysisService answerAnalysisService;
 
     /**
      * 답변 등록
@@ -60,11 +61,15 @@ public class AnswerService {
             throw new CustomException(ErrorCode.SELF_ANSWER_DENIED);
         }
 
+        // 감성 분석 수행
+        Boolean isNegative = answerAnalysisService.analyzeSentiment(request.getContent());
+
         // 답변 생성
         Answer answer = Answer.builder()
                 .user(user)
                 .sushi(sushi)
                 .content(request.getContent())
+                .isNegative(isNegative != null ? isNegative : false) // 분석 실패 시 기본값 false
                 .build();
         CreateAnswerResponse response = CreateAnswerResponse.of(answerRepository.save(answer));
 

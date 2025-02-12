@@ -47,6 +47,9 @@ dependencies {
 	// API send
 	implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
+	// WebClient(AI)
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
