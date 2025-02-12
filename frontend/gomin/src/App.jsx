@@ -13,6 +13,7 @@ import Navbar from "./components/NavBar";
 import OAuthCallback from "./components/OAuthCallback";
 import ErrorPage from "./pages/ErrorPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import MuteButton from "./components/MuteButton";
 
 function App() {
   const location = useLocation();
@@ -43,6 +44,7 @@ function App() {
     <BgmProvider>
     <div className="container">
       {shouldShowNavbar && <Navbar />}
+      <MuteButton />
       <Routes>
         <Route path="/" element={<Intro />} />
 
