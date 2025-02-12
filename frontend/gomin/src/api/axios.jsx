@@ -40,7 +40,7 @@ api.interceptors.response.use(
       window.location.href = '/';
     }
     // 홈 이동이 필요한 에러
-    else if (['S003', 'S004', 'S005', 'R001'].includes(errorCode)) {
+    else if (['S003', 'S004', 'S005', 'R001', 'R005'].includes(errorCode)) {
       window.location.href = '/home';
     }
 
