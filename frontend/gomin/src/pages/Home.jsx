@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { countLike } from "../store/slices/memberSlice";
@@ -21,6 +21,8 @@ import bgImg from "../assets/home/back.webp";
 import deskImg from "../assets/home/rail.webp";
 import masterImg from "../assets/home/master.webp";
 import SushiView from "./SushiView";
+
+import catSound from "../assets/sounds/nyang.mp3";
 
 import { setIsNew } from "../store/slices/memberSlice";
 
@@ -72,6 +74,15 @@ const Home = () => {
   const loading = useSelector(
     (state) => state.notification.status === "loading"
   );
+
+  const audioRef = useRef(null);
+  // 고양이 마스터 클릭 시 소리 재생 함수
+  const handleCatMasterClick = () => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3;
+      audioRef.current.play();
+    }
+  };
 
   useLikeCountSSE();
   useNotificationSSE();
@@ -190,9 +201,15 @@ const Home = () => {
           />
 
           {/* Rail */}
-          <div style={styles.rail}>
+          <div
+            onClick={handleCatMasterClick} // 클릭 시 소리 재생
+            style={styles.rail}>
             <Rail onSushiClick={handleSushiClick} />
           </div>
+          {/* 효과음 */}
+          <audio ref={audioRef}>
+            <source src={catSound} type="audio/mp3" />
+          </audio>
           {/* 주문벨 */}
           <div style={styles.bell}>
             <PostSushiBell onClick={openPostSushi} style={{ zIndex: 5 }} />
