@@ -30,19 +30,19 @@ function App() {
   // Navbar 표시 여부 결정
   const shouldShowNavbar = location.pathname !== "/";
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    // const accessToken = "123";
+  // useEffect(() => {
+  //   const accessToken = localStorage.getItem("accessToken");
+  //   // const accessToken = "123";
 
-    if (
-      !accessToken &&
-      location.pathname !== "/" &&
-      !location.pathname.startsWith("/share/") &&
-      !location.pathname.startsWith("/oauth/")
-    ) {
-      navigate("/", { replace: true });
-    }
-  }, [location.pathname, navigate]);
+  //   if (
+  //     !accessToken &&
+  //     location.pathname !== "/" &&
+  //     !location.pathname.startsWith("/share/") &&
+  //     !location.pathname.startsWith("/oauth/")
+  //   ) {
+  //     navigate("/", { replace: true });
+  //   }
+  // }, [location.pathname, navigate]);
 
   return (
     <div className="container">

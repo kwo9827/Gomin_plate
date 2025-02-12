@@ -16,26 +16,27 @@ const SushiUnlockBar = ({ onClick }) => {
     dispatch(countLike());
   }, [dispatch]);
 
-  // 상수 정의
-  const LIKES_PER_SUSHI = 3; // 초밥 1개 해금에 필요한 좋아요 수
-  const MAX_SUSHI = 12; // 최대 초밥 개수
+  // 해금 조건을 배열로 정의
+  const unlockThresholds = [0, 1, 2, 3, 6, 10, 15, 20, 30, 50, 80, 100];
+  const MAX_SUSHI = unlockThresholds.length - 1; // 최대 해금 가능한 초밥 개수
 
   // 현재 해금된 초밥 개수 계산
-  const unlockedSushiCount = Math.min(
-    Math.floor(likesReceived / LIKES_PER_SUSHI),
-    MAX_SUSHI
+  const unlockedSushiCount = unlockThresholds.findIndex(
+    (threshold) => likesReceived < threshold
   );
 
   // 다음 초밥 해금까지 남은 좋아요 수 계산
-  const remainingLikes = LIKES_PER_SUSHI - (likesReceived % LIKES_PER_SUSHI);
+  const remainingLikes = unlockThresholds[unlockedSushiCount] - likesReceived;
 
   // 현재 단계의 진행률 계산 (0-100%)
   const currentProgress =
-    ((likesReceived % LIKES_PER_SUSHI) / LIKES_PER_SUSHI) * 100;
+    ((likesReceived - unlockThresholds[unlockedSushiCount - 1]) /
+      (unlockThresholds[unlockedSushiCount] -
+        unlockThresholds[unlockedSushiCount - 1])) *
+    100;
 
-  // 다음 해금할 초밥 타입 (1-12 사이)
-  const nextSushiType = Math.min(unlockedSushiCount + 1, MAX_SUSHI);
-
+  // 다음 해금할 초밥 타입 (0부터 시작)
+  const nextSushiType = Math.min(unlockedSushiCount, MAX_SUSHI);
   return (
     <div style={styles.container} onClick={onClick}>
       <img
