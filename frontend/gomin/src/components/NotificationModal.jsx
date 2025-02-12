@@ -44,7 +44,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
 
         <div>
           {status === "loading" ? (
-            <p>로딩 중...</p>
+            <p style={emptyTextStyle}>로딩 중...</p>
           ) : notifications.length > 0 ? (
             <ul style={listStyle}>
               {notifications.map((notification) => (
