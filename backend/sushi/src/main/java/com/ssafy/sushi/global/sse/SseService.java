@@ -3,7 +3,6 @@ package com.ssafy.sushi.global.sse;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -189,7 +188,7 @@ public class SseService {
         log.info("All SSE connections have been closed");
     }
 
-    @Scheduled(fixedRate = 60000)  // 1분마다 체크
+//    @Scheduled(fixedRate = 60000)  // 1분마다 체크
     public void cleanupStaleConnections() {
         log.info("Checking for stale SSE connections...");
 
@@ -217,9 +216,11 @@ public class SseService {
             if (emitter != null) {
                 try {
                     emitter.complete();
+                    log.info("complete one and now : {}", emitterMap.size());
                 } catch (Exception e) {
                     // 이미 완료된 경우 무시
-                    log.trace("Emitter already completed for user: {}", userId);
+                    log.debug("this error {}", e.getMessage());
+                    log.info("Emitter already completed for user: {}", userId);
                 }
             }
         });
