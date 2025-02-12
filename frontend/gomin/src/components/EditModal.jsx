@@ -51,6 +51,7 @@ const EditModal = ({ isOpen, onClose }) => {
       try {
         await dispatch(deleteAccount()).unwrap();
         navigate("/");
+        console.log("회원탈퇴 되긴 됨 근데 왜 네비게이트 안되냐 ?");
         onClose();
       } catch (err) {
         setError("회원탈퇴에 실패했습니다. 다시 시도해주세요.");
