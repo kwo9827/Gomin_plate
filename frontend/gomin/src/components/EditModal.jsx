@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const EditModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
-  const currentNickname = localStorage.getItem('userNickname');
+  const currentNickname = localStorage.getItem("userNickname");
 
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
@@ -93,11 +93,11 @@ const EditModal = ({ isOpen, onClose }) => {
         {error && <p style={errorStyle}>{error}</p>}
 
         <div style={buttonContainer}>
-          <button onClick={handleSaveNickname} style={confirmButtonStyle}>
-            확인
-          </button>
           <button onClick={onClose} style={cancelButtonStyle}>
             취소
+          </button>
+          <button onClick={handleSaveNickname} style={confirmButtonStyle}>
+            확인
           </button>
         </div>
 
@@ -170,7 +170,7 @@ const buttonContainer = {
   justifyContent: "space-between",
   alignItems: "center",
   width: "100%",
-  marginBottom: "30px",
+  marginBottom: "1.8vh",
 };
 
 const confirmButtonStyle = {
@@ -181,9 +181,10 @@ const confirmButtonStyle = {
   color: "white",
   fontSize: "16px",
   cursor: "pointer",
-  width: "40%",
+  width: "15vh",
   whiteSpace: "nowrap",
   lineHeight: "1",
+  fontFamily: "inherit",
 };
 
 const cancelButtonStyle = {
@@ -194,26 +195,29 @@ const cancelButtonStyle = {
   color: "white",
   fontSize: "16px",
   cursor: "pointer",
-  width: "40%",
+  width: "15vh",
   whiteSpace: "nowrap",
   lineHeight: "1",
+  fontFamily: "inherit",
 };
 
 const bottomButtonContainer = {
   position: "absolute",
-  bottom: "10px",
+  bottom: "1vh",
+  left: "10px",
   right: "10px",
   display: "flex",
-  gap: "10px",
+  justifyContent: "space-between",
 };
 
 const bottomButtonStyle = {
   background: "none",
   border: "none",
-  color: "#666",
+  color: "#888",
   fontSize: "12px",
   cursor: "pointer",
   textDecoration: "underline",
+  fontFamily: "inherit",
 };
 
 const errorStyle = {
