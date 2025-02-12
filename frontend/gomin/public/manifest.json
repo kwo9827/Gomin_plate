@@ -1,0 +1,8 @@
+{
+  "name": "고민한접시",
+  "short_name": "고민한접시",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff"
+}
