@@ -4,26 +4,39 @@ import bgmSound from "../assets/sounds/bgm.mp3"; // 배경음악 파일
 const BgmContext = createContext();
 
 export const BgmProvider = ({ children }) => {
-  const [isMuted, setIsMuted] = useState(true);
-  const [volume, setVolume] = useState(0.1); // 🎵 초기 볼륨 설정
+  const [isMuted, setIsMuted] = useState(true); // 기본적으로 음소거 상태
+  const [isPlaying, setIsPlaying] = useState(false); // 음악이 재생 중인지 여부
   const audioRef = useRef(new Audio(bgmSound));
 
   useEffect(() => {
     const audio = audioRef.current;
     audio.loop = true;
-    audio.volume = 0;
+    audio.volume = 0.2; // 기본 볼륨 설정
 
-    return () => audio.pause();
-  }, []);
+    if (!isMuted && isPlaying) {
+      audio
+        .play()
+        .catch((err) => console.log("자동 재생 차단됨:", err));
+    } else {
+      audio.pause();
+    }
+
+    return () => {
+      audio.pause();
+    };
+  }, [isMuted, isPlaying]);
 
   const toggleMute = () => {
     const audio = audioRef.current;
+
     if (isMuted) {
-        audio.volume = volume; // 🔊 음소거 해제 시 볼륨 적용
-        audio.play().catch((err) => console.log("재생 실패:", err));
-      } else {
-        audio.volume = 0; // 🔇 음소거 시 볼륨 0
-      }
+      audio.volume = 0.2; // 음소거 해제 시 볼륨 복원
+      setIsPlaying(true); // 음악 재생 시작
+    } else {
+      audio.volume = 0; // 음소거 시 볼륨 0
+      setIsPlaying(false); // 음악 정지
+    }
+
     setIsMuted(!isMuted);
   };
 
