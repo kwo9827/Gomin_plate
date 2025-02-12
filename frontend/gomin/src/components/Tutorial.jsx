@@ -1,60 +1,147 @@
-import { useState, useEffect } from "react";
-import "../styles/dialog.css";
+import React, { useState, useEffect } from "react";
+import Dialog from "../components/Dialog";
 
-const Tutorial = ({ dialogues = [], speed = 50 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [displayText, setDisplayText] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const [showNextIndicator, setShowNextIndicator] = useState(false);
+//튜토리얼 이미지
+import t0 from "../assets/tuto/0.webp";
+import t1 from "../assets/tuto/1.webp";
+import t2 from "../assets/tuto/2.webp";
+import t3 from "../assets/tuto/3.webp";
+import t4 from "../assets/tuto/4.webp";
+import t5 from "../assets/tuto/5.webp";
+import t6 from "../assets/tuto/6.webp";
+import t7 from "../assets/tuto/7.webp";
+import t8 from "../assets/tuto/8.webp";
+import t9 from "../assets/tuto/9.webp";
+import t10 from "../assets/tuto/10.webp";
+
+const Tutorial = ({ onComplete }) => {
+  const [showDialog, setShowDialog] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const [isDialogOpen, setIsDialogOpen] = useState(true);
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
+
+  const dialogues = [
+    "어서오세요. 처음 뵙는 분이군요.",
+    "고민 한접시의 이용 방법을 알려드릴게요.",
+    "준비가 되면 화면을 눌러 진행하세요!",
+  ];
+
+  const tutorialSlides = [t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10];
 
   useEffect(() => {
-    // dialogues가 비어있거나 currentIndex가 범위를 벗어나면 return
-    if (!dialogues.length || currentIndex >= dialogues.length) return;
+    const timer = setTimeout(() => {
+      setShowDialog(true);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
-    // 현재 대화 내용이 문자열인지 확인하고 처리
-    const currentDialogue = String(dialogues[currentIndex] || "");
+  const handleDialogComplete = () => {
+    setShowDialog(false);
+    setIsDialogOpen(false);
+    setShowTutorial(true);
+  };
 
-    setDisplayText("");
-    setIsTyping(true);
-    setShowNextIndicator(false);
-
-    let index = 0;
-    let mounted = true;
-
-    const interval = setInterval(() => {
-      if (!mounted) return;
-
-      if (index < currentDialogue.length) {
-        setDisplayText((prev) => currentDialogue.substring(0, index + 1));
-        index++;
-      } else {
-        clearInterval(interval);
-        setIsTyping(false);
-        setShowNextIndicator(true);
-      }
-    }, speed);
-
-    return () => {
-      mounted = false;
-      clearInterval(interval);
-    };
-  }, [currentIndex, dialogues, speed]);
-
-  const handleNext = () => {
-    if (isTyping) return;
-    if (currentIndex < dialogues.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+  const handleTutorialNext = () => {
+    if (currentSlide < tutorialSlides.length - 1) {
+      setCurrentSlide(currentSlide + 1);
+    } else {
+      setShowTutorial(false);
+      onComplete();
     }
   };
 
   return (
-    <div className="dialog-container" onClick={handleNext}>
-      <div className="speech-bubble">
-        <p>{displayText}</p>
-        {showNextIndicator && <span className="next-indicator">▼</span>}
-      </div>
-    </div>
+    <>
+      {showDialog && (
+        <div
+          style={{
+            position: "absolute",
+            top: "25vh",
+            left: "28vh",
+            width: "25vh",
+          }}
+        >
+          <Dialog
+            dialogues={dialogues}
+            onClose={handleCloseDialog}
+            isOpen={isDialogOpen}
+            onComplete={handleDialogComplete}
+          />
+        </div>
+      )}
+
+      {showTutorial && (
+        <div style={styles.tutorialModal} onClick={handleTutorialNext}>
+          <div style={styles.tutorialContent}>
+            <img
+              src={tutorialSlides[currentSlide]}
+              alt={`Tutorial ${currentSlide + 1}`}
+              style={styles.tutorialImage}
+            />
+            <div style={styles.pagination}>
+              {tutorialSlides.map((_, index) => (
+                <div
+                  key={index}
+                  style={{
+                    ...styles.paginationDot,
+
+                    backgroundColor:
+                      currentSlide === index ? "#24D536" : "#D1D5DB",
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
+};
+
+const styles = {
+  tutorialModal: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 9,
+  },
+  tutorialContent: {
+    // backgroundColor: "white",
+    borderRadius: "12px",
+    width: "45vh", // 300vh는 너무 큰 값입니다
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  tutorialImage: {
+    width: "100%",
+    height: "auto",
+    display: "block",
+    objectFit: "contain", // 이미지 비율 유지
+  },
+  pagination: {
+    display: "flex",
+    gap: "8px",
+    padding: "16px 0",
+  },
+  paginationDot: {
+    width: "1vh",
+    height: "1vh",
+    borderRadius: "5vh",
+    transition: "background-color 0.2s",
+  },
 };
 
 export default Tutorial;

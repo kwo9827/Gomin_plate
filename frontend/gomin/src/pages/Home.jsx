@@ -15,13 +15,14 @@ import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 import SushiUnlockBar from "../components/SushiUnlockBar";
-import Tutorial from "../components/Tutorial";
 
 //이미지 파일
 import bgImg from "../assets/home/back.webp";
 import deskImg from "../assets/home/rail.webp";
 import masterImg from "../assets/home/master.webp";
 import SushiView from "./SushiView";
+
+import { setIsNew } from "../store/slices/memberSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,11 @@ const Home = () => {
   const [isPostSushiOpen, setIsPostSushiOpen] = useState(false);
   const [isSushiViewOpen, setIsSushiViewOpen] = useState(false);
   const [selectedSushiData, setSelectedSushiData] = useState(null);
+
+  // ✅ `handleSetIsNew` 함수 정의
+  const handleSetIsNew = (value) => {
+    dispatch(setIsNew(value));
+  };
 
   const handleSushiClick = (sushiData) => {
     setSelectedSushiData(sushiData);
@@ -66,12 +72,6 @@ const Home = () => {
   const loading = useSelector(
     (state) => state.notification.status === "loading"
   );
-
-  const dialogues = [
-    "어서오세요! 튜토리얼을 시작할게요!",
-    "이곳에서 다양한 기능을 경험할 수 있어요",
-    "준비가 되면 화면을 눌러 진행하세요!",
-  ];
 
   useLikeCountSSE();
   useNotificationSSE();
@@ -237,18 +237,8 @@ const Home = () => {
 
             {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
-            
-            {/* <h2>튜토리얼 테스트</h2>
-            <div
-              style={{
-                position: "absolute",
-                top: "11vh",
-                left: "28vh",
-                width: "25vh",
-              }}
-            >
-              <Tutorial dialogues={dialogues} />
-            </div> */}
+
+            {/* <button onClick={handleSetIsNew}>튜토리얼 테스트</button> */}
 
             {!allImagesLoaded && (
               <div>

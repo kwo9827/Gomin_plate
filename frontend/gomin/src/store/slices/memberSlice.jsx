@@ -52,6 +52,9 @@ const memberSlice = createSlice({
       state.refreshToken = "";
       state.isNew = false;
     },
+    setIsNew: (state, action) => {
+      state.isNew = action.payload; // ✅ isNew 값을 설정하는 액션 추가
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -70,5 +73,6 @@ export const {
   updateNicknameState,
   updateLikesReceived,
   clearMemberData,
+  setIsNew, // ✅ 추가한 액션을 export
 } = memberSlice.actions;
 export default memberSlice.reducer;
