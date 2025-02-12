@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from '../../api/axios';
+import api from "../../api/axios";
 
 const initialState = {
   nickname: localStorage.getItem("userNickname") || "",
@@ -59,7 +59,7 @@ const memberSlice = createSlice({
         state.likesReceived = action.payload.totalLikes;
       })
       .addCase(countLike.rejected, (state, action) => {
-        console.error('좋아요 수 조회 실패:', action.error);
+        console.error("좋아요 수 조회 실패:", action.error);
       });
   },
 });
