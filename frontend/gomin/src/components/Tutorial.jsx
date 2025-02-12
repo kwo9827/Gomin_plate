@@ -14,7 +14,7 @@ import t8 from "../assets/tuto/8.webp";
 import t9 from "../assets/tuto/9.webp";
 import t10 from "../assets/tuto/10.webp";
 
-const Tutorial = ({ onComplete }) => {
+const Tutorial = ({ onClose }) => {
   const [showDialog, setShowDialog] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -31,7 +31,7 @@ const Tutorial = ({ onComplete }) => {
     "준비가 되면 화면을 눌러 진행하세요!",
   ];
 
-  const tutorialSlides = [t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10];
+  const tutorialSlides = [t0, t1, t2, t3, t4, t5, t6, t7, t8, t9];
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -51,7 +51,7 @@ const Tutorial = ({ onComplete }) => {
       setCurrentSlide(currentSlide + 1);
     } else {
       setShowTutorial(false);
-      onComplete();
+      onClose();
     }
   };
 
