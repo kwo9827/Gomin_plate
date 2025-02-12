@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from '../../api/axios';
+import api from "../../api/axios";
 
 const initialState = {
   nickname: localStorage.getItem("userNickname") || "",
@@ -52,6 +52,9 @@ const memberSlice = createSlice({
       state.refreshToken = "";
       state.isNew = false;
     },
+    setIsNew: (state, action) => {
+      state.isNew = action.payload; // ✅ isNew 값을 설정하는 액션 추가
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -59,7 +62,7 @@ const memberSlice = createSlice({
         state.likesReceived = action.payload.totalLikes;
       })
       .addCase(countLike.rejected, (state, action) => {
-        console.error('좋아요 수 조회 실패:', action.error);
+        console.error("좋아요 수 조회 실패:", action.error);
       });
   },
 });
@@ -70,5 +73,6 @@ export const {
   updateNicknameState,
   updateLikesReceived,
   clearMemberData,
+  setIsNew, // ✅ 추가한 액션을 export
 } = memberSlice.actions;
 export default memberSlice.reducer;
