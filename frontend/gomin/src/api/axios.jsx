@@ -9,7 +9,12 @@ api.interceptors.request.use((config) => {
   // const token = useSelector((state) => state.member.accessToken);
 
   const token = localStorage.getItem("accessToken");
-  config.headers.Authorization = `Bearer ${token}`;
+  // config.headers.Authorization = `Bearer ${token}`;
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
 
   // config.headers.Authorization = `Bearer test`;
 
