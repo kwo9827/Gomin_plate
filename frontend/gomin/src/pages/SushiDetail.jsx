@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMySushiDetail } from "../store/slices/sushiSlice";
 import PostItModal from "../components/PostItModal";
+import postItImage from "../assets/PostIt.png";
 
 const SushiDetail = () => {
   const { sushiId } = useParams();
-  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -14,18 +14,16 @@ const SushiDetail = () => {
   const status = useSelector((state) => state.sushi.status);
   const [currentPage, setCurrentPage] = useState(0);
 
-  // 구조 분해 할당으로 안전하게 데이터 추출
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+
   const {
     title = "",
     content = "",
     expirationTime = new Date(),
     answer = [],
-  } = currentSushi === "loading" ? {} : currentSushi || {};
-
-  /* 모달 관련 상태 추가 */
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [likedAnswerId, setLikedAnswerId] = useState(null);
+    isClosed = false,
+  } = currentSushi || {};
 
   useEffect(() => {
     if (!sushiId) {
@@ -33,36 +31,21 @@ const SushiDetail = () => {
       return;
     }
     dispatch(fetchMySushiDetail(sushiId));
-  }, [sushiId, dispatch, navigate, modalOpen]);
+  }, [sushiId, dispatch, navigate]);
 
-  /* 모달 열기 */
   const openModal = (answer) => {
     setSelectedAnswer(answer);
     setModalOpen(true);
   };
-  /* 모달 닫기 */
+
   const closeModal = () => {
     setModalOpen(false);
   };
 
+  /** 포스트잇(댓글) 페이징 설정 */
   const answersPerPage = 5;
-  const totalPages = Math.ceil(answer.length / answersPerPage);
+  const totalPages = Math.max(1, Math.ceil(answer.length / answersPerPage));
 
-  // 로딩 상태 처리
-  if (currentSushi === "loading") {
-    return <div style={styles.loading}>로딩 중...</div>;
-  }
-
-  if (status === "failed") {
-    return <div style={styles.error}>데이터를 불러오는 데 실패했습니다.</div>;
-  }
-
-  if (!currentSushi || !sushiId) {
-    navigate("/home");
-    return null;
-  }
-
-  /* 댓글 페이지 양 옆으로 슬라이드하기 */
   const nextPage = () => {
     if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1);
@@ -74,6 +57,17 @@ const SushiDetail = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  if (status === "loading") {
+    return <div style={styles.loading}>로딩 중...</div>;
+  }
+  if (status === "failed") {
+    return <div style={styles.error}>데이터를 불러오는 데 실패했습니다.</div>;
+  }
+  if (!currentSushi || !sushiId) {
+    navigate("/home");
+    return null;
+  }
 
   return (
     <div style={styles.background}>
@@ -97,89 +91,57 @@ const SushiDetail = () => {
 
         <hr style={styles.divider} />
 
-        {/* 마감되지 않았을때 경고문 */}
-        {!currentSushi.isClosed && (
-          <p style={styles.catMessage}>아직 답변이 마감되지 않았다냥 🐱</p>
-        )}
-
-        {/* 댓글 보기 */}
-        <div
-          style={{
-            ...styles.postItOuterBox,
-            filter: !currentSushi.isClosed ? "blur(5px)" : "none",
-            pointerEvents: !currentSushi.isClosed ? "none" : "auto",
-          }}
-        ></div>
-
-        {/* 답변 목록(포스트잇 들어갈 자리) */}
-        <div style={styles.postItOuterBox}>
-          <div style={styles.postItRow}>
+        {/* 포스트잇 (댓글) */}
+        {!isClosed ? (
+          <p style={styles.catMessage}>£아직 답변이 마감되지 않았다냥♤</p>
+        ) : (
+          <div style={styles.postItContainer}>
             {answer
               .slice(
                 currentPage * answersPerPage,
-                currentPage * answersPerPage + 3
-              )
-              .map((item, index) => (
-                <div
-                  key={item.answerId}
-                  style={{
-                    ...styles.postIt,
-                    backgroundColor:
-                      styles.postItColors[index % styles.postItColors.length],
-                  }}
-                  onClick={() => openModal(item)}
-                >
-                  <p>{item.content}</p>
-                </div>
-              ))}
-          </div>
-          <div style={styles.postItRow}>
-            {answer
-              .slice(
-                currentPage * answersPerPage + 3,
                 (currentPage + 1) * answersPerPage
               )
               .map((item, index) => (
                 <div
                   key={item.answerId}
                   style={{
-                    ...styles.postIt,
-                    backgroundColor:
-                      styles.postItColors[
-                        (index + 3) % styles.postItColors.length
-                      ],
+                    ...styles.postItBox,
+                    ...styles[`postIt${index + 1}`],
                   }}
                   onClick={() => openModal(item)}
                 >
-                  <p>{item.content}</p>
+                  {/* 포스트잇 안의 텍스트 */}
+                  <div style={styles.postIt}>
+                    <p style={styles.postItText}>{item.content}</p>
+                  </div>
                 </div>
               ))}
           </div>
-        </div>
+        )}
 
-        {/* 양 옆으로 슬라이드 버튼 */}
-        <div style={styles.arrowContainer}>
-          {currentPage > 0 && (
-            <button onClick={prevPage} style={styles.arrowLeft}>
-              ◀
-            </button>
-          )}
-          {currentPage < totalPages - 1 && (
-            <button onClick={nextPage} style={styles.arrowRight}>
-              ▶
-            </button>
-          )}
-        </div>
+        {/* 페이지네이션 버튼 */}
+        {totalPages > 1 && (
+          <div style={styles.arrowContainer}>
+            {currentPage > 0 && (
+              <button onClick={prevPage} style={styles.arrowLeft}>
+                ◀
+              </button>
+            )}
+            {currentPage < totalPages - 1 && (
+              <button onClick={nextPage} style={styles.arrowRight}>
+                ▶
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* PostItModal 렌더링 - modalOpen이 true일 때만 보임 */}
+      {/* PostItModal */}
       {modalOpen && (
         <PostItModal
           isOpen={modalOpen}
           onClose={closeModal}
           answer={selectedAnswer}
-          likedAnswerId={likedAnswerId}
-          setLikedAnswerId={setLikedAnswerId}
         />
       )}
     </div>
@@ -187,32 +149,31 @@ const SushiDetail = () => {
 };
 
 const styles = {
+  /**배경 */
   background: {
-    // backgroundColor: "#FDFCC8",
     padding: "20px",
     position: "relative",
     height: "100vh",
     width: "100%",
     overflow: "hidden",
     boxSizing: "border-box",
+    backgroundColor: "#FFF8E1",
   },
+  /**전체 감싸는 컨테이너 */
   outerContainer: {
     backgroundColor: "#FFFEEC",
     position: "relative",
     zIndex: 2,
-    width: "90%",
+    width: "100%",
     maxWidth: "600px",
-    /**디테일창 화면 전체 비율 수정할때 수정하시오
-     * 현재는 화면의 80%로 설정되어있음.
-     */
     height: "80vh",
-    /**여기까지 */
     margin: "-5px auto",
     padding: "20px",
     boxSizing: "border-box",
     border: "6px solid #8B6B3E",
     borderRadius: "12px",
   },
+  /**뒤로가기 버튼 */
   backButton: {
     position: "absolute",
     top: "10px",
@@ -222,97 +183,101 @@ const styles = {
     border: "none",
     cursor: "pointer",
   },
+  /**제목 */
   title: {
     fontSize: "1.5rem",
     textAlign: "center",
   },
+  /**날짜 */
   date: {
     fontSize: "1rem",
     color: "#8D7B7B",
     marginBottom: "20px",
   },
+  /**내용 박스 */
   contentBox: {
     overflowY: "auto",
     padding: "10px",
-    /**디테일창 내용 박스 비율 수정할때 수정하시오
-     * 현재는 화면의 20%로 설정되어있음.
-     */
     height: "20vh",
-    /**여기까지 */
     borderRadius: "8px",
     border: "4px solid #B2975C",
     scrollbarWidth: "none",
   },
-  content: {
-    fontSize: "1.1rem",
-    color: "#5D4A37",
-    lineHeight: "1.6",
-    textAlign: "left",
-    margin: "0px",
-    padding: "0px",
-  },
+  /**구분선 */
   divider: {
     width: "90%",
     margin: "20px auto",
     border: "1px solid #B2975C",
   },
-  /**포스트잇 감싸는 박스 */
-  postItOuterBox: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "10px",
-    overflow: "auto",
-  },
-  postItRow: {
+  /**포스트잇 컨테이너 */
+  postItContainer: {
+    position: "relative",
+    width: "100%",
+    height: "200px",
     display: "flex",
     justifyContent: "center",
-    gap: "10px",
+    alignItems: "center",
   },
+  /**포스트잇 박스 */
+  postItBox: {
+    position: "absolute",
+    width: "80%",
+    maxWidth: "110px",
+    aspectRatio: "1 / 1",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    backgroundColor: "transparent",
+    margin: "0px",
+  },
+  /**포스트잇 디자인 */
   postIt: {
-    width: "100px",
-    height: "100px",
-    padding: "10px",
-    fontSize: "0.9rem",
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    backgroundImage: `url(${postItImage})`,
+    backgroundSize: "contain",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    zIndex: 0,
+
+    display: "flex",
+    justifyContent: "center",
+    // alignItems: "center",
+    padding: "5%",
+  },
+  /**포스트잇 내용 */
+  postItText: {
+    fontSize: "0.75rem",
     color: "#5D4A37",
     fontWeight: "bold",
     textAlign: "center",
-    borderRadius: "6px",
-    boxShadow: "3px 3px 5px rgba(0,0,0,0.2)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    width: "90%",
+    height: "90%",
+    overflow: "hidden",
+    wordBreak: "break-word",
+    whiteSpace: "normal",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    WebkitLineClamp: 4,
+    WebkitBoxOrient: "vertical",
   },
-  postItColors: ["#FFD700", "#FFA07A", "#87CEFA", "#98FB98", "#F0E68C"],
+  /** 포스트잇 배치 */
+  postIt1: { top: "-15%", left: "-10%", transform: "rotate(-5deg)" },
+  postIt2: { top: "40%", left: "5%", transform: "rotate(3deg)" },
+  postIt3: { top: "-15%", left: "25%", transform: "rotate(-2deg)" },
+  postIt4: { top: "40%", left: "45%", transform: "rotate(4deg)" },
+  postIt5: { top: "-15%", left: "60%", transform: "rotate(-3deg)" },
+  /**화살표 컨테이너 */
   arrowContainer: {
     display: "flex",
     justifyContent: "center",
     marginTop: "10px",
   },
-  arrowLeft: {
-    marginRight: "10px",
-    cursor: "pointer",
-  },
-  arrowRight: {
-    marginLeft: "10px",
-    cursor: "pointer",
-  },
-  loading: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    fontSize: "1.5rem",
-    color: "#5D4A37",
-  },
-  error: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    fontSize: "1.5rem",
-    color: "red",
-  },
+  /**왼쪽, 오른쪽 화살표 */
+  arrowLeft: { marginRight: "10px", cursor: "pointer" },
+  arrowRight: { marginLeft: "10px", cursor: "pointer" },
+  /**마감 안된 답변 안내문 */
   catMessage: {
     textAlign: "center",
     fontSize: "1.3rem",
@@ -325,11 +290,9 @@ const styles = {
 // Chrome, Safari에서 스크롤바 숨기기
 document.addEventListener("DOMContentLoaded", function () {
   const style = document.createElement("style");
-  style.innerHTML = `
-    .listContainer::-webkit-scrollbar {
+  style.innerHTML = `.listContainer::-webkit-scrollbar {
       display: none;
-    }
-  `;
+    }`;
   document.head.appendChild(style);
 });
 
