@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSushi } from "../store/slices/sushiSlice";
 import Slider from "react-slick";
@@ -30,6 +30,7 @@ const PostSushi = ({ onClose }) => {
   const [sushiType, setSushiType] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const categoryMapping = {
     연애: 1,
@@ -61,30 +62,19 @@ const PostSushi = ({ onClose }) => {
     centerPadding: "0vh",
     slidesToShow: 3,
     speed: 500,
-    afterChange: (current) => {
-      const filteredSushi = sushiImages.filter(
-        (sushi) => sushi.requiredLikes <= likesReceived
-      );
-      const sushiId = filteredSushi[current].id;
-      setSushiType(sushiId);
+    beforeChange: (current, next) => {
+      setCurrentSlide(next);
+      const nextSushi = sushiImages[next];
+      if (likesReceived >= nextSushi.requiredLikes) {
+        setSushiType(nextSushi.id);
+      } else {
+        setSushiType(-1);
+      }
     },
     initialSlide: 0,
     swipeToSlide: true,
-    focusOnSelect: false,
     slidesToScroll: 1,
-    draggable: true,
-    accessibility: true,
-    responsive: [
-      {
-        breakpoint: 9999,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          infinite: false,
-          centerMode: true,
-        },
-      },
-    ],
+    arrows: false,
   };
 
   const handleCategoryChange = (e) => {
@@ -95,13 +85,23 @@ const PostSushi = ({ onClose }) => {
     setMaxAnswers(Number(e.target.value));
   };
 
-  const handleSushiTypeChange = (name) => {
-    setSushiType(name);
+  const handleSushiTypeChange = (sushi) => {
+    if (likesReceived >= sushi.requiredLikes) {
+      setSushiType(sushi.id);
+    } else {
+      alert(
+        `이 초밥을 선택하기 위해서는 ${sushi.requiredLikes}개의 좋아요가 필요합니다.`
+      );
+    }
   };
 
   const handleNext = () => {
     if (!category) {
       alert("카테고리를 설정해주세요.");
+      return;
+    }
+    if (sushiType === -1) {
+      alert("사용할 수 없는 초밥입니다.");
       return;
     }
     if (!sushiType) {
@@ -267,22 +267,48 @@ const PostSushi = ({ onClose }) => {
                 <p style={orderSet}>초밥 종류 선택</p>
                 <div style={sliderContainer}>
                   <Slider {...settings}>
-                    {sushiImages
-                      .filter((sushi) => sushi.requiredLikes <= likesReceived)
-                      .map((sushi) => (
-                        <div
-                          className="slider"
-                          key={sushi.id}
-                          onClick={() => handleSushiTypeChange(sushi.id)}
+                    {sushiImages.map((sushi, index) => (
+                      <div
+                        className={`slider ${
+                          currentSlide === index ? "active" : ""
+                        }`}
+                        key={sushi.id}
+                        style={{
+                          cursor:
+                            likesReceived >= sushi.requiredLikes
+                              ? "pointer"
+                              : "not-allowed",
+                          border:
+                            currentSlide === index
+                              ? "2px solid #FFD700"
+                              : "none",
+                          textAlign: "center",
+                        }}
+                      >
+                        <img
+                          style={{
+                            ...sliderSushi,
+                            opacity:
+                              likesReceived >= sushi.requiredLikes ? 1 : 0.5,
+                          }}
+                          src={sushi.src}
+                          alt={sushi.name}
+                        />
+                        <p
+                          style={{
+                            opacity:
+                              likesReceived >= sushi.requiredLikes ? 1 : 0.5,
+                            position: "relative",
+                            justifyContent: "center",
+                            top: "-5vh",
+                            textAlign: "center",
+                            fontSize: "1.95vh",
+                          }}
                         >
-                          <img
-                            style={sliderSushi}
-                            src={sushi.src}
-                            alt={sushi.name}
-                          />
-                          <p style={sliderSushiName}> {sushi.name}</p>
-                        </div>
-                      ))}
+                          {sushi.name}
+                        </p>
+                      </div>
+                    ))}
                   </Slider>
                 </div>
                 <div style={orderFormFooter}>
@@ -520,6 +546,7 @@ const radioContainer = {
   gap: "1vh",
   accentColor: "black",
   fontSize: "1.95vh",
+  color: "#454545",
 };
 
 const radioBtn = {
@@ -527,11 +554,11 @@ const radioBtn = {
   textAlign: "left",
   display: "flex",
   gap: "0.5vh",
+  accentColor: "#454545",
 };
 
 const radioLabel = {
   marginTop: "0.5vh",
-  color: "#454545",
 };
 
 const rangeInput = {
@@ -554,24 +581,16 @@ const presentPerson = {
 const sliderContainer = {
   height: "26.5vh",
   width: "100%",
+  color: "#454545",
 };
 
 const sliderSushi = {
-  justifyContent: "center",
-  height: "24vh",
-  pointerEvents: "none",
   display: "block",
   margin: "0 auto",
-  objectFit: "contain",
+  height: "24vh",
+  pointerEvents: "none",
 };
 
-const sliderSushiName = {
-  position: "relative",
-  top: "-7vh",
-  textAlign: "center",
-  fontSize: "1.95vh",
-  color: "#454545",
-};
 const orderFormFooter = {
   position: "absolute",
   bottom: "0",
@@ -601,10 +620,9 @@ const titleText = {
   resize: "none",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
-  width: "99%",
+  width: "44vh",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
-  color: "#454545",
 };
 
 const contentText = {
@@ -614,11 +632,10 @@ const contentText = {
   resize: "none",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
-  height: "35vh",
-  width: "99%",
+  height: "36.8vh",
+  width: "44vh",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
-  color: "#454545",
 };
 
 const backBtn = {
@@ -665,17 +682,16 @@ const submitModalContent = {
   border: "1vh solid #906C48",
   outline: "0.3vh solid #67523E",
   fontSize: "2.8vh",
-  color: "#454545",
 };
 
 const buttonContainer = {
   display: "flex",
-  justifyContent: "center", // 버튼들이 가운데로 정렬되게 설정
-  alignItems: "center", // 버튼들이 세로로 중앙 정렬되게 설정
+  justifyContent: "center",
+  alignItems: "center",
   width: "100%",
   marginTop: "3vh",
   marginBottom: "1vh",
-  gap: "1.5vh", // 버튼들 간의 간격을 설정
+  gap: "1.5vh",
 };
 
 const iconButtonStyle = {
@@ -688,10 +704,10 @@ const iconButtonStyle = {
 };
 
 const iconStyle = {
-  fontSize: "30px", // 아이콘 크기 일관성
-  color: "#333", // 아이콘 색상
-  width: "40px", // 동일한 크기로 지정
-  height: "40px", // 동일한 크기로 지정
+  fontSize: "30px",
+  color: "#333",
+  width: "40px",
+  height: "40px",
   display: "inline-block",
 };
 
@@ -702,7 +718,7 @@ const confirmButtonStyle = {
   backgroundColor: "#dc3545",
   color: "white",
   cursor: "pointer",
-  width: "30%",
+  width: "40%",
   whiteSpace: "nowrap",
   lineHeight: "1",
   fontFamily: "Ownglyph, Ownglyph",
