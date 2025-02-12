@@ -53,7 +53,7 @@ export const useLikeCountSSE = () => {
     });
 
     eventSourceRef.current.onopen = () => {
-      // console.log('좋아요 SSE 연결 성공');
+      console.log('좋아요 SSE 연결 성공');
     };
 
     eventSourceRef.current.onerror = (error) => {

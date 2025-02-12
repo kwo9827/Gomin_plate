@@ -35,10 +35,11 @@ api.interceptors.response.use(
 
     // 페이지 이동이 필요한 에러 (인증, 권한)
     if ([...authErrors, ...oauthErrors].includes(errorCode)) {
+      console.log("문제나서 홈으로");
       window.location.href = "/";
     }
     // 홈 이동이 필요한 에러
-    else if (["S003", "S004", "S005", "R001"].includes(errorCode)) {
+    else if (["S003", "S004", "S005", "R001", "R005"].includes(errorCode)) {
       window.location.href = "/home";
     }
 

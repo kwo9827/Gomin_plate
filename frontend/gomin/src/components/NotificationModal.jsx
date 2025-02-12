@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -10,11 +10,15 @@ import {
 const NotificationModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const { notifications, status } = useSelector((state) => state.notification);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
+      setShow(true);
       dispatch(fetchNotifications({ page: 1, size: 10 }));
       dispatch(fetchUnreadExists());
+    } else {
+      setShow(false);
     }
   }, [isOpen, dispatch]);
 
@@ -26,11 +30,11 @@ const NotificationModal = ({ isOpen, onClose }) => {
     onClose();
   };
 
-  if (!isOpen) return null;
+  if (!isOpen && !show) return null;
 
   return (
-    <div style={overlayStyle}>
-      <div style={modalStyle}>
+    <div style={{ ...overlayStyle, opacity: show ? 1 : 0 }}>
+      <div style={{ ...modalStyle, transform: show ? "scale(1)" : "scale(0.9)" }}>
         <div style={outerBoxStyle}>
           <div style={innerBoxStyle}>알림</div>
           <button style={cancelButtonStyle} onClick={onClose}>
@@ -40,7 +44,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
 
         <div>
           {status === "loading" ? (
-            <p>로딩 중...</p>
+            <p style={emptyTextStyle}>로딩 중...</p>
           ) : notifications.length > 0 ? (
             <ul style={listStyle}>
               {notifications.map((notification) => (
@@ -98,13 +102,15 @@ const overlayStyle = {
   alignItems: "center",
   zIndex: 1000,
   backdropFilter: "blur(10px)",
+  transition: "opacity 0.3s ease", // opacity에 애니메이션 추가
 };
 
 const modalStyle = {
   backgroundColor: "#fdf5e6",
   padding: "0px",
   borderRadius: "10px",
-  width: "90%",
+  top: "6vh",
+  width: "46vh",
   maxWidth: "393px",
   height: "80vh",
   maxHeight: "691px",
@@ -114,6 +120,7 @@ const modalStyle = {
   overflowY: "auto",
   boxSizing: "border-box",
   scrollbarWidth: "none",
+  transition: "transform 0.3s ease", // scale에 애니메이션 추가
 };
 
 const cancelButtonStyle = {
@@ -130,7 +137,7 @@ const cancelButtonStyle = {
 };
 
 const outerBoxStyle = {
-  width: "100%",
+  width: "30vh",
   maxWidth: "250px",
   margin: "20px auto",
   border: "4px solid #8B6B3E",
