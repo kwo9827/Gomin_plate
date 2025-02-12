@@ -22,7 +22,7 @@ import deskImg from "../assets/home/rail.webp";
 import masterImg from "../assets/home/master.webp";
 import SushiView from "./SushiView";
 
-import catSound from "../assets/sounds/nyang.mp3";
+import plate from "../assets/sounds/plate.mp3";
 
 import { setIsNew } from "../store/slices/memberSlice";
 
@@ -39,6 +39,8 @@ const Home = () => {
   const [isPostSushiOpen, setIsPostSushiOpen] = useState(false);
   const [isSushiViewOpen, setIsSushiViewOpen] = useState(false);
   const [selectedSushiData, setSelectedSushiData] = useState(null);
+
+  const audioRef = useRef(null);
 
   // ✅ `handleSetIsNew` 함수 정의
   const handleSetIsNew = (value) => {
@@ -74,15 +76,6 @@ const Home = () => {
   const loading = useSelector(
     (state) => state.notification.status === "loading"
   );
-
-  const audioRef = useRef(null);
-  // 고양이 마스터 클릭 시 소리 재생 함수
-  const handleCatMasterClick = () => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.3;
-      audioRef.current.play();
-    }
-  };
 
   useLikeCountSSE();
   useNotificationSSE();
@@ -159,6 +152,14 @@ const Home = () => {
     }
   }, [hasRefreshed]);
 
+  // 초밥 모달이 열릴 때 소리 재생
+  useEffect(() => {
+    if (isSushiViewOpen && audioRef.current) {
+      audioRef.current.volume = 0.4;
+      audioRef.current.play();
+    }
+  }, [isSushiViewOpen]);
+
   return (
     <>
       {/* 배경 이미지 */}
@@ -201,15 +202,9 @@ const Home = () => {
           />
 
           {/* Rail */}
-          <div
-            onClick={handleCatMasterClick} // 클릭 시 소리 재생
-            style={styles.rail}>
+          <div style={styles.rail}>
             <Rail onSushiClick={handleSushiClick} />
           </div>
-          {/* 효과음 */}
-          <audio ref={audioRef}>
-            <source src={catSound} type="audio/mp3" />
-          </audio>
           {/* 주문벨 */}
           <div style={styles.bell}>
             <PostSushiBell onClick={openPostSushi} style={{ zIndex: 5 }} />
@@ -266,6 +261,7 @@ const Home = () => {
                 <p> 초밥집에 입장하는 중..</p>
               </div>
             )}
+            <audio ref={audioRef} src={plate} />
             {selectedSushiData && (
               <SushiView
                 isOpen={isSushiViewOpen}
