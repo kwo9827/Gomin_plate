@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SushiCard from "../components/SushiCard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMySushi } from "../store/slices/sushiSlice";
-import { useTrail, animated } from '@react-spring/web'; // react-spring 라이브러리에서 useTrail, animated 가져오기
+import { useTrail, animated } from "@react-spring/web"; // react-spring 라이브러리에서 useTrail, animated 가져오기
 
 import "../styles/font.css";
 
@@ -55,8 +55,8 @@ const MySushiList = () => {
   // react-spring 애니메이션 효과를 위한 trail
   const trail = useTrail(displaySushi.length, {
     opacity: 1,
-    transform: 'translateY(0px)',
-    from: { opacity: 0, transform: 'translateY(50px)' },
+    transform: "translateY(0px)",
+    from: { opacity: 0, transform: "translateY(50px)" },
     config: { mass: 1, tension: 200, friction: 20 },
   });
 
@@ -182,15 +182,15 @@ const styles = {
     border: "0.3vh solid #906C48",
     borderRadius: "1vh",
     outline: "none",
-    boxSizing: "border-box", // border를 width에 포함시키기 위해 추가
+    boxSizing: "border-box",
   },
 
   /** 입력창 내부 돋보기 아이콘 */
   searchIcon: {
     position: "absolute",
-    right: "2vh", // 오른쪽에 배치
+    right: "2vh",
     top: "50%",
-    transform: "translateY(-50%)", // 세로 중앙 정렬
+    transform: "translateY(-50%)",
     fontSize: "3vh",
     color: "#906C48",
     cursor: "pointer",

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import KakaoLoginButton from "../components/KakaoLoginButton";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import introImage from "../assets/introoooo.webp";
+import BgmContext from "../context/BgmProvider";
 
 const Intro = () => {
   return (
@@ -14,6 +15,7 @@ const Intro = () => {
           transform: "translateX(0) translateY(3%)",
         }}
       ></div>
+
       <div style={styles.buttoncontainer}>
         <h2 style={{ marginBottom: "1vh", fontSize: "4.5vh" }}>로그인</h2>
         <KakaoLoginButton />

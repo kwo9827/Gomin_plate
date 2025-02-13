@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSushi } from "../store/slices/sushiSlice";
 import Slider from "react-slick";
@@ -6,6 +6,8 @@ import "../styles/slider.css";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
+import nextPage from "../assets/sounds/nextPage.mp3";
 
 import cuttle from "../assets/sushi/cuttle.webp";
 import eel from "../assets/sushi/eel.webp";
@@ -20,6 +22,44 @@ import uni from "../assets/sushi/성게알초밥.webp";
 import tuna from "../assets/sushi/참치초밥.webp";
 import x from "../assets/x-twitter.png"
 
+const styles = `
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      background-color: rgba(0,0,0,0);
+    }
+    to {
+      background-color: rgba(0,0,0,0.6);
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      background-color: rgba(0,0,0,0.6);
+    }
+    to {
+      background-color: rgba(0,0,0,0);
+    }
+  }
+`;
+
 const PostSushi = ({ onClose }) => {
   const dispatch = useDispatch();
   const likesReceived = useSelector((state) => state.member.likesReceived);
@@ -33,6 +73,8 @@ const PostSushi = ({ onClose }) => {
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [shareUrl, setShareUrl] = useState("");
+  const audioRef = useRef(null);
+  const [isClosing, setIsClosing] = useState(false);
 
   const categoryMapping = {
     연애: 1,
@@ -97,7 +139,17 @@ const PostSushi = ({ onClose }) => {
     }
   };
 
+  React.useEffect(() => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio(nextPage);
+    }
+  }, []);
+
   const handleNext = () => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.5;
+      audioRef.current.play();
+    }
     if (!category) {
       alert("카테고리를 설정해주세요.");
       return;
@@ -114,6 +166,10 @@ const PostSushi = ({ onClose }) => {
   };
 
   const handleBack = () => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.5;
+      audioRef.current.play();
+    }
     setStep(1);
   };
 
@@ -142,19 +198,18 @@ const PostSushi = ({ onClose }) => {
       sushiType,
     };
     console.log("등록된 내용:", sushiData);
-    dispatch(createSushi(sushiData))
-      .then((response) => {
-        const { success, data, error } = response.payload;  // 서버에서 반환된 token
-        const { token } = data;  // 서버에서 반환된 token
-        // 공유 URL 생성 (이제 `token`을 포함한 URL을 생성)
-        const shareUrl = `share/${token}`;
-        setShareUrl(shareUrl); // shareUrl 상태 업데이트
-        console.log("공유 URL:", shareUrl);
+    dispatch(createSushi(sushiData)).then((response) => {
+      const { success, data, error } = response.payload; // 서버에서 반환된 token
+      const { token } = data; // 서버에서 반환된 token
+      // 공유 URL 생성 (이제 `token`을 포함한 URL을 생성)
+      const shareUrl = `share/${token}`;
+      setShareUrl(shareUrl); // shareUrl 상태 업데이트
+      console.log("공유 URL:", shareUrl);
 
-        // 모달에서 공유 URL을 활용
-        setShowModal(false);
-        setShowCompleteModal(true);
-      })
+      // 모달에서 공유 URL을 활용
+      setShowModal(false);
+      setShowCompleteModal(true);
+    });
   };
 
   const handleCompleteClose = () => {
@@ -173,6 +228,11 @@ const PostSushi = ({ onClose }) => {
     } catch (err) {
       console.log(err);
     }
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 700); // 애니메이션 지속 시간과 동일하게 설정
   };
 
   React.useEffect(() => {
@@ -180,311 +240,332 @@ const PostSushi = ({ onClose }) => {
   }, []);
 
   return (
-    <div style={overlayStyle}>
-      <div style={modalStyle}>
-        <div style={orderForm}>
-          <div style={orderFormHeader}>
-            <div style={orderFormHeaderTop}>
-              <p style={orderTitle}>
-                마음속 이야기를
-                <br />
-                적는 고민 작성서
+    <>
+      <style>{styles}</style>
+      <div
+        style={{
+          ...overlayStyle,
+          animation: isClosing
+            ? "fadeOut 0.7s ease-out"
+            : "fadeIn 0.7s ease-out",
+          backgroundColor: isClosing ? "rgba(0,0,0,0)" : "rgba(0,0,0,0.6)",
+        }}
+      >
+        <div
+          style={{
+            ...modalStyle,
+            animation: isClosing
+              ? "slideDown 0.7s ease-out"
+              : "slideUp 0.7s ease-out",
+          }}
+        >
+          <div style={orderForm}>
+            <div style={orderFormHeader}>
+              <div style={orderFormHeaderTop}>
+                <p style={orderTitle}>
+                  마음속 이야기를
+                  <br />
+                  적는 고민 작성서
+                </p>
+                <button style={closeBtn} onClick={handleClose}>
+                  ✖
+                </button>
+              </div>
+              <p style={orderExplain}>
+                주문 가능 초밥의
+                <br /> 종류는 달라질 수 있습니다
               </p>
-              <button style={closeBtn} onClick={onClose}>
-                ✖
-              </button>
+              <hr style={divider} />
             </div>
-            <p style={orderExplain}>
-              주문 가능 초밥의
-              <br /> 종류는 달라질 수 있습니다
-            </p>
-            <hr style={divider} />
-          </div>
 
-          <div style={orderFormBody}>
-            {step === 1 ? (
-              <>
-                <p style={orderSet}>질문 카테고리 설정</p>
-                <div style={radioContainer}>
-                  <label style={radioBtn}>
-                    <input
-                      type="radio"
-                      id="category1"
-                      name="category"
-                      value={categoryMapping["연애"]}
-                      checked={category === categoryMapping["연애"]}
-                      onChange={handleCategoryChange}
-                    />
-                    <span style={radioLabel}>연애</span>
-                  </label>
-                  <label style={radioBtn}>
-                    <input
-                      type="radio"
-                      id="category2"
-                      name="category"
-                      value={categoryMapping["우정"]}
-                      checked={category === categoryMapping["우정"]}
-                      onChange={handleCategoryChange}
-                    />
-                    <span style={radioLabel}>우정</span>
-                  </label>
-                  <label style={radioBtn}>
-                    <input
-                      type="radio"
-                      id="category3"
-                      name="category"
-                      value={categoryMapping["진로"]}
-                      checked={category === categoryMapping["진로"]}
-                      onChange={handleCategoryChange}
-                    />
-                    <span style={radioLabel}>진로</span>
-                  </label>
-                  <label style={radioBtn}>
-                    <input
-                      type="radio"
-                      id="category4"
-                      name="category"
-                      value={categoryMapping["건강"]}
-                      checked={category === categoryMapping["건강"]}
-                      onChange={handleCategoryChange}
-                    />
-                    <span style={radioLabel}>건강</span>
-                  </label>
-                  <label style={radioBtn}>
-                    <input
-                      type="radio"
-                      id="category5"
-                      name="category"
-                      value={categoryMapping["가족"]}
-                      checked={category === categoryMapping["가족"]}
-                      onChange={handleCategoryChange}
-                    />
-                    <span style={radioLabel}>가족</span>
-                  </label>
-                  <label style={radioBtn}>
-                    <input
-                      type="radio"
-                      id="category6"
-                      name="category"
-                      value={categoryMapping["기타"]}
-                      checked={category === categoryMapping["기타"]}
-                      onChange={handleCategoryChange}
-                    />
-                    <span style={radioLabel}>기타</span>
-                  </label>
-                </div>
-                <hr style={divider} />
-                <p style={orderSet}>인원수 설정</p>
-                <input
-                  style={rangeInput}
-                  type="range"
-                  min="1"
-                  max="10"
-                  value={maxAnswers}
-                  onChange={handleProgressChange}
-                />
-                <p style={presentPerson}>{maxAnswers} / 10</p>
-                <hr style={divider} />
-                <p style={orderSet}>초밥 종류 선택</p>
-                <div style={sliderContainer}>
-                  <Slider {...settings}>
-                    {sushiImages.map((sushi, index) => (
-                      <div
-                        className={`slider ${
-                          currentSlide === index ? "active" : ""
-                        }`}
-                        key={sushi.id}
-                        style={{
-                          cursor:
-                            likesReceived >= sushi.requiredLikes
-                              ? "pointer"
-                              : "not-allowed",
-                          border:
-                            currentSlide === index
-                              ? "2px solid #FFD700"
-                              : "none",
-                          textAlign: "center",
-                        }}
-                      >
-                        <img
+            <div style={orderFormBody}>
+              {step === 1 ? (
+                <>
+                  <p style={orderSet}>질문 카테고리 설정</p>
+                  <div style={radioContainer}>
+                    <label style={radioBtn}>
+                      <input
+                        type="radio"
+                        id="category1"
+                        name="category"
+                        value={categoryMapping["연애"]}
+                        checked={category === categoryMapping["연애"]}
+                        onChange={handleCategoryChange}
+                      />
+                      <span style={radioLabel}>연애</span>
+                    </label>
+                    <label style={radioBtn}>
+                      <input
+                        type="radio"
+                        id="category2"
+                        name="category"
+                        value={categoryMapping["우정"]}
+                        checked={category === categoryMapping["우정"]}
+                        onChange={handleCategoryChange}
+                      />
+                      <span style={radioLabel}>우정</span>
+                    </label>
+                    <label style={radioBtn}>
+                      <input
+                        type="radio"
+                        id="category3"
+                        name="category"
+                        value={categoryMapping["진로"]}
+                        checked={category === categoryMapping["진로"]}
+                        onChange={handleCategoryChange}
+                      />
+                      <span style={radioLabel}>진로</span>
+                    </label>
+                    <label style={radioBtn}>
+                      <input
+                        type="radio"
+                        id="category4"
+                        name="category"
+                        value={categoryMapping["건강"]}
+                        checked={category === categoryMapping["건강"]}
+                        onChange={handleCategoryChange}
+                      />
+                      <span style={radioLabel}>건강</span>
+                    </label>
+                    <label style={radioBtn}>
+                      <input
+                        type="radio"
+                        id="category5"
+                        name="category"
+                        value={categoryMapping["가족"]}
+                        checked={category === categoryMapping["가족"]}
+                        onChange={handleCategoryChange}
+                      />
+                      <span style={radioLabel}>가족</span>
+                    </label>
+                    <label style={radioBtn}>
+                      <input
+                        type="radio"
+                        id="category6"
+                        name="category"
+                        value={categoryMapping["기타"]}
+                        checked={category === categoryMapping["기타"]}
+                        onChange={handleCategoryChange}
+                      />
+                      <span style={radioLabel}>기타</span>
+                    </label>
+                  </div>
+                  <hr style={divider} />
+                  <p style={orderSet}>인원수 설정</p>
+                  <input
+                    style={rangeInput}
+                    type="range"
+                    min="1"
+                    max="10"
+                    value={maxAnswers}
+                    onChange={handleProgressChange}
+                  />
+                  <p style={presentPerson}>{maxAnswers} / 10</p>
+                  <hr style={divider} />
+                  <p style={orderSet}>초밥 종류 선택</p>
+                  <div style={sliderContainer}>
+                    <Slider {...settings}>
+                      {sushiImages.map((sushi, index) => (
+                        <div
+                          className={`slider ${
+                            currentSlide === index ? "active" : ""
+                          }`}
+                          key={sushi.id}
                           style={{
-                            ...sliderSushi,
-                            opacity:
-                              likesReceived >= sushi.requiredLikes ? 1 : 0.5,
-                          }}
-                          src={sushi.src}
-                          alt={sushi.name}
-                        />
-                        <p
-                          style={{
-                            opacity:
-                              likesReceived >= sushi.requiredLikes ? 1 : 0.5,
-                            position: "relative",
-                            justifyContent: "center",
-                            top: "-5vh",
+                            cursor:
+                              likesReceived >= sushi.requiredLikes
+                                ? "pointer"
+                                : "not-allowed",
+                            border:
+                              currentSlide === index
+                                ? "2px solid #FFD700"
+                                : "none",
                             textAlign: "center",
-                            fontSize: "1.95vh",
                           }}
                         >
-                          {sushi.name}
-                        </p>
-                      </div>
-                    ))}
-                  </Slider>
-                </div>
-                <div style={orderFormFooter}>
+                          <img
+                            style={{
+                              ...sliderSushi,
+                              opacity:
+                                likesReceived >= sushi.requiredLikes ? 1 : 0.5,
+                            }}
+                            src={sushi.src}
+                            alt={sushi.name}
+                          />
+                          <p
+                            style={{
+                              opacity:
+                                likesReceived >= sushi.requiredLikes ? 1 : 0.5,
+                              position: "relative",
+                              justifyContent: "center",
+                              top: "-5vh",
+                              textAlign: "center",
+                              fontSize: "1.95vh",
+                            }}
+                          >
+                            {sushi.name}
+                          </p>
+                        </div>
+                      ))}
+                    </Slider>
+                  </div>
+                  <div style={orderFormFooter}>
+                    <hr style={divider} />
+                    <div style={pageSelect}>
+                      <button style={nextBtn} onClick={handleNext}>
+                        고민작성 &gt;
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <p style={orderSet}>제목</p>
                   <hr style={divider} />
-                  <div style={pageSelect}>
-                    <button style={nextBtn} onClick={handleNext}>
-                      고민작성 &gt;
-                    </button>
+                  <textarea
+                    style={titleText}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="고민의 제목을 입력하세요 (30자 이내)"
+                    maxLength={30}
+                  />
+                  <p style={textCounter}>{title.length} / 30</p>
+                  <hr style={divider} />
+                  <p style={orderSet}>내용</p>
+                  <hr style={divider} />
+                  <textarea
+                    style={contentText}
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    placeholder="고민의 내용을 입력하세요 (500자 이내)"
+                    maxLength={500}
+                  />
+                  <p style={textCounter}>{content.length} / 500</p>
+                  <div style={orderFormFooter}>
+                    <hr style={divider} />
+                    <div style={pageSelect}>
+                      <button style={backBtn} onClick={handleBack}>
+                        &lt; 이전
+                      </button>
+                      <button style={submitBtn} onClick={handleSubmit}>
+                        고민제출 &gt;
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </>
-            ) : (
-              <div>
-                <p style={orderSet}>제목</p>
-                <hr style={divider} />
-                <textarea
-                  style={titleText}
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="고민의 제목을 입력하세요 (30자 이내)"
-                  maxLength={30}
-                />
-                <p style={textCounter}>{title.length} / 30</p>
-                <hr style={divider} />
-                <p style={orderSet}>내용</p>
-                <hr style={divider} />
-                <textarea
-                  style={contentText}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="고민의 내용을 입력하세요 (500자 이내)"
-                  maxLength={500}
-                />
-                <p style={textCounter}>{content.length} / 500</p>
-                <div style={orderFormFooter}>
-                  <hr style={divider} />
-                  <div style={pageSelect}>
-                    <button style={backBtn} onClick={handleBack}>
-                      &lt; 이전
+              )}
+            </div>
+
+            {showModal && (
+              <div style={submitModalStyle}>
+                <div style={submitModalContent}>
+                  <h3>
+                    고민을 제출하고 난 후에는 <br /> 수정할 수 없습니다.
+                  </h3>
+                  <div style={buttonContainer}>
+                    <button
+                      style={confirmButtonStyle}
+                      onClick={handleConfirmSubmit}
+                    >
+                      확인
                     </button>
-                    <button style={submitBtn} onClick={handleSubmit}>
-                      고민제출 &gt;
+                    <button
+                      style={cancelButtonStyle}
+                      onClick={handleCancelSubmit}
+                    >
+                      취소
                     </button>
                   </div>
                 </div>
               </div>
             )}
-          </div>
 
-          {showModal && (
-            <div style={submitModalStyle}>
-              <div style={submitModalContent}>
-                <h3>
-                  고민을 제출하고 난 후에는 <br /> 수정할 수 없습니다.
-                </h3>
-                <div style={buttonContainer}>
+            {showCompleteModal && (
+              <div style={submitModalStyle}>
+                <div style={submitModalContent}>
+                  <h3>제출이 완료되었습니다!</h3>
+
                   <button
                     style={confirmButtonStyle}
-                    onClick={handleConfirmSubmit}
+                    onClick={handleCompleteClose}
                   >
                     확인
                   </button>
-                  <button
-                    style={cancelButtonStyle}
-                    onClick={handleCancelSubmit}
-                  >
-                    취소
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
 
-          {showCompleteModal && (
-            <div style={submitModalStyle}>
-              <div style={submitModalContent}>
-                <h3>제출이 완료되었습니다!</h3>
+                  <p>공유하기</p>
 
-                <button
-                  style={confirmButtonStyle}
-                  onClick={handleCompleteClose}
-                >
-                  확인
-                </button>
+                  <div style={buttonContainer}>
+                    {/* 링크복사 아이콘 */}
+                    <i 
+                      className="fas fa-link"
+                      onClick={() => handleCopyClipBoard(`${window.location.origin}/${shareUrl}`)}
+                      style={iconStyleR}
+                    ></i>
 
-                <p>공유하기</p>
+                    {/* 카카오톡 공유 아이콘 */}
+                    <button
+                      style={iconButtonStyle}
+                      onClick={() => {
+                        if (!window.Kakao.isInitialized()) {
+                          window.Kakao.init(
+                            import.meta.env.VITE_KAKAO_JAVASCRIPT_ID
+                          );
+                        }
 
-                <div style={buttonContainer}>
-                  {/* 링크복사 아이콘 */}
-                  <i 
-                    className="fas fa-link"
-                    onClick={() => handleCopyClipBoard(`${window.location.origin}/${shareUrl}`)}
-                    style={iconStyleR}
-                  ></i>
+                        window.Kakao.Link.sendCustom({
+                          templateId: 117216, // 본인 템플릿 ID
+                          templateArgs: {
+                            url: shareUrl,
+                          },
+                        });
+                        console.log("카카오톡 공유하기" + shareUrl);
+                      }}
+                    >
+                      <img
+                        src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
+                        alt="카카오톡 아이콘"
+                        style={iconStyleF}
+                      />
+                    </button>
 
-                  {/* 카카오톡 공유 아이콘 */}
-                  <button
-                    style={iconButtonStyle}
-                    onClick={() => {
-                      if (!window.Kakao.isInitialized()) {
-                        window.Kakao.init(
-                          import.meta.env.VITE_KAKAO_JAVASCRIPT_ID
+                    {/* 페이스북 공유 아이콘 */}
+                    <button
+                      style={iconButtonStyle}
+                      onClick={() => {
+                        window.open(
+                          `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${shareUrl}`,
+                          "_blank"
                         );
-                      }
+                        console.log("페이스북 공유하기");
+                      }}
+                    >
+                      <i
+                        className="fab fa-facebook-square"
+                        style={iconStyleF}
+                      ></i>
+                    </button>
 
-                      window.Kakao.Link.sendCustom({
-                        templateId: 117216, // 본인 템플릿 ID
-                        templateArgs: {
-                          url: shareUrl,
-                        },
-                      });
-                      console.log("카카오톡 공유하기" + shareUrl);
-                    }}
-                  >
-                    <img
-                      src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
-                      alt="카카오톡 아이콘"
-                      style={iconStyleF}
-                    />
-                  </button>
-
-                  {/* 페이스북 공유 아이콘 */}
-                  <button
-                    style={iconButtonStyle}
-                    onClick={() => {
-                      window.open(
-                        `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${shareUrl}`,
-                        "_blank"
-                      );
-                      console.log("페이스북 공유하기");
-                    }}
-                  >
-                    <i className="fab fa-facebook-square" style={iconStyleF}></i>
-                  </button>
-
-                  {/* X (구 트위터) 공유 아이콘 */}
-                  <a
-                    href={`https://x.com/intent/tweet?text=Check%20out%20this%20sushi%20post!&url=${window.location.origin}/${shareUrl}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={iconButtonStyle}
-                  >
-                    <img
-                      src={x}
-                      alt="X (Twitter) Icon"
-                      style={iconStyleX}
-                    />
-                  </a>
+                    {/* X (구 트위터) 공유 아이콘 */}
+                    <a
+                      href={`https://x.com/intent/tweet?text=Check%20out%20this%20sushi%20post!&url=${window.location.origin}/${shareUrl}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={iconButtonStyle}
+                    >
+                      <i
+                        class="fab fa-brands fa-x-twitter"
+                        style={iconStyleX}
+                      ></i>
+                      {/* <i className="fa-brands fa-x-twitter" style={iconStyleX}></i> */}
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -507,6 +588,7 @@ const modalStyle = {
   height: "80vh",
   width: "50vh",
   maxWidth: "90vw",
+  animation: "slideUp 0.7s ease-out", // 아래에서 위로 슬라이드 애니메이션으로 변경
 };
 
 const orderForm = {
@@ -804,5 +886,6 @@ const textCounter = {
   fontSize: "1.8vh",
   color: "#454545",
 };
+}
 
 export default PostSushi;

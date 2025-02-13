@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { countLike } from "../store/slices/memberSlice";
 
@@ -18,6 +18,48 @@ import flatfighImg from "../assets/sushi/광어초밥.webp";
 const MAX_LIKES = 80; // 최대 좋아요 수 수정 (참치 해금 조건)
 const SUSHI_COUNT = 11;
 
+const keyframes = `
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      background-color: rgba(0,0,0,0.6);
+    }
+    to {
+      background-color: rgba(0,0,0,0);
+    }
+  }
+
+  @keyframes modalShow {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes modalHide {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+  }
+`;
+
 // 초밥 타입 매핑 수정 - Sushi.jsx와 동일한 방식으로 변경
 const sushiTypes = {
   1: { name: "계란초밥", image: eggImg, requiredLikes: 0 },
@@ -34,8 +76,28 @@ const sushiTypes = {
 };
 
 const SushiUnlock = ({ isOpen, onClose }) => {
+  const [isClosing, setIsClosing] = useState(false);
   const dispatch = useDispatch();
   const likesReceived = useSelector((state) => state.member.likesReceived);
+
+  // keyframes 스타일을 동적으로 추가
+  useEffect(() => {
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = keyframes;
+    document.head.appendChild(styleSheet);
+
+    return () => {
+      document.head.removeChild(styleSheet);
+    };
+  }, []);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 300);
+  };
 
   // 다음 해금될 초밥 찾기 함수 추가
   const getNextSushi = () => {
@@ -47,24 +109,55 @@ const SushiUnlock = ({ isOpen, onClose }) => {
     return sushiTypes[SUSHI_COUNT]; // 모두 해금된 경우 마지막 초밥 반환
   };
 
+  // 현재 해금된 초밥의 인덱스 찾기
+  const getCurrentSushiIndex = () => {
+    for (let i = SUSHI_COUNT; i >= 1; i--) {
+      if (sushiTypes[i].requiredLikes <= likesReceived) {
+        return i;
+      }
+    }
+    return 1; // 기본값은 첫 번째 초밥
+  };
+
   useEffect(() => {
     if (isOpen) {
       dispatch(countLike());
     }
   }, [isOpen, dispatch]);
 
-  const progressPercentage = Math.min((likesReceived / MAX_LIKES) * 100, 100);
   const nextSushi = getNextSushi();
+  const currentSushiIndex = getCurrentSushiIndex();
+  const currentSushi = sushiTypes[currentSushiIndex];
+
+  const progressPercentage = Math.min(
+    ((likesReceived - currentSushi.requiredLikes) /
+      (nextSushi.requiredLikes - currentSushi.requiredLikes)) *
+      100,
+    100
+  );
 
   if (!isOpen) return null;
 
   return (
-    <div style={overlayStyle}>
-      <div style={modalStyle}>
+    <div
+      style={{
+        ...overlayStyle,
+        animation: isClosing ? "fadeOut 0.3s ease-out" : "fadeIn 0.3s ease-out",
+        backgroundColor: isClosing ? "rgba(0,0,0,0)" : "rgba(0,0,0,0.6)",
+      }}
+    >
+      <div
+        style={{
+          ...modalStyle,
+          animation: isClosing
+            ? "modalHide 0.3s ease-in-out forwards"
+            : "modalShow 0.3s ease-in-out forwards",
+        }}
+      >
         <div style={outerBoxStyle}>
           <div style={innerBoxStyle}>나의 초밥</div>
         </div>
-        <button onClick={onClose} style={cancelButtonStyle}>
+        <button onClick={handleClose} style={cancelButtonStyle}>
           ✖
         </button>
 
@@ -83,7 +176,7 @@ const SushiUnlock = ({ isOpen, onClose }) => {
             />
           </div>
           <span style={progressText}>
-            {likesReceived} / {MAX_LIKES}
+            {likesReceived} / {nextSushi.requiredLikes}
           </span>
         </div>
 
@@ -134,6 +227,7 @@ const overlayStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  animation: "fadeIn 0.3s ease-in-out forwards",
   // backdropFilter: "blur(10px)",
 };
 
@@ -143,26 +237,25 @@ const modalStyle = {
   paddingTop: "2vh",
   position: "relative",
   top: "6vh",
-  height: "80vh",
+  height: "fit-content",
   width: "50vh",
   maxWidth: "90vw",
   border: "1vh solid #906C48",
+  borderRadius: "1.2vh",
   outline: "0.25vh solid #67523E",
-  overflowY: "auto",
-  scrollbarWidth: "none", // Firefox를 위한 설정
-  msOverflowStyle: "none", // IE를 위한 설정
-  "&::-webkit-scrollbar": {
-    display: "none", // Chrome, Safari를 위한 설정
-  },
-  display: "flex", // 추가
-  flexDirection: "column", // 추가
+  display: "flex",
+  flexDirection: "column",
   alignItems: "center",
   boxSizing: "border-box",
+  opacity: 0,
+  transform: "translateY(20px) scale(0.95)",
+  animation: "modalShow 0.3s ease-in-out forwards",
 };
 
 const outerBoxStyle = {
   width: "30vh",
   border: "0.5vh solid #906C48",
+  borderRadius: "1.2vh",
   marginTop: "0.3vh",
   marginBottom: "3vh",
   backgroundColor: "#B2975C",
@@ -174,6 +267,7 @@ const outerBoxStyle = {
 const innerBoxStyle = {
   width: "100%",
   border: "0.3vh solid #906C48",
+  borderRadius: "1.2vh",
   backgroundColor: "#B2975C",
   textAlign: "center",
   color: "#5D4A37",
@@ -296,8 +390,8 @@ const sushiImageContainer = {
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
-  transform: "scale(3.5)",
-  top: "2vh",
+  transform: "scale(2.5)",
+  top: "1.3vh",
 };
 
 const sushiImageStyle = {
@@ -309,11 +403,11 @@ const sushiImageStyle = {
 
 const sushiNameStyle = {
   position: "absolute",
-  top: "7.2vh",
+  top: "7vh",
   width: "100%",
   color: "#5D4A37",
   textAlign: "center",
-  fontSize: "0.5vh",
+  fontSize: "0.8vh",
 };
 
 const lockedStyle = {
@@ -324,24 +418,27 @@ const lockedStyle = {
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
+  transform: "scale(2.5)",
+  top: "1.3vh",
 };
 
 const lockIconStyle = {
   position: "absolute",
-  top: "4.2vh",
-  color: "#5D4A37",
-  transform: "scale(3)",
-  opacity: 0.7,
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  top: "-0.8vh",
 };
 
 const requiredLikesStyle = {
   position: "absolute",
   width: "100%",
-  top: "6.2vh",
-  fontSize: "1.5vh",
+  top: "5.5vh",
+  fontSize: "0.7vh",
   textAlign: "center",
-  marginBottom: "0.3vh",
-  padding: "0 0.5vh",
   wordBreak: "keep-all",
   color: "#5D4A37",
   textShadow: `
@@ -354,11 +451,11 @@ const requiredLikesStyle = {
 
 const sushiUnlockNameStyle = {
   position: "absolute",
-  top: "10.65vh",
+  top: "7vh",
   width: "100%",
   color: "#5D4A37",
   textAlign: "center",
-  fontSize: "1.75vh",
+  fontSize: "0.8vh",
 };
 
 export default SushiUnlock;

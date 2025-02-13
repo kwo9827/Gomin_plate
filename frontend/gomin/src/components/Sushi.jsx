@@ -13,6 +13,7 @@ import scallopImg from "../assets/sushi/가리비초밥.webp";
 import tunaImg from "../assets/sushi/참치초밥.webp";
 import uniImg from "../assets/sushi/성게알초밥.webp";
 import flatfighImg from "../assets/sushi/광어초밥.webp";
+import salmonroeImg from "../assets/sushi/연어알초밥.webp";
 
 // Plates 이미지 임포트
 import redImg from "../assets/plates/red.webp";
@@ -73,6 +74,7 @@ const Sushi = ({
     9: { name: "광어", image: flatfighImg },
     10: { name: "성게알", image: uniImg },
     11: { name: "참치", image: tunaImg },
+    12: { name: "연어알", image: salmonroeImg },
   };
 
   const categoryName = categories[category] || "알 수 없는 카테고리";
