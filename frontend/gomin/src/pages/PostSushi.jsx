@@ -228,6 +228,7 @@ const PostSushi = ({ onClose }) => {
     } catch (err) {
       console.log(err);
     }
+  }
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
@@ -494,72 +495,69 @@ const PostSushi = ({ onClose }) => {
 
                   <p>공유하기</p>
 
-                  <div style={buttonContainer}>
-                    {/* 링크복사 아이콘 */}
-                    <i 
-                      className="fas fa-link"
-                      onClick={() => handleCopyClipBoard(`${window.location.origin}/${shareUrl}`)}
-                      style={iconStyleR}
-                    ></i>
+                <div style={buttonContainer}>
+                  {/* 링크복사 아이콘 */}
+                  <i 
+                    className="fas fa-link"
+                    onClick={() => handleCopyClipBoard(`${window.location.origin}/${shareUrl}`)}
+                    style={iconStyleR}
+                  ></i>
 
-                    {/* 카카오톡 공유 아이콘 */}
-                    <button
-                      style={iconButtonStyle}
-                      onClick={() => {
-                        if (!window.Kakao.isInitialized()) {
-                          window.Kakao.init(
-                            import.meta.env.VITE_KAKAO_JAVASCRIPT_ID
-                          );
-                        }
-
-                        window.Kakao.Link.sendCustom({
-                          templateId: 117216, // 본인 템플릿 ID
-                          templateArgs: {
-                            url: shareUrl,
-                          },
-                        });
-                        console.log("카카오톡 공유하기" + shareUrl);
-                      }}
-                    >
-                      <img
-                        src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
-                        alt="카카오톡 아이콘"
-                        style={iconStyleF}
-                      />
-                    </button>
-
-                    {/* 페이스북 공유 아이콘 */}
-                    <button
-                      style={iconButtonStyle}
-                      onClick={() => {
-                        window.open(
-                          `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${shareUrl}`,
-                          "_blank"
+                  {/* 카카오톡 공유 아이콘 */}
+                  <button
+                    style={iconButtonStyle}
+                    onClick={() => {
+                      if (!window.Kakao.isInitialized()) {
+                        window.Kakao.init(
+                          import.meta.env.VITE_KAKAO_JAVASCRIPT_ID
                         );
-                        console.log("페이스북 공유하기");
-                      }}
-                    >
-                      <i
-                        className="fab fa-facebook-square"
-                        style={iconStyleF}
-                      ></i>
-                    </button>
+                      }
 
-                    {/* X (구 트위터) 공유 아이콘 */}
-                    <a
-                      href={`https://x.com/intent/tweet?text=Check%20out%20this%20sushi%20post!&url=${window.location.origin}/${shareUrl}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={iconButtonStyle}
-                    >
-                      <i
-                        class="fab fa-brands fa-x-twitter"
-                        style={iconStyleX}
-                      ></i>
-                      {/* <i className="fa-brands fa-x-twitter" style={iconStyleX}></i> */}
-                    </a>
-                  </div>
+                      window.Kakao.Link.sendCustom({
+                        templateId: 117216, // 본인 템플릿 ID
+                        templateArgs: {
+                          url: shareUrl,
+                        },
+                      });
+                      console.log("카카오톡 공유하기" + shareUrl);
+                    }}
+                  >
+                    <img
+                      src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
+                      alt="카카오톡 아이콘"
+                      style={iconStyleF}
+                    />
+                  </button>
+
+                  {/* 페이스북 공유 아이콘 */}
+                  <button
+                    style={iconButtonStyle}
+                    onClick={() => {
+                      window.open(
+                        `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${shareUrl}`,
+                        "_blank"
+                      );
+                      console.log("페이스북 공유하기");
+                    }}
+                  >
+                    <i className="fab fa-facebook-square" style={iconStyleF}></i>
+                  </button>
+
+                  {/* X (구 트위터) 공유 아이콘 */}
+                  <a
+                    href={`https://x.com/intent/tweet?text=Check%20out%20this%20sushi%20post!&url=${window.location.origin}/${shareUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={iconButtonStyle}
+                  >
+                    <img
+                      src={x}
+                      alt="X (Twitter) Icon"
+                      style={iconStyleX}
+                    />
+                  </a>
                 </div>
+              </div>
               </div>
             )}
           </div>
@@ -886,6 +884,5 @@ const textCounter = {
   fontSize: "1.8vh",
   color: "#454545",
 };
-}
 
 export default PostSushi;
