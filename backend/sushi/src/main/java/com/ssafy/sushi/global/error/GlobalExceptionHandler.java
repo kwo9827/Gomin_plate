@@ -21,13 +21,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AsyncRequestTimeoutException.class)
     public void handleAsyncRequestTimeoutException(AsyncRequestTimeoutException e) {
-        log.info("SSE connection closed due to timeout - This is expected during server shutdown");
+        log.debug("SSE connection closed due to timeout - This is expected during server shutdown");
         // SSE timeout은 정상적인 상황이므로 별도 처리 없이 void 반환
     }
 
     @ExceptionHandler(ClientAbortException.class)
     public void handleClientAbortException(ClientAbortException e) {
-        log.info("SSE connection closed by client - Normal disconnection");
+        log.debug("SSE connection closed by client - Normal disconnection");
         // 클라이언트 연결 종료는 정상적인 상황이므로 별도 처리 없이 void 반환
     }
 
