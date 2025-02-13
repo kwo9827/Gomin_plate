@@ -18,7 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SseService {
 
     private final Map<Integer, SseEmitter> emitters = new ConcurrentHashMap<>();
-    private static final Long TIMEOUT = 60L * 1000 * 60; // 60분
+//    private static final Long TIMEOUT = 60L * 1000 * 60; // 60분
+    private static final Long TIMEOUT = 60L * 1000 * 3; // 3분
 
     public SseEmitter subscribe(Integer userId) {
         SseEmitter emitter = emitters.computeIfAbsent(userId, key -> {
