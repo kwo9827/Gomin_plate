@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation, useNavigate, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import { BgmProvider } from "./context/BgmProvider";
 import Home from "./pages/Home";
 import Intro from "./pages/Intro";
@@ -42,49 +48,49 @@ function App() {
 
   return (
     <BgmProvider>
-    <div className="container">
-      {shouldShowNavbar && <Navbar />}
-      <MuteButton />
-      <Routes>
-        <Route path="/" element={<Intro />} />
+      <div className="container">
+        {shouldShowNavbar && <Navbar />}
+        <MuteButton />
+        <Routes>
+          <Route path="/" element={<Intro />} />
 
-        {/* <Route path="/home" element={<Home />} /> */}
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
+          {/* <Route path="/home" element={<Home />} /> */}
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route path="/mysushilist" element={<MySushiList />} />
-        <Route path="/myanswerlist" element={<MyAnswerList />} />
-        <Route path="/sushidetail/:sushiId" element={<SushiDetail />} />
-        <Route path="/sushiview" element={<SushiView />} />
-        <Route path="/postsushi" element={<PostSushi />} />
-        <Route
-          path="/sushianswerdetail/:sushiId"
-          element={<SushiAnswerDetail />}
-        />
-        <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
-        <Route path="/oauth/google/callback" element={<OAuthCallback />} />
-        {/* <Route path="/share/:token" element={<Home />} /> */}
-        <Route
-          path="/share/:token"
-          element={
-            localStorage.getItem("accessToken") ? (
-              <Home />
-            ) : (
-              <Navigate
-                to={`/?redirectUrl=${encodeURIComponent(location.pathname)}`}
-              />
-            )
-          }
-        />
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-    </div>
+          <Route path="/mysushilist" element={<MySushiList />} />
+          <Route path="/myanswerlist" element={<MyAnswerList />} />
+          <Route path="/sushidetail/:sushiId" element={<SushiDetail />} />
+          <Route path="/sushiview" element={<SushiView />} />
+          <Route path="/postsushi" element={<PostSushi />} />
+          <Route
+            path="/sushianswerdetail/:sushiId"
+            element={<SushiAnswerDetail />}
+          />
+          <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
+          <Route path="/oauth/google/callback" element={<OAuthCallback />} />
+          {/* <Route path="/share/:token" element={<Home />} /> */}
+          <Route
+            path="/share/:token"
+            element={
+              localStorage.getItem("accessToken") ? (
+                <Home />
+              ) : (
+                <Navigate
+                  to={`/?redirectUrl=${encodeURIComponent(location.pathname)}`}
+                />
+              )
+            }
+          />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </div>
     </BgmProvider>
   );
 }
