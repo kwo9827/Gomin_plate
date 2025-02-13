@@ -26,6 +26,7 @@ import SushiView from "./SushiView";
 import plate from "../assets/sounds/plate.mp3";
 
 import { setIsNew } from "../store/slices/memberSlice";
+import { useSSE } from "../hooks/useSSE";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -71,15 +72,12 @@ const Home = () => {
   const openSushiUnlock = () => setIsSushiUnlockOpen(true);
   const closeSushiUnlock = () => setIsSushiUnlockOpen(false);
 
-  const hasUnread = useSelector(
-    (state) => state.notification.hasUnread ?? false
-  );
-  const loading = useSelector(
-    (state) => state.notification.status === "loading"
-  );
+  const hasUnread = useSelector((state) => state.notification.hasUnread ?? false);
+  const loading = useSelector((state) => state.notification.status === "loading");
 
-  useLikeCountSSE();
-  useNotificationSSE();
+  // useLikeCountSSE();
+  // useNotificationSSE();
+  useSSE();
 
   useEffect(() => {
     // 현재 URL 경로에서 '/share/' 뒤의 값을 추출
@@ -292,15 +290,9 @@ const Home = () => {
               />
             )}
 
-            <SushiUnlock
-              isOpen={isSushiUnlockOpen}
-              onClose={closeSushiUnlock}
-            />
+            <SushiUnlock isOpen={isSushiUnlockOpen} onClose={closeSushiUnlock} />
             {isPostSushiOpen && <PostSushi onClose={closePostSushi} />}
-            <NotificationModal
-              isOpen={isNotificationOpen}
-              onClose={closeNotification}
-            />
+            <NotificationModal isOpen={isNotificationOpen} onClose={closeNotification} />
           </div>
         </div>
       </div>
