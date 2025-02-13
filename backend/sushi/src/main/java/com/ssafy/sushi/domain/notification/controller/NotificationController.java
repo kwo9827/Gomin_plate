@@ -9,16 +9,16 @@ import com.ssafy.sushi.global.common.util.AuthenticationUtil;
 import com.ssafy.sushi.global.security.UserPrincipal;
 import com.ssafy.sushi.global.sse.SseService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/notification")
@@ -31,21 +31,29 @@ public class NotificationController {
     @GetMapping("")
     public ResponseEntity<ApiResponse<CustomPage<MyNotificationListResponse>>> getMyNotificationList(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable){
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(notificationService.getMyNotificationList(userId, pageable));
     }
 
-    @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
-        return sseService.subscribe(userId);
-    }
+//    @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//    public SseEmitter subscribe(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+//        try {
+//            Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
+//            return sseService.subscribe(userId);
+//        } catch (CustomException e) {
+//            log.info("SSE Access Denied catch User Notification");
+////            SseEmitter emitter = new SseEmitter(0L);
+////            emitter.complete();
+////            return emitter;
+//            return null;
+//        }
+//    }
 
     @GetMapping("/unread-exists")
     public ResponseEntity<ApiResponse<HasUnreadNotificationResponse>> hasUnreadNotification(
-            @AuthenticationPrincipal UserPrincipal userPrincipal){
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
         Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(notificationService.hasUnreadNotification(userId));
@@ -53,7 +61,7 @@ public class NotificationController {
 
     @PutMapping("/{notificationId}")
     public ResponseEntity<ApiResponse<Void>> markNotificationAsRead(
-            @PathVariable("notificationId") Integer notificationId){
+            @PathVariable("notificationId") Integer notificationId) {
         notificationService.markNotificationAsRead(notificationId);
 
         return ApiResponse.success(HttpStatus.OK);
