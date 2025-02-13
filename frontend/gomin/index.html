@@ -4,13 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#ffffff" />
-    
+
+    <!-- 캐시 버스팅을 위한 메타 태그 추가 -->
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <!-- iOS 지원을 위한 메타 태그 추가 -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="고민한접시">
-    <link rel="apple-touch-icon" href="/icons/apple-icon-180x180.png">
-    
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="고민한접시" />
+    <link rel="apple-touch-icon" href="/icons/apple-icon-180x180.png" />
+
     <link rel="icon" type="image/svg+xml" href="/1ogo.ico" />
     <link rel="manifest" href="/manifest.json" />
     <link
@@ -24,14 +32,17 @@
     <!-- 카카오 SDK -->
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script type="module" src="/src/main.jsx"></script>
-    
+
     <!-- 서비스 워커 등록 스크립트 추가 -->
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/serviceWorker.js')
-            .then(reg => console.log('Service worker registered'))
-            .catch(err => console.log('Service worker registration failed:', err));
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/serviceWorker.js")
+            .then((reg) => console.log("Service worker registered"))
+            .catch((err) =>
+              console.log("Service worker registration failed:", err)
+            );
         });
       }
     </script>
