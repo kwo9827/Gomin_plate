@@ -79,9 +79,6 @@ const SushiAnswerDetail = () => {
           transition: 'opacity 0.5s ease, transform 0.5s ease',
         }}
       >
-        <button onClick={() => navigate(-1)} style={styles.backButton}>
-          ◀
-        </button>
         <h2 style={styles.title}>{title || "제목이 없습니다"}</h2>
         <hr style={styles.divider} />
         <p style={styles.date}>
