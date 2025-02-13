@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
                 e instanceof IOException && e.getMessage() != null &&
                         e.getMessage().contains("Broken pipe") ||
                 e.getMessage().contains("연결은 사용자의 호스트 시스템의 소프트웨어의 의해 중단되었습니다")) {
-            log.info("SSE Connection closed by client");
+//            log.info("SSE Connection closed by client");
             return null;
         }
 

@@ -11,13 +11,13 @@ import com.ssafy.sushi.global.security.UserPrincipal;
 import com.ssafy.sushi.global.sse.SseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
@@ -48,11 +48,19 @@ public class UserController {
         return ApiResponse.success(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/my-like/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter likeSubscribe(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
-        return sseService.subscribeLikeCount(userId);
-    }
+//    @GetMapping(value = "/my-like/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//    public SseEmitter likeSubscribe(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+//        try {
+//            Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
+//            return sseService.subscribeLikeCount(userId);
+//        } catch (CustomException e) {
+//            log.info("SSE Access Denied catch User");
+////            SseEmitter emitter = new SseEmitter(0L);
+////            emitter.complete();
+////            return emitter;
+//            return null;
+//        }
+//    }
 
     @GetMapping("/my-like")
     public ResponseEntity<ApiResponse<UserLikeNumResponse>> getUserLikeNum(

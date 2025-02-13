@@ -3,6 +3,7 @@ package com.ssafy.sushi.global.config.security;
 import com.ssafy.sushi.global.security.jwt.JwtAuthenticationFilter;
 import com.ssafy.sushi.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -19,6 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -42,9 +45,12 @@ public class SecurityConfig {
                 )
 //                요청 URL별 인증 설정
                 .authorizeHttpRequests(authorize ->
-                                authorize
-                                        .requestMatchers("/api/**").permitAll()
-                                        .anyRequest().authenticated()
+                            authorize
+                                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/sse/subscribe")).permitAll()
+//                                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/notification/subscribe")).permitAll()
+//                                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/user/my-like/subscribe")).permitAll()
+                                    .requestMatchers("/api/**").permitAll()
+                                    .anyRequest().authenticated()
                 )
 //                JWT 인증 필터 추가
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
