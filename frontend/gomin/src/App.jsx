@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation, useNavigate, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
+import { BgmProvider } from "./context/BgmProvider";
 import Home from "./pages/Home";
 import Intro from "./pages/Intro";
 import MyAnswerList from "./pages/MyAnswerList";
@@ -12,12 +19,15 @@ import Navbar from "./components/NavBar";
 import OAuthCallback from "./components/OAuthCallback";
 import ErrorPage from "./pages/ErrorPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import MuteButton from "./components/MuteButton";
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("accessToken")
+  );
 
   // Navbar 표시 여부 결정
   const shouldShowNavbar = location.pathname !== "/";
@@ -37,43 +47,51 @@ function App() {
   }, [location.pathname, navigate]);
 
   return (
-    <div className="container">
-      {shouldShowNavbar && <Navbar />}
-      <Routes>
-        <Route path="/" element={<Intro />} />
+    <BgmProvider>
+      <div className="container">
+        {shouldShowNavbar && <Navbar />}
+        <MuteButton />
+        <Routes>
+          <Route path="/" element={<Intro />} />
 
-        {/* <Route path="/home" element={<Home />} /> */}
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
+          {/* <Route path="/home" element={<Home />} /> */}
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route path="/mysushilist" element={<MySushiList />} />
-        <Route path="/myanswerlist" element={<MyAnswerList />} />
-        <Route path="/sushidetail/:sushiId" element={<SushiDetail />} />
-        <Route path="/sushiview" element={<SushiView />} />
-        <Route path="/postsushi" element={<PostSushi />} />
-        <Route path="/sushianswerdetail/:sushiId" element={<SushiAnswerDetail />} />
-        <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
-        <Route path="/oauth/google/callback" element={<OAuthCallback />} />
-        {/* <Route path="/share/:token" element={<Home />} /> */}
-        <Route
-          path="/share/:token"
-          element={
-            localStorage.getItem("accessToken") ? (
-              <Home />
-            ) : (
-              <Navigate to={`/?redirectUrl=${encodeURIComponent(location.pathname)}`} />
-            )
-          }
-        />
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-    </div>
+          <Route path="/mysushilist" element={<MySushiList />} />
+          <Route path="/myanswerlist" element={<MyAnswerList />} />
+          <Route path="/sushidetail/:sushiId" element={<SushiDetail />} />
+          <Route path="/sushiview" element={<SushiView />} />
+          <Route path="/postsushi" element={<PostSushi />} />
+          <Route
+            path="/sushianswerdetail/:sushiId"
+            element={<SushiAnswerDetail />}
+          />
+          <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
+          <Route path="/oauth/google/callback" element={<OAuthCallback />} />
+          {/* <Route path="/share/:token" element={<Home />} /> */}
+          <Route
+            path="/share/:token"
+            element={
+              localStorage.getItem("accessToken") ? (
+                <Home />
+              ) : (
+                <Navigate
+                  to={`/?redirectUrl=${encodeURIComponent(location.pathname)}`}
+                />
+              )
+            }
+          />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </div>
+    </BgmProvider>
   );
 }
 

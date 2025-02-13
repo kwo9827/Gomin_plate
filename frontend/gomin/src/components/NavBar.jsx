@@ -65,7 +65,12 @@ const Navbar = () => {
 
   return (
     <nav style={{ ...styles.navbar, backgroundImage: `url(${bgImage})` }}>
-      <div style={styles.contentWrapper}>
+      <div
+        style={{
+          ...styles.contentWrapper,
+          pointerEvents: isTutorialOpen ? "none" : "auto",
+        }}
+      >
         {/* Home 메뉴 */}
         <div
           style={styles.navItem}
@@ -89,7 +94,9 @@ const Navbar = () => {
       </div>
 
       {/* 튜토리얼 실행 */}
-      {isTutorialOpen && <Tutorial onClose={handleTutorialClose} />}
+      {isTutorialOpen && (
+        <Tutorial onClose={handleTutorialClose} showFullTutorial={true} />
+      )}
 
       {/* 닉네임 설정 모달 */}
       {isModalOpen && <Modal isOpen={isModalOpen} onClose={closeModal} />}
