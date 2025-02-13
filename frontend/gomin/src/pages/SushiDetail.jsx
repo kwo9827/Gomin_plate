@@ -193,13 +193,13 @@ const SushiDetail = () => {
 const styles = {
   /**배경 */
   background: {
-    padding: "20px",
     position: "relative",
+    overflow: "hidden",
+    padding: "3vh",
     height: "100vh",
     width: "100%",
-    overflow: "hidden",
-    boxSizing: "border-box",
     backgroundColor: "#FFF8E1",
+    boxSizing: "border-box",
   },
   /**전체 감싸는 컨테이너 */
   outerContainer: {

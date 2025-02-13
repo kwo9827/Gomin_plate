@@ -241,7 +241,7 @@ const modalStyle = {
   width: "50vh",
   maxWidth: "90vw",
   border: "1vh solid #906C48",
-  borderRadius: "1.2vh",
+  borderRadius: "1.3vh",
   outline: "0.25vh solid #67523E",
   display: "flex",
   flexDirection: "column",
@@ -255,7 +255,7 @@ const modalStyle = {
 const outerBoxStyle = {
   width: "30vh",
   border: "0.5vh solid #906C48",
-  borderRadius: "1.2vh",
+  borderRadius: "1.3vh",
   marginTop: "0.3vh",
   marginBottom: "3vh",
   backgroundColor: "#B2975C",
@@ -267,7 +267,7 @@ const outerBoxStyle = {
 const innerBoxStyle = {
   width: "100%",
   border: "0.3vh solid #906C48",
-  borderRadius: "1.2vh",
+  borderRadius: "0.6vh",
   backgroundColor: "#B2975C",
   textAlign: "center",
   color: "#5D4A37",
@@ -288,7 +288,6 @@ const cancelButtonStyle = {
   color: "#67523E",
   fontSize: "2.5vh",
   cursor: "pointer",
-  fontWeight: "bold",
 };
 
 const progressContainer = {
@@ -314,6 +313,7 @@ const progressBar = {
   width: "calc(100% - 6vh)",
   height: "2vh",
   border: "0.2vh solid #906C48",
+  borderRadius: "0.6vh",
   overflow: "hidden",
   left: "3vh",
   right: "3vh",
@@ -323,7 +323,7 @@ const progressBar = {
 const progressFill = {
   height: "100%",
   backgroundColor: "#4BBE0E",
-  borderRadius: "2vh",
+  borderRadius: "0.6vh",
   transition: "width 0.5s ease-in-out",
 };
 
