@@ -52,7 +52,13 @@ const MySushiList = () => {
     });
   };
 
-  // react-spring 애니메이션 효과를 위한 trail
+  // useEffect(() => {
+  //   if (!search.trim()) {
+  //     setDisplaySushi(mySushi);
+  //   }
+  // }, [mySushi, search]);
+
+  // react-spring 애니메이션 효과
   const trail = useTrail(displaySushi.length, {
     opacity: 1,
     transform: "translateY(0px)",
