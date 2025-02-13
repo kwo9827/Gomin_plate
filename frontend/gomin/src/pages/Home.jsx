@@ -163,9 +163,9 @@ const Home = () => {
 
   const bgSpring = useSpring({
     opacity: allImagesLoaded ? 1 : 0,
-    transform: allImagesLoaded ? "translateY(0)" : "translateY(-50%)",
+    transform: allImagesLoaded ? "translateY(2)" : "translateY(-50%)",
     config: { tension: 170, friction: 26 },
-    delay: 500,
+    delay: 1000,
   });
 
   const masterSpring = useSpring({
@@ -179,7 +179,7 @@ const Home = () => {
     opacity: allImagesLoaded ? 1 : 0,
     transform: allImagesLoaded ? "translateY(0)" : "translateY(50%)",
     config: { tension: 170, friction: 26 },
-    delay: 1000,
+    delay: 300,
   });
 
   return (
@@ -207,6 +207,7 @@ const Home = () => {
           }}
           onLoad={() => handleImageLoad("master")}
         ></animated.div>
+
         {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
         <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
 
