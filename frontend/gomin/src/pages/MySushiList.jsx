@@ -21,21 +21,34 @@ const MySushiList = () => {
   };
 
   useEffect(() => {
-    dispatch(
-      fetchMySushi({
-        search: "",
-        page: 1,
-        size: 10,
-      })
-    ).then((result) => {
-      if (result.payload && result.payload.data) {
-        setDisplaySushi(result.payload.data.content);
-        setHasMore(result.payload.data.content.length === 10);
-      }
-    });
-  }, [dispatch]);
+    let mounted = true;
 
-  /* 무한 스크롤 기능 */
+    const fetchInitialData = async () => {
+      try {
+        const result = await dispatch(
+          fetchMySushi({
+            search: "",
+            page: 1,
+            size: 10,
+          })
+        );
+
+        if (mounted && result.payload && result.payload.data) {
+          setDisplaySushi(result.payload.data.content);
+          setHasMore(result.payload.data.content.length === 10);
+        }
+      } catch (error) {
+        console.error("초기 데이터 로딩 실패:", error);
+      }
+    };
+
+    fetchInitialData();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const handleScroll = (e) => {
     const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
 
@@ -44,7 +57,6 @@ const MySushiList = () => {
     }
   };
 
-  /*데이터 불러오기 */
   const loadMore = () => {
     if (loading || !hasMore) return;
 
@@ -91,12 +103,6 @@ const MySushiList = () => {
       setDisplaySushi(filtered);
     });
   };
-
-  useEffect(() => {
-    if (!search.trim()) {
-      setDisplaySushi(mySushi);
-    }
-  }, [mySushi, search]);
 
   // react-spring 애니메이션 효과
   const trail = useTrail(displaySushi.length, {
@@ -148,7 +154,10 @@ const MySushiList = () => {
         {displaySushi && displaySushi.length > 0 ? (
           <ul style={styles.list}>
             {trail.map((style, index) => (
-              <animated.li key={displaySushi[index].sushiId} style={style}>
+              <animated.li
+                key={`${displaySushi[index].sushiId}-${index}`}
+                style={style}
+              >
                 <SushiCard
                   id={displaySushi[index].sushiId}
                   title={displaySushi[index].title}
