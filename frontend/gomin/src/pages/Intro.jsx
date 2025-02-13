@@ -63,23 +63,24 @@ const Intro = () => {
         <h2 style={{ marginBottom: "1vh", fontSize: "4.5vh" }}>로그인</h2>
         <KakaoLoginButton />
         <GoogleLoginButton />
-      </div>
-      {/* 안드로이드/크롬용 설치 버튼 */}
-      {installPrompt && (
-        <button
-          style={styles.installButton}
-          onClick={handleInstallClick}
-        >
-          앱 설치하기
-        </button>
-      )}
+        {/* 안드로이드/크롬용 설치 버튼 */}
+        {installPrompt && (
+          <button
+            style={styles.installButton}
+            onClick={handleInstallClick}
+          >
+            앱 설치하기
+          </button>
+        )}
 
-      {/* iOS용 안내 메시지 */}
-      {isIOS && (
-        <div style={styles.iosInstallPrompt}>
-          이 앱을 설치하려면, 하단 공유 버튼을 누른 후 "홈 화면에 추가"를 선택하세요.
-        </div>
-      )}
+        {/* iOS용 안내 메시지 */}
+        {isIOS && (
+          <div style={styles.iosInstallPrompt}>
+            이 앱을 설치하려면, 하단 공유 버튼을 누른 후 "홈 화면에 추가"를 선택하세요.
+          </div>
+        )}
+      </div>
+
     </div>
   );
 };
