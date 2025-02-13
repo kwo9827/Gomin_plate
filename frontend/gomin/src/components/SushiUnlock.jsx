@@ -14,9 +14,10 @@ import scallopImg from "../assets/sushi/가리비초밥.webp";
 import tunaImg from "../assets/sushi/참치초밥.webp";
 import uniImg from "../assets/sushi/성게알초밥.webp";
 import flatfighImg from "../assets/sushi/광어초밥.webp";
+import salmonEggImg from "../assets/sushi/연어알초밥.webp";
 
 const MAX_LIKES = 80; // 최대 좋아요 수 수정 (참치 해금 조건)
-const SUSHI_COUNT = 11;
+const SUSHI_COUNT = 12;
 
 const keyframes = `
   @keyframes fadeIn {
@@ -73,6 +74,7 @@ const sushiTypes = {
   9: { name: "광어초밥", image: flatfighImg, requiredLikes: 30 },
   10: { name: "성게알초밥", image: uniImg, requiredLikes: 50 },
   11: { name: "참치초밥", image: tunaImg, requiredLikes: 80 },
+  12: { name: "연어알초밥", image: salmonEggImg, requiredLikes: 100 },
 };
 
 const SushiUnlock = ({ isOpen, onClose }) => {

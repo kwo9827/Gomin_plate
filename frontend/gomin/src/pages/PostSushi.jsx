@@ -20,6 +20,7 @@ import scallop from "../assets/sushi/가리비초밥.webp";
 import flatfish from "../assets/sushi/광어초밥.webp";
 import uni from "../assets/sushi/성게알초밥.webp";
 import tuna from "../assets/sushi/참치초밥.webp";
+import salmonRoe from "../assets/sushi/연어알초밥.webp";
 
 const styles = `
   @keyframes slideUp {
@@ -96,6 +97,7 @@ const PostSushi = ({ onClose }) => {
     { id: 9, src: flatfish, name: "광어초밥", requiredLikes: 30 },
     { id: 10, src: uni, name: "성게알초밥", requiredLikes: 50 },
     { id: 11, src: tuna, name: "참치초밥", requiredLikes: 80 },
+    { id: 12, src: salmonRoe, name: "연어알초밥", requiredLikes: 100 },
   ];
 
   const settings = {
