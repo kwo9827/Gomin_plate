@@ -171,14 +171,14 @@ const Home = () => {
 
   const bgSpring = useSpring({
     opacity: allImagesLoaded ? 1 : 0,
-    transform: allImagesLoaded ? "translateY(2)" : "translateY(-50%)",
+    transform: allImagesLoaded ? "translateY(7%)" : "translateY(-50%)",
     config: { tension: 170, friction: 26 },
     delay: 1000,
   });
 
   const masterSpring = useSpring({
     opacity: allImagesLoaded ? 1 : 0,
-    transform: allImagesLoaded ? "scale(1)" : "scale(0.8)",
+    transform: allImagesLoaded ? "scale(1.2)" : "scale(0.8)",
     config: { tension: 170, friction: 26 },
     delay: 1500,
   });
