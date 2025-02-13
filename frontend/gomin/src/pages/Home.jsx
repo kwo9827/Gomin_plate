@@ -72,8 +72,12 @@ const Home = () => {
   const openSushiUnlock = () => setIsSushiUnlockOpen(true);
   const closeSushiUnlock = () => setIsSushiUnlockOpen(false);
 
-  const hasUnread = useSelector((state) => state.notification.hasUnread ?? false);
-  const loading = useSelector((state) => state.notification.status === "loading");
+  const hasUnread = useSelector(
+    (state) => state.notification.hasUnread ?? false
+  );
+  const loading = useSelector(
+    (state) => state.notification.status === "loading"
+  );
 
   const handleTutorialClose = () => {
     setStartTutorial(false);
@@ -83,8 +87,6 @@ const Home = () => {
     setStartTutorial(true);
   };
 
-  useLikeCountSSE();
-  useNotificationSSE();
   useSSE();
 
   useEffect(() => {
@@ -240,7 +242,12 @@ const Home = () => {
           }}
         >
           {/* 책상 */}
-          <img src={deskImg} alt="Desk" style={styles.deskImage} onLoad={() => handleImageLoad("desk")} />
+          <img
+            src={deskImg}
+            alt="Desk"
+            style={styles.deskImage}
+            onLoad={() => handleImageLoad("desk")}
+          />
 
           {/* Rail */}
           <div style={styles.rail}>
@@ -293,7 +300,6 @@ const Home = () => {
 
             {/* <button onClick={handleSetIsNew}>튜토리얼 테스트</button> */}
 
-
             {!allImagesLoaded && (
               <div>
                 <p> 초밥집에 입장하는 중..</p>
@@ -312,9 +318,15 @@ const Home = () => {
               />
             )}
 
-            <SushiUnlock isOpen={isSushiUnlockOpen} onClose={closeSushiUnlock} />
+            <SushiUnlock
+              isOpen={isSushiUnlockOpen}
+              onClose={closeSushiUnlock}
+            />
             {isPostSushiOpen && <PostSushi onClose={closePostSushi} />}
-            <NotificationModal isOpen={isNotificationOpen} onClose={closeNotification} />
+            <NotificationModal
+              isOpen={isNotificationOpen}
+              onClose={closeNotification}
+            />
           </div>
         </div>
       </div>
