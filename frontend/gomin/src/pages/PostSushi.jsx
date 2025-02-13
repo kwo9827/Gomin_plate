@@ -18,6 +18,7 @@ import scallop from "../assets/sushi/가리비초밥.webp";
 import flatfish from "../assets/sushi/광어초밥.webp";
 import uni from "../assets/sushi/성게알초밥.webp";
 import tuna from "../assets/sushi/참치초밥.webp";
+import x from "../assets/x-twitter.png"
 
 const PostSushi = ({ onClose }) => {
   const dispatch = useDispatch();
@@ -163,6 +164,15 @@ const PostSushi = ({ onClose }) => {
 
   const handleCancelSubmit = () => {
     setShowModal(false);
+  };
+
+  const handleCopyClipBoard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("클립보드에 링크가 복사되었어요.");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   React.useEffect(() => {
@@ -408,6 +418,13 @@ const PostSushi = ({ onClose }) => {
                 <p>공유하기</p>
 
                 <div style={buttonContainer}>
+                  {/* 링크복사 아이콘 */}
+                  <i 
+                    className="fas fa-link"
+                    onClick={() => handleCopyClipBoard(`${window.location.origin}/${shareUrl}`)}
+                    style={iconStyleR}
+                  ></i>
+
                   {/* 카카오톡 공유 아이콘 */}
                   <button
                     style={iconButtonStyle}
@@ -455,8 +472,11 @@ const PostSushi = ({ onClose }) => {
                     rel="noopener noreferrer"
                     style={iconButtonStyle}
                   >
-                    <i class="fab fa-brands fa-x-twitter" style={iconStyleX}></i>
-                    {/* <i className="fa-brands fa-x-twitter" style={iconStyleX}></i> */}
+                    <img
+                      src={x}
+                      alt="X (Twitter) Icon"
+                      style={iconStyleX}
+                    />
                   </a>
                 </div>
               </div>
@@ -718,20 +738,35 @@ const iconButtonStyle = {
   alignItems: "center",
 };
 
+const iconStyleR = {
+  fontSize: "1em",
+  backgroundColor: "#5B9253",
+  color: "#ffffff",
+  width: "40px",
+  height: "40px",
+  borderRadius: "15%",
+  lineHeight: "40px",
+  display: "inline-block",
+  textAlign: "center",
+  transition: "background-color 0.3s ease-in-out",
+  verticalAlign: "middle", // 수직 정렬 맞추기
+};
+
 const iconStyleF = {
-  fontSize: "3em", // 아이콘 크기 일관성
+  fontSize: "3.2em", // 아이콘 크기 일관성 (조금 작게 조정)
   color: "#3b5998", // 아이콘 색상
   width: "40px", // 동일한 크기로 지정
   height: "40px", // 동일한 크기로 지정
   display: "inline-block",
+  verticalAlign: "middle", // 수직 정렬 맞추기
 };
 
 const iconStyleX = {
-  fontSize: "3em", // 아이콘 크기 일관성
   color: "#3b5998", // 아이콘 색상
-  width: "40px", // 동일한 크기로 지정
-  height: "40px", // 동일한 크기로 지정
+  width: "45px", // 동일한 크기로 지정
+  height: "45px", // 동일한 크기로 지정
   display: "inline-block",
+  verticalAlign: "middle", // 수직 정렬 맞추기
 };
 
 const confirmButtonStyle = {
