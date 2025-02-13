@@ -4,8 +4,6 @@ import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { countLike } from "../store/slices/memberSlice";
 import { fetchSushiByToken } from "../store/slices/sushiSlice";
 import { useLocation } from "react-router-dom";
-import { useNotificationSSE } from "../hooks/useNotificationSSE";
-import { useLikeCountSSE } from "../hooks/useLikeCountSSE";
 
 import Rail from "../components/Rail";
 import PostSushiBell from "../components/PostSushiBell";
@@ -75,8 +73,6 @@ const Home = () => {
   const hasUnread = useSelector((state) => state.notification.hasUnread ?? false);
   const loading = useSelector((state) => state.notification.status === "loading");
 
-  // useLikeCountSSE();
-  // useNotificationSSE();
   useSSE();
 
   useEffect(() => {
@@ -210,18 +206,15 @@ const Home = () => {
         <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
 
         {/* 책상과 그 위의 요소들 */}
-        <animated.div style={{
-          ...styles.deskContainer,
-          opacity: deskSpring.opacity,
-          transform: deskSpring.transform,
-        }}>
+        <animated.div
+          style={{
+            ...styles.deskContainer,
+            opacity: deskSpring.opacity,
+            transform: deskSpring.transform,
+          }}
+        >
           {/* 책상 */}
-          <img
-            src={deskImg}
-            alt="Desk"
-            style={styles.deskImage}
-            onLoad={() => handleImageLoad("desk")}
-          />
+          <img src={deskImg} alt="Desk" style={styles.deskImage} onLoad={() => handleImageLoad("desk")} />
 
           {/* Rail */}
           <div style={styles.rail}>
