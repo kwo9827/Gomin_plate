@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import KakaoLoginButton from "../components/KakaoLoginButton";
 import GoogleLoginButton from "../components/GoogleLoginButton";
-import introImage from "../assets/introoooo.webp";
+import introImage from "../assets/intro.webp";
 import BgmContext from "../context/BgmProvider";
 
 // 쿠키 설정 함수
@@ -18,10 +18,10 @@ const setCookie = (name, value, days) => {
 // 쿠키 가져오기 함수
 const getCookie = (name) => {
   const nameEQ = name + "=";
-  const ca = document.cookie.split(';');
+  const ca = document.cookie.split(";");
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+    while (c.charAt(0) === " ") c = c.substring(1, c.length);
     if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
   }
   return null;
@@ -30,7 +30,14 @@ const getCookie = (name) => {
 // iOS 체크 함수
 const isIOS = () => {
   return (
-    ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(navigator.platform) ||
+    [
+      "iPad Simulator",
+      "iPhone Simulator",
+      "iPod Simulator",
+      "iPad",
+      "iPhone",
+      "iPod",
+    ].includes(navigator.platform) ||
     // iPad on iOS 13 detection
     (navigator.userAgent.includes("Mac") && "ontouchend" in document)
   );
@@ -54,7 +61,10 @@ const Intro = () => {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
     };
   }, []);
 
@@ -86,23 +96,35 @@ const Intro = () => {
         }}
       ></div>
 
+      {/* iOS가 아니고 설치 버튼이 보여야 할 때만 표시 */}
+      {!isIOSDevice && (
+        <div
+          id="install-button"
+          style={styles.installButtonContainer}
+          onClick={handleInstallClick}
+        >
+          <span style={{ ...styles.installButton }}>앱</span>
+          <span style={{ ...styles.installButton }}>설</span>
+          <span style={{ ...styles.installButton }}>치</span>
+          <span style={{ ...styles.installButton }}>♤</span>
+        </div>
+      )}
+      {/* {!isIOSDevice && (
+        <div style={styles.installButtonContainer}>
+          <button
+            id="install-button"
+            style={styles.installButton}
+            onClick={handleInstallClick}
+          >
+            앱 설치
+          </button>
+        </div>
+      )} */}
+
       <div style={styles.buttoncontainer}>
         <h2 style={{ marginBottom: "1vh", fontSize: "4.5vh" }}>로그인</h2>
         <KakaoLoginButton />
         <GoogleLoginButton />
-
-        {/* iOS가 아니고 설치 버튼이 보여야 할 때만 표시 */}
-        {!isIOSDevice && (
-          <div style={styles.installButtonContainer}>
-            <button
-              id="install-button"
-              style={styles.installButton}
-              onClick={handleInstallClick}
-            >
-              앱 설치
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -134,19 +156,38 @@ const styles = {
     bottom: "35vh",
   },
   installButtonContainer: {
-    marginTop: "20px",
+    position: "absolute",
+    zIndex: 2,
+    color: "#fff",
     display: "flex",
-    justifyContent: "center",
+    // flexDirection: "column",
+    // gap: "0.4vh",
+    right: "1.5vh",
+    top: "1.5vh",
+    // right: "3vh",
+    // top: "38.3vh",
   },
   installButton: {
-    padding: "10px 20px",
-    backgroundColor: "#4CAF50",
-    color: "#fff",
+    // position: "absolute",
+    // background: "#FEE500",
+    // background: "#f0f0f0",
+    height: "3vh",
+    width: "3vh",
     border: "none",
-    borderRadius: "5px",
+    // borderRadius: "0.8vh",
+    borderRadius: "3vh",
+    // color: "#f0f0f0",
+    color: "#2e4485",
+    fontFamily: "inherit",
+    fontWeight: "bold",
+    fontSize: "2.2vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     cursor: "pointer",
-    fontSize: "1.5rem",
-    width: "100%",
+    zIndex: "2",
+    backgroundColor: "#f0f0f0",
+    // backgroundColor: "#9C0716",
   },
 };
 
