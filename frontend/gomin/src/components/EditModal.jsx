@@ -196,7 +196,7 @@ const cancelButtonStyle = {
   color: "white",
   fontSize: "16px",
   cursor: "pointer",
-  width: "15vh",
+  width: "40%",
   whiteSpace: "nowrap",
   lineHeight: "1",
   fontFamily: "inherit",

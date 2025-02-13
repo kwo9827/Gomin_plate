@@ -451,21 +451,19 @@ const PostSushi = ({ onClose }) => {
             {showModal && (
               <div style={submitModalStyle}>
                 <div style={submitModalContent}>
-                  <h3>
-                    고민을 제출하고 난 후에는 <br /> 수정할 수 없습니다.
-                  </h3>
+                  <h3>고민을 제출하고 난 후에는 수정할 수 없습니다.</h3>
                   <div style={buttonContainer}>
-                    <button
-                      style={confirmButtonStyle}
-                      onClick={handleConfirmSubmit}
-                    >
-                      확인
-                    </button>
                     <button
                       style={cancelButtonStyle}
                       onClick={handleCancelSubmit}
                     >
                       취소
+                    </button>
+                    <button
+                      style={confirmButtonStyle}
+                      onClick={handleConfirmSubmit}
+                    >
+                      확인
                     </button>
                   </div>
                 </div>
@@ -783,7 +781,7 @@ const submitModalContent = {
   textAlign: "center",
   border: "1vh solid #906C48",
   outline: "0.3vh solid #67523E",
-  fontSize: "2.8vh",
+  fontSize: "2.3vh",
 };
 
 const buttonContainer = {
@@ -793,7 +791,7 @@ const buttonContainer = {
   width: "100%",
   marginTop: "3vh",
   marginBottom: "1vh",
-  gap: "1.5vh",
+  gap: "5vh",
 };
 
 const iconButtonStyle = {
