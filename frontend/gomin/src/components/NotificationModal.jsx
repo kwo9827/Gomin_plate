@@ -34,7 +34,9 @@ const NotificationModal = ({ isOpen, onClose }) => {
 
   return (
     <div style={{ ...overlayStyle, opacity: show ? 1 : 0 }}>
-      <div style={{ ...modalStyle, transform: show ? "scale(1)" : "scale(0.9)" }}>
+      <div
+        style={{ ...modalStyle, transform: show ? "scale(1)" : "scale(0.9)" }}
+      >
         <div style={outerBoxStyle}>
           <div style={innerBoxStyle}>알림</div>
           <button style={cancelButtonStyle} onClick={onClose}>
@@ -96,27 +98,27 @@ const overlayStyle = {
   left: 0,
   width: "100%",
   height: "100%",
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
+  backgroundColor: "rgba(0, 0, 0, 0.6)",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   zIndex: 1000,
-  backdropFilter: "blur(10px)",
+  // backdropFilter: "blur(10px)",
   transition: "opacity 0.3s ease", // opacity에 애니메이션 추가
 };
 
 const modalStyle = {
-  backgroundColor: "#fdf5e6",
-  padding: "0px",
-  borderRadius: "10px",
-  top: "6vh",
-  width: "46vh",
-  maxWidth: "393px",
-  height: "80vh",
-  maxHeight: "691px",
   position: "relative",
-  border: "8px solid #906C48",
-  outline: "2px solid #67523E",
+  top: "6vh",
+  width: "50vh",
+  maxWidth: "90vw",
+  height: "80vh",
+  padding: "2.5vh",
+  paddingTop: "2vh",
+  backgroundColor: "#fdf5e6",
+  border: "1vh solid #906C48",
+  borderRadius: "1.3vh",
+  outline: "0.25vh solid #67523E",
   overflowY: "auto",
   boxSizing: "border-box",
   scrollbarWidth: "none",
@@ -163,7 +165,6 @@ const innerBoxStyle = {
 const listStyle = {
   listStyle: "none",
   padding: 0,
-  margin: 0,
   width: "100%",
 };
 
@@ -171,6 +172,7 @@ const listItemStyle = {
   display: "flex",
   justifyContent: "center",
   width: "100%",
+  marginBottom: "1vh",
 };
 
 const outerContainerStyle = {

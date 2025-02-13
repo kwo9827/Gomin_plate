@@ -3,14 +3,17 @@ import { useDispatch } from "react-redux";
 import { updateNickname, deleteAccount } from "../store/slices/authSlice";
 import { clearMemberData } from "../store/slices/memberSlice";
 import { useNavigate } from "react-router-dom";
+import "../styles/font.css";
 
-const EditModal = ({ isOpen, onClose }) => {
+const EditModal = ({ isOpen, onClose, onConfirm }) => {
   const dispatch = useDispatch();
   const currentNickname = localStorage.getItem("userNickname");
 
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
   const [fade, setFade] = useState(false);
+  const [isEditPressed, setIsEditPressed] = React.useState(false);
+  const [isCancelPressed, setIsCancelPressed] = React.useState(false);
 
   const navigate = useNavigate();
 
@@ -79,153 +82,198 @@ const EditModal = ({ isOpen, onClose }) => {
   if (!isOpen && !fade) return null;
 
   return (
-    <div style={{ ...overlayStyle, opacity: fade ? 1 : 0 }}>
-      <div style={{ ...modalStyle, opacity: fade ? 1 : 0 }}>
-        <h3 style={titleStyle}>당신을 어떻게 부르면 될까요?</h3>
-        <div style={inputContainer}>
-          <input
-            type="text"
-            value={nickname}
-            onChange={handleInputChange}
-            placeholder="answer"
-            style={inputStyle}
-          />
-        </div>
-        {error && <p style={errorStyle}>{error}</p>}
+    <div style={styles.overlay}>
+      <div style={styles.modal}>
+        <div style={styles.innerBox}>
+          <p style={styles.titleStyle}>당신을 어떻게 부르면 될까요?</p>
+          <div style={styles.inputContainer}>
+            <input
+              type="text"
+              value={nickname}
+              onChange={handleInputChange}
+              placeholder="answer"
+              style={styles.inputStyle}
+            />
+          </div>
+          {error && <p style={styles.errorStyle}>{error}</p>}
 
-        <div style={buttonContainer}>
-          <button onClick={onClose} style={cancelButtonStyle}>
-            취소
-          </button>
-          <button onClick={handleSaveNickname} style={confirmButtonStyle}>
-            확인
-          </button>
-        </div>
+          <div style={styles.buttonBox}>
+            <button
+              onClick={onClose}
+              onMouseDown={() => setIsCancelPressed(true)}
+              onMouseUp={() => setIsCancelPressed(false)}
+              onMouseLeave={() => setIsCancelPressed(false)}
+              style={{
+                ...styles.cancelButton,
+                backgroundColor: isCancelPressed ? "#863334" : "#C85253",
+                transform: isCancelPressed
+                  ? "translateY(0.4vh)"
+                  : "translateY(-0.2vh)",
+                boxShadow: isCancelPressed
+                  ? "0 0 0 #863334"
+                  : "0 0.4vh 0 #863334",
+              }}
+              className="custom-placeholder"
+            >
+              아니요
+            </button>
+            <button
+              onClick={handleSaveNickname}
+              onMouseDown={() => setIsEditPressed(true)}
+              onMouseUp={() => setIsEditPressed(false)}
+              onMouseLeave={() => setIsEditPressed(false)}
+              style={{
+                ...styles.editButton,
+                backgroundColor: isEditPressed ? "#67523E" : "#A68564",
+                transform: isEditPressed
+                  ? "translateY(0.4vh)"
+                  : "translateY(-0.2vh)",
+                boxShadow: isEditPressed
+                  ? "0 0 0 #67523E"
+                  : "0 0.4vh 0 #67523E",
+              }}
+              className="custom-placeholder"
+            >
+              네
+            </button>
+          </div>
 
-        <div style={bottomButtonContainer}>
-          <button onClick={handleDeleteAccount} style={bottomButtonStyle}>
-            회원탈퇴
-          </button>
-          <button onClick={handleLogout} style={bottomButtonStyle}>
-            로그아웃
-          </button>
+          <div style={styles.bottomButtonContainer}>
+            <button
+              onClick={handleDeleteAccount}
+              style={styles.bottomButtonStyle}
+            >
+              회원탈퇴
+            </button>
+            <button onClick={handleLogout} style={styles.bottomButtonStyle}>
+              로그아웃
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-const overlayStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 1000,
-  transition: "opacity 0.3s ease-in-out", // fade-in/fade-out 효과
-};
-
-const modalStyle = {
-  backgroundColor: "#fdf5e6",
-  padding: "20px",
-  borderRadius: "10px",
-  width: "49vh",
-  maxWidth: "600px",
-  position: "relative",
-  border: "8px solid #906C48",
-  outline: "2px solid #67523E",
-  boxSizing: "border-box",
-  transition: "opacity 0.3s ease-in-out", // fade-in/fade-out 효과
-};
-
-const titleStyle = {
-  fontSize: "18px",
-  marginBottom: "20px",
-  color: "#000",
-  fontWeight: "bold",
-  textAlign: "center",
-};
-
-const inputContainer = {
-  width: "100%",
-  marginBottom: "20px",
-};
-
-const inputStyle = {
-  width: "100%",
-  padding: "10px",
-  border: "1px solid #ddd",
-  borderRadius: "5px",
-  fontSize: "16px",
-  backgroundColor: "white",
-  textAlign: "center",
-  boxSizing: "border-box",
-};
-
-const buttonContainer = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  width: "100%",
-  marginBottom: "1.8vh",
-};
-
-const confirmButtonStyle = {
-  padding: "8px 0",
-  border: "none",
-  borderRadius: "5px",
-  backgroundColor: "#dc3545",
-  color: "white",
-  fontSize: "16px",
-  cursor: "pointer",
-  width: "15vh",
-  whiteSpace: "nowrap",
-  lineHeight: "1",
-  fontFamily: "inherit",
-};
-
-const cancelButtonStyle = {
-  padding: "8px 0",
-  border: "none",
-  borderRadius: "5px",
-  backgroundColor: "#808080",
-  color: "white",
-  fontSize: "16px",
-  cursor: "pointer",
-  width: "40%",
-  whiteSpace: "nowrap",
-  lineHeight: "1",
-  fontFamily: "inherit",
-};
-
-const bottomButtonContainer = {
-  position: "absolute",
-  bottom: "1vh",
-  left: "10px",
-  right: "10px",
-  display: "flex",
-  justifyContent: "space-between",
-};
-
-const bottomButtonStyle = {
-  background: "none",
-  border: "none",
-  color: "#888",
-  fontSize: "12px",
-  cursor: "pointer",
-  textDecoration: "underline",
-  fontFamily: "inherit",
-};
-
-const errorStyle = {
-  color: "#dc3545",
-  fontSize: "14px",
-  marginBottom: "15px",
-  textAlign: "center",
+const styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 9999,
+    transition: "opacity 0.2s ease-in-out",
+  },
+  modal: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+  },
+  innerBox: {
+    backgroundColor: "#fdf5e6",
+    padding: "3vh",
+    borderRadius: "2vh",
+    width: "40vh",
+    position: "relative",
+    textAlign: "center",
+    border: "1vh solid #906C48",
+    outline: "0.3vh solid #67523E",
+    fontSize: "2.3vh",
+  },
+  buttonBox: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    marginTop: "3vh",
+    marginBottom: "1vh",
+    gap: "5vh",
+  },
+  editButton: {
+    padding: "1vh 0",
+    border: "none",
+    borderRadius: "1vh",
+    backgroundColor: "#A68564",
+    color: "white",
+    cursor: "pointer",
+    width: "40%",
+    whiteSpace: "nowrap",
+    lineHeight: "1",
+    fontFamily: "Ownglyph, Ownglyph",
+    fontSize: "2.8vh",
+    transition: "all 0.1s ease",
+  },
+  cancelButton: {
+    padding: "1vh 0",
+    border: "none",
+    borderRadius: "1vh",
+    backgroundColor: "#C85253",
+    color: "white",
+    cursor: "pointer",
+    width: "40%",
+    whiteSpace: "nowrap",
+    lineHeight: "1",
+    fontFamily: "Ownglyph, Ownglyph",
+    fontSize: "2.8vh",
+    transition: "all 0.1s ease",
+  },
+  bottomButtonContainer: {
+    position: "absolute",
+    bottom: "1vh",
+    left: "10px",
+    right: "10px",
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  bottomButtonStyle: {
+    background: "none",
+    border: "none",
+    color: "#888",
+    fontSize: "1.4vh",
+    cursor: "pointer",
+    textDecoration: "underline",
+    fontFamily: "inherit",
+  },
+  errorStyle: {
+    color: "#dc3545",
+    fontSize: "14px",
+    marginBottom: "15px",
+    textAlign: "center",
+  },
+  titleStyle: {
+    fontSize: "2.8vh",
+    marginBottom: "20px",
+    color: "#000",
+    textAlign: "center",
+  },
+  inputContainer: {
+    width: "100%",
+    marginBottom: "20px",
+  },
+  inputStyle: {
+    width: "100%",
+    padding: "10px",
+    border: "1px solid #ddd",
+    borderRadius: "5px",
+    fontSize: "16px",
+    backgroundColor: "white",
+    textAlign: "center",
+    boxSizing: "border-box",
+    fontSize: "2.8vh",
+    fontFamily: "Ownglyph, Ownglyph",
+  },
 };
 
 export default EditModal;
