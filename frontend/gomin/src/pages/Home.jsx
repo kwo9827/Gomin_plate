@@ -3,18 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { countLike } from "../store/slices/memberSlice";
 import { fetchSushiByToken } from "../store/slices/sushiSlice";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useNotificationSSE } from "../hooks/useNotificationSSE";
-import { useLikeCountSSE } from "../hooks/useLikeCountSSE";
+import { useLocation } from "react-router-dom";
 
 import Rail from "../components/Rail";
-import Modal from "../components/EditModal";
 import PostSushiBell from "../components/PostSushiBell";
 import NotificationBell from "../components/NotificationBell";
 import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 import SushiUnlockBar from "../components/SushiUnlockBar";
+
+import { useSpring, animated } from "@react-spring/web";
 
 //이미지 파일
 import bgImg from "../assets/home/back.webp";
@@ -26,6 +25,7 @@ import plate from "../assets/sounds/plate.mp3";
 
 import { setIsNew } from "../store/slices/memberSlice";
 import Tutorial from "../components/Tutorial";
+import { useSSE } from "../hooks/useSSE";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -72,12 +72,8 @@ const Home = () => {
   const openSushiUnlock = () => setIsSushiUnlockOpen(true);
   const closeSushiUnlock = () => setIsSushiUnlockOpen(false);
 
-  const hasUnread = useSelector(
-    (state) => state.notification.hasUnread ?? false
-  );
-  const loading = useSelector(
-    (state) => state.notification.status === "loading"
-  );
+  const hasUnread = useSelector((state) => state.notification.hasUnread ?? false);
+  const loading = useSelector((state) => state.notification.status === "loading");
 
   const handleTutorialClose = () => {
     setStartTutorial(false);
@@ -89,6 +85,7 @@ const Home = () => {
 
   useLikeCountSSE();
   useNotificationSSE();
+  useSSE();
 
   useEffect(() => {
     // 현재 URL 경로에서 '/share/' 뒤의 값을 추출
@@ -170,31 +167,53 @@ const Home = () => {
     }
   }, [isSushiViewOpen]);
 
+  const bgSpring = useSpring({
+    opacity: allImagesLoaded ? 1 : 0,
+    transform: allImagesLoaded ? "translateY(2)" : "translateY(-50%)",
+    config: { tension: 170, friction: 26 },
+    delay: 1000,
+  });
+
+  const masterSpring = useSpring({
+    opacity: allImagesLoaded ? 1 : 0,
+    transform: allImagesLoaded ? "scale(1)" : "scale(0.8)",
+    config: { tension: 170, friction: 26 },
+    delay: 1500,
+  });
+
+  const deskSpring = useSpring({
+    opacity: allImagesLoaded ? 1 : 0,
+    transform: allImagesLoaded ? "translateY(0)" : "translateY(50%)",
+    config: { tension: 170, friction: 26 },
+    delay: 300,
+  });
+
   return (
     <>
       {/* 배경 이미지 */}
       <div style={styles.backgroundContainer}>
-        <div
+        <animated.div
           style={{
             ...styles.backgroundLayer,
             backgroundImage: `url("${bgImg}")`,
             zIndex: 1,
-            transform: "translateX(0) translateY(6%)",
-            opacity: allImagesLoaded ? 1 : 0,
+            opacity: bgSpring.opacity,
+            transform: bgSpring.transform,
           }}
           onLoad={() => handleImageLoad("bg")}
-        ></div>
+        ></animated.div>
         {/* 고양이마스터 */}
-        <div
+        <animated.div
           style={{
             ...styles.backgroundLayer,
             backgroundImage: `url("${masterImg}")`,
             zIndex: 2,
-            transform: "translateX(0) translateY(0) scale(1.2)",
-            opacity: allImagesLoaded ? 1 : 0,
+            opacity: masterSpring.opacity,
+            transform: masterSpring.transform,
           }}
           onLoad={() => handleImageLoad("master")}
-        ></div>
+        ></animated.div>
+
         {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
         <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
 
@@ -213,17 +232,15 @@ const Home = () => {
         )}
 
         {/* 책상과 그 위의 요소들 */}
-        <div style={styles.deskContainer}>
+        <animated.div
+          style={{
+            ...styles.deskContainer,
+            opacity: deskSpring.opacity,
+            transform: deskSpring.transform,
+          }}
+        >
           {/* 책상 */}
-          <img
-            src={deskImg}
-            alt="Desk"
-            style={{
-              ...styles.deskImage,
-              opacity: allImagesLoaded ? 1 : 0,
-            }}
-            onLoad={() => handleImageLoad("desk")}
-          />
+          <img src={deskImg} alt="Desk" style={styles.deskImage} onLoad={() => handleImageLoad("desk")} />
 
           {/* Rail */}
           <div style={styles.rail}>
@@ -231,13 +248,13 @@ const Home = () => {
           </div>
           {/* 주문벨 */}
           <div style={styles.bell}>
-            <PostSushiBell onClick={openPostSushi} style={{ zIndex: 5 }} />
+            <PostSushiBell onClick={openPostSushi} />
           </div>
           {/* 해금요소 */}
           <div style={styles.unlock}>
-            <SushiUnlockBar onClick={openSushiUnlock} style={{ zIndex: 5 }} />
+            <SushiUnlockBar onClick={openSushiUnlock} />
           </div>
-        </div>
+        </animated.div>
 
         {/* 모달 */}
         <div>
@@ -276,6 +293,7 @@ const Home = () => {
 
             {/* <button onClick={handleSetIsNew}>튜토리얼 테스트</button> */}
 
+
             {!allImagesLoaded && (
               <div>
                 <p> 초밥집에 입장하는 중..</p>
@@ -294,15 +312,9 @@ const Home = () => {
               />
             )}
 
-            <SushiUnlock
-              isOpen={isSushiUnlockOpen}
-              onClose={closeSushiUnlock}
-            />
+            <SushiUnlock isOpen={isSushiUnlockOpen} onClose={closeSushiUnlock} />
             {isPostSushiOpen && <PostSushi onClose={closePostSushi} />}
-            <NotificationModal
-              isOpen={isNotificationOpen}
-              onClose={closeNotification}
-            />
+            <NotificationModal isOpen={isNotificationOpen} onClose={closeNotification} />
           </div>
         </div>
       </div>
@@ -331,7 +343,7 @@ const styles = {
   deskContainer: {
     position: "absolute",
     bottom: 0,
-    left: "50%",
+    left: "-35%",
     transform: "translateX(-50%)",
     width: "auto%",
     height: "28vh", // 책상의 높이 설정
