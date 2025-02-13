@@ -14,6 +14,9 @@ const SushiAnswerDetail = () => {
   const status = useSelector((state) => state.answer.status);
   const [currentPage, setCurrentPage] = useState(0);
 
+  // 애니메이션 관련 상태
+  const [isVisible, setIsVisible] = useState(false);
+
   const {
     title = "",
     content = "",
@@ -32,6 +35,13 @@ const SushiAnswerDetail = () => {
       return;
     }
     dispatch(fetchAnswerDetail(sushiId));
+
+    // 데이터 로딩 후 애니메이션 시작
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [sushiId, dispatch, navigate]);
 
   const openModal = (answer) => {
@@ -61,7 +71,14 @@ const SushiAnswerDetail = () => {
 
   return (
     <div style={styles.background}>
-      <div style={styles.outerContainer}>
+      <div
+        style={{
+          ...styles.outerContainer,
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'opacity 0.5s ease, transform 0.5s ease',
+        }}
+      >
         <button onClick={() => navigate(-1)} style={styles.backButton}>
           ◀
         </button>
@@ -80,6 +97,8 @@ const SushiAnswerDetail = () => {
               style={{
                 ...styles.postIt,
                 backgroundColor: styles.postItColors[0],
+                animation: isVisible ? `fadeIn 0.5s ease forwards 0.3s` : 'none',
+                opacity: 0
               }}
               onClick={() => openModal(answer)}
             >
@@ -248,12 +267,23 @@ const styles = {
   },
 };
 
-// Chrome, Safari에서 스크롤바 숨기기
+// Chrome, Safari에서 스크롤바 숨기기 및 애니메이션 키프레임 추가
 document.addEventListener("DOMContentLoaded", function () {
   const style = document.createElement("style");
   style.innerHTML = `
     .listContainer::-webkit-scrollbar {
       display: none;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   `;
   document.head.appendChild(style);
