@@ -7,7 +7,7 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   // const token = useSelector((state) => state.member.accessToken);
 
-  const token = localStorage.getItem("accessToken");
+  // const token = localStorage.getItem("accessToken");
 
   if (token) {
     // alert("토큰 있음. " + "path: " + config.url);
