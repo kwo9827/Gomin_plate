@@ -14,7 +14,7 @@ import t8 from "../assets/tuto/8.webp";
 import t9 from "../assets/tuto/9.webp";
 import t10 from "../assets/tuto/10.webp";
 
-const Tutorial = ({ onClose }) => {
+const Tutorial = ({ onClose, showFullTutorial = true }) => {
   const [showDialog, setShowDialog] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -31,14 +31,18 @@ const Tutorial = ({ onClose }) => {
     "준비가 되면 화면을 눌러 진행하세요!",
   ];
 
-  const tutorialSlides = [t0, t1, t2, t3, t4, t5, t6, t7, t8, t9];
+  const tutorialSlides = [t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t9];
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowDialog(true);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
+    if (showFullTutorial) {
+      const timer = setTimeout(() => {
+        setShowDialog(true);
+      }, 1500);
+      return () => clearTimeout(timer);
+    } else {
+      setShowTutorial(true);
+    }
+  }, [showFullTutorial]);
 
   const handleDialogComplete = () => {
     setShowDialog(false);
@@ -57,6 +61,21 @@ const Tutorial = ({ onClose }) => {
 
   return (
     <>
+      {(showDialog || showTutorial) && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 8, // tutorialModal의 zIndex보다 낮게
+            backgroundColor: "transparent",
+          }}
+          onClick={(e) => e.stopPropagation()}
+        />
+      )}
+
       {showDialog && (
         <div
           style={{
@@ -119,7 +138,7 @@ const styles = {
   tutorialContent: {
     // backgroundColor: "white",
     borderRadius: "12px",
-    width: "45vh", // 300vh는 너무 큰 값입니다
+    width: "45vh",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
