@@ -26,6 +26,7 @@ import plate from "../assets/sounds/plate.mp3";
 import { setIsNew } from "../store/slices/memberSlice";
 import Tutorial from "../components/Tutorial";
 import { useSSE } from "../hooks/useSSE";
+import SSEIndicator from "../components/SSEIndicator";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -87,7 +88,8 @@ const Home = () => {
     setStartTutorial(true);
   };
 
-  useSSE();
+  // useSSE();
+  const isSSEConnected = useSSE();
 
   useEffect(() => {
     // 현재 URL 경로에서 '/share/' 뒤의 값을 추출
@@ -194,6 +196,7 @@ const Home = () => {
     <>
       {/* 배경 이미지 */}
       <div style={styles.backgroundContainer}>
+        <SSEIndicator isConnected={isSSEConnected} />
         <animated.div
           style={{
             ...styles.backgroundLayer,
@@ -215,24 +218,20 @@ const Home = () => {
           }}
           onLoad={() => handleImageLoad("master")}
         ></animated.div>
-
         {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
         <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
-
         {/* 튜토리얼 버튼 */}
         <div style={styles.buttonContainer}>
           <button style={styles.button} onClick={restartTutorial}>
             ?
           </button>
         </div>
-
         {startTutorial && (
           <Tutorial
             onClose={() => setStartTutorial(false)}
             showFullTutorial={false}
           />
         )}
-
         {/* 책상과 그 위의 요소들 */}
         <animated.div
           style={{
@@ -248,7 +247,6 @@ const Home = () => {
             style={styles.deskImage}
             onLoad={() => handleImageLoad("desk")}
           />
-
           {/* Rail */}
           <div style={styles.rail}>
             <Rail onSushiClick={handleSushiClick} />
@@ -262,7 +260,6 @@ const Home = () => {
             <SushiUnlockBar onClick={openSushiUnlock} />
           </div>
         </animated.div>
-
         {/* 모달 */}
         <div>
           <div style={{ position: "absolute", zIndex: "10" }}>

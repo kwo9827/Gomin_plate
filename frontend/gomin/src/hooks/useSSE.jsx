@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateHasUnread } from "../store/slices/notificationSlice";
 import { updateLikesReceived } from "../store/slices/memberSlice";
@@ -6,6 +6,7 @@ import { EventSource } from "eventsource";
 
 export const useSSE = (initialDelay = 3000) => {
   const dispatch = useDispatch();
+  const [isConnected, setIsConnected] = useState(false); // 홈화면 표기용
   const eventSourceRef = useRef(null);
   const reconnectTimeoutRef = useRef(null);
   const connectionTimeoutRef = useRef(null);
@@ -17,6 +18,7 @@ export const useSSE = (initialDelay = 3000) => {
     // 최대 재시도 횟수 체크
     if (retryCountRef.current >= MAX_RETRIES) {
       console.error(`SSE 연결 실패 - 최대 재시도 횟수(${MAX_RETRIES}회) 초과`);
+      setIsConnected(false);
       return; // 더 이상 재연결 시도하지 않음
     }
 
@@ -24,12 +26,14 @@ export const useSSE = (initialDelay = 3000) => {
 
     if (!token) {
       console.error("No access token found for sse connection");
+      setIsConnected(false);
       return;
     }
 
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
       eventSourceRef.current = null;
+      setIsConnected(false);
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
@@ -49,6 +53,7 @@ export const useSSE = (initialDelay = 3000) => {
     connectionTimeoutRef.current = setTimeout(() => {
       if (!eventSourceRef.current || eventSourceRef.current.readyState !== 1) {
         console.error("SSE 초기 연결 실패 - 타임아웃");
+        setIsConnected(false);
         retryCountRef.current += 1;
 
         if (retryCountRef.current >= MAX_RETRIES) {
@@ -83,6 +88,7 @@ export const useSSE = (initialDelay = 3000) => {
 
     // 서버 셧다운 이벤트 처리
     eventSourceRef.current.addEventListener("shutdown", (event) => {
+      setIsConnected(false);
       eventSourceRef.current.close();
 
       const checkServerAndReconnect = async () => {
@@ -106,12 +112,14 @@ export const useSSE = (initialDelay = 3000) => {
     // 연결 시
     eventSourceRef.current.onopen = () => {
       console.log("SSE 연결 성공");
+      setIsConnected(true);
       retryCountRef.current = 0;
     };
 
     // 연결 에러 시
     eventSourceRef.current.onerror = (error) => {
       console.error("SSE 에러발생");
+      setIsConnected(false);
       retryCountRef.current += 1;
 
       if (eventSourceRef.current) {
@@ -138,6 +146,7 @@ export const useSSE = (initialDelay = 3000) => {
 
     return () => {
       retryCountRef.current = 0;
+      setIsConnected(false);
       if (eventSourceRef.current) {
         eventSourceRef.current.close();
         eventSourceRef.current = null;
@@ -155,4 +164,6 @@ export const useSSE = (initialDelay = 3000) => {
       }
     };
   }, [connectSSE, initialDelay]);
+
+  return isConnected;
 };
