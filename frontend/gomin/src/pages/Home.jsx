@@ -196,6 +196,7 @@ const Home = () => {
     <>
       {/* 배경 이미지 */}
       <div style={styles.backgroundContainer}>
+        {/* SSE 연결 상태 표시 */}
         <SSEIndicator isConnected={isSSEConnected} />
         <animated.div
           style={{
