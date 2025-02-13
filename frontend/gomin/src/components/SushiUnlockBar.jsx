@@ -16,27 +16,27 @@ const SushiUnlockBar = ({ onClick }) => {
     dispatch(countLike());
   }, [dispatch]);
 
-  // 해금 조건을 배열로 정의
-  const unlockThresholds = [0, 1, 2, 3, 6, 10, 15, 20, 30, 50, 80, 100];
-  const MAX_SUSHI = unlockThresholds.length - 1; // 최대 해금 가능한 초밥 개수
+  const LIKE_THRESHOLDS = [0, 1, 2, 3, 6, 10, 15, 20, 30, 50, 80, 100];
 
   // 현재 해금된 초밥 개수 계산
-  const unlockedSushiCount = unlockThresholds.findIndex(
-    (threshold) => likesReceived < threshold
+  const unlockedSushiCount =
+    LIKE_THRESHOLDS.filter((like) => likesReceived >= like).length - 1;
+
+  // 다음 해금될 초밥 찾기 (현재 받은 좋아요보다 큰 최소값을 찾음)
+  const nextSushiIndex = LIKE_THRESHOLDS.findIndex(
+    (like) => likesReceived < like
   );
 
-  // 다음 초밥 해금까지 남은 좋아요 수 계산
-  const remainingLikes = unlockThresholds[unlockedSushiCount] - likesReceived;
+  const nextSushiType =
+    nextSushiIndex !== -1 ? nextSushiIndex + 1 : LIKE_THRESHOLDS.length - 1;
 
-  // 현재 단계의 진행률 계산 (0-100%)
-  const currentProgress =
-    ((likesReceived - unlockThresholds[unlockedSushiCount - 1]) /
-      (unlockThresholds[unlockedSushiCount] -
-        unlockThresholds[unlockedSushiCount - 1])) *
+  // 현재 해금된 초밥의 최소 좋아요 수 & 다음 해금까지 필요한 좋아요 수
+  const currentThreshold = LIKE_THRESHOLDS[unlockedSushiCount];
+  const nextThreshold = LIKE_THRESHOLDS[nextSushiType];
+  const progressPercentage =
+    ((likesReceived - currentThreshold) / (nextThreshold - currentThreshold)) *
     100;
 
-  // 다음 해금할 초밥 타입 (0부터 시작)
-  const nextSushiType = Math.min(unlockedSushiCount, MAX_SUSHI);
   return (
     <div style={styles.container} onClick={onClick}>
       <img
@@ -50,7 +50,7 @@ const SushiUnlockBar = ({ onClick }) => {
         <div
           style={{
             ...styles.progressBar,
-            width: `${currentProgress}%`,
+            width: `${progressPercentage}%`,
           }}
         />
       </div>
