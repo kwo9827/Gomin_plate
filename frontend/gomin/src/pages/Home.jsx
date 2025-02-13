@@ -25,6 +25,7 @@ import SushiView from "./SushiView";
 import plate from "../assets/sounds/plate.mp3";
 
 import { setIsNew } from "../store/slices/memberSlice";
+import Tutorial from "../components/Tutorial";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -39,13 +40,14 @@ const Home = () => {
   const [isPostSushiOpen, setIsPostSushiOpen] = useState(false);
   const [isSushiViewOpen, setIsSushiViewOpen] = useState(false);
   const [selectedSushiData, setSelectedSushiData] = useState(null);
+  const [startTutorial, setStartTutorial] = useState(false);
 
   const audioRef = useRef(null);
 
-  // ✅ `handleSetIsNew` 함수 정의
-  const handleSetIsNew = (value) => {
-    dispatch(setIsNew(value));
-  };
+  // // ✅ `handleSetIsNew` 함수 정의
+  // const handleSetIsNew = (value) => {
+  //   dispatch(setIsNew(value));
+  // };
 
   const handleSushiClick = (sushiData) => {
     setSelectedSushiData(sushiData);
@@ -76,6 +78,14 @@ const Home = () => {
   const loading = useSelector(
     (state) => state.notification.status === "loading"
   );
+
+  const handleTutorialClose = () => {
+    setStartTutorial(false);
+  };
+
+  const restartTutorial = () => {
+    setStartTutorial(true);
+  };
 
   useLikeCountSSE();
   useNotificationSSE();
@@ -188,6 +198,20 @@ const Home = () => {
         {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
         <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
 
+        {/* 튜토리얼 버튼 */}
+        <div style={styles.buttonContainer}>
+          <button style={styles.button} onClick={restartTutorial}>
+            ?
+          </button>
+        </div>
+
+        {startTutorial && (
+          <Tutorial
+            onClose={() => setStartTutorial(false)}
+            showFullTutorial={false}
+          />
+        )}
+
         {/* 책상과 그 위의 요소들 */}
         <div style={styles.deskContainer}>
           {/* 책상 */}
@@ -251,10 +275,6 @@ const Home = () => {
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
 
             {/* <button onClick={handleSetIsNew}>튜토리얼 테스트</button> */}
-
-            <div>
-              <button>튜토리얼</button>
-            </div>
 
             {!allImagesLoaded && (
               <div>
@@ -345,6 +365,28 @@ const styles = {
     left: "25%",
     bottom: "23%",
     zIndex: 5,
+  },
+  buttonContainer: {
+    position: "absolute",
+    left: "49.5vh",
+    top: "51.1vh",
+    zIndex: 5,
+  },
+  button: {
+    padding: "0.2vh",
+    border: "0.6vh solid",
+    borderRadius: "5vh",
+    backgroundColor: "#ada782",
+    // backgroundColor: "#a6a07a",
+    color: "#dfdbaf",
+    fontSize: "2.5vh",
+    fontWeight: "bold",
+    cursor: "pointer",
+    width: "4vh",
+    height: "4vh",
+    whiteSpace: "nowrap",
+    lineHeight: "1",
+    fontFamily: "inherit",
   },
 };
 
