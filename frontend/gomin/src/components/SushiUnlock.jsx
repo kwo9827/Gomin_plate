@@ -256,26 +256,25 @@ const modalStyle = {
 
 const outerBoxStyle = {
   width: "30vh",
-  border: "0.5vh solid #906C48",
-  borderRadius: "1.3vh",
-  marginTop: "0.3vh",
-  marginBottom: "3vh",
+  maxWidth: "250px",
+  margin: "20px auto",
+  border: "4px solid #8B6B3E",
+  borderRadius: "8px",
   backgroundColor: "#B2975C",
-  padding: "0.75vh",
+  padding: "6px",
   boxSizing: "border-box",
-  position: "relative",
 };
 
 const innerBoxStyle = {
   width: "100%",
-  border: "0.3vh solid #906C48",
-  borderRadius: "0.6vh",
+  border: "2px solid #906C48",
+  borderRadius: "4px",
   backgroundColor: "#B2975C",
   textAlign: "center",
   color: "#5D4A37",
-  fontSize: "3vh",
+  fontSize: "1.5rem",
   fontWeight: "bold",
-  padding: "1vh",
+  padding: "6px 0",
   boxSizing: "border-box",
 };
 
