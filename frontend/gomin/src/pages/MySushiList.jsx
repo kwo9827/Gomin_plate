@@ -9,16 +9,14 @@ import "../styles/font.css";
 const MySushiList = () => {
   const [search, setSearch] = useState("");
   const [displaySushi, setDisplaySushi] = useState([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
+
+  const onChange = (e) => {
+    const searchValue = e.target.value;
+    setSearch(searchValue);
+  };
 
   const dispatch = useDispatch();
   const mySushi = useSelector((state) => state.sushi.mySushi);
-
-  const onChange = (e) => {
-    setSearch(e.target.value);
-  };
 
   useEffect(() => {
     dispatch(
@@ -28,53 +26,15 @@ const MySushiList = () => {
         size: 10,
       })
     ).then((result) => {
-      if (result.payload && result.payload.data) {
-        setDisplaySushi(result.payload.data.content);
-        setHasMore(result.payload.data.content.length === 10);
-      }
+      setDisplaySushi(result.payload.data.content);
     });
   }, [dispatch]);
 
-  /* 무한 스크롤 기능 */
-  const handleScroll = (e) => {
-    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
-
-    if (!loading && hasMore && scrollHeight - scrollTop <= clientHeight + 100) {
-      loadMore();
+  useEffect(() => {
+    if (!search.trim()) {
+      setDisplaySushi(mySushi);
     }
-  };
-
-  /*데이터 불러오기 */
-  const loadMore = () => {
-    if (loading || !hasMore) return;
-
-    setLoading(true);
-    const nextPage = page + 1;
-
-    console.log("다음 페이지 요청:", { nextPage });
-
-    dispatch(
-      fetchMySushi({
-        search: search,
-        page: nextPage,
-        size: 10,
-      })
-    ).then((result) => {
-      if (result.payload && result.payload.data) {
-        const newSushi = result.payload.data.content;
-
-        console.log("새로 불러온 게시글 수", newSushi.length);
-
-        if (newSushi.length < 10) {
-          console.log("더 이상 불러올 데이터가 없습니다.");
-          setHasMore(false);
-        }
-        setDisplaySushi((prev) => [...prev, ...newSushi]);
-        setPage(nextPage);
-      }
-      setLoading(false);
-    });
-  };
+  }, [mySushi, search]);
 
   const onSearch = () => {
     dispatch(
@@ -92,13 +52,7 @@ const MySushiList = () => {
     });
   };
 
-  useEffect(() => {
-    if (!search.trim()) {
-      setDisplaySushi(mySushi);
-    }
-  }, [mySushi, search]);
-
-  // react-spring 애니메이션 효과
+  // react-spring 애니메이션 효과를 위한 trail
   const trail = useTrail(displaySushi.length, {
     opacity: 1,
     transform: "translateY(0px)",
@@ -107,9 +61,9 @@ const MySushiList = () => {
   });
 
   return (
-    <div style={styles.background} onScroll={handleScroll}>
+    <div style={styles.background}>
+      {/* 나의 고민 박스 */}
       <div style={styles.listContainer}>
-        {/* 나의 고민 박스 */}
         <div style={styles.position}>
           <div style={styles.outerBox}>
             <div style={styles.innerBox}>나의 고민</div>
@@ -126,7 +80,6 @@ const MySushiList = () => {
               placeholder="고민을 검색해주세요"
               style={styles.searchInput}
               className="custom-placeholder"
-              // onKeyPress={(e) => e.key === "Enter" && onSearch()}
             />
             <i
               className="fas fa-search"
@@ -134,14 +87,6 @@ const MySushiList = () => {
               onClick={onSearch}
             ></i>
           </div>
-        </div>
-
-        {/* 디버깅을 위한 현재 상태 표시 */}
-        <div style={{ display: "none" }}>
-          <p>검색어: {search}</p>
-          <p>데이터 개수: {displaySushi.length}</p>
-          <p>로딩 상태: {loading ? "true" : "false"}</p>
-          <p>추가 데이터 존재: {hasMore ? "true" : "false"}</p>
         </div>
 
         {/* 고민 리스트 */}
@@ -161,14 +106,6 @@ const MySushiList = () => {
           </ul>
         ) : (
           <div style={styles.noResult}>일치하는 고민이 없습니다.</div>
-        )}
-
-        {/* 로딩 표시 */}
-        {loading && <div style={styles.loadingText}>로딩 중...</div>}
-
-        {/* 더 이상 데이터가 없을 때 메시지 */}
-        {!hasMore && displaySushi.length > 0 && (
-          <div style={styles.endMessage}>더 이상 고민이 없습니다.</div>
         )}
       </div>
     </div>
@@ -271,20 +208,6 @@ const styles = {
     listStyle: "none",
     padding: 0,
     margin: 0,
-  },
-
-  loadingText: {
-    textAlign: "center",
-    color: "#8B6B3E",
-    fontSize: "2vh",
-    padding: "2vh 0",
-  },
-
-  endMessage: {
-    textAlign: "center",
-    color: "#8B6B3E",
-    fontSize: "2vh",
-    padding: "2vh 0",
   },
 };
 
