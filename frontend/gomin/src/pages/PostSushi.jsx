@@ -22,6 +22,8 @@ import uni from "../assets/sushi/성게알초밥.webp";
 import tuna from "../assets/sushi/참치초밥.webp";
 import salmonRoe from "../assets/sushi/연어알초밥.webp";
 
+import x from "../assets/x-twitter.png"
+
 const styles = `
   @keyframes slideUp {
     from {
@@ -222,6 +224,14 @@ const PostSushi = ({ onClose }) => {
     setShowModal(false);
   };
 
+  const handleCopyClipBoard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("클립보드에 링크가 복사되었어요.");
+    } catch (err) {
+      console.log(err);
+    }
+  }
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
@@ -486,65 +496,69 @@ const PostSushi = ({ onClose }) => {
 
                   <p>공유하기</p>
 
-                  <div style={buttonContainer}>
-                    {/* 카카오톡 공유 아이콘 */}
-                    <button
-                      style={iconButtonStyle}
-                      onClick={() => {
-                        if (!window.Kakao.isInitialized()) {
-                          window.Kakao.init(
-                            import.meta.env.VITE_KAKAO_JAVASCRIPT_ID
-                          );
-                        }
+                <div style={buttonContainer}>
+                  {/* 링크복사 아이콘 */}
+                  <i 
+                    className="fas fa-link"
+                    onClick={() => handleCopyClipBoard(`${window.location.origin}/${shareUrl}`)}
+                    style={iconStyleR}
+                  ></i>
 
-                        window.Kakao.Link.sendCustom({
-                          templateId: 117216, // 본인 템플릿 ID
-                          templateArgs: {
-                            url: shareUrl,
-                          },
-                        });
-                        console.log("카카오톡 공유하기" + shareUrl);
-                      }}
-                    >
-                      <img
-                        src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
-                        alt="카카오톡 아이콘"
-                        style={iconStyleF}
-                      />
-                    </button>
-
-                    {/* 페이스북 공유 아이콘 */}
-                    <button
-                      style={iconButtonStyle}
-                      onClick={() => {
-                        window.open(
-                          `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${shareUrl}`,
-                          "_blank"
+                  {/* 카카오톡 공유 아이콘 */}
+                  <button
+                    style={iconButtonStyle}
+                    onClick={() => {
+                      if (!window.Kakao.isInitialized()) {
+                        window.Kakao.init(
+                          import.meta.env.VITE_KAKAO_JAVASCRIPT_ID
                         );
-                        console.log("페이스북 공유하기");
-                      }}
-                    >
-                      <i
-                        className="fab fa-facebook-square"
-                        style={iconStyleF}
-                      ></i>
-                    </button>
+                      }
 
-                    {/* X (구 트위터) 공유 아이콘 */}
-                    <a
-                      href={`https://x.com/intent/tweet?text=Check%20out%20this%20sushi%20post!&url=${window.location.origin}/${shareUrl}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={iconButtonStyle}
-                    >
-                      <i
-                        class="fab fa-brands fa-x-twitter"
-                        style={iconStyleX}
-                      ></i>
-                      {/* <i className="fa-brands fa-x-twitter" style={iconStyleX}></i> */}
-                    </a>
-                  </div>
+                      window.Kakao.Link.sendCustom({
+                        templateId: 117216, // 본인 템플릿 ID
+                        templateArgs: {
+                          url: shareUrl,
+                        },
+                      });
+                      console.log("카카오톡 공유하기" + shareUrl);
+                    }}
+                  >
+                    <img
+                      src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
+                      alt="카카오톡 아이콘"
+                      style={iconStyleF}
+                    />
+                  </button>
+
+                  {/* 페이스북 공유 아이콘 */}
+                  <button
+                    style={iconButtonStyle}
+                    onClick={() => {
+                      window.open(
+                        `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${shareUrl}`,
+                        "_blank"
+                      );
+                      console.log("페이스북 공유하기");
+                    }}
+                  >
+                    <i className="fab fa-facebook-square" style={iconStyleF}></i>
+                  </button>
+
+                  {/* X (구 트위터) 공유 아이콘 */}
+                  <a
+                    href={`https://x.com/intent/tweet?text=Check%20out%20this%20sushi%20post!&url=${window.location.origin}/${shareUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={iconButtonStyle}
+                  >
+                    <img
+                      src={x}
+                      alt="X (Twitter) Icon"
+                      style={iconStyleX}
+                    />
+                  </a>
                 </div>
+              </div>
               </div>
             )}
           </div>
@@ -805,20 +819,35 @@ const iconButtonStyle = {
   alignItems: "center",
 };
 
+const iconStyleR = {
+  fontSize: "1em",
+  backgroundColor: "#5B9253",
+  color: "#ffffff",
+  width: "40px",
+  height: "40px",
+  borderRadius: "15%",
+  lineHeight: "40px",
+  display: "inline-block",
+  textAlign: "center",
+  transition: "background-color 0.3s ease-in-out",
+  verticalAlign: "middle", // 수직 정렬 맞추기
+};
+
 const iconStyleF = {
-  fontSize: "3em", // 아이콘 크기 일관성
+  fontSize: "3.2em", // 아이콘 크기 일관성 (조금 작게 조정)
   color: "#3b5998", // 아이콘 색상
   width: "40px", // 동일한 크기로 지정
   height: "40px", // 동일한 크기로 지정
   display: "inline-block",
+  verticalAlign: "middle", // 수직 정렬 맞추기
 };
 
 const iconStyleX = {
-  fontSize: "3em", // 아이콘 크기 일관성
   color: "#3b5998", // 아이콘 색상
-  width: "40px", // 동일한 크기로 지정
-  height: "40px", // 동일한 크기로 지정
+  width: "45px", // 동일한 크기로 지정
+  height: "45px", // 동일한 크기로 지정
   display: "inline-block",
+  verticalAlign: "middle", // 수직 정렬 맞추기
 };
 
 const confirmButtonStyle = {
