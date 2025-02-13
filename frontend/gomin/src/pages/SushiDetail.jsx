@@ -25,6 +25,9 @@ const SushiDetail = () => {
   const [negativeModalOpen, setNegativeModalOpen] = useState(false);
   const [negativeAnswer, setNegativeAnswer] = useState(null);
 
+  // 애니메이션 관련 state
+  const [isVisible, setIsVisible] = useState(false);
+
   const {
     title = "",
     content = "",
@@ -43,6 +46,11 @@ const SushiDetail = () => {
     }, 5);
 
     dispatch(fetchMySushiDetail(sushiId));
+
+    // 로딩 후 컴포넌트 페이드인 효과
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
   }, [sushiId, dispatch, navigate, modalOpen]);
 
   const openAnswer = (answer) => {
@@ -102,12 +110,12 @@ const SushiDetail = () => {
 
   return (
     <div style={styles.background}>
-      <div style={styles.outerContainer}>
-        {/* 뒤로 가기 버튼 */}
-        <button onClick={() => navigate(-1)} style={styles.backButton}>
-          ◀
-        </button>
-
+      <div style={{
+        ...styles.outerContainer,
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+        transition: 'opacity 0.5s ease, transform 0.5s ease',
+      }}>
         {/* 제목 */}
         <h2 style={styles.title}>{title}</h2>
         <hr style={styles.divider} />
@@ -140,6 +148,8 @@ const SushiDetail = () => {
                     ...styles[`postIt${index + 1}`],
                     filter: item.isNegative ? "blur(8px)" : "none",
                     cursor: "pointer",
+                    animation: `fadeIn 0.5s ease forwards ${0.1 + index * 0.1}s`,
+                    opacity: 0,
                   }}
                   onClick={() => openAnswer(item)}
                 >
@@ -193,13 +203,13 @@ const SushiDetail = () => {
 const styles = {
   /**배경 */
   background: {
+    padding: "20px",
     position: "relative",
-    overflow: "hidden",
-    padding: "3vh",
     height: "100vh",
     width: "100%",
-    backgroundColor: "#FFF8E1",
+    overflow: "hidden",
     boxSizing: "border-box",
+    backgroundColor: "#FFF8E1",
   },
   /**전체 감싸는 컨테이너 */
   outerContainer: {
@@ -327,14 +337,42 @@ const styles = {
     color: "#8B6B3E",
     marginBottom: "20px",
   },
+  loading: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+    fontSize: '1.5rem',
+    color: '#8B6B3E',
+  },
+  error: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+    fontSize: '1.5rem',
+    color: 'red',
+  },
 };
 
-// Chrome, Safari에서 스크롤바 숨기기
+// 애니메이션 키프레임 추가
 document.addEventListener("DOMContentLoaded", function () {
   const style = document.createElement("style");
-  style.innerHTML = `.listContainer::-webkit-scrollbar {
+  style.innerHTML = `
+    .listContainer::-webkit-scrollbar {
       display: none;
-    }`;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  `;
   document.head.appendChild(style);
 });
 
