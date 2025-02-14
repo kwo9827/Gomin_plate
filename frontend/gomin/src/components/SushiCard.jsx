@@ -9,7 +9,8 @@ const SushiCard = ({
   category,
   sushiType,
   showHeart = false,
-  remainingAnswers
+  remainingAnswers,
+  isClosed
 }) => {
   const navigate = useNavigate();
 
@@ -38,13 +39,24 @@ const SushiCard = ({
             <hr style={dividerStyle} />
             <div style={contentStyle}>{content}</div>
 
-            {remainingAnswers > 0 ? (
-              <div style={remainingAnswersStyle}>
-                마감까지 {remainingAnswers}명 남았어요
+            {!isClosed ? (
+              <div>
+                {remainingAnswers > 0 ? (
+                  <div style={remainingAnswersStyle}>
+                    마감까지 {remainingAnswers}명 남았어요
+                  </div>
+                ) : (
+                  <div style={remainingAnswersStyle}>
+                    답변이 모두 달렸어요!
+                  </div>
+                )}
               </div>
-            ) : <div style={remainingAnswersStyle}>
-              답변이 모두 달렸어요 !
-            </div>}
+            ) : (
+              <div style={remainingAnswersStyle}>
+                {remainingAnswers}개의 답변이 달렸어요 !
+              </div>
+            )}
+
           </div>
         </div>
       </div>
