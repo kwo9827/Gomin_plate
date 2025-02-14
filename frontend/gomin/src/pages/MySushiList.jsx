@@ -22,7 +22,6 @@ const MySushiList = () => {
 
   useEffect(() => {
     let mounted = true;
-
     const fetchInitialData = async () => {
       try {
         const result = await dispatch(
@@ -32,7 +31,6 @@ const MySushiList = () => {
             size: 10,
           })
         );
-
         if (mounted && result.payload && result.payload.data) {
           setDisplaySushi(result.payload.data.content);
           setHasMore(result.payload.data.content.length === 10);
@@ -41,14 +39,13 @@ const MySushiList = () => {
         console.error("초기 데이터 로딩 실패:", error);
       }
     };
-
     fetchInitialData();
-
     return () => {
       mounted = false;
     };
   }, []);
 
+  /*스크롤 감지 */
   const handleScroll = (e) => {
     const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
 
@@ -57,14 +54,12 @@ const MySushiList = () => {
     }
   };
 
+  /*다음 페이지 요청하는 코드 */
   const loadMore = () => {
     if (loading || !hasMore) return;
-
     setLoading(true);
     const nextPage = page + 1;
-
-    console.log("다음 페이지 요청:", { nextPage });
-
+    console.log("다음 페이지:", { nextPage });
     dispatch(
       fetchMySushi({
         search: search,
@@ -74,9 +69,7 @@ const MySushiList = () => {
     ).then((result) => {
       if (result.payload && result.payload.data) {
         const newSushi = result.payload.data.content;
-
         console.log("새로 불러온 게시글 수", newSushi.length);
-
         if (newSushi.length < 10) {
           console.log("더 이상 불러올 데이터가 없습니다.");
           setHasMore(false);
@@ -88,6 +81,7 @@ const MySushiList = () => {
     });
   };
 
+  /*검색 기능 */
   const onSearch = () => {
     dispatch(
       fetchMySushi({
@@ -102,6 +96,13 @@ const MySushiList = () => {
       );
       setDisplaySushi(filtered);
     });
+  };
+
+  /*검색 엔터 기능 */
+  const OnSearchSubmit = (e) => {
+    if (e.key === "Enter") {
+      onSearch();
+    }
   };
 
   // react-spring 애니메이션 효과
@@ -129,6 +130,7 @@ const MySushiList = () => {
               type="text"
               value={search}
               onChange={onChange}
+              onKeyPress={OnSearchSubmit}
               placeholder="고민을 검색해주세요"
               style={styles.searchInput}
               className="custom-placeholder"
