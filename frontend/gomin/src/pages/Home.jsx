@@ -187,7 +187,7 @@ const Home = () => {
 
   const deskSpring = useSpring({
     opacity: allImagesLoaded ? 1 : 0,
-    transform: allImagesLoaded ? "translateY(0)" : "translateY(50%)",
+    transform: allImagesLoaded ? "translateX(0)" : "translateX(-50%)",
     config: { tension: 170, friction: 26 },
     delay: 300,
   });
