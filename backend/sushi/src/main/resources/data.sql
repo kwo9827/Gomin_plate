@@ -1,10 +1,11 @@
 -- 테스트 유저 데이터
-INSERT INTO user (nickname, provider, provider_id, created_at, updated_at, total_likes)
-VALUES ('테스트맨', 'KAKAO', '112312312', CURRENT_TIMESTAMP,CURRENT_TIMESTAMP, 1);
+INSERT INTO user (nickname,total_likes, provider, provider_id, created_at, updated_at)
+VALUES ('고양이마스터', 0, 'KAKAO', 1111111, NOW(), NOW());
 
 -- 더미 유저
 INSERT INTO user (nickname, total_likes, provider, provider_id, created_at, updated_at)
-VALUES ('testUser1', 0, 'KAKAO', 1231440, NOW(), NOW()),
+VALUES ('테스트맨', 0,'KAKAO', 112312312, NOW(), NOW()),
+        ('testUser1', 0, 'KAKAO', 1231440, NOW(), NOW()),
        ('testUser2', 1, 'GOOGLE', 1231441, NOW(), NOW()),
        ('testUser3', 0, 'KAKAO', 1231442, NOW(), NOW()),
        ('testUser4', 2, 'GOOGLE', 1231443, NOW(), NOW()),

@@ -20,6 +20,7 @@ public class MySushiDetailResponse {
     private final Integer maxAnswers;
     private final Integer remainingAnswers;
     private final Boolean isClosed;
+    private final LocalDateTime createdAt;
     private final LocalDateTime expirationTime;
     private final List<AnswerItem> answer;
 
@@ -33,6 +34,7 @@ public class MySushiDetailResponse {
                 .maxAnswers(sushi.getMaxAnswers())
                 .remainingAnswers(sushi.getRemainingAnswers())
                 .isClosed(sushi.getIsClosed())
+                .createdAt(sushi.getCreatedAt())
                 .expirationTime(sushi.getExpirationTime())
                 .answer(AnswerItem.of(answerList))
                 .build();
@@ -44,6 +46,8 @@ public class MySushiDetailResponse {
         private final Integer answerId;
         private final String content;
         private final Boolean isLiked;
+        private final Boolean isNegative;
+        private final Boolean isGPT;
 
         public static List<AnswerItem> of(List<Answer> answerList) {
             return answerList.stream()
@@ -51,6 +55,8 @@ public class MySushiDetailResponse {
                             .answerId(a.getId())
                             .content(a.getContent())
                             .isLiked(a.getIsLiked())
+                            .isNegative(a.getIsNegative())
+                            .isGPT(a.getIsGPT())
                             .build())
                     .toList();
         }

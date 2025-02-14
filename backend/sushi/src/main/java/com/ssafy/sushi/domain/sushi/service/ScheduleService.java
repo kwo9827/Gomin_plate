@@ -1,5 +1,6 @@
 package com.ssafy.sushi.domain.sushi.service;
 
+import com.ssafy.sushi.domain.answer.service.AnswerService;
 import com.ssafy.sushi.domain.notification.enums.NotificationType;
 import com.ssafy.sushi.domain.notification.service.NotificationService;
 import com.ssafy.sushi.domain.sushi.dto.ScheduleTask;
@@ -7,6 +8,7 @@ import com.ssafy.sushi.domain.sushi.entity.Sushi;
 import com.ssafy.sushi.domain.sushi.repository.SushiRepository;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
+import com.ssafy.sushi.global.infra.chatgpt.GPTService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,8 @@ import java.util.concurrent.TimeUnit;
 public class ScheduleService {
     private final SushiRepository sushiRepository;
     private final NotificationService notificationService;
+    private final AnswerService answerService;
+    private final GPTService gptService;
     private final RedisService redisService;
 
     public void sushiEnd(Sushi sushi) {
@@ -87,9 +91,24 @@ public class ScheduleService {
         Sushi freshSushi = sushiRepository.findById(sushiId).orElseThrow(() ->
                 new CustomException(ErrorCode.SUSHI_NOT_FOUND));
 
+
         if (!freshSushi.getIsClosed()) {
+            if (freshSushi.canAnswer()) {
+                try {
+                    String gptAnswer = gptService.generateGPTAnswer(
+                            freshSushi.getTitle(),
+                            freshSushi.getContent()
+                    );
+                    answerService.saveGPTAnswer(freshSushi, gptAnswer);
+                    freshSushi.reduceRemainingAnswers();
+                } catch (CustomException e) {
+                    log.error("GPT API 호출 실패: {}", e.getMessage());
+                }
+            }
+
             freshSushi.closeSushi();
             sushiRepository.save(freshSushi);
+
 
             notificationService.sendNotification(
                     freshSushi.getUser(),

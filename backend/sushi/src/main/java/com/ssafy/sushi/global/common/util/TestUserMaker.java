@@ -21,9 +21,9 @@ public class TestUserMaker {
     public static Authentication getAuthentication(String token) {
         Integer userId;
         if ("test".equals(token)) {
-            userId = 1;
-        } else if ("test2".equals(token)) {
             userId = 2;
+        } else if ("test2".equals(token)) {
+            userId = 3;
         } else {
             return null;
         }
