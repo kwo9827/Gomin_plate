@@ -56,4 +56,7 @@ public class Sushi extends BaseEntity {
         this.remainingAnswers -= 1;
     }
 
+    public boolean canAnswer() {
+        return !isClosed && remainingAnswers > 0;
+    }
 }
