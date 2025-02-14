@@ -23,6 +23,10 @@ const MySushiList = () => {
   };
 
   useEffect(() => {
+    console.log(displaySushi);
+  }, [displaySushi])
+
+  useEffect(() => {
     let mounted = true;
     const fetchInitialData = async () => {
       try {
@@ -91,11 +95,13 @@ const MySushiList = () => {
         keyword: search,
       })
     ).then((result) => {
+      console.log(search);
       const apiResult = result.payload.data.content;
       // const filtered = apiResult.filter((sushi) =>
       //   sushi.title.toLowerCase().includes(search.toLowerCase())
       // );
       setDisplaySushi(apiResult);
+      console.log(apiResult);
     });
   };
 
@@ -167,6 +173,7 @@ const MySushiList = () => {
                   category={displaySushi[index].category}
                   content={displaySushi[index].content}
                   sushiType={displaySushi[index].sushiType}
+                  remainingAnswers={displaySushi[index].remainingAnswers}
                 />
               </animated.li>
             ))}

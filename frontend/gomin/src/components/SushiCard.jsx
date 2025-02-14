@@ -9,6 +9,7 @@ const SushiCard = ({
   category,
   sushiType,
   showHeart = false,
+  remainingAnswers
 }) => {
   const navigate = useNavigate();
 
@@ -20,9 +21,6 @@ const SushiCard = ({
     navigate(`/sushidetail/${id}`);
   };
 
-  /**초밥 타입 콘솔창 확인 */
-  // console.log("sushiType 값 확인:", sushiType);
-
   return (
     <div style={outerContainerStyle} onClick={handleClick}>
       <div style={middleContainerStyle}>
@@ -31,12 +29,6 @@ const SushiCard = ({
 
           <div style={sushiOuterImageStyle}>
             <div style={sushiImageStyle}>
-              {/* <img
-                src={sushiData.image}
-                alt={sushiData.name}
-                width="100%"
-                height="100%"
-              /> */}
               <Sushi isushiId={id} category={category} sushiType={sushiType} />
             </div>
           </div>
@@ -45,6 +37,14 @@ const SushiCard = ({
             <div style={titleStyle}>{title}</div>
             <hr style={dividerStyle} />
             <div style={contentStyle}>{content}</div>
+
+            {remainingAnswers > 0 ? (
+              <div style={remainingAnswersStyle}>
+                마감까지 {remainingAnswers}명 남았어요
+              </div>
+            ) : <div style={remainingAnswersStyle}>
+              답변이 모두 달렸어요 !
+            </div>}
           </div>
         </div>
       </div>
@@ -105,7 +105,6 @@ const sushiOuterImageStyle = {
 };
 
 /**스시 사진 크기 조절 */
-/**이 부분을 수정해주세요. */
 const sushiImageStyle = {
   position: "absolute",
   width: "20vh",
@@ -114,18 +113,11 @@ const sushiImageStyle = {
   transform: "translate(-0.8vh, 1vh) scale(0.8)",
 };
 
-// const sushiImageStyle = {
-//   width: "90px",
-//   height: "90px",
-//   transform: "scale(1.5)",
-//   marginRight: "10px",
-//   borderRadius: "8px",
-//   objectFit: "cover",
-// };
-
 const textContainerStyle = {
   flex: 1,
   overflow: "hidden",
+  display: "flex",
+  flexDirection: "column",
 };
 
 const titleStyle = {
@@ -145,7 +137,7 @@ const contentStyle = {
   color: "#8D7B7B",
   lineHeight: "1.4",
   display: "-webkit-box",
-  WebkitLineClamp: 2,
+  WebkitLineClamp: 1,
   WebkitBoxOrient: "vertical",
   overflow: "hidden",
 };
@@ -154,6 +146,13 @@ const dividerStyle = {
   width: "24vh",
   border: "0.5px solid #BCBCBC",
   margin: "1vh 0",
+};
+
+const remainingAnswersStyle = {
+  fontSize: "1.8vh",
+  color: "#E86100",
+  marginTop: "0.8vh",
+  fontWeight: "500",
 };
 
 export default SushiCard;
