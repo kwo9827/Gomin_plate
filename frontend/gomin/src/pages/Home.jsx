@@ -197,7 +197,18 @@ const Home = () => {
       {/* 배경 이미지 */}
       <div style={styles.backgroundContainer}>
         {/* SSE 연결 상태 표시 */}
-        <SSEIndicator isConnected={isSSEConnected} />
+        <animated.div
+          style={{
+            ...styles.backgroundLayer,
+            zIndex: 2,
+            position: "absolute",
+            backgroundImage: `url("${bgImg}")`,
+            opacity: bgSpring.opacity,
+            transform: bgSpring.transform,
+          }}
+        >
+          <SSEIndicator isConnected={isSSEConnected} />
+        </animated.div>
         <animated.div
           style={{
             ...styles.backgroundLayer,
@@ -298,11 +309,11 @@ const Home = () => {
 
             {/* <button onClick={handleSetIsNew}>튜토리얼 테스트</button> */}
 
-            {!allImagesLoaded && (
+            {/* {!allImagesLoaded && (
               <div>
                 <p> 초밥집에 입장하는 중..</p>
               </div>
-            )}
+            )} */}
             <audio ref={audioRef} src={plate} />
             {selectedSushiData && (
               <SushiView
@@ -350,6 +361,7 @@ const styles = {
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
   },
+
   deskContainer: {
     position: "absolute",
     bottom: 0,

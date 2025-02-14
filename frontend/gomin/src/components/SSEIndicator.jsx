@@ -12,27 +12,26 @@ const SSEIndicator = ({ isConnected }) => {
     <div
       style={{
         position: "absolute",
-        top: "37vh",
-        right: "4vh",
+        top: "22.7vh",
+        right: "9.9vh",
         padding: "1vh",
         display: "flex",
         alignItems: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.2)",
-        backdropFilter: "blur(4px)",
+        // backgroundColor: "rgba(0, 0, 0, 0.2)",
+        // backdropFilter: "blur(4px)",
         borderRadius: "0.5vh",
         cursor: "pointer",
-        zIndex: 999,
       }}
       onMouseEnter={() => setShowText(true)}
       onMouseLeave={() => setShowText(false)}
     >
       <div
         style={{
-          width: "1vh",
-          height: "1vh",
+          width: "0.7vh",
+          height: "0.8vh",
           borderRadius: "50%",
-          backgroundColor: isConnected ? "#4CAF50" : "#f44336",
-          animation: isConnected ? "pulse 2s infinite" : "none",
+          backgroundColor: isConnected ? "#aaaaaa" : "#3e586e",
+          // animation: isConnected ? "pulse 2s infinite" : "none",
         }}
       />
       {showText && (
