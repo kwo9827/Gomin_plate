@@ -12,8 +12,8 @@ const SSEIndicator = ({ isConnected }) => {
     <div
       style={{
         position: "absolute",
-        top: "22.7vh",
-        right: "9.9vh",
+        top: "22.8vh",
+        right: "6.45vh",
         padding: "1vh",
         display: "flex",
         alignItems: "center",
@@ -27,10 +27,10 @@ const SSEIndicator = ({ isConnected }) => {
     >
       <div
         style={{
-          width: "0.7vh",
-          height: "0.8vh",
+          width: "0.5vh",
+          height: "0.4vh",
           borderRadius: "50%",
-          backgroundColor: isConnected ? "#aaaaaa" : "#3e586e",
+          backgroundColor: isConnected ? "#e9d263" : "#915653",
           // animation: isConnected ? "pulse 2s infinite" : "none",
         }}
       />
