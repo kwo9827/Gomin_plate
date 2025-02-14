@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import alarmTrueImg from "../assets/home/alarmON.webp";
 import alarmFalseImg from "../assets/home/alarmOFF.webp";
 import notificationBell from "../assets/sounds/notificationBell.mp3";
 
@@ -18,28 +17,40 @@ const NotificationBell = ({ onClick, hasUnread }) => {
       audioRef.current.play(); // 효과음 재생
     }
   };
-  
+
   return (
     <div
       style={{
-        backgroundImage: `url("${hasUnread ? alarmTrueImg : alarmFalseImg}")`,
-
+        backgroundImage: `url("${alarmFalseImg}")`,
         position: "absolute",
         top: "-49%",
         right: "0",
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
-
         width: "50vh",
         height: "100%",
-
         zIndex: 2,
       }}
     >
+      {/* 읽지 않은 알림 표시 빨간 동그라미 */}
+      {hasUnread && (
+        <div
+          style={{
+            position: "absolute",
+            top: "55.2%",
+            right: "9.5%",
+            width: "2vh",
+            height: "2vh",
+            backgroundColor: "#ff4949",
+            borderRadius: "50%",
+            zIndex: 3,
+          }}
+        />
+      )}
       {/* 클릭 이벤트를 감지할 투명 버튼 */}
       <div
-        onClick={() => { 
+        onClick={() => {
           onClick();
           handlePlaySound(); // 효과음 재생
         }}

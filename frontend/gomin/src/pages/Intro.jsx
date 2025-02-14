@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import KakaoLoginButton from "../components/KakaoLoginButton";
 import GoogleLoginButton from "../components/GoogleLoginButton";
-import introImage from "../assets/intro.webp";
+import introImage from "../assets/introf.webp";
 import BgmContext from "../context/BgmProvider";
 
 // 쿠키 설정 함수
@@ -55,8 +55,12 @@ const Intro = () => {
 
     // 앱이 이미 설치되었는지 확인
     const checkIfAppIsInstalled = () => {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-      const isFullscreen = window.matchMedia('(display-mode: fullscreen)').matches;
+      const isStandalone = window.matchMedia(
+        "(display-mode: standalone)"
+      ).matches;
+      const isFullscreen = window.matchMedia(
+        "(display-mode: fullscreen)"
+      ).matches;
       return isStandalone || isFullscreen;
     };
 
@@ -74,7 +78,7 @@ const Intro = () => {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     // display-mode가 변경되는 것을 감지
-    const mediaQueryList = window.matchMedia('(display-mode: standalone)');
+    const mediaQueryList = window.matchMedia("(display-mode: standalone)");
     const handleChange = (e) => {
       setIsAppInstalled(e.matches);
       if (e.matches) {
@@ -83,7 +87,7 @@ const Intro = () => {
     };
 
     if (mediaQueryList.addEventListener) {
-      mediaQueryList.addEventListener('change', handleChange);
+      mediaQueryList.addEventListener("change", handleChange);
     } else if (mediaQueryList.addListener) {
       // 구형 브라우저 대응
       mediaQueryList.addListener(handleChange);
@@ -96,7 +100,7 @@ const Intro = () => {
       );
 
       if (mediaQueryList.removeEventListener) {
-        mediaQueryList.removeEventListener('change', handleChange);
+        mediaQueryList.removeEventListener("change", handleChange);
       } else if (mediaQueryList.removeListener) {
         mediaQueryList.removeListener(handleChange);
       }
