@@ -264,13 +264,13 @@ const Home = () => {
         {/* 모달 */}
         <div>
           <div style={{ position: "absolute", zIndex: "10" }}>
-            <div
+            {/* <div
               style={{
                 position: "fixed",
                 top: 0,
                 left: 0,
                 width: "100%",
-                height: "100%",
+                height: "71.88vh",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -280,8 +280,8 @@ const Home = () => {
               <div
                 style={{
                   position: "relative",
-                  top: "10.4vh",
-                  height: "90vh",
+                  bottom: 0,
+                  height: "71.88vh",
                   width: "55vh",
 
                   backgroundColor: "#fdfcc8",
@@ -291,7 +291,7 @@ const Home = () => {
                   pointerEvents: showLoadingScreen ? "auto" : "none",
                 }}
               />
-            </div>
+            </div> */}
 
             {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
