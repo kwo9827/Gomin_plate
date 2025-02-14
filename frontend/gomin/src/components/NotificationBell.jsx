@@ -16,14 +16,14 @@ const NotificationBell = ({ onClick, hasUnread }) => {
     from: { transform: "translateX(0px) rotate(0deg)" },
     to: shake
       ? [
-        { transform: "translateX(-5px) rotate(-5deg)" },
-        { transform: "translateX(5px) rotate(5deg)" },
-        { transform: "translateX(-5px) rotate(-5deg)" },
-        { transform: "translateX(5px) rotate(5deg)" },
-        { transform: "translateX(0px) rotate(0deg)" },
-      ]
+          { transform: "translateX(-2px) rotate(-2deg)" },
+          { transform: "translateX(2px) rotate(0deg)" },
+          { transform: "translateX(-1px) rotate(-1deg)" },
+          { transform: "translateX(1px) rotate(1deg)" },
+          { transform: "translateX(0px) rotate(0deg)" },
+        ]
       : { transform: "translateX(0px) rotate(0deg)" },
-    config: { duration: 50 },
+    config: { duration: 300 },
     reset: true,
     onRest: () => setShake(false),
   });
@@ -57,6 +57,7 @@ const NotificationBell = ({ onClick, hasUnread }) => {
         width: "50vh",
         height: "100%",
         zIndex: 2,
+        transformOrigin: "90% 30%",
         ...shakeAnimation, // 애니메이션 적용
       }}
     >

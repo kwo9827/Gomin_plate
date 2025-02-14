@@ -32,7 +32,9 @@ const SushiUnlockBar = ({ onClick }) => {
 
   const progressPercentage =
     nextThreshold > currentThreshold
-      ? ((likesReceived - currentThreshold) / (nextThreshold - currentThreshold)) * 100
+      ? ((likesReceived - currentThreshold) /
+          (nextThreshold - currentThreshold)) *
+        100
       : 100;
 
   // 🔥 격렬한 흔들림 애니메이션 설정
@@ -41,12 +43,12 @@ const SushiUnlockBar = ({ onClick }) => {
     from: { transform: "translateX(0px) rotate(0deg)" },
     to: shake
       ? [
-        { transform: "translateX(-5px) rotate(-5deg)" },
-        { transform: "translateX(5px) rotate(5deg)" },
-        { transform: "translateX(-5px) rotate(-5deg)" },
-        { transform: "translateX(5px) rotate(5deg)" },
-        { transform: "translateX(0px) rotate(0deg)" },
-      ]
+          { transform: "translateX(-3px) rotate(-3deg)" },
+          { transform: "translateX(1.5px) rotate(1.5deg)" },
+          { transform: "translateX(-5px) rotate(-5deg)" },
+          { transform: "translateX(5px) rotate(5deg)" },
+          { transform: "translateX(0px) rotate(0deg)" },
+        ]
       : { transform: "translateX(0px) rotate(0deg)" },
     config: { duration: 50 },
     reset: true,
@@ -62,11 +64,20 @@ const SushiUnlockBar = ({ onClick }) => {
   }, [likesReceived]);
 
   return (
-    <animated.div style={{ ...styles.container, ...shakeAnimation }} onClick={onClick}>
-      <img src={unlockssImg} alt="Unlock Sushi" style={styles.backgroundImage} />
+    <animated.div
+      style={{ ...styles.container, ...shakeAnimation }}
+      onClick={onClick}
+    >
+      <img
+        src={unlockssImg}
+        alt="Unlock Sushi"
+        style={styles.backgroundImage}
+      />
 
       <div style={styles.progressContainer}>
-        <div style={{ ...styles.progressBar, width: `${progressPercentage}%` }} />
+        <div
+          style={{ ...styles.progressBar, width: `${progressPercentage}%` }}
+        />
       </div>
 
       <div style={styles.sushiContainer}>
