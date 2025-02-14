@@ -10,6 +10,7 @@ const SushiCard = ({
   sushiType,
   showHeart = false,
   remainingAnswers,
+  maxAnswers,
   isClosed
 }) => {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ const SushiCard = ({
               </div>
             ) : (
               <div style={remainingAnswersStyle}>
-                {remainingAnswers}개의 답변이 달렸어요 !
+                {maxAnswers - remainingAnswers}개의 답변이 달렸어요 !
               </div>
             )}
 

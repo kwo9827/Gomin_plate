@@ -174,6 +174,7 @@ const MySushiList = () => {
                   content={displaySushi[index].content}
                   sushiType={displaySushi[index].sushiType}
                   remainingAnswers={displaySushi[index].remainingAnswers}
+                  maxAnswers={displaySushi[index].maxAnswers}
                   isClosed={displaySushi[index].isClosed}
                 />
               </animated.li>
