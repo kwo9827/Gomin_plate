@@ -70,4 +70,9 @@ public class NotificationService {
             notificationRepository.save(notification);
         }
     }
+
+    @Transactional
+    public void markAllNotificationAsRead(Integer userId) {
+        notificationRepository.markAllNotificationAsRead(userId);
+    }
 }
