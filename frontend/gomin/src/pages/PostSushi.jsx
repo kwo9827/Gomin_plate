@@ -551,14 +551,14 @@ const PostSushi = ({ onClose }) => {
                       style={{
                         ...cancelButtonStyle,
                         backgroundColor: isCancelPressed
-                          ? "#863334"
-                          : "#C85253",
+                          ? "#67523E"
+                          : "#A68564",
                         transform: isCancelPressed
                           ? "translateY(0.4vh)"
                           : "translateY(-0.2vh)",
                         boxShadow: isCancelPressed
-                          ? "0 0 0 #863334"
-                          : "0 0.4vh 0 #863334",
+                          ? "0 0 0 #67523E"
+                          : "0 0.4vh 0 #67523E",
                       }}
                       onClick={handleCancelSubmit}
                       onMouseDown={() => setIsCancelPressed(true)}
@@ -571,14 +571,15 @@ const PostSushi = ({ onClose }) => {
                       style={{
                         ...confirmButtonStyle,
                         backgroundColor: isConfirmPressed
-                          ? "#67523E"
-                          : "#A68564",
+                          ? "#863334"
+                          : "#C85253",
+
                         transform: isConfirmPressed
                           ? "translateY(0.4vh)"
                           : "translateY(-0.2vh)",
                         boxShadow: isConfirmPressed
-                          ? "0 0 0 #67523E"
-                          : "0 0.4vh 0 #67523E",
+                          ? "0 0 0 #863334"
+                          : "0 0.4vh 0 #863334",
                       }}
                       onClick={handleConfirmSubmit}
                       onMouseDown={() => setIsConfirmPressed(true)}
