@@ -6,6 +6,7 @@ import com.ssafy.sushi.domain.notification.dto.response.MyNotificationListRespon
 import com.ssafy.sushi.domain.notification.entity.Notification;
 import com.ssafy.sushi.domain.notification.enums.NotificationType;
 import com.ssafy.sushi.domain.notification.repository.NotificationRepository;
+import com.ssafy.sushi.domain.sushi.entity.Sushi;
 import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;
@@ -31,10 +32,11 @@ public class NotificationService {
     private String host;
 
     @Transactional
-    public void sendNotification(User receiveUser, NotificationType notificationType, Integer parameter) {
+    public void sendNotification(User receiveUser, Sushi sushi, NotificationType notificationType, Integer parameter) {
 
         Notification notification = Notification.builder()
                 .user(receiveUser)
+                .sushi(sushi)
                 .notificationType(notificationType)
                 .message(notificationType.getMessage())
                 .redirectUrl(host + notificationType.getRedirectUrl() + parameter.toString())
@@ -69,5 +71,10 @@ public class NotificationService {
             notification.markNotificationAsRead();
             notificationRepository.save(notification);
         }
+    }
+
+    @Transactional
+    public void markAllNotificationAsRead(Integer userId) {
+        notificationRepository.markAllNotificationAsRead(userId);
     }
 }

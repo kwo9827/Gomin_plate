@@ -37,20 +37,6 @@ public class NotificationController {
         return ApiResponse.success(notificationService.getMyNotificationList(userId, pageable));
     }
 
-//    @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-//    public SseEmitter subscribe(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-//        try {
-//            Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
-//            return sseService.subscribe(userId);
-//        } catch (CustomException e) {
-//            log.info("SSE Access Denied catch User Notification");
-////            SseEmitter emitter = new SseEmitter(0L);
-////            emitter.complete();
-////            return emitter;
-//            return null;
-//        }
-//    }
-
     @GetMapping("/unread-exists")
     public ResponseEntity<ApiResponse<HasUnreadNotificationResponse>> hasUnreadNotification(
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
@@ -63,6 +49,15 @@ public class NotificationController {
     public ResponseEntity<ApiResponse<Void>> markNotificationAsRead(
             @PathVariable("notificationId") Integer notificationId) {
         notificationService.markNotificationAsRead(notificationId);
+
+        return ApiResponse.success(HttpStatus.OK);
+    }
+
+    @PutMapping("/read-all")
+    public ResponseEntity<ApiResponse<Void>> markAllNotificationAsRead(
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
+        notificationService.markAllNotificationAsRead(userId);
 
         return ApiResponse.success(HttpStatus.OK);
     }

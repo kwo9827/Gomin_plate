@@ -2,6 +2,7 @@ package com.ssafy.sushi.domain.notification.entity;
 
 import com.ssafy.sushi.domain.notification.enums.NotificationType;
 import com.ssafy.sushi.domain.notification.enums.NotificationTypeConverter;
+import com.ssafy.sushi.domain.sushi.entity.Sushi;
 import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.global.common.Entity.BaseEntity;
 import jakarta.persistence.*;
@@ -18,6 +19,10 @@ public class Notification extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sushi_id", nullable = true) // nullable = true가 기본값이라 생략 가능
+    private Sushi sushi;
 
     @Convert(converter = NotificationTypeConverter.class)
     private NotificationType notificationType;
