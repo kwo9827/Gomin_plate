@@ -17,13 +17,13 @@ const NotificationBell = ({ onClick, hasUnread }) => {
     to: shake
       ? [
           { transform: "translateX(-2px) rotate(-2deg)" },
-          { transform: "translateX(2px) rotate(0deg)" },
-          { transform: "translateX(-1px) rotate(-1deg)" },
-          { transform: "translateX(1px) rotate(1deg)" },
+          { transform: "translateX(2px) rotate(2deg)" },
+          { transform: "translateX(-2px) rotate(-2deg)" },
+          { transform: "translateX(2px) rotate(2deg)" },
           { transform: "translateX(0px) rotate(0deg)" },
         ]
       : { transform: "translateX(0px) rotate(0deg)" },
-    config: { duration: 300 },
+    config: { duration: 50 },
     reset: true,
     onRest: () => setShake(false),
   });
