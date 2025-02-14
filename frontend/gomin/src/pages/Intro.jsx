@@ -47,24 +47,59 @@ const Intro = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallButtonVisible, setInstallButtonVisible] = useState(false);
   const [isIOSDevice, setIsIOSDevice] = useState(false);
+  const [isAppInstalled, setIsAppInstalled] = useState(false);
 
   useEffect(() => {
     // iOS 디바이스 체크
     setIsIOSDevice(isIOS());
 
+    // 앱이 이미 설치되었는지 확인
+    const checkIfAppIsInstalled = () => {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+      const isFullscreen = window.matchMedia('(display-mode: fullscreen)').matches;
+      return isStandalone || isFullscreen;
+    };
+
+    setIsAppInstalled(checkIfAppIsInstalled());
+
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      setInstallButtonVisible(true);
+      // 앱이 설치되지 않은 경우에만 버튼 표시
+      if (!checkIfAppIsInstalled()) {
+        setInstallButtonVisible(true);
+      }
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    // display-mode가 변경되는 것을 감지
+    const mediaQueryList = window.matchMedia('(display-mode: standalone)');
+    const handleChange = (e) => {
+      setIsAppInstalled(e.matches);
+      if (e.matches) {
+        setInstallButtonVisible(false);
+      }
+    };
+
+    if (mediaQueryList.addEventListener) {
+      mediaQueryList.addEventListener('change', handleChange);
+    } else if (mediaQueryList.addListener) {
+      // 구형 브라우저 대응
+      mediaQueryList.addListener(handleChange);
+    }
 
     return () => {
       window.removeEventListener(
         "beforeinstallprompt",
         handleBeforeInstallPrompt
       );
+
+      if (mediaQueryList.removeEventListener) {
+        mediaQueryList.removeEventListener('change', handleChange);
+      } else if (mediaQueryList.removeListener) {
+        mediaQueryList.removeListener(handleChange);
+      }
     };
   }, []);
 
@@ -75,6 +110,8 @@ const Intro = () => {
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === "accepted") {
           console.log("사용자가 앱 설치를 수락했습니다");
+          setIsAppInstalled(true);
+          setInstallButtonVisible(false);
         } else {
           console.log("사용자가 앱 설치를 거부했습니다");
         }
@@ -96,8 +133,8 @@ const Intro = () => {
         }}
       ></div>
 
-      {/* iOS가 아니고 설치 버튼이 보여야 할 때만 표시 */}
-      {!isIOSDevice && (
+      {/* iOS가 아니고, 앱이 설치되지 않았을 때만 설치 버튼 표시 */}
+      {!isIOSDevice && !isAppInstalled && isInstallButtonVisible && (
         <div
           id="install-button"
           style={styles.installButtonContainer}
@@ -109,17 +146,6 @@ const Intro = () => {
           <span style={{ ...styles.installButton }}>♤</span>
         </div>
       )}
-      {/* {!isIOSDevice && (
-        <div style={styles.installButtonContainer}>
-          <button
-            id="install-button"
-            style={styles.installButton}
-            onClick={handleInstallClick}
-          >
-            앱 설치
-          </button>
-        </div>
-      )} */}
 
       <div style={styles.buttoncontainer}>
         <h2 style={{ marginBottom: "1vh", fontSize: "4.5vh" }}>로그인</h2>
@@ -160,23 +186,14 @@ const styles = {
     zIndex: 2,
     color: "#fff",
     display: "flex",
-    // flexDirection: "column",
-    // gap: "0.4vh",
     right: "1.5vh",
     top: "1.5vh",
-    // right: "3vh",
-    // top: "38.3vh",
   },
   installButton: {
-    // position: "absolute",
-    // background: "#FEE500",
-    // background: "#f0f0f0",
     height: "3vh",
     width: "3vh",
     border: "none",
-    // borderRadius: "0.8vh",
     borderRadius: "3vh",
-    // color: "#f0f0f0",
     color: "#2e4485",
     fontFamily: "inherit",
     fontWeight: "bold",
@@ -187,7 +204,6 @@ const styles = {
     cursor: "pointer",
     zIndex: "2",
     backgroundColor: "#f0f0f0",
-    // backgroundColor: "#9C0716",
   },
 };
 
