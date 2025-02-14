@@ -21,16 +21,20 @@ const EditModal = ({ isOpen, onClose, onConfirm }) => {
     if (isOpen) {
       setFade(true);
     } else {
-      const timer = setTimeout(() => {
-        setFade(false);
-      }, 300); // 모달이 사라지는 동안 기다리는 시간 (transition duration)
-      return () => clearTimeout(timer);
+      setFade(false);
     }
   }, [isOpen]);
 
   useEffect(() => {
     setNickname(currentNickname);
   }, [isOpen, currentNickname]);
+
+  const handleClose = () => {
+    setFade(false);
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  };
 
   const handleSaveNickname = async () => {
     if (!nickname.trim()) {
@@ -42,7 +46,7 @@ const EditModal = ({ isOpen, onClose, onConfirm }) => {
       console.log("변경 성공:", result);
       localStorage.setItem("userNickname", nickname);
       alert("닉네임이 성공적으로 변경되었습니다.");
-      onClose();
+      handleClose();
     } catch (err) {
       console.log("변경 실패:", err);
       setError("닉네임 변경에 실패했습니다. 다시 시도해주세요.");
@@ -53,9 +57,8 @@ const EditModal = ({ isOpen, onClose, onConfirm }) => {
     if (window.confirm("정말로 탈퇴하시겠습니까?")) {
       try {
         await dispatch(deleteAccount()).unwrap();
+        handleClose();
         navigate("/");
-        console.log("회원탈퇴 되긴 됨 근데 왜 네비게이트 안되냐 ?");
-        onClose();
       } catch (err) {
         setError("회원탈퇴에 실패했습니다. 다시 시도해주세요.");
       }
@@ -66,9 +69,8 @@ const EditModal = ({ isOpen, onClose, onConfirm }) => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userNickname");
     dispatch(clearMemberData());
+    handleClose();
     navigate("/");
-    onClose();
-    console.log("로그아웃 버튼이 클릭되었습니다.");
   };
 
   const handleInputChange = (e) => {
@@ -79,11 +81,23 @@ const EditModal = ({ isOpen, onClose, onConfirm }) => {
     }
   };
 
-  if (!isOpen && !fade) return null;
+  if (!isOpen) return null;
 
   return (
-    <div style={styles.overlay}>
-      <div style={styles.modal}>
+    <div
+      style={{
+        ...styles.overlay,
+        opacity: fade ? 1 : 0,
+        visibility: fade ? "visible" : "hidden",
+      }}
+    >
+      <div
+        style={{
+          ...styles.modal,
+          transform: fade ? "translateY(0)" : "translateY(-20px)",
+          opacity: fade ? 1 : 0,
+        }}
+      >
         <div style={styles.innerBox}>
           <p style={styles.titleStyle}>당신을 어떻게 부르면 될까요?</p>
           <div style={styles.inputContainer}>
@@ -99,7 +113,7 @@ const EditModal = ({ isOpen, onClose, onConfirm }) => {
 
           <div style={styles.buttonBox}>
             <button
-              onClick={onClose}
+              onClick={handleClose}
               onMouseDown={() => setIsCancelPressed(true)}
               onMouseUp={() => setIsCancelPressed(false)}
               onMouseLeave={() => setIsCancelPressed(false)}
@@ -167,7 +181,8 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     zIndex: 9999,
-    transition: "opacity 0.2s ease-in-out",
+    transition: "all 0.3s ease-in-out",
+    visibility: "hidden",
   },
   modal: {
     position: "fixed",
@@ -180,6 +195,9 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     zIndex: 1000,
+    transition: "all 0.3s ease-in-out",
+    transform: "translateY(-20px)",
+    opacity: 0,
   },
   innerBox: {
     backgroundColor: "#fdf5e6",
@@ -236,15 +254,15 @@ const styles = {
     right: "10px",
     display: "flex",
     justifyContent: "space-between",
+    fontSize: "1.4vh",
   },
   bottomButtonStyle: {
     background: "none",
     border: "none",
     color: "#888",
-    fontSize: "1.4vh",
     cursor: "pointer",
     textDecoration: "underline",
-    fontFamily: "inherit",
+    fontFamily: "Ownglyph, Ownglyph",
   },
   errorStyle: {
     color: "#dc3545",
@@ -267,7 +285,6 @@ const styles = {
     padding: "10px",
     border: "1px solid #ddd",
     borderRadius: "5px",
-    fontSize: "16px",
     backgroundColor: "white",
     textAlign: "center",
     boxSizing: "border-box",
