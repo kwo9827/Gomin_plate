@@ -27,6 +27,8 @@ import padlock from "../assets/home/padlock.webp";
 
 import x from "../assets/x-twitter.png";
 
+import CommonAlertModal from "../components/CommonAlertModal";
+
 const styles = `
   @keyframes slideUp {
     from {
@@ -82,6 +84,10 @@ const PostSushi = ({ onClose }) => {
   const [isClosing, setIsClosing] = useState(false);
   const [isConfirmPressed, setIsConfirmPressed] = useState(false);
   const [isCancelPressed, setIsCancelPressed] = useState(false);
+  const [alertModal, setAlertModal] = useState({
+    isOpen: false,
+    message: "",
+  });
 
   const categoryMapping = {
     연애: 1,
@@ -153,21 +159,28 @@ const PostSushi = ({ onClose }) => {
     }
   }, []);
 
+  const showAlert = (message) => {
+    setAlertModal({
+      isOpen: true,
+      message,
+    });
+  };
+
   const handleNext = () => {
     if (audioRef.current) {
       audioRef.current.volume = 0.5;
       audioRef.current.play();
     }
     if (!category) {
-      alert("카테고리를 설정해주세요.");
+      showAlert("카테고리를 설정해주세요.");
       return;
     }
     if (sushiType === -1) {
-      alert("사용할 수 없는 초밥입니다.");
+      showAlert("사용할 수 없는 초밥입니다.");
       return;
     }
     if (!sushiType) {
-      alert("초밥을 골라주세요.");
+      showAlert("초밥을 골라주세요.");
       return;
     }
     setStep(2);
@@ -183,15 +196,15 @@ const PostSushi = ({ onClose }) => {
 
   const handleSubmit = () => {
     if (title.length === 0 || content.length === 0) {
-      alert("제목과 내용을 모두 입력해주세요.");
+      showAlert("제목과 내용을 모두 입력해주세요.");
       return;
     }
     if (title.length > 30) {
-      alert("제목은 30자 이내로 입력해주세요.");
+      showAlert("제목은 30자 이내로 입력해주세요.");
       return;
     }
     if (content.length > 500) {
-      alert("내용은 500자 이내로 입력해주세요.");
+      showAlert("내용은 500자 이내로 입력해주세요.");
       return;
     }
     setShowModal(true);
@@ -232,7 +245,7 @@ const PostSushi = ({ onClose }) => {
   const handleCopyClipBoard = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
-      alert("클립보드에 링크가 복사되었어요.");
+      showAlert("클립보드에 링크가 복사되었어요.");
     } catch (err) {
       console.log(err);
     }
@@ -678,6 +691,13 @@ const PostSushi = ({ onClose }) => {
           </div>
         </div>
       </div>
+
+      {/* 공통 알림 모달 */}
+      <CommonAlertModal
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, message: "" })}
+        message={alertModal.message}
+      />
     </>
   );
 };
