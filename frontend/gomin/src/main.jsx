@@ -13,8 +13,11 @@ if (window.Kakao.isInitialized()) {
   console.log("카카오 SDK 초기화 완료");
 }
 
+// 우클릭 방지
+document.addEventListener("contextmenu", (e) => e.preventDefault());
+
 // Service Worker 업데이트 코드 추가
-if ('serviceWorker' in navigator) {
+if ("serviceWorker" in navigator) {
   navigator.serviceWorker.getRegistrations().then(function (registrations) {
     for (let registration of registrations) {
       registration.update();

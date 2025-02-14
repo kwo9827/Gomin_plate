@@ -204,7 +204,11 @@ const SushiDetail = () => {
                   onClick={() => openAnswer(item, index)}
                 >
                   <div style={{ ...styles.postIt, backgroundImage: "none" }}>
-                    <p style={styles.postItText}>{item.content}</p>
+                    <p style={styles.postItText}>
+                      {item.content.length > 30
+                        ? `${item.content.slice(0, 30)}...`
+                        : item.content}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -322,31 +326,10 @@ const styles = {
   contentBox: {
     overflowY: "auto",
     padding: "1vh",
+    paddingLeft: "2vh",
     height: "22vh",
     borderRadius: "0.8vh",
     border: "0.4vh solid #B2975C",
-    scrollbarWidth: "thin",
-    scrollbarColor: "#B2975C transparent",
-    msOverflowStyle: "none",
-    "&": {
-      scrollbarWidth: "none",
-      msOverflowStyle: "none",
-      "&::-webkit-scrollbar": {
-        display: "none",
-      },
-    },
-    position: "relative",
-    "&::after": {
-      content: '""',
-      position: "absolute",
-      top: "0",
-      right: "0",
-      width: "4px",
-      height: "100%",
-      background: "#B2975C",
-      borderRadius: "2px",
-      opacity: "0.6",
-    },
   },
   /**내용 */
   content: {
@@ -398,7 +381,7 @@ const styles = {
   /**포스트잇 내용 */
   postItText: {
     position: "absolute",
-    top: "65%",
+    top: "40%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     fontSize: "1vh",
@@ -407,10 +390,9 @@ const styles = {
     width: "70%",
     height: "70%",
     overflow: "hidden",
-    wordBreak: "break-word",
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
-    display: "-webkit-box",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   /** 포스트잇 배치 */
   postIt1: { top: "-15%", left: "-10%", transform: "rotate(-5deg)" },

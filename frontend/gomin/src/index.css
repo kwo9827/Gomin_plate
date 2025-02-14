@@ -2,6 +2,12 @@
   -webkit-tap-highlight-color: transparent;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-focus-ring-color: transparent;
+  user-select: none; /* 드래그 방지 */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none; /* iOS에서 길게 터치할 때 메뉴 방지 */
+  touch-action: manipulation; /* 모바일 터치 제한 */
 }
 
 html,
@@ -27,16 +33,20 @@ body,
   background-color: #fdfcc8;
 }
 
-.slick-prev,
-.slick-next {
-  font-size: 20px; /* 버튼 크기 축소 */
-  z-index: 1000;
+/* 스크롤바 기본 스타일 */
+::-webkit-scrollbar {
+  width: 0.5vh;
 }
 
-.slick-prev {
-  left: -30px; /* 이전 버튼 위치 조정 */
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.slick-next {
-  right: -30px; /* 다음 버튼 위치 조정 */
+::-webkit-scrollbar-thumb {
+  background: #b2975c;
+  border-radius: 1vh;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8b6b3e;
 }
