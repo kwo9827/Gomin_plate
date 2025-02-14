@@ -91,7 +91,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
   );
 };
 
-// Styles
+/*오버레이 스타일 */
 const overlayStyle = {
   position: "fixed",
   top: 0,
@@ -106,7 +106,7 @@ const overlayStyle = {
   // backdropFilter: "blur(10px)",
   transition: "opacity 0.3s ease", // opacity에 애니메이션 추가
 };
-
+/*모달 스타일 */
 const modalStyle = {
   position: "relative",
   top: "6vh",
@@ -114,7 +114,7 @@ const modalStyle = {
   maxWidth: "90vw",
   height: "80vh",
   padding: "2.5vh",
-  paddingTop: "2vh",
+  paddingTop: "0.3vh",
   backgroundColor: "#fdf5e6",
   border: "1vh solid #906C48",
   borderRadius: "1.3vh",
@@ -124,7 +124,7 @@ const modalStyle = {
   scrollbarWidth: "none",
   transition: "transform 0.3s ease", // scale에 애니메이션 추가
 };
-
+/*취소 버튼 */
 const cancelButtonStyle = {
   position: "absolute",
   top: "10px",
@@ -137,7 +137,7 @@ const cancelButtonStyle = {
   cursor: "pointer",
   fontWeight: "bold",
 };
-
+/* '나의 알림' 외부 박스 */
 const outerBoxStyle = {
   width: "30vh",
   maxWidth: "250px",
@@ -148,7 +148,7 @@ const outerBoxStyle = {
   padding: "6px",
   boxSizing: "border-box",
 };
-
+/* '나의 알림' 내부 박스 */
 const innerBoxStyle = {
   width: "100%",
   border: "2px solid #906C48",
@@ -161,20 +161,20 @@ const innerBoxStyle = {
   padding: "6px 0",
   boxSizing: "border-box",
 };
-
+/*알림 리스트 스타일 */
 const listStyle = {
   listStyle: "none",
   padding: 0,
   width: "100%",
 };
-
+/*알림 리스트 아이템 스타일 */
 const listItemStyle = {
   display: "flex",
   justifyContent: "center",
   width: "100%",
   marginBottom: "1vh",
 };
-
+/*알림 리스트 아이템 외부 컨테이너 스타일 */
 const outerContainerStyle = {
   position: "relative",
   display: "flex",
@@ -188,7 +188,7 @@ const outerContainerStyle = {
   borderRadius: "6px",
   boxSizing: "border-box",
 };
-
+/*알림 리스트 아이템 중간 컨테이너 스타일 */
 const middleContainerStyle = {
   width: "100%",
   backgroundColor: "#B2975C",
@@ -196,7 +196,7 @@ const middleContainerStyle = {
   padding: "8px",
   boxSizing: "border-box",
 };
-
+/*알림 리스트 아이템 내부 컨테이너 스타일 */
 const innerContainerStyle = {
   position: "relative",
   width: "100%",
@@ -208,10 +208,52 @@ const innerContainerStyle = {
   flexDirection: "row",
   alignItems: "center",
 };
+/*알림 리스트 아이템 텍스트 컨테이너 스타일 */
+const textContainerStyle = {
+  flex: 1,
+};
+/*알림 리스트 아이템 타이틀 스타일 */
+const titleStyle = {
+  fontSize: "1.2rem",
+  fontWeight: "bold",
+  color: "#5A4628",
+  marginBottom: "8px",
+  marginLeft: "10px",
+  // textAlign: "center",
+  marginTop: "10px",
+};
+/*알림 리스트 아이템 텍스트 스타일 */
+const contentTextStyle = {
+  fontSize: "0.8rem",
+  color: "#8D7B7B",
+  lineHeight: "1.4",
+  display: "-webkit-box",
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: "vertical",
+  overflow: "hidden",
+};
+/*알림 리스트 아이템 구분선 스타일 */
+const dividerStyle = {
+  width: "100%",
+  border: "0.5px solid #BCBCBC",
+  margin: "8px 0",
+};
+/*알림 리스트 아이템 시간 스타일 */
+const timeStyle = {
+  fontSize: "0.7rem",
+  color: "#666",
+  textAlign: "right",
+};
+/*알림 리스트 아이템 빈 텍스트 스타일 */
+const emptyTextStyle = {
+  textAlign: "center",
+  color: "#666",
+  padding: "20px",
+};
 
 const sushiImageStyle = {
-  width: "90px",
-  height: "90px",
+  width: "80px",
+  height: "80px",
   marginRight: "10px",
   borderRadius: "4px",
   objectFit: "cover",
@@ -220,44 +262,6 @@ const sushiImageStyle = {
 const imageStyle = {
   width: "100%",
   height: "100%",
-};
-
-const textContainerStyle = {
-  flex: 1,
-};
-
-const titleStyle = {
-  fontSize: "1.2rem",
-  fontWeight: "bold",
-  color: "#5A4628",
-  marginBottom: "8px",
-};
-
-const contentTextStyle = {
-  fontSize: "1rem",
-  color: "#8D7B7B",
-  lineHeight: "1.4",
-  display: "-webkit-box",
-  WebkitLineClamp: 2,
-  WebkitBoxOrient: "vertical",
-  overflow: "hidden",
-};
-
-const dividerStyle = {
-  width: "100%",
-  border: "0.5px solid #BCBCBC",
-  margin: "8px 0",
-};
-
-const timeStyle = {
-  fontSize: "12px",
-  color: "#666",
-};
-
-const emptyTextStyle = {
-  textAlign: "center",
-  color: "#666",
-  padding: "20px",
 };
 
 export default NotificationModal;

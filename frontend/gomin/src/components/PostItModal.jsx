@@ -1,7 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { toggleLike } from "../store/slices/answerSlice";
-import postItImage from "../assets/PostIt.png";
+
+/* 포스트잇 이미지 */
+import postItPink from "../assets/postIt/postIt1.webp";
+import postItGreen from "../assets/postIt/postIt2.webp";
+import postItBlue from "../assets/postIt/postIt3.webp";
+import postItRed from "../assets/postIt/postIt4.webp";
+import postItOrange from "../assets/postIt/postIt5.webp";
+
+const postItImages = {
+  pink: postItPink,
+  green: postItGreen,
+  blue: postItBlue,
+  red: postItRed,
+  orange: postItOrange,
+};
 
 const PostItModal = ({ isOpen, onClose, answer }) => {
   if (!isOpen || !answer) return null;
@@ -11,6 +25,8 @@ const PostItModal = ({ isOpen, onClose, answer }) => {
   const [isLiked, setIsLiked] = useState(answer.isLiked);
   // 요청 중복 방지를 위한 상태
   const [isLoading, setIsLoading] = useState(false);
+  // 답변 포스트잇 컬러
+  const currentPostItImage = postItImages[answer.postItColor];
 
   // answer prop이 변경될 때마다 로컬 상태 업데이트
   useEffect(() => {
@@ -41,7 +57,11 @@ const PostItModal = ({ isOpen, onClose, answer }) => {
     <div style={styles.overlay} onClick={onClose}>
       <div style={styles.postOuterBox}>
         <div style={styles.postIt} onClick={(e) => e.stopPropagation()}>
-          <img src={postItImage} alt="PostIt" style={styles.postItImage} />
+          <img
+            src={currentPostItImage}
+            alt="PostIt"
+            style={styles.postItImage}
+          />
           <div style={styles.closeButton} onClick={onClose}>
             ✖
           </div>
