@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSushi } from "../store/slices/sushiSlice";
 import Slider from "react-slick";
@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import nextPage from "../assets/sounds/nextPage.mp3";
+import BgmContext from '../context/BgmProvider';
 
 import cuttle from "../assets/sushi/cuttle.webp";
 import eel from "../assets/sushi/eel.webp";
@@ -83,6 +84,8 @@ const PostSushi = ({ onClose }) => {
   const [isConfirmPressed, setIsConfirmPressed] = useState(false);
   const [isCancelPressed, setIsCancelPressed] = useState(false);
 
+  const { isMuted } = useContext(BgmContext);
+
   const categoryMapping = {
     연애: 1,
     우정: 2,
@@ -155,7 +158,8 @@ const PostSushi = ({ onClose }) => {
 
   const handleNext = () => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.5;
+      // 음소거 상태에 따라 볼륨 설정
+      audioRef.current.volume = isMuted ? 0 : 0.5;
       audioRef.current.play();
     }
     if (!category) {
@@ -175,7 +179,8 @@ const PostSushi = ({ onClose }) => {
 
   const handleBack = () => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.5;
+      // 음소거 상태에 따라 볼륨 설정
+      audioRef.current.volume = isMuted ? 0 : 0.5;
       audioRef.current.play();
     }
     setStep(1);
