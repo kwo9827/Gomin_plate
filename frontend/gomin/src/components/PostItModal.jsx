@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { toggleLike } from "../store/slices/answerSlice";
+import postItImage from "../assets/PostIt.png";
 
 const PostItModal = ({ isOpen, onClose, answer }) => {
   if (!isOpen || !answer) return null;
@@ -29,7 +30,7 @@ const PostItModal = ({ isOpen, onClose, answer }) => {
       const result = await dispatch(toggleLike(answer.answerId)).unwrap();
       setIsLiked(true); // 성공 시에만 상태 업데이트
     } catch (error) {
-      console.error('Failed to toggle like:', error);
+      console.error("Failed to toggle like:", error);
       // 에러 발생 시 처리 (예: 토스트 메시지)
     } finally {
       setIsLoading(false);
@@ -37,67 +38,96 @@ const PostItModal = ({ isOpen, onClose, answer }) => {
   };
 
   return (
-    <div style={overlayStyle} onClick={onClose}>
-      <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
-        <div style={closeButtonStyle} onClick={onClose}>✖</div>
-        <div style={contentStyle}>{answer.content}</div>
-        <div
-          style={{
-            ...heartStyle,
-            cursor: isLoading ? 'not-allowed' : 'pointer',
-            opacity: isLoading ? 0.5 : 1
-          }}
-          onClick={handleToggleLike}
-        >
-          {isLiked ? "❤️" : "🤍"}
+    <div style={styles.overlay} onClick={onClose}>
+      <div style={styles.postOuterBox}>
+        <div style={styles.postIt} onClick={(e) => e.stopPropagation()}>
+          <img src={postItImage} alt="PostIt" style={styles.postItImage} />
+          <div style={styles.closeButton} onClick={onClose}>
+            ✖
+          </div>
+          <div style={styles.content}>{answer.content}</div>
+          <div
+            style={{
+              ...styles.heart,
+              cursor: isLoading ? "not-allowed" : "pointer",
+              opacity: isLoading ? 0.5 : 1,
+            }}
+            onClick={handleToggleLike}
+          >
+            {isLiked ? "❤️" : "🤍"}
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-const overlayStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 1000,
-};
-
-const modalStyle = {
-  backgroundColor: "#FFF7B8",
-  padding: "40px",
-  borderRadius: "15px",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-  position: "relative",
-  width: "49vh",
-  textAlign: "center",
-  fontSize: "1.2rem",
-  boxSizing: "border-box",
-};
-
-const closeButtonStyle = {
-  position: "absolute",
-  top: "10px",
-  right: "10px",
-  cursor: "pointer",
-  fontSize: "18px",
-};
-
-const contentStyle = {
-  margin: "20px 0",
-};
-
-const heartStyle = {
-  position: "absolute",
-  bottom: "10px",
-  right: "10px",
-  fontSize: "24px",
+const styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+  },
+  postOuterBox: {
+    position: "relative",
+    width: "80vh",
+    height: "80vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  postIt: {
+    position: "relative",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  postItImage: {
+    position: "absolute",
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  },
+  closeButton: {
+    position: "absolute",
+    top: "17%",
+    right: "15%",
+    cursor: "pointer",
+    fontSize: "24px",
+    zIndex: 3,
+    color: "#000000",
+  },
+  content: {
+    position: "relative",
+    margin: "10px 0",
+    zIndex: 2,
+    width: "55vw",
+    height: "55vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "1rem",
+    bottom: "5%",
+  },
+  heart: {
+    position: "absolute",
+    bottom: "25%",
+    right: "15%",
+    fontSize: "28px",
+    zIndex: 3,
+    cursor: "pointer",
+  },
 };
 
 export default PostItModal;
