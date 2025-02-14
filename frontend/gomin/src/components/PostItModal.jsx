@@ -73,12 +73,21 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    // padding: "10px",
     zIndex: 1000,
   },
   postOuterBox: {
     position: "relative",
+    // width: "80vh",
+    // height: "80vh",
+
+    /*추가 디자인 안되면 주석 처리 ㄱㄱ */
     width: "80vh",
     height: "80vh",
+    maxWidth: "500px",
+    maxHeight: "500px",
+    /*여기까지 주석! */
+
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -94,7 +103,7 @@ const styles = {
   postItImage: {
     position: "absolute",
     top: "0",
-    left: "0",
+    right: "0%",
     width: "100%",
     height: "100%",
     objectFit: "cover",
@@ -102,9 +111,9 @@ const styles = {
   closeButton: {
     position: "absolute",
     top: "17%",
-    right: "15%",
+    right: "21%",
     cursor: "pointer",
-    fontSize: "24px",
+    fontSize: "2.5vh",
     zIndex: 3,
     color: "#000000",
   },
@@ -112,18 +121,19 @@ const styles = {
     position: "relative",
     margin: "10px 0",
     zIndex: 2,
-    width: "55vw",
-    height: "55vh",
+    width: "55%",
+    height: "55%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    fontSize: "1rem",
+    // fontSize: "clamp(14px, 1.5vw, 18px)", // 반응형 폰트 크기
+    fontSize: "2vh",
     bottom: "5%",
   },
   heart: {
     position: "absolute",
     bottom: "25%",
-    right: "15%",
+    right: "20%",
     fontSize: "28px",
     zIndex: 3,
     cursor: "pointer",
