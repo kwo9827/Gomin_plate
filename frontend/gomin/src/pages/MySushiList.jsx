@@ -65,7 +65,7 @@ const MySushiList = () => {
     console.log("다음 페이지:", { nextPage });
     dispatch(
       fetchMySushi({
-        search: search,
+        keyword: search,
         page: nextPage,
         size: 10,
       })
@@ -88,16 +88,14 @@ const MySushiList = () => {
   const onSearch = () => {
     dispatch(
       fetchMySushi({
-        search: search,
-        page: 1,
-        size: 10,
+        keyword: search,
       })
     ).then((result) => {
       const apiResult = result.payload.data.content;
-      const filtered = apiResult.filter((sushi) =>
-        sushi.title.toLowerCase().includes(search.toLowerCase())
-      );
-      setDisplaySushi(filtered);
+      // const filtered = apiResult.filter((sushi) =>
+      //   sushi.title.toLowerCase().includes(search.toLowerCase())
+      // );
+      setDisplaySushi(apiResult);
     });
   };
 
@@ -181,9 +179,9 @@ const MySushiList = () => {
         {loading && <div style={styles.loadingText}>로딩 중...</div>}
 
         {/* 더 이상 데이터가 없을 때 메시지 */}
-        {!hasMore && displaySushi.length > 0 && (
+        {/* {!hasMore && displaySushi.length > 0 && (
           <div style={styles.endMessage}>더 이상 고민이 없습니다.</div>
-        )}
+        )} */}
       </div>
     </div>
   );
