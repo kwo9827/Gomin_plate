@@ -8,6 +8,7 @@ import CommonAlertModal from "../components/CommonAlertModal";
 const SushiView = ({
   isOpen,
   onClose,
+  onAnswerSubmit,
   sushiId,
   category,
   sushiType,
@@ -28,7 +29,7 @@ const SushiView = ({
   const dispatch = useDispatch();
   const currentSushi = useSelector((state) => state.sushi.currentSushi);
 
-  const [modalOpen, setModalOpen] = useState(false);
+  // const [modalOpen, setModalOpen] = useState(false);
   const [alertModal, setAlertModal] = useState({
     isOpen: false,
     message: "",
@@ -152,7 +153,7 @@ const SushiView = ({
       await dispatch(createAnswer({ sushiId: sushiData.sushiId, content }));
       setShowAnswerInput(false);
       setContent("");
-      setModalOpen(true);
+      onAnswerSubmit(); // 먼저 확인 모달 열기
       onClose();
     } catch (error) {
       console.error("답변 제출 실패:", error);
@@ -210,12 +211,6 @@ const SushiView = ({
 
   return (
     <>
-      {modalOpen && (
-        <AnswerSubmitCheckModal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-        />
-      )}
       <div
         style={{
           ...styles.modalOverlay,

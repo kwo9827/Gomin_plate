@@ -27,6 +27,7 @@ import { setIsNew } from "../store/slices/memberSlice";
 import Tutorial from "../components/Tutorial";
 import { useSSE } from "../hooks/useSSE";
 import SSEIndicator from "../components/SSEIndicator";
+import AnswerSubmitCheckModal from "../components/AnswerSubmitCheckModal";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ const Home = () => {
   const [isSushiViewOpen, setIsSushiViewOpen] = useState(false);
   const [selectedSushiData, setSelectedSushiData] = useState(null);
   const [startTutorial, setStartTutorial] = useState(false);
+  const [showAnswerSubmitModal, setShowAnswerSubmitModal] = useState(false);
 
   const audioRef = useRef(null);
 
@@ -86,6 +88,10 @@ const Home = () => {
 
   const restartTutorial = () => {
     setStartTutorial(true);
+  };
+
+  const handleAnswerSubmit = () => {
+    setShowAnswerSubmitModal(true);
   };
 
   // useSSE();
@@ -319,6 +325,7 @@ const Home = () => {
               <SushiView
                 isOpen={isSushiViewOpen}
                 onClose={() => setIsSushiViewOpen(false)}
+                onAnswerSubmit={handleAnswerSubmit}
                 sushiId={selectedSushiData.sushiId}
                 category={selectedSushiData.category}
                 sushiType={selectedSushiData.sushiType}
@@ -326,6 +333,10 @@ const Home = () => {
                 expirationTime={selectedSushiData.expirationTime}
               />
             )}
+            <AnswerSubmitCheckModal
+              isOpen={showAnswerSubmitModal}
+              onClose={() => setShowAnswerSubmitModal(false)}
+            />
 
             <SushiUnlock
               isOpen={isSushiUnlockOpen}
