@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAnswerDetail } from "../store/slices/answerSlice";
 import PostItAnswerModal from "../components/PostItAnswerModal";
 
+import postIt from "../assets/postIt.webp";
+
 const SushiAnswerDetail = () => {
   const { sushiId } = useParams();
   const location = useLocation();
@@ -21,6 +23,7 @@ const SushiAnswerDetail = () => {
     title = "",
     content = "",
     expirationTime = new Date(),
+    createdAt = new Date(),
     answer = [],
     isLiked = new Boolean(),
   } = currentSushi || {};
@@ -56,6 +59,15 @@ const SushiAnswerDetail = () => {
   const answersPerPage = 5;
   const totalPages = Math.ceil(1 / answersPerPage);
 
+  const handleGoBack = () => {
+    navigate("/myAnswerList");
+  };
+
+  const truncateText = (text, maxLength) => {
+    if (!text) return "답변 내용 없음";
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+  };
+
   if (status === "loading") {
     return <div style={styles.loading}>로딩 중...</div>;
   }
@@ -75,14 +87,19 @@ const SushiAnswerDetail = () => {
         style={{
           ...styles.outerContainer,
           opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-          transition: 'opacity 0.5s ease, transform 0.5s ease',
+          transform: isVisible ? "translateY(0)" : "translateY(20px)",
+          transition: "opacity 0.5s ease, transform 0.5s ease",
         }}
       >
-        <h2 style={styles.title}>{title || "제목이 없습니다"}</h2>
+        <div style={styles.headerContainer}>
+          <button onClick={handleGoBack} style={styles.backButton}>
+            &lt;
+          </button>
+          <p style={styles.title}>{title || "제목이 없습니다"}</p>
+        </div>
         <hr style={styles.divider} />
         <p style={styles.date}>
-          {new Date(expirationTime).toLocaleString() || "날짜 정보 없음"}
+          {new Date(createdAt).toLocaleString() || "날짜 정보 없음"}
         </p>
         <div style={styles.contentBox}>
           <p style={styles.content}>{content || "본문 내용이 없습니다"}</p>
@@ -92,18 +109,29 @@ const SushiAnswerDetail = () => {
           <div style={styles.postItRow}>
             <div
               style={{
-                ...styles.postIt,
-                backgroundColor: styles.postItColors[0],
-                animation: isVisible ? `fadeIn 0.5s ease forwards 0.3s` : 'none',
-                opacity: 0
+                ...styles.postItContainer,
+                animation: isVisible
+                  ? `fadeIn 0.5s ease forwards 0.3s`
+                  : "none",
+                opacity: 0,
               }}
-              onClick={() => openModal(answer)}
             >
-              <p>{answer || "답변 내용 없음"}</p>
+              <img
+                src={postIt}
+                alt="포스트잇"
+                style={{
+                  cursor: "pointer",
+                  width: "37.5vh",
+                  height: "37.5vh",
+                  objectFit: "contain",
+                }}
+                onClick={() => openModal(answer)}
+              />
+              <p style={styles.postItText}>{truncateText(answer, 58)}</p>
             </div>
           </div>
         </div>
-        <div style={styles.arrowContainer}>
+        {/* <div style={styles.arrowContainer}>
           {currentPage > 0 && (
             <button
               onClick={() => setCurrentPage(currentPage - 1)}
@@ -120,7 +148,7 @@ const SushiAnswerDetail = () => {
               ▶
             </button>
           )}
-        </div>
+        </div> */}
       </div>
       {modalOpen && (
         <PostItAnswerModal
@@ -135,10 +163,8 @@ const SushiAnswerDetail = () => {
 };
 
 const styles = {
-  /**배경 스타일 */
   background: {
-    // backgroundColor: "#FDFCC8",
-    padding: "20px",
+    padding: "3vh",
     position: "relative",
     height: "100vh",
     width: "100%",
@@ -150,117 +176,153 @@ const styles = {
     position: "relative",
     zIndex: 2,
     width: "100%",
-    maxWidth: "600px",
-    /**디테일창 화면 전체 비율 수정할때 수정하시오
-     * 현재는 화면의 80%로 설정되어있음.
-     */
+    maxWidth: "60vh",
     height: "80vh",
-    /**여기까지 */
-    margin: "-5px auto",
-    padding: "20px",
+    margin: "-0.5vh auto",
+    padding: "2vh",
     boxSizing: "border-box",
-    border: "6px solid #8B6B3E",
-    borderRadius: "12px",
+    border: "0.6vh solid #8B6B3E",
+    borderRadius: "1.2vh",
+  },
+  headerContainer: {
+    display: "flex",
+    height: "10vh",
   },
   backButton: {
     position: "absolute",
-    top: "10px",
-    left: "10px",
-    fontSize: "24px",
-    background: "none",
+    left: "2vh",
+    fontFamily: "'Ownglyph', Ownglyph",
+    fontSize: "2.4vh",
+    fontWeight: "bold",
+    background: "transparent",
     border: "none",
     cursor: "pointer",
+    color: "#8B6B3E",
   },
   title: {
-    fontSize: "1.5rem",
+    width: "80%",
+    fontSize: "3.5vh",
     textAlign: "center",
+    margin: "0 auto",
+    flex: "0 1 auto",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
   },
   date: {
-    fontSize: "1rem",
-    color: "#8D7B7B",
-    marginBottom: "20px",
+    fontSize: "1.8vh",
+    color: "#8B6B3E",
+    textAlign: "right",
+    marginRight: "2vh",
+    marginTop: "1vh",
+    marginBottom: "1vh",
   },
   contentBox: {
     overflowY: "auto",
-    padding: "10px",
-    /**디테일창 내용 박스 비율 수정할때 수정하시오
-     * 현재는 화면의 20%로 설정되어있음.
-     */
-    height: "20vh",
-    /**여기까지 */
-    borderRadius: "8px",
-    border: "4px solid #B2975C",
-    scrollbarWidth: "none",
+    padding: "1vh",
+    height: "22vh",
+    borderRadius: "0.8vh",
+    border: "0.4vh solid #B2975C",
+    scrollbarWidth: "thin",
+    scrollbarColor: "#B2975C transparent",
   },
   content: {
-    fontSize: "1.1rem",
+    margin: "0",
+    fontSize: "2.5vh",
     color: "#5D4A37",
-    lineHeight: "1.6",
-    textAlign: "left",
-    margin: "0px",
-    padding: "0px",
   },
   divider: {
     width: "90%",
-    margin: "20px auto",
-    border: "1px solid #B2975C",
+    margin: "2vh auto",
+    border: "0.1vh solid #B2975C",
   },
-  /**포스트잇 감싸는 박스 */
   postItOuterBox: {
+    position: "relative",
+    width: "100%",
+    height: "25vh",
+    top: "5vh",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap: "10px",
-    overflow: "auto",
+    gap: "1vh",
   },
   postItRow: {
     display: "flex",
     justifyContent: "center",
-    gap: "10px",
+    gap: "1vh",
   },
-  postIt: {
-    width: "100px",
-    height: "100px",
-    padding: "10px",
-    fontSize: "0.9rem",
-    color: "#5D4A37",
-    fontWeight: "bold",
-    textAlign: "center",
-    borderRadius: "6px",
-    boxShadow: "3px 3px 5px rgba(0,0,0,0.2)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  postItColors: ["#FFD700", "#FFA07A", "#87CEFA", "#98FB98", "#F0E68C"],
   arrowContainer: {
+    position: "relative",
     display: "flex",
     justifyContent: "center",
-    marginTop: "10px",
+    bottom: "17vh",
+    height: "16%",
+    width: "100%",
   },
   arrowLeft: {
-    marginRight: "10px",
+    position: "relative",
+    top: "3vh",
+    marginRight: "auto",
+    height: "3vh",
+    width: "3vh",
+    background: "transparent",
+    border: "none",
     cursor: "pointer",
+    color: "#8B6B3E",
+    fontFamily: "'Ownglyph', Ownglyph",
+    fontSize: "3vh",
+    fontWeight: "bold",
   },
   arrowRight: {
-    marginLeft: "10px",
+    position: "relative",
+    top: "3vh",
+    marginLeft: "auto",
+    height: "3vh",
+    width: "3vh",
+    background: "transparent",
+    border: "none",
     cursor: "pointer",
+    color: "#8B6B3E",
+    fontFamily: "'Ownglyph', Ownglyph",
+    fontSize: "3vh",
+    fontWeight: "bold",
   },
   loading: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
-    fontSize: "1.5rem",
-    color: "#5D4A37",
+    fontSize: "3vh",
+    color: "#8B6B3E",
   },
   error: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
-    fontSize: "1.5rem",
+    fontSize: "3vh",
     color: "red",
+  },
+  postItContainer: {
+    position: "relative",
+    top: "-9vh",
+    width: "37.5vh",
+    height: "37.5vh",
+  },
+  postItText: {
+    position: "absolute",
+    top: "45%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    margin: 0,
+    fontSize: "3vh",
+    color: "#5D4A37",
+    textAlign: "center",
+    width: "20vh",
+    wordBreak: "break-word",
+    zIndex: 1,
+    pointerEvents: "none",
   },
 };
 
