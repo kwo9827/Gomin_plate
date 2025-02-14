@@ -11,6 +11,8 @@ const MyAnswerList = () => {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
+  const [initialLoding, setInitialLoading] = useState(true);
+
   useEffect(() => {
     let mounted = true;
 
@@ -24,6 +26,7 @@ const MyAnswerList = () => {
         );
 
         if (mounted && result.payload && result.payload.data) {
+          setInitialLoading(false);
           setDisplayAnswers(result.payload.data.content);
           setHasMore(result.payload.data.content.length === 10);
         }
@@ -115,7 +118,7 @@ const MyAnswerList = () => {
               </animated.li>
             ))}
           </ul>
-        ) : (
+        ) : initialLoding ? (<div style={styles.noResult}></div>) : (
           <div style={styles.noResult}>등록된 답변이 없습니다.</div>
         )}
 
