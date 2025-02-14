@@ -83,6 +83,7 @@ public class AnswerService {
             //== 알림 날리기==//
             notificationService.sendNotification(
                     sushi.getUser(),
+                    sushi,
                     NotificationType.ANS_END,
                     sushi.getId());
         }
@@ -130,6 +131,7 @@ public class AnswerService {
 
         notificationService.sendNotification(
                 respondent,
+                answer.getSushi(),
                 NotificationType.ANS_LIKE,
                 answer.getSushi().getId());
 

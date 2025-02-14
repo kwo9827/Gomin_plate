@@ -112,6 +112,7 @@ public class ScheduleService {
 
             notificationService.sendNotification(
                     freshSushi.getUser(),
+                    freshSushi,
                     NotificationType.EXP,
                     freshSushi.getId()
             );
