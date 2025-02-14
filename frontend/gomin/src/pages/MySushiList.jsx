@@ -13,6 +13,8 @@ const MySushiList = () => {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
+  const [initialLoding, setInitialLoading] = useState(true);
+
   const dispatch = useDispatch();
   const mySushi = useSelector((state) => state.sushi.mySushi);
 
@@ -32,6 +34,7 @@ const MySushiList = () => {
           })
         );
         if (mounted && result.payload && result.payload.data) {
+          setInitialLoading(false);
           setDisplaySushi(result.payload.data.content);
           setHasMore(result.payload.data.content.length === 10);
         }
@@ -134,7 +137,7 @@ const MySushiList = () => {
               placeholder="고민을 검색해주세요"
               style={styles.searchInput}
               className="custom-placeholder"
-              // onKeyPress={(e) => e.key === "Enter" && onSearch()}
+            // onKeyPress={(e) => e.key === "Enter" && onSearch()}
             />
             <i
               className="fas fa-search"
@@ -170,7 +173,7 @@ const MySushiList = () => {
               </animated.li>
             ))}
           </ul>
-        ) : (
+        ) : initialLoding ? (<div style={styles.noResult}></div>) : (
           <div style={styles.noResult}>일치하는 고민이 없습니다.</div>
         )}
 
