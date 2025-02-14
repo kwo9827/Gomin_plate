@@ -23,13 +23,13 @@ const NegativeAnswerModal = ({ isOpen, onClose, onConfirm }) => {
               onMouseLeave={() => setIsCancelPressed(false)}
               style={{
                 ...styles.cancelButton,
-                backgroundColor: isCancelPressed ? "#863334" : "#C85253",
+                backgroundColor: isCancelPressed ? "#67523E" : "#A68564",
                 transform: isCancelPressed
                   ? "translateY(0.4vh)"
                   : "translateY(-0.2vh)",
                 boxShadow: isCancelPressed
-                  ? "0 0 0 #863334"
-                  : "0 0.4vh 0 #863334",
+                  ? "0 0 0 #67523E"
+                  : "0 0.4vh 0 #67523E",
               }}
               className="custom-placeholder"
             >
@@ -42,13 +42,13 @@ const NegativeAnswerModal = ({ isOpen, onClose, onConfirm }) => {
               onMouseLeave={() => setIsOpenPressed(false)}
               style={{
                 ...styles.openButton,
-                backgroundColor: isOpenPressed ? "#67523E" : "#A68564",
+                backgroundColor: isOpenPressed ? "#863334" : "#C85253",
                 transform: isOpenPressed
                   ? "translateY(0.4vh)"
                   : "translateY(-0.2vh)",
                 boxShadow: isOpenPressed
-                  ? "0 0 0 #67523E"
-                  : "0 0.4vh 0 #67523E",
+                  ? "0 0 0 #863334"
+                  : "0 0.4vh 0 #863334",
               }}
               className="custom-placeholder"
             >
