@@ -136,4 +136,19 @@ public class AnswerService {
         SseLikeCountEvent event = SseLikeCountEvent.of(respondent.getTotalLikes());
         sseService.notifyLikeCount(respondent.getId(), event);
     }
+
+    @Transactional
+    public void saveGPTAnswer(Sushi sushi, String gptAnswer) {
+        User catMaster = User.builder().id(1).build();
+
+        // 답변 생성
+        Answer answer = Answer.builder()
+                .user(catMaster)
+                .sushi(sushi)
+                .content(gptAnswer)
+                .isGPT(true)
+                .build();
+
+        answerRepository.save(answer);
+    }
 }

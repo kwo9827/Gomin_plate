@@ -35,7 +35,12 @@ public class Answer extends BaseEntity {
     private Boolean isLiked = false;
 
     @Column(name = "is_negative", nullable = false)
-    private Boolean isNegative;
+    @Builder.Default
+    private Boolean isNegative = false;
+
+    @Column(name = "is_gpt")
+    @Builder.Default
+    private Boolean isGPT = false;
 
     public void markAsLiked() {
         this.isLiked = true;
