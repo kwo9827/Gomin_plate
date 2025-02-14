@@ -46,7 +46,7 @@ const SushiView = ({
   useEffect(() => {
     if (isOpen && sushiId) {
       dispatch(fetchSushiDetail(sushiId));
-      if (currentSushi === 'loading') {
+      if (currentSushi === "loading") {
         return <div style={styles.loading}>로딩 중...</div>;
       }
     }
@@ -190,17 +190,21 @@ const SushiView = ({
   if (!isOpen) return null;
 
   return (
-    <div style={{
-      ...styles.modalOverlay,
-      opacity,
-      transition: 'opacity 0.3s ease-in-out'
-    }}>
-      <div style={{
-        ...styles.modalContent,
+    <div
+      style={{
+        ...styles.modalOverlay,
         opacity,
-        transform: `translateY(${20 - (opacity * 20)}px)`,
-        transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out'
-      }}>
+        transition: "opacity 0.3s ease-in-out",
+      }}
+    >
+      <div
+        style={{
+          ...styles.modalContent,
+          opacity,
+          transform: `translateY(${20 - opacity * 20}px)`,
+          transition: "opacity 0.3s ease-in-out, transform 0.3s ease-in-out",
+        }}
+      >
         <div style={styles.container}>
           <div style={styles.buttonRow}>
             <div
@@ -324,7 +328,7 @@ const styles = {
     padding: "0 10px",
     fontWeight: "bold",
     color: "#5D4A37",
-    fontSize: "1.3rem",
+    fontSize: "3vh",
   },
   contentContainer: {
     position: "relative",
@@ -350,7 +354,7 @@ const styles = {
   },
   text: {
     margin: "3vh 0",
-    fontSize: "1rem",
+    fontSize: "2.2vh",
     lineHeight: "1.3",
     wordBreak: "break-word",
   },
@@ -379,7 +383,7 @@ const styles = {
   textarea: {
     width: "35vh",
     flex: 1,
-    padding: "1vh",
+    padding: "1.2vh",
     marginTop: "2vh",
     borderRadius: "6px",
     border: "4px solid #B2975C",

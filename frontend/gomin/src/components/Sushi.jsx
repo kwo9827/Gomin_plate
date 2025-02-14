@@ -140,7 +140,7 @@ const Sushi = ({
             alt={sushiName.name}
             style={{
               width: "46vh",
-              height: "10vh",
+              height: "12vh",
               overflow: "hidden", // 넘치는 부분 숨기기
               objectFit: "cover",
               objectPosition: "center",
