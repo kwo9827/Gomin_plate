@@ -5,6 +5,7 @@ import {
   fetchNotifications,
   markAsRead,
   fetchUnreadExists,
+  markAsReadAll,
 } from "../store/slices/notificationSlice";
 
 const NotificationModal = ({ isOpen, onClose }) => {
@@ -30,6 +31,13 @@ const NotificationModal = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const readAllNotification = () => {
+    dispatch(markAsReadAll()).then(() => {
+      // 알림 전체 읽기를 완료한 후 notifications 비우기
+      dispatch(fetchNotifications({ page: 1, size: 10 })); // 또는 빈 배열로 설정
+    });
+  }
+
   if (!isOpen && !show) return null;
 
   return (
@@ -43,6 +51,8 @@ const NotificationModal = ({ isOpen, onClose }) => {
             ✖
           </button>
         </div>
+
+        <button onClick={readAllNotification}>알림 전체 읽기</button>
 
         <div>
           {status === "loading" ? (

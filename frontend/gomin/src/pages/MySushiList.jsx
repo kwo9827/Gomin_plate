@@ -13,6 +13,8 @@ const MySushiList = () => {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
+  const [initialLoding, setInitialLoading] = useState(true);
+
   const dispatch = useDispatch();
   const mySushi = useSelector((state) => state.sushi.mySushi);
 
@@ -21,8 +23,11 @@ const MySushiList = () => {
   };
 
   useEffect(() => {
-    let mounted = true;
+    console.log(displaySushi);
+  }, [displaySushi])
 
+  useEffect(() => {
+    let mounted = true;
     const fetchInitialData = async () => {
       try {
         const result = await dispatch(
@@ -32,8 +37,8 @@ const MySushiList = () => {
             size: 10,
           })
         );
-
         if (mounted && result.payload && result.payload.data) {
+          setInitialLoading(false);
           setDisplaySushi(result.payload.data.content);
           setHasMore(result.payload.data.content.length === 10);
         }
@@ -41,14 +46,13 @@ const MySushiList = () => {
         console.error("초기 데이터 로딩 실패:", error);
       }
     };
-
     fetchInitialData();
-
     return () => {
       mounted = false;
     };
   }, []);
 
+  /*스크롤 감지 */
   const handleScroll = (e) => {
     const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
 
@@ -57,26 +61,22 @@ const MySushiList = () => {
     }
   };
 
+  /*다음 페이지 요청하는 코드 */
   const loadMore = () => {
     if (loading || !hasMore) return;
-
     setLoading(true);
     const nextPage = page + 1;
-
-    console.log("다음 페이지 요청:", { nextPage });
-
+    console.log("다음 페이지:", { nextPage });
     dispatch(
       fetchMySushi({
-        search: search,
+        keyword: search,
         page: nextPage,
         size: 10,
       })
     ).then((result) => {
       if (result.payload && result.payload.data) {
         const newSushi = result.payload.data.content;
-
         console.log("새로 불러온 게시글 수", newSushi.length);
-
         if (newSushi.length < 10) {
           console.log("더 이상 불러올 데이터가 없습니다.");
           setHasMore(false);
@@ -88,20 +88,28 @@ const MySushiList = () => {
     });
   };
 
+  /*검색 기능 */
   const onSearch = () => {
     dispatch(
       fetchMySushi({
-        search: search,
-        page: 1,
-        size: 10,
+        keyword: search,
       })
     ).then((result) => {
+      console.log(search);
       const apiResult = result.payload.data.content;
-      const filtered = apiResult.filter((sushi) =>
-        sushi.title.toLowerCase().includes(search.toLowerCase())
-      );
-      setDisplaySushi(filtered);
+      // const filtered = apiResult.filter((sushi) =>
+      //   sushi.title.toLowerCase().includes(search.toLowerCase())
+      // );
+      setDisplaySushi(apiResult);
+      console.log(apiResult);
     });
+  };
+
+  /*검색 엔터 기능 */
+  const OnSearchSubmit = (e) => {
+    if (e.key === "Enter") {
+      onSearch();
+    }
   };
 
   // react-spring 애니메이션 효과
@@ -129,10 +137,11 @@ const MySushiList = () => {
               type="text"
               value={search}
               onChange={onChange}
+              onKeyPress={OnSearchSubmit}
               placeholder="고민을 검색해주세요"
               style={styles.searchInput}
               className="custom-placeholder"
-              // onKeyPress={(e) => e.key === "Enter" && onSearch()}
+            // onKeyPress={(e) => e.key === "Enter" && onSearch()}
             />
             <i
               className="fas fa-search"
@@ -164,11 +173,14 @@ const MySushiList = () => {
                   category={displaySushi[index].category}
                   content={displaySushi[index].content}
                   sushiType={displaySushi[index].sushiType}
+                  remainingAnswers={displaySushi[index].remainingAnswers}
+                  maxAnswers={displaySushi[index].maxAnswers}
+                  isClosed={displaySushi[index].isClosed}
                 />
               </animated.li>
             ))}
           </ul>
-        ) : (
+        ) : initialLoding ? (<div style={styles.noResult}></div>) : (
           <div style={styles.noResult}>일치하는 고민이 없습니다.</div>
         )}
 
@@ -176,9 +188,9 @@ const MySushiList = () => {
         {loading && <div style={styles.loadingText}>로딩 중...</div>}
 
         {/* 더 이상 데이터가 없을 때 메시지 */}
-        {!hasMore && displaySushi.length > 0 && (
+        {/* {!hasMore && displaySushi.length > 0 && (
           <div style={styles.endMessage}>더 이상 고민이 없습니다.</div>
-        )}
+        )} */}
       </div>
     </div>
   );

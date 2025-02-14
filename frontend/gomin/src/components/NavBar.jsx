@@ -43,21 +43,41 @@ const Navbar = () => {
     });
   }, []);
 
+  // useEffect(() => {
+  //   switch (location.pathname) {
+  //     case "/Home":
+  //       setBgImage(navHomeImg);
+  //       break;
+  //     case "/MySushiList":
+  //       setBgImage(navSushiImg);
+  //       break;
+  //     case "/MyAnswerList":
+  //       setBgImage(navAnswerImg);
+  //       break;
+  //     default:
+  //       setBgImage(navImg);
+  //   }
+  // }, [location.pathname]);
+
   useEffect(() => {
-    switch (location.pathname) {
-      case "/Home":
-        setBgImage(navHomeImg);
-        break;
-      case "/MySushiList":
-        setBgImage(navSushiImg);
-        break;
-      case "/MyAnswerList":
-        setBgImage(navAnswerImg);
-        break;
-      default:
-        setBgImage(navImg);
+    const getBgImage = () => {
+      switch (location.pathname) {
+        case "/Home":
+          return navHomeImg;
+        case "/MySushiList":
+          return navSushiImg;
+        case "/MyAnswerList":
+          return navAnswerImg;
+        default:
+          return navImg;
+      }
+    };
+
+    const newBgImage = getBgImage();
+    if (bgImage !== newBgImage) {
+      setBgImage(newBgImage);
     }
-  }, [location.pathname]);
+  }, [location.pathname, bgImage]);
 
   const handleNavigation = (path) => {
     navigate(path);
