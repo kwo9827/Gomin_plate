@@ -148,7 +148,7 @@ const Intro = () => {
       )}
 
       <div style={styles.buttoncontainer}>
-        <h2 style={{ marginBottom: "1vh", fontSize: "4.5vh" }}>로그인v3</h2>
+        <h2 style={{ marginBottom: "1vh", fontSize: "4.5vh" }}>로그인v4</h2>
         <KakaoLoginButton />
         <GoogleLoginButton />
       </div>
