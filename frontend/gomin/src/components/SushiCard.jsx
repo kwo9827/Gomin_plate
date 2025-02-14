@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sushi from "./Sushi";
 
@@ -11,9 +11,36 @@ const SushiCard = ({
   showHeart = false,
   remainingAnswers,
   maxAnswers,
-  isClosed
+  isClosed,
+  expirationTime,
 }) => {
   const navigate = useNavigate();
+  const [remainingTime, setRemainingTime] = useState(0);
+
+  useEffect(() => {
+    const expirationDate = new Date(expirationTime).getTime();
+
+    const intervalId = setInterval(() => {
+      const currentTime = new Date().getTime();
+      const timeLeft = expirationDate - currentTime;
+
+      if (timeLeft <= 0) {
+        clearInterval(intervalId);
+        setRemainingTime(0);
+      } else {
+        setRemainingTime(Math.floor(timeLeft / 1000)); // 소수점 버리고 초 단위로
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId); // 컴포넌트가 언마운트되면 인터벌 정리
+  }, [expirationTime]);
+
+  const formatTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${hours}h ${minutes}m ${secs}s`;
+  };
 
   const handleClick = () => {
     if (!id) {
@@ -51,13 +78,22 @@ const SushiCard = ({
                     답변이 모두 달렸어요!
                   </div>
                 )}
+                {remainingTime > 0 && (
+                  <div style={remainingAnswersStyle}>
+                    남은 시간: {formatTime(remainingTime)}
+                  </div>
+                )}
               </div>
             ) : (
               <div style={remainingAnswersStyle}>
                 {maxAnswers - remainingAnswers}개의 답변이 달렸어요 !
+                {remainingTime > 0 && (
+                  <div style={remainingAnswersStyle}>
+                    남은 시간: {formatTime(remainingTime)}
+                  </div>
+                )}
               </div>
             )}
-
           </div>
         </div>
       </div>
