@@ -20,8 +20,6 @@ public class GoogleOAuthStrategy implements OAuthStrategy {
     public OAuthUserInfo getUserInfo(String code) throws IOException {
         GoogleTokenResponse tokenResponse = googleOAuthClient.getToken(code);
 
-        log.info("Google token response: {}", tokenResponse);
-
         GoogleUserResponse userResponse = googleOAuthClient.getUserInfo(tokenResponse.getAccessToken());
 
         return OAuthUserInfo.builder()
