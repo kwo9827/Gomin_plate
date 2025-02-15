@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { countLike } from "../store/slices/memberSlice";
@@ -12,6 +12,7 @@ import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 import SushiUnlockBar from "../components/SushiUnlockBar";
+import BgmContext from '../context/BgmProvider';
 
 import { useSpring, animated } from "@react-spring/web";
 
@@ -46,6 +47,7 @@ const Home = () => {
   const [showAnswerSubmitModal, setShowAnswerSubmitModal] = useState(false);
 
   const audioRef = useRef(null);
+  const { isMuted } = useContext(BgmContext);
 
   // // ✅ `handleSetIsNew` 함수 정의
   // const handleSetIsNew = (value) => {
@@ -172,7 +174,8 @@ const Home = () => {
   // 초밥 모달이 열릴 때 소리 재생
   useEffect(() => {
     if (isSushiViewOpen && audioRef.current) {
-      audioRef.current.volume = 0.4;
+      // 음소거 상태에 따라 볼륨 설정
+      audioRef.current.volume = isMuted ? 0 : 0.5;
       audioRef.current.play();
     }
   }, [isSushiViewOpen]);
