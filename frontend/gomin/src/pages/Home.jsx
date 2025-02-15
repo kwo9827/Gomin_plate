@@ -12,7 +12,7 @@ import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 import SushiUnlockBar from "../components/SushiUnlockBar";
-import BgmContext from '../context/BgmProvider';
+import BgmContext from "../context/BgmProvider";
 
 import { useSpring, animated } from "@react-spring/web";
 
@@ -201,6 +201,13 @@ const Home = () => {
     delay: 300,
   });
 
+  const bellSpring = useSpring({
+    opacity: allImagesLoaded ? 1 : 0,
+    transform: allImagesLoaded ? "translateY(0)" : "translateY(-50%)",
+    config: { tension: 300, friction: 10 },
+    delay: 1700,
+  });
+
   return (
     <>
       {/* 배경 이미지 */}
@@ -239,8 +246,19 @@ const Home = () => {
           }}
           onLoad={() => handleImageLoad("master")}
         ></animated.div>
-        {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
-        <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
+
+        <animated.div
+          style={{
+            ...styles.backgroundLayer,
+            zIndex: 2,
+            opacity: bellSpring.opacity,
+            transform: bellSpring.transform,
+          }}
+        >
+          {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
+          <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
+        </animated.div>
+
         {/* 튜토리얼 버튼 */}
         <div style={styles.buttonContainer}>
           <button style={styles.button} onClick={restartTutorial}>
