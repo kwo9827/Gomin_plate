@@ -12,7 +12,7 @@ const NegativeAnswerModal = ({ isOpen, onClose, onConfirm }) => {
       <div style={styles.modal}>
         <div style={styles.innerBox}>
           <p>
-            부적절한 내용을 포함하고 있습니다.
+            부적절한 내용을 포함할 수 있습니다.
             <br /> 열어보시겠습니까?
           </p>
           <div style={styles.buttonBox}>
