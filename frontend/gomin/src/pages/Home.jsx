@@ -120,7 +120,7 @@ const Home = () => {
           setSelectedSushiData(response.payload.data);
           setTimeout(() => {
             setIsSushiViewOpen(true);
-          }, 3000);
+          }, 2000);
         }
       });
     }
