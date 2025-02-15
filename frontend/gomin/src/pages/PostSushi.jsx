@@ -659,7 +659,7 @@ const PostSushi = ({ onClose }) => {
                       <img
                         src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
                         alt="카카오톡 아이콘"
-                        style={iconStyleF}
+                        style={iconStyleK}
                       />
                     </button>
 
@@ -675,7 +675,7 @@ const PostSushi = ({ onClose }) => {
                       }}
                     >
                       <i
-                        className="fab fa-facebook-square"
+                        className="fa-brands fa-facebook-f"
                         style={iconStyleF}
                       ></i>
                     </button>
@@ -949,7 +949,7 @@ const buttonContainer = {
   width: "100%",
   marginTop: "3vh",
   marginBottom: "1vh",
-  gap: "5vh",
+  gap: "3vh",
 };
 
 const iconButtonStyle = {
@@ -975,19 +975,32 @@ const iconStyleR = {
   verticalAlign: "middle", // 수직 정렬 맞추기
 };
 
-const iconStyleF = {
+const iconStyleK = {
   fontSize: "3.2em", // 아이콘 크기 일관성 (조금 작게 조정)
-  color: "#3b5998", // 아이콘 색상
   width: "40px", // 동일한 크기로 지정
   height: "40px", // 동일한 크기로 지정
   display: "inline-block",
   verticalAlign: "middle", // 수직 정렬 맞추기
 };
 
+const iconStyleF = {
+  fontSize: "2em",
+  backgroundColor: "#3b5998",
+  color: "#ffffff",
+  width: "40px",
+  height: "40px",
+  borderRadius: "15%",
+  lineHeight: "40px",
+  display: "inline-block",
+  textAlign: "center",
+  transition: "background-color 0.3s ease-in-out",
+  verticalAlign: "middle", // 수직 정렬 맞추기
+};
+
 const iconStyleX = {
   color: "#3b5998", // 아이콘 색상
-  width: "45px", // 동일한 크기로 지정
-  height: "45px", // 동일한 크기로 지정
+  width: "47px", // 동일한 크기로 지정
+  height: "47px", // 동일한 크기로 지정
   display: "inline-block",
   verticalAlign: "middle", // 수직 정렬 맞추기
 };
