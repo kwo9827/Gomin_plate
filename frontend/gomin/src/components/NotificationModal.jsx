@@ -166,33 +166,33 @@ const styles = {
   /* '알림' 외부 박스 */
   outerBox: {
     width: "30vh",
-    maxWidth: "250px",
-    margin: "0 auto 20px auto",
-    marginTop: "10px",
-    border: "4px solid #8B6B3E",
-    borderRadius: "8px",
+    // maxWidth: "250px",
+    margin: "0 auto 3vh auto",
+    marginTop: "1.5vh",
+    border: "0.4vh solid #8B6B3E",
+    borderRadius: "1vh",
     backgroundColor: "#B2975C",
-    padding: "6px",
+    padding: "0.7vh",
     boxSizing: "border-box",
   },
   /* '알림' 내부 박스 */
   innerBox: {
     width: "100%",
-    border: "2px solid #906C48",
-    borderRadius: "4px",
+    border: "0.3vh solid #906C48",
+    borderRadius: "0.5vh",
     backgroundColor: "#B2975C",
     textAlign: "center",
     color: "#5D4A37",
-    fontSize: "1.5rem",
+    fontSize: "2.6vh",
     fontWeight: "bold",
-    padding: "6px 0",
+    padding: "0.8vh 0",
     boxSizing: "border-box",
   },
   /* 알림 목록 스타일 */
   list: {
     listStyle: "none",
     padding: 0,
-    width: "100%",
+    width: "43.1vh",
   },
   /* 알림 아이템 컨테이너 */
   listItem: {
@@ -210,16 +210,16 @@ const styles = {
     width: "100%",
     maxWidth: "100%",
     margin: "0",
-    padding: "10px 0",
+    padding: "0.7vh 0",
     boxSizing: "border-box",
-    border: "1px solid #D4C5B1",
+    border: "0.2vh solid #D4C5B1",
     backgroundColor: "#FFFEFA",
-    marginBottom: "0px",
+    marginBottom: "0",
   },
   /* 알림 아이템 중간 컨테이너 */
   middleContainer: {
-    width: "100%",
-    padding: "8px 20px",
+    width: "50vh",
+    padding: "1vh 2vh",
     boxSizing: "border-box",
     backgroundColor: "#FFFEFA",
   },
@@ -234,10 +234,10 @@ const styles = {
   },
   /* 알림 이미지 컨테이너 */
   notificationImage: {
-    width: "90px",
-    height: "90px",
-    marginRight: "10px",
-    borderRadius: "4px",
+    width: "9.2vh",
+    height: "9.2vh",
+    marginRight: "2vh",
+    borderRadius: "1vh",
     objectFit: "cover",
   },
   /* 알림 이미지 */
@@ -251,10 +251,10 @@ const styles = {
   },
   /* 알림 메시지 스타일 */
   title: {
-    fontSize: "1.2rem",
+    fontSize: "2.2vh",
     fontWeight: "bold",
     color: "#5A4628",
-    marginBottom: "8px",
+    marginBottom: "1vh",
     display: "-webkit-box",
     WebkitLineClamp: 2, // 최대 2줄까지 표시
     WebkitBoxOrient: "vertical",
@@ -263,14 +263,14 @@ const styles = {
   },
   /* 초밥 제목 스타일 */
   contentText: {
-    fontSize: "1rem",
+    fontSize: "1.8vh",
     color: "#8D7B7B",
     lineHeight: "1.4",
     marginBottom: "5px",
   },
   /* 알림 시간 */
   time: {
-    fontSize: "12px",
+    fontSize: "1.5vh",
     color: "#666",
   },
   /* 알림없을때 */

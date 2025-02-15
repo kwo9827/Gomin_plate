@@ -229,14 +229,14 @@ const SushiView = ({
           <div style={styles.container}>
             <div style={styles.buttonRow}>
               <div
-                style={{ width: "3vh", cursor: "pointer" }}
+                style={{ width: "3vh", cursor: "pointer", fontSize: "2.5vh" }}
                 onClick={handleBack}
               >
                 {" "}
                 &lt;
               </div>
               <div
-                style={{ width: "3vh", cursor: "pointer" }}
+                style={{ width: "3vh", cursor: "pointer", fontSize: "2.5vh" }}
                 onClick={handleClose}
               >
                 {" "}
@@ -248,7 +248,7 @@ const SushiView = ({
                 <h3
                   style={{
                     ...styles.title,
-                    boxShadow: `0 4px 0px ${titleShadowColor}`,
+                    boxShadow: `0 0.5vh 0px ${titleShadowColor}`,
                   }}
                 >
                   {sushiData?.title}
@@ -272,7 +272,7 @@ const SushiView = ({
                 <h3
                   style={{
                     ...styles.title,
-                    boxShadow: `0 4px 0px ${titleShadowColor}`,
+                    boxShadow: `0 0.5vh 0px ${titleShadowColor}`,
                   }}
                 >
                   {sushiData?.title}
@@ -339,20 +339,20 @@ const styles = {
     width: "100%",
     height: "70vh",
     background: "#FFFEEC",
-    border: "8px #906C48 solid",
+    border: "1vh #906C48 solid",
     position: "relative",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     padding: "2vh",
     boxSizing: "border-box",
-    borderRadius: "4px",
+    borderRadius: "1vh",
     overflow: "hidden",
   },
   title: {
     display: "inline",
     margin: "0 2vh 1vh",
-    padding: "0 10px",
+    padding: "0 2vh",
     fontWeight: "bold",
     color: "#5D4A37",
     fontSize: "3vh",
@@ -411,25 +411,25 @@ const styles = {
     width: "35vh",
     flex: 1,
     padding: "1.2vh",
-    marginTop: "2vh",
-    borderRadius: "6px",
-    border: "4px solid #B2975C",
+    marginTop: "1.5vh",
+    borderRadius: "1vh",
+    border: "0.5vh solid #B2975C",
     fontFamily: "inherit",
-    fontSize: "1.1rem",
+    fontSize: "2vh",
     lineHeight: "1.5",
     resize: "none",
   },
   charCount: {
-    fontSize: "0.8rem",
+    fontSize: "1.5vh",
     textAlign: "right",
     padding: "0.5vh",
   },
   button: {
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "1vh",
     backgroundColor: "#B2975C",
     color: "#5D4A37",
-    fontSize: "1rem",
+    fontSize: "2vh",
     padding: "1vh 2vh",
     margin: "0",
     cursor: "pointer",
@@ -441,7 +441,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
-    fontSize: "1.5rem",
+    fontSize: "2vh",
     color: "#5D4A37",
   },
 };

@@ -105,8 +105,8 @@ const styles = {
     /*추가 디자인 안되면 주석 처리 ㄱㄱ */
     width: "80vh",
     height: "80vh",
-    maxWidth: "500px",
-    maxHeight: "500px",
+    // maxWidth: "500px",
+    // maxHeight: "500px",
     /*여기까지 주석! */
 
     display: "flex",
