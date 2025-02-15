@@ -34,7 +34,6 @@ export const socialLogin = createAsyncThunk(
       console.log(response.data); // 응답 구조 확인
       console.log(response.data.data); // 실제 필요한 데이터 확인
       dispatch(setAuthData(response.data.data));
-      console.log("isNew:", response.data.data.user.isNew); // isNew 값 출력
       localStorage.setItem("accessToken", response.data.data.accessToken);
       localStorage.setItem("userNickname", response.data.data.user.nickname);
       console.log("sociallogin 호출됐다고 !!");
