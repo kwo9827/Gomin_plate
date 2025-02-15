@@ -36,7 +36,7 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
     if (showFullTutorial) {
       const timer = setTimeout(() => {
         setShowDialog(true);
-      }, 1500);
+      }, 2500);
       return () => clearTimeout(timer);
     } else {
       setShowTutorial(true);
