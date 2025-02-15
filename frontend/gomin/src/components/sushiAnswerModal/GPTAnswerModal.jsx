@@ -43,17 +43,18 @@ const styles = {
   },
   headerTitle: {
     color: "#424242", // 더 진한 파란색
-    fontSize: "1.8vh",
+    fontSize: "2.2vh",
+    margin: "-0.5vh 0 0.5vh 1vh",
     // fontWeight: "bold",
   },
   masterIcon: {
-    width: "25px",
-    height: "25px",
-    marginRight: "10px",
+    width: "3vh",
+    height: "3vh",
+    marginRight: "1vh",
   },
   pawPrint: {
     position: "absolute",
-    bottom: "25%",
+    bottom: "23%",
     right: "20%",
     transform: "scale(2)",
     zIndex: 3,
