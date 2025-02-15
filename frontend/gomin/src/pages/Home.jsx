@@ -106,11 +106,13 @@ const Home = () => {
   useEffect(() => {
     if (token) {
       dispatch(fetchSushiByToken(token)).then((response) => {
-        console.log("Fetched Sushi Data:", response.payload); // 데이터 확인
-        // 초밥 데이터가 성공적으로 불러와졌다면 모달 열기
+        console.log("Fetched Sushi Data:", response.payload);
+        // 초밥 데이터가 성공적으로 불러와졌다면 4초 후에 모달 열기
         if (response.payload) {
-          setSelectedSushiData(response.payload.data); // 불러온 초밥 데이터를 상태에 저장
-          setIsSushiViewOpen(true); // 모달 열기
+          setSelectedSushiData(response.payload.data);
+          setTimeout(() => {
+            setIsSushiViewOpen(true);
+          }, 4000);
         }
       });
     }
