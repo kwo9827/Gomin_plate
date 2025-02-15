@@ -26,7 +26,7 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
   };
 
   const dialogues = [
-    "어서오세요. 처음 뵙는 분이군요.",
+    "어서오세요. <br />처음 뵙는 분이군요.",
     "고민 한접시의 이용 방법을 알려드릴게요.",
     "준비가 되면 화면을 눌러 진행하세요!",
   ];
@@ -37,7 +37,7 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
     if (showFullTutorial) {
       const timer = setTimeout(() => {
         setShowDialog(true);
-      }, 1500);
+      }, 2000);
       return () => clearTimeout(timer);
     } else {
       setShowTutorial(true);
@@ -48,6 +48,13 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
     setShowDialog(false);
     setIsDialogOpen(false);
     setShowTutorial(true);
+  };
+
+  const handleTutorialPrevious = (e) => {
+    e.stopPropagation();
+    if (currentSlide > 0) {
+      setCurrentSlide(currentSlide - 1);
+    }
   };
 
   const handleTutorialNext = () => {
@@ -69,7 +76,7 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
             left: 0,
             right: 0,
             bottom: 0,
-            zIndex: 8, // tutorialModal의 zIndex보다 낮게
+            zIndex: 8,
             backgroundColor: "transparent",
           }}
           onClick={(e) => e.stopPropagation()}
@@ -90,13 +97,26 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
             onClose={handleCloseDialog}
             isOpen={isDialogOpen}
             onComplete={handleDialogComplete}
+            renderDialogContent={(content) => (
+              <div dangerouslySetInnerHTML={{ __html: content }} />
+            )}
           />
         </div>
       )}
 
       {showTutorial && (
-        <div style={styles.tutorialModal} onClick={handleTutorialNext}>
+        <div style={styles.tutorialModal}>
           <div style={styles.tutorialContent}>
+            <div style={styles.navigationContainer}>
+              <div
+                style={styles.navigationLeft}
+                onClick={handleTutorialPrevious}
+              />
+              <div
+                style={styles.navigationRight}
+                onClick={handleTutorialNext}
+              />
+            </div>
             <img
               src={tutorialSlides[currentSlide]}
               alt={`Tutorial ${currentSlide + 1}`}
@@ -108,7 +128,6 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
                   key={index}
                   style={{
                     ...styles.paginationDot,
-
                     backgroundColor:
                       currentSlide === index ? "#24D536" : "#D1D5DB",
                   }}
