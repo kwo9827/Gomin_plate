@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useCallback, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSushi } from "../store/slices/sushiSlice";
 import Slider from "react-slick";
@@ -85,11 +85,12 @@ const PostSushi = ({ onClose }) => {
   const [isClosing, setIsClosing] = useState(false);
   const [isConfirmPressed, setIsConfirmPressed] = useState(false);
   const [isCancelPressed, setIsCancelPressed] = useState(false);
+  const isSubmittingRef = useRef(false);
+  const reRender = useCallback(() => {}, []);
   const [alertModal, setAlertModal] = useState({
     isOpen: false,
     message: "",
   });
-
   const { isMuted } = useContext(BgmContext);
 
   const categoryMapping = {
@@ -215,27 +216,35 @@ const PostSushi = ({ onClose }) => {
     setShowModal(true);
   };
 
-  const handleConfirmSubmit = () => {
-    const sushiData = {
-      title,
-      content,
-      maxAnswers,
-      category,
-      sushiType,
-    };
-    console.log("등록된 내용:", sushiData);
-    dispatch(createSushi(sushiData)).then((response) => {
-      const { success, data, error } = response.payload; // 서버에서 반환된 token
-      const { token } = data; // 서버에서 반환된 token
-      // 공유 URL 생성 (이제 `token`을 포함한 URL을 생성)
-      const shareUrl = `share/${token}`;
-      setShareUrl(shareUrl); // shareUrl 상태 업데이트
-      console.log("공유 URL:", shareUrl);
+  const handleConfirmSubmit = async () => {
+    if (isSubmittingRef.current) {
+      return;
+    }
 
-      // 모달에서 공유 URL을 활용
+    isSubmittingRef.current = true;
+    reRender();
+
+    try {
+      const sushiData = {
+        title,
+        content,
+        maxAnswers,
+        category,
+        sushiType,
+      };
+      console.log("등록된 내용:", sushiData);
+      const response = await dispatch(createSushi(sushiData));
+      const { success, data, error } = response.payload;
+      const { token } = data;
+      const shareUrl = `share/${token}`;
+      setShareUrl(shareUrl);
+      console.log("공유 URL:", shareUrl);
       setShowModal(false);
       setShowCompleteModal(true);
-    });
+    } finally {
+      isSubmittingRef.current = false;
+      reRender();
+    }
   };
 
   const handleCompleteClose = () => {
@@ -265,6 +274,11 @@ const PostSushi = ({ onClose }) => {
   React.useEffect(() => {
     setSushiType(sushiImages[0].id);
   }, []);
+
+  function useReRenderer() {
+    const [, setState] = useState({});
+    return useCallback(() => setState({}), []);
+  }
 
   return (
     <>
