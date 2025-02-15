@@ -60,6 +60,24 @@ const SushiCard = ({
             <div style={sushiImageStyle}>
               <Sushi isushiId={id} category={category} sushiType={sushiType} />
             </div>
+            {!isClosed ? (
+              <div>
+                {remainingAnswers > 0 ? (
+                  <div style={remainingAnswersStyle}>
+                    {maxAnswers - remainingAnswers}/{maxAnswers}
+                  </div>
+                ) : (
+                  <div style={remainingAnswersStyle}>SOLD OUT</div>
+                )}
+                {remainingTime <= 10800 && remainingTime > 0 && (
+                  <div style={remainingTimeStyle}>마감 임박!</div>
+                )}
+              </div>
+            ) : (
+              <div style={remainingAnswersStyle}>
+                {maxAnswers - remainingAnswers}
+              </div>
+            )}
           </div>
 
           <div style={textContainerStyle}>
@@ -67,16 +85,14 @@ const SushiCard = ({
             <hr style={dividerStyle} />
             <div style={contentStyle}>{content}</div>
 
-            {!isClosed ? (
+            {/* {!isClosed ? (
               <div>
                 {remainingAnswers > 0 ? (
                   <div style={remainingAnswersStyle}>
-                    마감까지 {remainingAnswers}명 남았어요
+                    {maxAnswers - remainingAnswers}/{maxAnswers}
                   </div>
                 ) : (
-                  <div style={remainingAnswersStyle}>
-                    답변이 모두 달렸어요!
-                  </div>
+                  <div style={remainingAnswersStyle}>답변이 모두 달렸어요!</div>
                 )}
                 {remainingTime > 0 && (
                   <div style={remainingAnswersStyle}>
@@ -93,7 +109,7 @@ const SushiCard = ({
                   </div>
                 )}
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
@@ -174,7 +190,7 @@ const titleStyle = {
   fontSize: "3vh",
   fontWeight: "bold",
   color: "#5A4628",
-  margin: "1vh 0",
+  margin: "2vh 0 0 0",
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -198,10 +214,43 @@ const dividerStyle = {
 };
 
 const remainingAnswersStyle = {
+  position: "relative",
+  textAlign: "right",
+  bottom: 0,
   fontSize: "1.8vh",
-  color: "#E86100",
+  color: "#f0f0f0",
+  marginTop: "6.5vh",
+  marginLeft: "9vh",
+  padding: "0 1vh",
+  height: "3vh",
+  minWidth: "1vh",
+  width: "auto",
+  border: "none",
+  borderRadius: "1vh",
+  fontSize: "2.2vh",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: "#E86100",
+};
+
+const remainingTimeStyle = {
+  position: "absolute",
+  top: "1.7vh",
+  left: "1.3vh",
+  backgroundColor: "#454545",
+  fontSize: "2vh",
+  border: "none",
+  borderRadius: "0.5vh",
+  width: "7vh",
+  height: "3vh",
+  color: "#f0f0f0",
   marginTop: "0.8vh",
-  fontWeight: "500",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "0 0.5vh",
+  transform: "rotate(-25deg)",
 };
 
 export default SushiCard;
