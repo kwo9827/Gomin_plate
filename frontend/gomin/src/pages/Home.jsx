@@ -118,9 +118,7 @@ const Home = () => {
         // 초밥 데이터가 성공적으로 불러와졌다면 4초 후에 모달 열기
         if (response.payload) {
           setSelectedSushiData(response.payload.data);
-          setTimeout(() => {
-            setIsSushiViewOpen(true);
-          }, 4000);
+          setIsSushiViewOpen(true);
         }
       });
     }
