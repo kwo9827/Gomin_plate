@@ -1,39 +1,20 @@
 package com.ssafy.sushi.domain.answer.service;
 
+import com.ssafy.sushi.global.infra.chatgpt.GPTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 @RequiredArgsConstructor
 public class AnswerAnalysisService {
 
-    private final WebClient webClient;
+    private final GPTService gptService;
 
     public Boolean analyzeSentiment(String text) {
-        try {
-            SentimentResponse response = webClient.post()
-                    .uri("/predict/")
-                    .header("Content-Type", "application/json")
-                    .bodyValue(new SentimentRequest(text))
-                    .retrieve()
-                    .bodyToMono(SentimentResponse.class)
-                    .block(); // 동기 방식
+        // GPT에게 윤리성 분석을 요청하고, 분석 결과에 따라 부정적이라면 true, 아니면 false를 반환
+        String sentimentAnalysis = gptService.analyzeNegative(text);
 
-            return response != null && response.isNegative();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null; // 실패하면 null 반환
-        }
-    }
-
-    // 요청 DTO
-    private record SentimentRequest(String text) {}
-
-    // 응답 DTO
-    private record SentimentResponse(String label) {
-        public Boolean isNegative() {
-            return "negative".equalsIgnoreCase(label);
-        }
+        // "negative" 결과가 있으면 부정적, 그 외에는 긍정적이라고 판단
+        return "negative".equalsIgnoreCase(sentimentAnalysis);
     }
 }
