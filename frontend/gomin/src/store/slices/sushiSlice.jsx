@@ -13,10 +13,10 @@ export const fetchRailSushi = createAsyncThunk(
 /* 본인이 등록한 초밥(질문)에 대한 리스트를 불러오는 API */
 export const fetchMySushi = createAsyncThunk(
   "sushi/fetchMySushi",
-  async ({ search = "", page = 1, size = 10 }) => {
+  async ({ keyword = "", page = 1, size = 10 }) => {
     const response = await api.get("/sushi/my", {
       params: {
-        search,
+        keyword,
         page,
         size,
       },

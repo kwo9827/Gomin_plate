@@ -119,17 +119,17 @@ const EditModal = ({ isOpen, onClose, onConfirm }) => {
               onMouseLeave={() => setIsCancelPressed(false)}
               style={{
                 ...styles.cancelButton,
-                backgroundColor: isCancelPressed ? "#863334" : "#C85253",
+                backgroundColor: isCancelPressed ? "#67523E" : "#A68564",
                 transform: isCancelPressed
                   ? "translateY(0.4vh)"
                   : "translateY(-0.2vh)",
                 boxShadow: isCancelPressed
-                  ? "0 0 0 #863334"
-                  : "0 0.4vh 0 #863334",
+                  ? "0 0 0 #67523E"
+                  : "0 0.4vh 0 #67523E",
               }}
               className="custom-placeholder"
             >
-              아니요
+              취소
             </button>
             <button
               onClick={handleSaveNickname}
@@ -138,17 +138,17 @@ const EditModal = ({ isOpen, onClose, onConfirm }) => {
               onMouseLeave={() => setIsEditPressed(false)}
               style={{
                 ...styles.editButton,
-                backgroundColor: isEditPressed ? "#67523E" : "#A68564",
+                backgroundColor: isEditPressed ? "#863334" : "#C85253",
                 transform: isEditPressed
                   ? "translateY(0.4vh)"
                   : "translateY(-0.2vh)",
                 boxShadow: isEditPressed
-                  ? "0 0 0 #67523E"
-                  : "0 0.4vh 0 #67523E",
+                  ? "0 0 0 #863334"
+                  : "0 0.4vh 0 #863334",
               }}
               className="custom-placeholder"
             >
-              네
+              확인
             </button>
           </div>
 

@@ -296,8 +296,8 @@ const PostSushi = ({ onClose }) => {
                 </button>
               </div>
               <p style={orderExplain}>
-                주문 가능 초밥의
-                <br /> 종류는 달라질 수 있습니다
+                유통기한이 임박한 초밥에는
+                <br /> 마스터냥의 조언이 달릴 수 있습니다
               </p>
               <hr style={divider} />
             </div>
@@ -316,7 +316,7 @@ const PostSushi = ({ onClose }) => {
                         checked={category === categoryMapping["연애"]}
                         onChange={handleCategoryChange}
                       />
-                      <span style={radioLabel}>연애</span>
+                      <span style={radioLabel}>사람 관계</span>
                     </label>
                     <label style={radioBtn}>
                       <input
@@ -327,7 +327,7 @@ const PostSushi = ({ onClose }) => {
                         checked={category === categoryMapping["우정"]}
                         onChange={handleCategoryChange}
                       />
-                      <span style={radioLabel}>우정</span>
+                      <span style={radioLabel}>금전 문제</span>
                     </label>
                     <label style={radioBtn}>
                       <input
@@ -338,7 +338,7 @@ const PostSushi = ({ onClose }) => {
                         checked={category === categoryMapping["진로"]}
                         onChange={handleCategoryChange}
                       />
-                      <span style={radioLabel}>진로</span>
+                      <span style={radioLabel}>건강 및 생활</span>
                     </label>
                     <label style={radioBtn}>
                       <input
@@ -349,7 +349,7 @@ const PostSushi = ({ onClose }) => {
                         checked={category === categoryMapping["건강"]}
                         onChange={handleCategoryChange}
                       />
-                      <span style={radioLabel}>건강</span>
+                      <span style={radioLabel}>공부 및 진로</span>
                     </label>
                     <label style={radioBtn}>
                       <input
@@ -360,7 +360,7 @@ const PostSushi = ({ onClose }) => {
                         checked={category === categoryMapping["가족"]}
                         onChange={handleCategoryChange}
                       />
-                      <span style={radioLabel}>가족</span>
+                      <span style={radioLabel}>자아실현</span>
                     </label>
                     <label style={radioBtn}>
                       <input
@@ -566,14 +566,14 @@ const PostSushi = ({ onClose }) => {
                       style={{
                         ...cancelButtonStyle,
                         backgroundColor: isCancelPressed
-                          ? "#863334"
-                          : "#C85253",
+                          ? "#67523E"
+                          : "#A68564",
                         transform: isCancelPressed
                           ? "translateY(0.4vh)"
                           : "translateY(-0.2vh)",
                         boxShadow: isCancelPressed
-                          ? "0 0 0 #863334"
-                          : "0 0.4vh 0 #863334",
+                          ? "0 0 0 #67523E"
+                          : "0 0.4vh 0 #67523E",
                       }}
                       onClick={handleCancelSubmit}
                       onMouseDown={() => setIsCancelPressed(true)}
@@ -586,14 +586,15 @@ const PostSushi = ({ onClose }) => {
                       style={{
                         ...confirmButtonStyle,
                         backgroundColor: isConfirmPressed
-                          ? "#67523E"
-                          : "#A68564",
+                          ? "#863334"
+                          : "#C85253",
+
                         transform: isConfirmPressed
                           ? "translateY(0.4vh)"
                           : "translateY(-0.2vh)",
                         boxShadow: isConfirmPressed
-                          ? "0 0 0 #67523E"
-                          : "0 0.4vh 0 #67523E",
+                          ? "0 0 0 #863334"
+                          : "0 0.4vh 0 #863334",
                       }}
                       onClick={handleConfirmSubmit}
                       onMouseDown={() => setIsConfirmPressed(true)}
@@ -759,7 +760,7 @@ const orderExplain = {
   margin: "0",
   height: "4vh",
   paddingRight: "1vh",
-  fontSize: "1.55vh",
+  fontSize: "1.7vh",
   textAlign: "right",
   color: "#454545",
 };
@@ -864,6 +865,7 @@ const titleText = {
   resize: "none",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
+  padding: "1vh",
   width: "44vh",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
@@ -876,7 +878,8 @@ const contentText = {
   resize: "none",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
-  height: "36.8vh",
+  padding: "1vh",
+  height: "34.4vh",
   width: "44vh",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
