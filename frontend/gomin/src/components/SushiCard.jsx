@@ -163,7 +163,7 @@ const titleStyle = {
   fontSize: "3vh",
   fontWeight: "bold",
   color: "#5A4628",
-  margin: "2vh 0 0 0",
+  margin: "0.5vh 0 0 0",
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -228,7 +228,7 @@ const remainingTimeStyle = {
 const soldoutStyle = {
   position: "absolute",
   top: "4vh",
-  left: "3.5vh",
+  left: "2.6vh",
   // backgroundColor: "#454545",
   fontWeight: "bold",
   fontSize: "2vh",
