@@ -39,6 +39,8 @@ const NotificationModal = ({ isOpen, onClose }) => {
     dispatch(markAsReadAll()).then(() => {
       // 알림 전체 읽기를 완료한 후 notifications 비우기
       dispatch(fetchNotifications({ page: 1, size: 10 })); // 또는 빈 배열로 설정
+      // 읽지 않은 알림 존재 여부 dispatch
+      dispatch(fetchUnreadExists());
     });
   };
 
