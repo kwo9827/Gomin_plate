@@ -23,6 +23,7 @@ const Navbar = () => {
   const isNew = useSelector((state) => state.member?.isNew);
 
   useEffect(() => {
+    console.log("isNew 값:", isNew);
     if (isNew) {
       setIsTutorialOpen(true); // 튜토리얼 먼저 실행
     }

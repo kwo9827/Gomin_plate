@@ -33,6 +33,7 @@ const memberSlice = createSlice({
     },
     setAuthData: (state, action) => {
       const { accessToken, refreshToken, user } = action.payload;
+      console.log("user.isNew:", user.isNew);
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
       state.nickname = user.nickname;
