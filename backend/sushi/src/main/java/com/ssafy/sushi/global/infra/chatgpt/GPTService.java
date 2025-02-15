@@ -53,6 +53,43 @@ public class GPTService {
         }
     }
 
+    public String analyzeNegative(String text){
+        try {
+            String negativePrompt = createNegativePrompt(text);
+            RequestBody body = createNegativeRequestBody(negativePrompt);
+
+            Request request = new Request.Builder()
+                    .url(GPT_API_URL)
+                    .addHeader("Authorization", "Bearer " + apiKey)
+                    .addHeader("Content-Type", "application/json")
+                    .post(body)
+                    .build();
+
+            Response response = okHttpClient.newCall(request).execute();
+
+            assert response.body() != null;
+            return parseGPTResponse(response.body().string());
+        } catch (Exception e) {
+            log.error("GPT API 윤리성 분석 실패", e);
+            throw new CustomException(ErrorCode.GPT_API_ERROR);
+        }
+    }
+
+    private String createNegativePrompt(String text) {
+        return String.format("""
+            다음 텍스트에 대해 부적절하거나 비윤리적인 내용이 포함되어 있는지 분석해주세요.
+            분석 기준: 
+            - 타인에게 상처를 줄 수 있는 언어나 표현
+            - 인종, 성별, 성적 지향 등에 대한 혐오 발언
+            - 불법적이거나 부정적인 영향을 미칠 수 있는 발언
+
+            텍스트:
+            %s
+
+            답변은 "negative" 또는 "positive"로만 해주세요.
+            """, text);
+    }
+
     private String createPrompt(String title, String content) {
 
         return String.format("""
@@ -69,6 +106,28 @@ public class GPTService {
                 title,
                 content
         );
+    }
+
+    private RequestBody createNegativeRequestBody(String negativePrompt) throws JsonProcessingException {
+        Map<String, Object> messageSystem = new LinkedHashMap<>();
+        messageSystem.put("role", "system");
+        messageSystem.put("content", "    이 곳은 사람들이 익명으로 고민을 올리는 익명 커뮤니티입니다. \n" +
+                "    당신은 고민에 달린 답변에 대해 분석을 해야합니다. \n");
+
+        Map<String, Object> messageUser = new LinkedHashMap<>();
+        messageUser.put("role", "user");
+        messageUser.put("content", negativePrompt);
+
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
+        jsonBody.put("model", "gpt-4o-mini");
+        jsonBody.put("messages", Arrays.asList(messageSystem, messageUser));
+        jsonBody.put("max_tokens", 500);
+        jsonBody.put("temperature", 0.7);
+
+        // ObjectMapper로 JSON 문자열 생성
+        String jsonString = objectMapper.writeValueAsString(jsonBody);
+
+        return RequestBody.create(jsonString, JSON);
     }
 
     private RequestBody createRequestBody(String prompt) throws JsonProcessingException {
