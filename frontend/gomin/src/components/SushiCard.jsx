@@ -58,25 +58,24 @@ const SushiCard = ({
 
           <div style={sushiOuterImageStyle}>
             <div style={sushiImageStyle}>
-              <Sushi isushiId={id} category={category} sushiType={sushiType} />
+              <Sushi sushiId={id} category={category} sushiType={sushiType} />
             </div>
             {!isClosed ? (
-              <div>
-                {remainingAnswers > 0 ? (
-                  <div style={remainingAnswersStyle}>
-                    {maxAnswers - remainingAnswers}/{maxAnswers}
-                  </div>
-                ) : (
-                  <div style={remainingAnswersStyle}>SOLD OUT</div>
-                )}
+              <>
+                <div style={remainingAnswersStyle}>
+                  {maxAnswers - remainingAnswers}/{maxAnswers}
+                </div>
                 {remainingTime <= 10800 && remainingTime > 0 && (
                   <div style={remainingTimeStyle}>마감 임박!</div>
                 )}
-              </div>
+              </>
             ) : (
-              <div style={remainingAnswersStyle}>
-                {maxAnswers - remainingAnswers}
-              </div>
+              <>
+                <div style={remainingAnswersStyle}>
+                  {maxAnswers - remainingAnswers}
+                </div>
+                {remainingTime > 0 && <div style={soldoutStyle}>SOLD OUT</div>}
+              </>
             )}
           </div>
 
@@ -84,32 +83,6 @@ const SushiCard = ({
             <div style={titleStyle}>{title}</div>
             <hr style={dividerStyle} />
             <div style={contentStyle}>{content}</div>
-
-            {/* {!isClosed ? (
-              <div>
-                {remainingAnswers > 0 ? (
-                  <div style={remainingAnswersStyle}>
-                    {maxAnswers - remainingAnswers}/{maxAnswers}
-                  </div>
-                ) : (
-                  <div style={remainingAnswersStyle}>답변이 모두 달렸어요!</div>
-                )}
-                {remainingTime > 0 && (
-                  <div style={remainingAnswersStyle}>
-                    남은 시간: {formatTime(remainingTime)}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div style={remainingAnswersStyle}>
-                {maxAnswers - remainingAnswers}개의 답변이 달렸어요 !
-                {remainingTime > 0 && (
-                  <div style={remainingAnswersStyle}>
-                    남은 시간: {formatTime(remainingTime)}
-                  </div>
-                )}
-              </div>
-            )} */}
           </div>
         </div>
       </div>
@@ -217,7 +190,6 @@ const remainingAnswersStyle = {
   position: "relative",
   textAlign: "right",
   bottom: 0,
-  fontSize: "1.8vh",
   color: "#f0f0f0",
   marginTop: "6.5vh",
   marginLeft: "9vh",
@@ -242,15 +214,37 @@ const remainingTimeStyle = {
   fontSize: "2vh",
   border: "none",
   borderRadius: "0.5vh",
-  width: "7vh",
+  width: "auto",
   height: "3vh",
   color: "#f0f0f0",
   marginTop: "0.8vh",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  padding: "0 0.5vh",
+  padding: "0 1vh",
   transform: "rotate(-25deg)",
+};
+
+const soldoutStyle = {
+  position: "absolute",
+  top: "4vh",
+  left: "3.5vh",
+  // backgroundColor: "#454545",
+  fontWeight: "bold",
+  fontSize: "2vh",
+  textShadow:
+    "0.3vh 0.3vh 0.6vh rgb(255, 255, 255), -0.3vh -0.3vh 0.6vh rgb(255, 255, 255)",
+  border: "0.5vh solid #454545",
+  borderRadius: "0.5vh",
+  width: "auto",
+  height: "3vh",
+  color: "#454545",
+  marginTop: "0.8vh",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "0 0.5vh",
+  transform: "rotate(-15deg)",
 };
 
 export default SushiCard;
