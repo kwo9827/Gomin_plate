@@ -14,11 +14,6 @@ const NegativeAnswerModal = ({ isOpen, onClose, onConfirm }) => {
     <div style={modalStyles.overlay}>
       <div style={styles.modal}>
         <div style={styles.innerBox}>
-          <img
-            src={postItOrange}
-            alt="Warning PostIt"
-            style={styles.warningPostIt}
-          />
           <div style={styles.warningContent}>
             <p>
               부적절한 내용을 포함할 수 있습니다.
