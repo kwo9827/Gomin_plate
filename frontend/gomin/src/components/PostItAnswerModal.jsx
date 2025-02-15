@@ -1,5 +1,5 @@
 import React from "react";
-import postItImage from "../assets/PostIt.png";
+import postItImage from "../assets/postIt.webp";
 
 const PostItAnswerModal = ({ isOpen, onClose, content, isLiked }) => {
   if (!isOpen) return null;

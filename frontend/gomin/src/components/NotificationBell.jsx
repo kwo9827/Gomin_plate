@@ -1,25 +1,27 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import { useSpring, animated } from "@react-spring/web";
 import alarmTrueImg from "../assets/home/alarmON.webp";
 import alarmFalseImg from "../assets/home/alarmOFF.webp";
 import notificationBell from "../assets/sounds/notificationBell.mp3";
+import BgmContext from '../context/BgmProvider';
 
 const NotificationBell = ({ onClick, hasUnread }) => {
   const audioRef = useRef(null);
   const prevHasUnread = useRef(hasUnread); // 이전 값 저장
   const [shake, setShake] = useState(false);
+  const { isMuted } = useContext(BgmContext);
 
   // 흔들림 애니메이션 설정
   const shakeAnimation = useSpring({
     from: { transform: "translateX(0px) rotate(0deg)" },
     to: shake
       ? [
-        { transform: "translateX(-5px) rotate(-5deg)" },
-        { transform: "translateX(5px) rotate(5deg)" },
-        { transform: "translateX(-5px) rotate(-5deg)" },
-        { transform: "translateX(5px) rotate(5deg)" },
-        { transform: "translateX(0px) rotate(0deg)" },
-      ]
+          { transform: "translateX(-2px) rotate(-2deg)" },
+          { transform: "translateX(2px) rotate(2deg)" },
+          { transform: "translateX(-2px) rotate(-2deg)" },
+          { transform: "translateX(2px) rotate(2deg)" },
+          { transform: "translateX(0px) rotate(0deg)" },
+        ]
       : { transform: "translateX(0px) rotate(0deg)" },
     config: { duration: 50 },
     reset: true,
@@ -34,12 +36,13 @@ const NotificationBell = ({ onClick, hasUnread }) => {
     prevHasUnread.current = hasUnread; // 이전 값 업데이트
   }, [hasUnread]);
 
-  const handlePlaySound = () => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.5;
+  // 흔들림 시작 시 소리 재생
+  useEffect(() => {
+    if (shake && !isMuted && audioRef.current) {
+      audioRef.current.volume = 0.4;
       audioRef.current.play();
     }
-  };
+  }, [shake, isMuted]); // shake 상태와 isMuted 상태가 변경될 때마다 실행
 
   return (
     <animated.div
@@ -54,6 +57,7 @@ const NotificationBell = ({ onClick, hasUnread }) => {
         width: "50vh",
         height: "100%",
         zIndex: 2,
+        transformOrigin: "90% 30%",
         ...shakeAnimation, // 애니메이션 적용
       }}
     >
@@ -61,7 +65,6 @@ const NotificationBell = ({ onClick, hasUnread }) => {
       <div
         onClick={() => {
           onClick();
-          handlePlaySound();
         }}
         style={{
           position: "absolute",

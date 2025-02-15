@@ -176,6 +176,8 @@ const MySushiList = () => {
                   remainingAnswers={displaySushi[index].remainingAnswers}
                   maxAnswers={displaySushi[index].maxAnswers}
                   isClosed={displaySushi[index].isClosed}
+                  createdAt={displaySushi[index].createdAt}
+                  expirationTime={displaySushi[index].expirationTime}
                 />
               </animated.li>
             ))}

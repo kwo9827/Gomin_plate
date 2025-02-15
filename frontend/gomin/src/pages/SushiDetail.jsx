@@ -76,13 +76,16 @@ const SushiDetail = () => {
   }, [sushiId, dispatch, navigate, modalOpen]);
 
   const openAnswer = (answer, index) => {
+    const postItColor = postItColors[postItImages[index % 5]];
+
     if (answer.isNegative) {
       console.log("부적절한 답변");
-      setNegativeAnswer(answer);
+      // setNegativeAnswer(answer);
+      setNegativeAnswer({ ...answer, postItColor });
       setNegativeModalOpen(true);
     } else {
       console.log("적절한 답변");
-      const postItColor = postItColors[postItImages[index % 5]];
+      // const postItColor = postItColors[postItImages[index % 5]];
       setSelectedAnswer({ ...answer, postItColor });
       setModalOpen(true);
     }

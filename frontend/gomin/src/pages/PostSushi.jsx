@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSushi } from "../store/slices/sushiSlice";
 import Slider from "react-slick";
@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import nextPage from "../assets/sounds/nextPage.mp3";
+import BgmContext from '../context/BgmProvider';
 
 import cuttle from "../assets/sushi/cuttle.webp";
 import eel from "../assets/sushi/eel.webp";
@@ -26,6 +27,8 @@ import padlock_color from "../assets/home/padlock_color.webp";
 import padlock from "../assets/home/padlock.webp";
 
 import x from "../assets/x-twitter.png";
+
+import CommonAlertModal from "../components/CommonAlertModal";
 
 const styles = `
   @keyframes slideUp {
@@ -84,6 +87,11 @@ const PostSushi = ({ onClose }) => {
   const [isCancelPressed, setIsCancelPressed] = useState(false);
   const isSubmittingRef = useRef(false);
   const reRender = useCallback(() => {}, []);
+  const [alertModal, setAlertModal] = useState({
+    isOpen: false,
+    message: "",
+  });
+  const { isMuted } = useContext(BgmContext);
 
   const categoryMapping = {
     연애: 1,
@@ -155,21 +163,29 @@ const PostSushi = ({ onClose }) => {
     }
   }, []);
 
+  const showAlert = (message) => {
+    setAlertModal({
+      isOpen: true,
+      message,
+    });
+  };
+
   const handleNext = () => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.5;
+      // 음소거 상태에 따라 볼륨 설정
+      audioRef.current.volume = isMuted ? 0 : 0.5;
       audioRef.current.play();
     }
     if (!category) {
-      alert("카테고리를 설정해주세요.");
+      showAlert("카테고리를 설정해주세요.");
       return;
     }
     if (sushiType === -1) {
-      alert("사용할 수 없는 초밥입니다.");
+      showAlert("사용할 수 없는 초밥입니다.");
       return;
     }
     if (!sushiType) {
-      alert("초밥을 골라주세요.");
+      showAlert("초밥을 골라주세요.");
       return;
     }
     setStep(2);
@@ -177,7 +193,8 @@ const PostSushi = ({ onClose }) => {
 
   const handleBack = () => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.5;
+      // 음소거 상태에 따라 볼륨 설정
+      audioRef.current.volume = isMuted ? 0 : 0.5;
       audioRef.current.play();
     }
     setStep(1);
@@ -185,15 +202,15 @@ const PostSushi = ({ onClose }) => {
 
   const handleSubmit = () => {
     if (title.length === 0 || content.length === 0) {
-      alert("제목과 내용을 모두 입력해주세요.");
+      showAlert("제목과 내용을 모두 입력해주세요.");
       return;
     }
     if (title.length > 30) {
-      alert("제목은 30자 이내로 입력해주세요.");
+      showAlert("제목은 30자 이내로 입력해주세요.");
       return;
     }
     if (content.length > 500) {
-      alert("내용은 500자 이내로 입력해주세요.");
+      showAlert("내용은 500자 이내로 입력해주세요.");
       return;
     }
     setShowModal(true);
@@ -242,7 +259,7 @@ const PostSushi = ({ onClose }) => {
   const handleCopyClipBoard = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
-      alert("클립보드에 링크가 복사되었어요.");
+      showAlert("클립보드에 링크가 복사되었어요.");
     } catch (err) {
       console.log(err);
     }
@@ -656,7 +673,7 @@ const PostSushi = ({ onClose }) => {
                       <img
                         src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
                         alt="카카오톡 아이콘"
-                        style={iconStyleF}
+                        style={iconStyleK}
                       />
                     </button>
 
@@ -672,7 +689,7 @@ const PostSushi = ({ onClose }) => {
                       }}
                     >
                       <i
-                        className="fab fa-facebook-square"
+                        className="fa-brands fa-facebook-f"
                         style={iconStyleF}
                       ></i>
                     </button>
@@ -693,6 +710,13 @@ const PostSushi = ({ onClose }) => {
           </div>
         </div>
       </div>
+
+      {/* 공통 알림 모달 */}
+      <CommonAlertModal
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, message: "" })}
+        message={alertModal.message}
+      />
     </>
   );
 };
@@ -939,7 +963,7 @@ const buttonContainer = {
   width: "100%",
   marginTop: "3vh",
   marginBottom: "1vh",
-  gap: "5vh",
+  gap: "3vh",
 };
 
 const iconButtonStyle = {
@@ -965,19 +989,32 @@ const iconStyleR = {
   verticalAlign: "middle", // 수직 정렬 맞추기
 };
 
-const iconStyleF = {
+const iconStyleK = {
   fontSize: "3.2em", // 아이콘 크기 일관성 (조금 작게 조정)
-  color: "#3b5998", // 아이콘 색상
   width: "40px", // 동일한 크기로 지정
   height: "40px", // 동일한 크기로 지정
   display: "inline-block",
   verticalAlign: "middle", // 수직 정렬 맞추기
 };
 
+const iconStyleF = {
+  fontSize: "2em",
+  backgroundColor: "#3b5998",
+  color: "#ffffff",
+  width: "40px",
+  height: "40px",
+  borderRadius: "15%",
+  lineHeight: "40px",
+  display: "inline-block",
+  textAlign: "center",
+  transition: "background-color 0.3s ease-in-out",
+  verticalAlign: "middle", // 수직 정렬 맞추기
+};
+
 const iconStyleX = {
   color: "#3b5998", // 아이콘 색상
-  width: "45px", // 동일한 크기로 지정
-  height: "45px", // 동일한 크기로 지정
+  width: "47px", // 동일한 크기로 지정
+  height: "47px", // 동일한 크기로 지정
   display: "inline-block",
   verticalAlign: "middle", // 수직 정렬 맞추기
 };

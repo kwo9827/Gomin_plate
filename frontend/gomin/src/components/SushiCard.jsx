@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sushi from "./Sushi";
 
@@ -11,9 +11,36 @@ const SushiCard = ({
   showHeart = false,
   remainingAnswers,
   maxAnswers,
-  isClosed
+  isClosed,
+  expirationTime,
 }) => {
   const navigate = useNavigate();
+  const [remainingTime, setRemainingTime] = useState(0);
+
+  useEffect(() => {
+    const expirationDate = new Date(expirationTime).getTime();
+
+    const intervalId = setInterval(() => {
+      const currentTime = new Date().getTime();
+      const timeLeft = expirationDate - currentTime;
+
+      if (timeLeft <= 0) {
+        clearInterval(intervalId);
+        setRemainingTime(0);
+      } else {
+        setRemainingTime(Math.floor(timeLeft / 1000)); // 소수점 버리고 초 단위로
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId); // 컴포넌트가 언마운트되면 인터벌 정리
+  }, [expirationTime]);
+
+  const formatTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${hours}h ${minutes}m ${secs}s`;
+  };
 
   const handleClick = () => {
     if (!id) {
@@ -31,33 +58,31 @@ const SushiCard = ({
 
           <div style={sushiOuterImageStyle}>
             <div style={sushiImageStyle}>
-              <Sushi isushiId={id} category={category} sushiType={sushiType} />
+              <Sushi sushiId={id} category={category} sushiType={sushiType} />
             </div>
+            {!isClosed ? (
+              <>
+                <div style={remainingAnswersStyle}>
+                  {maxAnswers - remainingAnswers}/{maxAnswers}
+                </div>
+                {remainingTime <= 10800 && remainingTime > 0 && (
+                  <div style={remainingTimeStyle}>마감 임박!</div>
+                )}
+              </>
+            ) : (
+              <>
+                <div style={remainingAnswersStyle}>
+                  {maxAnswers - remainingAnswers}
+                </div>
+                {remainingTime > 0 && <div style={soldoutStyle}>SOLD OUT</div>}
+              </>
+            )}
           </div>
 
           <div style={textContainerStyle}>
             <div style={titleStyle}>{title}</div>
             <hr style={dividerStyle} />
             <div style={contentStyle}>{content}</div>
-
-            {!isClosed ? (
-              <div>
-                {remainingAnswers > 0 ? (
-                  <div style={remainingAnswersStyle}>
-                    마감까지 {remainingAnswers}명 남았어요
-                  </div>
-                ) : (
-                  <div style={remainingAnswersStyle}>
-                    답변이 모두 달렸어요!
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div style={remainingAnswersStyle}>
-                {maxAnswers - remainingAnswers}개의 답변이 달렸어요 !
-              </div>
-            )}
-
           </div>
         </div>
       </div>
@@ -138,7 +163,7 @@ const titleStyle = {
   fontSize: "3vh",
   fontWeight: "bold",
   color: "#5A4628",
-  margin: "1vh 0",
+  margin: "0.5vh 0 0 0",
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -162,10 +187,64 @@ const dividerStyle = {
 };
 
 const remainingAnswersStyle = {
-  fontSize: "1.8vh",
-  color: "#E86100",
+  position: "relative",
+  textAlign: "right",
+  bottom: 0,
+  color: "#f0f0f0",
+  marginTop: "6.5vh",
+  marginLeft: "9vh",
+  padding: "0 1vh",
+  height: "3vh",
+  minWidth: "1vh",
+  width: "auto",
+  border: "none",
+  borderRadius: "1vh",
+  fontSize: "2.2vh",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: "#E86100",
+};
+
+const remainingTimeStyle = {
+  position: "absolute",
+  top: "1.7vh",
+  left: "1.3vh",
+  backgroundColor: "#454545",
+  fontSize: "2vh",
+  border: "none",
+  borderRadius: "0.5vh",
+  width: "auto",
+  height: "3vh",
+  color: "#f0f0f0",
   marginTop: "0.8vh",
-  fontWeight: "500",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "0 1vh",
+  transform: "rotate(-25deg)",
+};
+
+const soldoutStyle = {
+  position: "absolute",
+  top: "4vh",
+  left: "2.6vh",
+  // backgroundColor: "#454545",
+  fontWeight: "bold",
+  fontSize: "2vh",
+  textShadow:
+    "0.3vh 0.3vh 0.6vh rgb(255, 255, 255), -0.3vh -0.3vh 0.6vh rgb(255, 255, 255)",
+  border: "0.5vh solid #454545",
+  borderRadius: "0.5vh",
+  width: "auto",
+  height: "3vh",
+  color: "#454545",
+  marginTop: "0.8vh",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "0 0.5vh",
+  transform: "rotate(-15deg)",
 };
 
 export default SushiCard;

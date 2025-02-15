@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { countLike } from "../store/slices/memberSlice";
@@ -12,6 +12,7 @@ import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 import SushiUnlockBar from "../components/SushiUnlockBar";
+import BgmContext from "../context/BgmProvider";
 
 import { useSpring, animated } from "@react-spring/web";
 
@@ -27,6 +28,7 @@ import { setIsNew } from "../store/slices/memberSlice";
 import Tutorial from "../components/Tutorial";
 import { useSSE } from "../hooks/useSSE";
 import SSEIndicator from "../components/SSEIndicator";
+import AnswerSubmitCheckModal from "../components/AnswerSubmitCheckModal";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -42,8 +44,10 @@ const Home = () => {
   const [isSushiViewOpen, setIsSushiViewOpen] = useState(false);
   const [selectedSushiData, setSelectedSushiData] = useState(null);
   const [startTutorial, setStartTutorial] = useState(false);
+  const [showAnswerSubmitModal, setShowAnswerSubmitModal] = useState(false);
 
   const audioRef = useRef(null);
+  const { isMuted } = useContext(BgmContext);
 
   // // ✅ `handleSetIsNew` 함수 정의
   // const handleSetIsNew = (value) => {
@@ -86,6 +90,10 @@ const Home = () => {
 
   const restartTutorial = () => {
     setStartTutorial(true);
+  };
+
+  const handleAnswerSubmit = () => {
+    setShowAnswerSubmitModal(true);
   };
 
   // useSSE();
@@ -168,7 +176,8 @@ const Home = () => {
   // 초밥 모달이 열릴 때 소리 재생
   useEffect(() => {
     if (isSushiViewOpen && audioRef.current) {
-      audioRef.current.volume = 0.4;
+      // 음소거 상태에 따라 볼륨 설정
+      audioRef.current.volume = isMuted ? 0 : 0.5;
       audioRef.current.play();
     }
   }, [isSushiViewOpen]);
@@ -189,9 +198,16 @@ const Home = () => {
 
   const deskSpring = useSpring({
     opacity: allImagesLoaded ? 1 : 0,
-    transform: allImagesLoaded ? "translateY(0)" : "translateY(50%)",
+    transform: allImagesLoaded ? "translateX(0)" : "translateX(-50%)",
     config: { tension: 170, friction: 26 },
     delay: 300,
+  });
+
+  const bellSpring = useSpring({
+    opacity: allImagesLoaded ? 1 : 0,
+    transform: allImagesLoaded ? "translateY(0)" : "translateY(-50%)",
+    config: { tension: 300, friction: 10 },
+    delay: 1700,
   });
 
   return (
@@ -232,8 +248,19 @@ const Home = () => {
           }}
           onLoad={() => handleImageLoad("master")}
         ></animated.div>
-        {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
-        <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
+
+        <animated.div
+          style={{
+            ...styles.backgroundLayer,
+            zIndex: 2,
+            opacity: bellSpring.opacity,
+            transform: bellSpring.transform,
+          }}
+        >
+          {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
+          <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
+        </animated.div>
+
         {/* 튜토리얼 버튼 */}
         <div style={styles.buttonContainer}>
           <button style={styles.button} onClick={restartTutorial}>
@@ -321,6 +348,7 @@ const Home = () => {
               <SushiView
                 isOpen={isSushiViewOpen}
                 onClose={() => setIsSushiViewOpen(false)}
+                onAnswerSubmit={handleAnswerSubmit}
                 sushiId={selectedSushiData.sushiId}
                 category={selectedSushiData.category}
                 sushiType={selectedSushiData.sushiType}
@@ -328,6 +356,10 @@ const Home = () => {
                 expirationTime={selectedSushiData.expirationTime}
               />
             )}
+            <AnswerSubmitCheckModal
+              isOpen={showAnswerSubmitModal}
+              onClose={() => setShowAnswerSubmitModal(false)}
+            />
 
             <SushiUnlock
               isOpen={isSushiUnlockOpen}
