@@ -18,7 +18,6 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
   const [showDialog, setShowDialog] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-
   const [isDialogOpen, setIsDialogOpen] = useState(true);
 
   const handleCloseDialog = () => {
@@ -26,7 +25,7 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
   };
 
   const dialogues = [
-    "어서오세요. <br />처음 뵙는 분이군요.",
+    "어서오세요. 처음 뵙는 분이군요.",
     "고민 한접시의 이용 방법을 알려드릴게요.",
     "준비가 되면 화면을 눌러 진행하세요!",
   ];
@@ -37,7 +36,7 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
     if (showFullTutorial) {
       const timer = setTimeout(() => {
         setShowDialog(true);
-      }, 2000);
+      }, 1500);
       return () => clearTimeout(timer);
     } else {
       setShowTutorial(true);
@@ -57,7 +56,8 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
     }
   };
 
-  const handleTutorialNext = () => {
+  const handleTutorialNext = (e) => {
+    e.stopPropagation();
     if (currentSlide < tutorialSlides.length - 1) {
       setCurrentSlide(currentSlide + 1);
     } else {
@@ -97,9 +97,6 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
             onClose={handleCloseDialog}
             isOpen={isDialogOpen}
             onComplete={handleDialogComplete}
-            renderDialogContent={(content) => (
-              <div dangerouslySetInnerHTML={{ __html: content }} />
-            )}
           />
         </div>
       )}
@@ -155,19 +152,38 @@ const styles = {
     zIndex: 9,
   },
   tutorialContent: {
-    // backgroundColor: "white",
     borderRadius: "12px",
     width: "45vh",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     overflow: "hidden",
+    position: "relative",
+  },
+  navigationContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: "flex",
+    zIndex: 2,
+  },
+  navigationLeft: {
+    width: "50%",
+    height: "100%",
+    cursor: "pointer",
+  },
+  navigationRight: {
+    width: "50%",
+    height: "100%",
+    cursor: "pointer",
   },
   tutorialImage: {
     width: "100%",
     height: "auto",
     display: "block",
-    objectFit: "contain", // 이미지 비율 유지
+    objectFit: "contain",
   },
   pagination: {
     display: "flex",
