@@ -5,14 +5,17 @@ import {
   fetchMySushiDetail,
   clearCurrentSushi,
 } from "../store/slices/sushiSlice";
-import PostItModal from "../components/PostItModal";
-import NegativeAnswerModal from "../components/NegativeAnswerModal";
+import PostItModal from "../components/sushiAnswerModal/PostItModal";
+import NegativeAnswerModal from "../components/sushiAnswerModal/NegativeAnswerModal";
+import GPTAnswerModal from "../components/sushiAnswerModal/GPTAnswerModal";
 
 import postItPink from "../assets/postIt/postIt1.webp";
 import postItGreen from "../assets/postIt/postIt2.webp";
 import postItBlue from "../assets/postIt/postIt3.webp";
 import postItRed from "../assets/postIt/postIt4.webp";
 import postItOrange from "../assets/postIt/postIt5.webp";
+
+import PawPrintIcon from "../components/icons/PawPrintIcon";
 
 const postItImages = [
   postItPink, // 1
@@ -45,6 +48,9 @@ const SushiDetail = () => {
   /* 부적절한 답변 여는 모달 */
   const [negativeModalOpen, setNegativeModalOpen] = useState(false);
   const [negativeAnswer, setNegativeAnswer] = useState(null);
+
+  // GPT 답변 여는 모달
+  const [gptModalOpen, setGptModalOpen] = useState(false);
 
   // 애니메이션 관련 state
   const [isVisible, setIsVisible] = useState(false);
@@ -83,6 +89,9 @@ const SushiDetail = () => {
       // setNegativeAnswer(answer);
       setNegativeAnswer({ ...answer, postItColor });
       setNegativeModalOpen(true);
+    } else if (answer.isGPT) {
+      setSelectedAnswer({ ...answer, postItColor });
+      setGptModalOpen(true);
     } else {
       console.log("적절한 답변");
       // const postItColor = postItColors[postItImages[index % 5]];
@@ -96,6 +105,9 @@ const SushiDetail = () => {
   };
   const closeNegativeModal = () => {
     setNegativeModalOpen(false);
+  };
+  const closeGptModal = () => {
+    setGptModalOpen(false);
   };
 
   const confirmNegativeAnswer = () => {
@@ -208,10 +220,21 @@ const SushiDetail = () => {
                 >
                   <div style={{ ...styles.postIt, backgroundImage: "none" }}>
                     <p style={styles.postItText}>
-                      {item.content.length > 30
-                        ? `${item.content.slice(0, 30)}...`
+                      {item.content.length > 20
+                        ? `${item.content.slice(0, 20)}...`
                         : item.content}
                     </p>
+
+                    {item.isGPT && (
+                      <>
+                        <div style={styles.previewPawPrintTop}>
+                          <PawPrintIcon />
+                        </div>
+                        <div style={styles.previewPawPrintBottom}>
+                          <PawPrintIcon />
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
@@ -244,6 +267,14 @@ const SushiDetail = () => {
         />
       )}
 
+      {/* GPT 답변 모달 */}
+      {gptModalOpen && (
+        <GPTAnswerModal
+          isOpen={gptModalOpen}
+          onClose={closeGptModal}
+          answer={selectedAnswer}
+        />
+      )}
       {/* 부적절한 답변 모달 */}
       {negativeModalOpen && (
         <NegativeAnswerModal
@@ -464,6 +495,22 @@ const styles = {
     height: "100vh",
     fontSize: "3vh",
     color: "red",
+  },
+  previewPawPrintTop: {
+    position: "absolute",
+    top: "0%", // 더 위로 이동
+    left: "0%", // 더 왼쪽으로 이동
+    transform: "scale(0.7) rotate(-15deg)", // 약간 회전 추가
+    zIndex: 3,
+    color: "#4a4a4a",
+  },
+  previewPawPrintBottom: {
+    position: "absolute",
+    bottom: "-10%", // 더 아래로 이동
+    right: "0%", // 더 오른쪽으로 이동
+    transform: "scale(0.7) rotate(15deg)", // 약간 회전 추가
+    zIndex: 3,
+    color: "#4a4a4a",
   },
 };
 
