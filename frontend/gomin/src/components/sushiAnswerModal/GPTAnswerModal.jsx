@@ -42,7 +42,7 @@ const styles = {
     zIndex: 3,
   },
   headerTitle: {
-    color: "#1e4b8f", // 더 진한 파란색
+    color: "#424242", // 더 진한 파란색
     fontSize: "1.8vh",
     // fontWeight: "bold",
   },
