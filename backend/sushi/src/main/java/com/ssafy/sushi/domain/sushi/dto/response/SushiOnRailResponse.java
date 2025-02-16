@@ -17,6 +17,7 @@ public class SushiOnRailResponse {
     private Integer maxAnswers;
     private Integer remainingAnswers;
     private LocalDateTime expirationTime;
+    private Boolean isClosed;
 
     public static SushiOnRailResponse of(Sushi sushi) {
         return SushiOnRailResponse.builder()
@@ -28,6 +29,7 @@ public class SushiOnRailResponse {
                 .maxAnswers(sushi.getMaxAnswers())
                 .remainingAnswers(sushi.getRemainingAnswers())
                 .expirationTime(sushi.getExpirationTime())
+                .isClosed(sushi.getIsClosed())
                 .build();
     }
 }
