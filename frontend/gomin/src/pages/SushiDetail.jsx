@@ -293,7 +293,7 @@ const styles = {
     padding: "3vh",
     position: "relative",
     height: "100vh",
-    width: "100%",
+    width: "55vh",
     overflow: "hidden",
     boxSizing: "border-box",
   },
@@ -302,7 +302,7 @@ const styles = {
     backgroundColor: "#FFFEEC",
     position: "relative",
     zIndex: 2,
-    width: "100%",
+    width: "48vh",
     maxWidth: "60vh",
     height: "80vh",
     margin: "-0.5vh auto",
@@ -380,7 +380,7 @@ const styles = {
   /**포스트잇 컨테이너 */
   postItContainer: {
     position: "relative",
-    width: "100%",
+    width: "40vh",
     height: "25vh",
     top: "5vh",
     left: "5.2vh",
