@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -44,11 +45,23 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CustomException.class)
-    protected ResponseEntity<ApiResponse<Object>> handleCustomException(CustomException e) {
-        log.error("HandleCustomException", e);
-        ErrorCode errorCode = e.getErrorCode();
+    protected ResponseEntity<ApiResponse<Object>> handleCustomException(CustomException e, HttpServletRequest request) {
+        if (!e.getParameters().isEmpty()) {
+            log.error("[CustomException] {} {}: {} - Parameters: {}",
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    e.getMessage(),
+                    e.getParameters()
+            );
+        } else {
+            log.error("[CustomException] {} {}: {}",
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    e.getMessage()
+            );
+        }
 
-        return ApiResponse.error(errorCode);
+        return ApiResponse.error(e.getErrorCode());
     }
 
     @ExceptionHandler(Exception.class)
@@ -68,12 +81,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ApiResponse<Object>> handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException e) {
-        log.error("HandleMethod :{}", e.getBindingResult().getFieldError().getDefaultMessage());
-        log.error("getField :{}", e.getBindingResult().getFieldError().getField());
+            MethodArgumentNotValidException e, HttpServletRequest request) {
 
-        String field = e.getBindingResult().getFieldError().getField();
-        String defaultMessage = e.getBindingResult().getFieldError().getDefaultMessage();
+        FieldError fieldError = e.getBindingResult().getFieldError();
+        String field = fieldError.getField();
+        String defaultMessage = fieldError.getDefaultMessage();
+
+        log.error("[ValidationException] {} {}: field '{}' - {}",
+                request.getMethod(),
+                request.getRequestURI(),
+                field,
+                defaultMessage
+        );
 
         return ApiResponse.error(ErrorCode.INVALID_INPUT_VALUE, field + " : " + defaultMessage);
     }
