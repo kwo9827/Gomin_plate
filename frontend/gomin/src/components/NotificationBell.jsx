@@ -1,54 +1,76 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
+import { useSpring, animated } from "@react-spring/web";
 import alarmTrueImg from "../assets/home/alarmON.webp";
 import alarmFalseImg from "../assets/home/alarmOFF.webp";
 import notificationBell from "../assets/sounds/notificationBell.mp3";
+import BgmContext from '../context/BgmProvider';
 
-/** 알림창을 열기 위한 Modal 트리거 컴포넌트
- * 1. 클릭 시 알림 모달이 열리도록 되어있음.
- * 2. 알림 모달에 관련해서는 Home page에 구현 되어있음
- * 3. 디자인만 수정하면 바로 사용가능 함.
- */
 const NotificationBell = ({ onClick, hasUnread }) => {
-  const audioRef = useRef(null); // audio 요소를 참조하기 위한 ref 생성
+  const audioRef = useRef(null);
+  const prevHasUnread = useRef(hasUnread); // 이전 값 저장
+  const [shake, setShake] = useState(false);
+  const { isMuted } = useContext(BgmContext);
 
-  // 클릭 시 효과음 재생
-  const handlePlaySound = () => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.5; // 소리를 50%로 설정
-      audioRef.current.play(); // 효과음 재생
+  // 흔들림 애니메이션 설정
+  const shakeAnimation = useSpring({
+    from: { transform: "translateX(0px) rotate(0deg)" },
+    to: shake
+      ? [
+          { transform: "translateX(-2px) rotate(-2deg)" },
+          { transform: "translateX(2px) rotate(2deg)" },
+          { transform: "translateX(-2px) rotate(-2deg)" },
+          { transform: "translateX(2px) rotate(2deg)" },
+          { transform: "translateX(0px) rotate(0deg)" },
+        ]
+      : { transform: "translateX(0px) rotate(0deg)" },
+    config: { duration: 50 },
+    reset: true,
+    onRest: () => setShake(false),
+  });
+
+  // hasUnread가 false → true로 변경될 때만 흔들리도록 설정
+  useEffect(() => {
+    if (!prevHasUnread.current && hasUnread) {
+      setShake(true);
     }
-  };
-  
+    prevHasUnread.current = hasUnread; // 이전 값 업데이트
+  }, [hasUnread]);
+
+  // 흔들림 시작 시 소리 재생
+  useEffect(() => {
+    if (shake && !isMuted && audioRef.current) {
+      audioRef.current.volume = 0.4;
+      audioRef.current.play();
+    }
+  }, [shake, isMuted]); // shake 상태와 isMuted 상태가 변경될 때마다 실행
+
   return (
-    <div
+    <animated.div
       style={{
         backgroundImage: `url("${hasUnread ? alarmTrueImg : alarmFalseImg}")`,
-
         position: "absolute",
         top: "-49%",
         right: "0",
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
-
         width: "50vh",
         height: "100%",
-
         zIndex: 2,
+        transformOrigin: "90% 30%",
+        ...shakeAnimation, // 애니메이션 적용
       }}
     >
-      {/* 클릭 이벤트를 감지할 투명 버튼 */}
+      {/* 클릭 이벤트 감지 투명 버튼 */}
       <div
-        onClick={() => { 
+        onClick={() => {
           onClick();
-          handlePlaySound(); // 효과음 재생
         }}
         style={{
           position: "absolute",
           top: "61%",
           right: "2%",
           transform: "translate(-50%, -50%)",
-          // 클릭 가능 영역 조정
           width: "12%",
           height: "12%",
           backgroundColor: "rgb(0, 0, 0, 0)",
@@ -59,7 +81,7 @@ const NotificationBell = ({ onClick, hasUnread }) => {
       <audio ref={audioRef}>
         <source src={notificationBell} type="audio/mp3" />
       </audio>
-    </div>
+    </animated.div>
   );
 };
 

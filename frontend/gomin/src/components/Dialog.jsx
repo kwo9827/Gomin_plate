@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "../styles/dialog.css";
 
 const Dialog = ({
@@ -13,6 +13,18 @@ const Dialog = ({
   const [isTyping, setIsTyping] = useState(false);
   const [showNextIndicator, setShowNextIndicator] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const intervalRef = useRef(null);
+
+  const showFullText = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    const currentDialogue = String(dialogues[currentIndex] || "");
+    setDisplayText(currentDialogue);
+    setIsTyping(false);
+    setShowNextIndicator(true);
+  };
 
   useEffect(() => {
     if (!isOpen) {
@@ -21,12 +33,16 @@ const Dialog = ({
       setIsTyping(false);
       setShowNextIndicator(false);
       setIsCompleted(false);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
       return;
     }
 
     if (!dialogues.length || currentIndex >= dialogues.length) {
       setIsCompleted(true);
-      onComplete?.(); // 대화가 완료되면 onComplete 호출
+      onComplete?.();
       return;
     }
 
@@ -39,14 +55,19 @@ const Dialog = ({
     let index = 0;
     let mounted = true;
 
-    const interval = setInterval(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    intervalRef.current = setInterval(() => {
       if (!mounted) return;
 
       if (index < currentDialogue.length) {
         setDisplayText((prev) => currentDialogue.substring(0, index + 1));
         index++;
       } else {
-        clearInterval(interval);
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
         setIsTyping(false);
         setShowNextIndicator(true);
       }
@@ -54,30 +75,54 @@ const Dialog = ({
 
     return () => {
       mounted = false;
-      clearInterval(interval);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     };
   }, [currentIndex, dialogues, speed, isOpen, onComplete]);
 
-  const handleClick = () => {
-    if (isTyping) return;
+  useEffect(() => {
+    if (!isOpen) return;
 
-    if (isCompleted) {
-      onClose?.();
-      return;
-    }
+    const handleGlobalClick = () => {
+      if (isTyping) {
+        showFullText();
+        return;
+      }
 
-    if (currentIndex < dialogues.length - 1) {
+      if (currentIndex >= dialogues.length - 1) {
+        if (!isCompleted) {
+          setIsCompleted(true);
+          onComplete?.();
+        } else {
+          onClose?.();
+        }
+        return;
+      }
+
       setCurrentIndex(currentIndex + 1);
-    } else {
-      setIsCompleted(true);
-      onComplete?.(); // 마지막 대화 완료 시 onComplete 호출
-    }
-  };
+    };
+
+    document.addEventListener("click", handleGlobalClick);
+
+    return () => {
+      document.removeEventListener("click", handleGlobalClick);
+    };
+  }, [
+    isOpen,
+    isTyping,
+    isCompleted,
+    currentIndex,
+    dialogues.length,
+    onClose,
+    onComplete,
+  ]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="dialog-container" onClick={handleClick}>
+    <div className="dialog-container">
       <div className="speech-bubble">
         <p>{displayText}</p>
         {showNextIndicator && <span className="next-indicator"> ▼ </span>}

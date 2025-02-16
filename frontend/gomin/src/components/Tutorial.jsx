@@ -18,7 +18,6 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
   const [showDialog, setShowDialog] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-
   const [isDialogOpen, setIsDialogOpen] = useState(true);
 
   const handleCloseDialog = () => {
@@ -37,7 +36,7 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
     if (showFullTutorial) {
       const timer = setTimeout(() => {
         setShowDialog(true);
-      }, 1500);
+      }, 2500);
       return () => clearTimeout(timer);
     } else {
       setShowTutorial(true);
@@ -50,7 +49,15 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
     setShowTutorial(true);
   };
 
-  const handleTutorialNext = () => {
+  const handleTutorialPrevious = (e) => {
+    e.stopPropagation();
+    if (currentSlide > 0) {
+      setCurrentSlide(currentSlide - 1);
+    }
+  };
+
+  const handleTutorialNext = (e) => {
+    e.stopPropagation();
     if (currentSlide < tutorialSlides.length - 1) {
       setCurrentSlide(currentSlide + 1);
     } else {
@@ -69,7 +76,7 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
             left: 0,
             right: 0,
             bottom: 0,
-            zIndex: 8, // tutorialModal의 zIndex보다 낮게
+            zIndex: 8,
             backgroundColor: "transparent",
           }}
           onClick={(e) => e.stopPropagation()}
@@ -95,8 +102,18 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
       )}
 
       {showTutorial && (
-        <div style={styles.tutorialModal} onClick={handleTutorialNext}>
+        <div style={styles.tutorialModal}>
           <div style={styles.tutorialContent}>
+            <div style={styles.navigationContainer}>
+              <div
+                style={styles.navigationLeft}
+                onClick={handleTutorialPrevious}
+              />
+              <div
+                style={styles.navigationRight}
+                onClick={handleTutorialNext}
+              />
+            </div>
             <img
               src={tutorialSlides[currentSlide]}
               alt={`Tutorial ${currentSlide + 1}`}
@@ -108,7 +125,6 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
                   key={index}
                   style={{
                     ...styles.paginationDot,
-
                     backgroundColor:
                       currentSlide === index ? "#24D536" : "#D1D5DB",
                   }}
@@ -136,19 +152,38 @@ const styles = {
     zIndex: 9,
   },
   tutorialContent: {
-    // backgroundColor: "white",
     borderRadius: "12px",
     width: "45vh",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     overflow: "hidden",
+    position: "relative",
+  },
+  navigationContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: "flex",
+    zIndex: 2,
+  },
+  navigationLeft: {
+    width: "50%",
+    height: "100%",
+    cursor: "pointer",
+  },
+  navigationRight: {
+    width: "50%",
+    height: "100%",
+    cursor: "pointer",
   },
   tutorialImage: {
     width: "100%",
     height: "auto",
     display: "block",
-    objectFit: "contain", // 이미지 비율 유지
+    objectFit: "contain",
   },
   pagination: {
     display: "flex",

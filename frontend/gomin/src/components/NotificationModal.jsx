@@ -5,7 +5,12 @@ import {
   fetchNotifications,
   markAsRead,
   fetchUnreadExists,
+  markAsReadAll,
 } from "../store/slices/notificationSlice";
+
+import EXP from "../assets/Notification/EXP.webp"; // 유통기한 마감
+import ANS_END from "../assets/Notification/ANS_END.webp"; // 답변 마감
+import ANS_LIKE from "../assets/Notification/ANS_LIKE.webp"; // 답변 좋아요
 
 const NotificationModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
@@ -30,47 +35,83 @@ const NotificationModal = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const readAllNotification = () => {
+    dispatch(markAsReadAll()).then(() => {
+      // 알림 전체 읽기를 완료한 후 notifications 비우기
+      dispatch(fetchNotifications({ page: 1, size: 10 })); // 또는 빈 배열로 설정
+      // 읽지 않은 알림 존재 여부 dispatch
+      dispatch(fetchUnreadExists());
+    });
+  };
+
+  // notification type 이미지
+  const getNotificationImage = (type) => {
+    switch (type) {
+      case 1:
+        return EXP;
+      case 2:
+        return ANS_END;
+      case 3:
+        return ANS_LIKE;
+      default:
+        return EXP;
+    }
+  };
+
+  // 제목을 6글자로 제한
+  const truncateTitle = (title) => {
+    if (!title) return "";
+    return title.length > 6 ? `[${title.slice(0, 6)}...]` : `[${title}]`;
+  };
+
   if (!isOpen && !show) return null;
 
   return (
-    <div style={{ ...overlayStyle, opacity: show ? 1 : 0 }}>
-      <div style={{ ...modalStyle, transform: show ? "scale(1)" : "scale(0.9)" }}>
-        <div style={outerBoxStyle}>
-          <div style={innerBoxStyle}>알림</div>
-          <button style={cancelButtonStyle} onClick={onClose}>
+    <div style={{ ...styles.overlay, opacity: show ? 1 : 0 }}>
+      <div
+        style={{ ...styles.modal, transform: show ? "scale(1)" : "scale(0.9)" }}
+      >
+        <div style={styles.outerBox}>
+          <div style={styles.innerBox}>알림</div>
+          <button style={styles.readAllButton} onClick={readAllNotification}>
+            ✓ 모두 읽음
+          </button>
+          <button style={styles.cancelButton} onClick={onClose}>
             ✖
           </button>
         </div>
 
         <div>
           {status === "loading" ? (
-            <p style={emptyTextStyle}>로딩 중...</p>
+            <p style={styles.emptyText}>로딩 중...</p>
           ) : notifications.length > 0 ? (
-            <ul style={listStyle}>
+            <ul style={styles.list}>
               {notifications.map((notification) => (
                 <li
                   key={notification.notificationId}
-                  style={listItemStyle}
+                  style={styles.listItem}
                   onClick={() => handleNotificationClick(notification)}
                 >
-                  <div style={outerContainerStyle}>
-                    <div style={middleContainerStyle}>
-                      <div style={innerContainerStyle}>
-                        <div style={sushiImageStyle}>
+                  <div style={styles.outerContainer}>
+                    <div style={styles.middleContainer}>
+                      <div style={styles.innerContainer}>
+                        <div style={styles.notificationImage}>
                           <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpL734zj0BQG4VtmIwh5Ql0tRFW4HIVMQIg&s"
-                            alt="초밥사진"
-                            style={imageStyle}
+                            src={getNotificationImage(
+                              notification.notificationType
+                            )}
+                            alt="알림 이미지"
+                            style={styles.image}
                           />
                         </div>
 
-                        <div style={textContainerStyle}>
-                          <div style={titleStyle}>{notification.message}</div>
-                          <hr style={dividerStyle} />
-                          <div style={contentTextStyle}>
+                        <div style={styles.textContainer}>
+                          <div style={styles.title}>{notification.message}</div>
+                          <div style={styles.contentText}>
+                            {truncateTitle(notification.sushi.title)}{" "}
                             {notification.message}
                           </div>
-                          <div style={timeStyle}>
+                          <div style={styles.time}>
                             {new Date(notification.createdAt).toLocaleString()}
                           </div>
                         </div>
@@ -81,7 +122,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
               ))}
             </ul>
           ) : (
-            <p style={emptyTextStyle}>알림이 없습니다.</p>
+            <p style={styles.emptyText}>알림이 없습니다.</p>
           )}
         </div>
       </div>
@@ -89,173 +130,186 @@ const NotificationModal = ({ isOpen, onClose }) => {
   );
 };
 
-// Styles
-const overlayStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 1000,
-  backdropFilter: "blur(10px)",
-  transition: "opacity 0.3s ease", // opacity에 애니메이션 추가
-};
-
-const modalStyle = {
-  backgroundColor: "#fdf5e6",
-  padding: "0px",
-  borderRadius: "10px",
-  top: "6vh",
-  width: "46vh",
-  maxWidth: "393px",
-  height: "80vh",
-  maxHeight: "691px",
-  position: "relative",
-  border: "8px solid #906C48",
-  outline: "2px solid #67523E",
-  overflowY: "auto",
-  boxSizing: "border-box",
-  scrollbarWidth: "none",
-  transition: "transform 0.3s ease", // scale에 애니메이션 추가
-};
-
-const cancelButtonStyle = {
-  position: "absolute",
-  top: "10px",
-  right: "10px",
-  padding: "5px 10px",
-  border: "none",
-  backgroundColor: "transparent",
-  color: "#67523E",
-  fontSize: "20px",
-  cursor: "pointer",
-  fontWeight: "bold",
-};
-
-const outerBoxStyle = {
-  width: "30vh",
-  maxWidth: "250px",
-  margin: "20px auto",
-  border: "4px solid #8B6B3E",
-  borderRadius: "8px",
-  backgroundColor: "#B2975C",
-  padding: "6px",
-  boxSizing: "border-box",
-};
-
-const innerBoxStyle = {
-  width: "100%",
-  border: "2px solid #906C48",
-  borderRadius: "4px",
-  backgroundColor: "#B2975C",
-  textAlign: "center",
-  color: "#5D4A37",
-  fontSize: "1.5rem",
-  fontWeight: "bold",
-  padding: "6px 0",
-  boxSizing: "border-box",
-};
-
-const listStyle = {
-  listStyle: "none",
-  padding: 0,
-  margin: 0,
-  width: "100%",
-};
-
-const listItemStyle = {
-  display: "flex",
-  justifyContent: "center",
-  width: "100%",
-};
-
-const outerContainerStyle = {
-  position: "relative",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  width: "100%",
-  maxWidth: "100%",
-  margin: "0px auto",
-  padding: "6px",
-  backgroundColor: "#906C48",
-  borderRadius: "6px",
-  boxSizing: "border-box",
-};
-
-const middleContainerStyle = {
-  width: "100%",
-  backgroundColor: "#B2975C",
-  borderRadius: "4px",
-  padding: "8px",
-  boxSizing: "border-box",
-};
-
-const innerContainerStyle = {
-  position: "relative",
-  width: "100%",
-  backgroundColor: "#FFFFF0",
-  borderRadius: "4px",
-  padding: "10px",
-  boxSizing: "border-box",
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
-};
-
-const sushiImageStyle = {
-  width: "90px",
-  height: "90px",
-  marginRight: "10px",
-  borderRadius: "4px",
-  objectFit: "cover",
-};
-
-const imageStyle = {
-  width: "100%",
-  height: "100%",
-};
-
-const textContainerStyle = {
-  flex: 1,
-};
-
-const titleStyle = {
-  fontSize: "1.2rem",
-  fontWeight: "bold",
-  color: "#5A4628",
-  marginBottom: "8px",
-};
-
-const contentTextStyle = {
-  fontSize: "1rem",
-  color: "#8D7B7B",
-  lineHeight: "1.4",
-  display: "-webkit-box",
-  WebkitLineClamp: 2,
-  WebkitBoxOrient: "vertical",
-  overflow: "hidden",
-};
-
-const dividerStyle = {
-  width: "100%",
-  border: "0.5px solid #BCBCBC",
-  margin: "8px 0",
-};
-
-const timeStyle = {
-  fontSize: "12px",
-  color: "#666",
-};
-
-const emptyTextStyle = {
-  textAlign: "center",
-  color: "#666",
-  padding: "20px",
+const styles = {
+  /* 오버레이 스타일 */
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+    transition: "opacity 0.3s ease",
+  },
+  /* 모달 스타일 */
+  modal: {
+    position: "relative",
+    top: "6vh",
+    width: "50vh",
+    maxWidth: "90vw",
+    height: "80vh",
+    padding: "2.5vh",
+    paddingTop: "1vh",
+    backgroundColor: "#FFFAF0",
+    border: "1vh solid #906C48",
+    borderRadius: "1.3vh",
+    outline: "0.25vh solid #67523E",
+    overflowY: "auto",
+    boxSizing: "border-box",
+    scrollbarWidth: "none",
+    transition: "transform 0.3s ease",
+  },
+  /* '알림' 외부 박스 */
+  outerBox: {
+    width: "30vh",
+    // maxWidth: "250px",
+    margin: "0 auto 3vh auto",
+    marginTop: "1.5vh",
+    border: "0.4vh solid #8B6B3E",
+    borderRadius: "1vh",
+    backgroundColor: "#B2975C",
+    padding: "0.7vh",
+    boxSizing: "border-box",
+  },
+  /* '알림' 내부 박스 */
+  innerBox: {
+    width: "100%",
+    border: "0.3vh solid #906C48",
+    borderRadius: "0.5vh",
+    backgroundColor: "#B2975C",
+    textAlign: "center",
+    color: "#5D4A37",
+    fontSize: "2.6vh",
+    fontWeight: "bold",
+    padding: "0.8vh 0",
+    boxSizing: "border-box",
+  },
+  /* 알림 목록 스타일 */
+  list: {
+    listStyle: "none",
+    padding: 0,
+    width: "43.1vh",
+  },
+  /* 알림 아이템 컨테이너 */
+  listItem: {
+    display: "flex",
+    justifyContent: "center",
+    width: "100%",
+    marginBottom: "1vh",
+  },
+  /* 알림 아이템 외부 컨테이너 */
+  outerContainer: {
+    position: "relative",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    maxWidth: "100%",
+    margin: "0",
+    padding: "0.7vh 0",
+    boxSizing: "border-box",
+    border: "0.2vh solid #D4C5B1",
+    backgroundColor: "#FFFEFA",
+    marginBottom: "0",
+  },
+  /* 알림 아이템 중간 컨테이너 */
+  middleContainer: {
+    width: "50vh",
+    padding: "1vh 2vh",
+    boxSizing: "border-box",
+    backgroundColor: "#FFFEFA",
+  },
+  /* 알림 아이템 내부 컨테이너 */
+  innerContainer: {
+    position: "relative",
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFFEFA",
+  },
+  /* 알림 이미지 컨테이너 */
+  notificationImage: {
+    width: "9.2vh",
+    height: "9.2vh",
+    marginRight: "2vh",
+    borderRadius: "1vh",
+    objectFit: "cover",
+  },
+  /* 알림 이미지 */
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+  /* 알림 텍스트 */
+  textContainer: {
+    flex: 1,
+  },
+  /* 알림 메시지 스타일 */
+  title: {
+    fontSize: "2.2vh",
+    fontWeight: "bold",
+    color: "#5A4628",
+    marginBottom: "1vh",
+    display: "-webkit-box",
+    WebkitLineClamp: 2, // 최대 2줄까지 표시
+    WebkitBoxOrient: "vertical",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
+  /* 초밥 제목 스타일 */
+  contentText: {
+    fontSize: "1.8vh",
+    color: "#8D7B7B",
+    lineHeight: "1.4",
+    marginBottom: "5px",
+  },
+  /* 알림 시간 */
+  time: {
+    fontSize: "1.5vh",
+    color: "#666",
+  },
+  /* 알림없을때 */
+  emptyText: {
+    textAlign: "center",
+    color: "#666",
+    padding: "20px",
+  },
+  /* 모두 읽음 버튼 */
+  readAllButton: {
+    position: "absolute",
+    top: "7vh",
+    right: "0.8vh",
+    padding: "0.6vh 1.2vh",
+    backgroundColor: "transparent",
+    color: "#67523E",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "1.8vh",
+    fontFamily: "Ownglyph, Ownglyph",
+    transition: "all 0.2s ease",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5vh",
+    opacity: 0.8,
+  },
+  /* 닫기 버튼 */
+  cancelButton: {
+    position: "absolute",
+    top: "1.2vh",
+    right: "1.5vh",
+    padding: "0.6vh 1.2vh",
+    border: "none",
+    backgroundColor: "transparent",
+    color: "#67523E",
+    fontSize: "2.5vh",
+    cursor: "pointer",
+    fontWeight: "bold",
+  },
 };
 
 export default NotificationModal;

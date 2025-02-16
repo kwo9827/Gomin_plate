@@ -23,6 +23,7 @@ const Navbar = () => {
   const isNew = useSelector((state) => state.member?.isNew);
 
   useEffect(() => {
+    console.log("isNew 값:", isNew);
     if (isNew) {
       setIsTutorialOpen(true); // 튜토리얼 먼저 실행
     }
@@ -43,21 +44,41 @@ const Navbar = () => {
     });
   }, []);
 
+  // useEffect(() => {
+  //   switch (location.pathname) {
+  //     case "/Home":
+  //       setBgImage(navHomeImg);
+  //       break;
+  //     case "/MySushiList":
+  //       setBgImage(navSushiImg);
+  //       break;
+  //     case "/MyAnswerList":
+  //       setBgImage(navAnswerImg);
+  //       break;
+  //     default:
+  //       setBgImage(navImg);
+  //   }
+  // }, [location.pathname]);
+
   useEffect(() => {
-    switch (location.pathname) {
-      case "/Home":
-        setBgImage(navHomeImg);
-        break;
-      case "/MySushiList":
-        setBgImage(navSushiImg);
-        break;
-      case "/MyAnswerList":
-        setBgImage(navAnswerImg);
-        break;
-      default:
-        setBgImage(navImg);
+    const getBgImage = () => {
+      switch (location.pathname) {
+        case "/Home":
+          return navHomeImg;
+        case "/MySushiList":
+          return navSushiImg;
+        case "/MyAnswerList":
+          return navAnswerImg;
+        default:
+          return navImg;
+      }
+    };
+
+    const newBgImage = getBgImage();
+    if (bgImage !== newBgImage) {
+      setBgImage(newBgImage);
     }
-  }, [location.pathname]);
+  }, [location.pathname, bgImage]);
 
   const handleNavigation = (path) => {
     navigate(path);

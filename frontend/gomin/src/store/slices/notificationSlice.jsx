@@ -28,6 +28,15 @@ export const fetchUnreadExists = createAsyncThunk(
   }
 );
 
+// 읽지 않은 모든 알람 조회
+export const markAsReadAll = createAsyncThunk(
+  "notification/markAsReadAll",
+  async () => {
+    const response = await api.put('/notification/read-all');
+    return response.data;
+  }
+)
+
 const notificationSlice = createSlice({
   name: "notification",
   initialState: {
@@ -92,9 +101,10 @@ const notificationSlice = createSlice({
       // Check unread exists
       .addCase(fetchUnreadExists.fulfilled, (state, action) => {
         state.hasUnread = action.payload.data.hasUnread;
-      });
+      })
+
   },
 });
 
-export const { clearNotifications,updateHasUnread } = notificationSlice.actions;
+export const { clearNotifications, updateHasUnread } = notificationSlice.actions;
 export default notificationSlice.reducer;

@@ -14,9 +14,12 @@ import scallopImg from "../assets/sushi/가리비초밥.webp";
 import tunaImg from "../assets/sushi/참치초밥.webp";
 import uniImg from "../assets/sushi/성게알초밥.webp";
 import flatfighImg from "../assets/sushi/광어초밥.webp";
+import salmonEggImg from "../assets/sushi/연어알초밥.webp";
 
-const MAX_LIKES = 80; // 최대 좋아요 수 수정 (참치 해금 조건)
-const SUSHI_COUNT = 11;
+import padlockImg from "../assets/home/padlock_color.webp";
+import heartImg from "../assets/heart.webp";
+
+const SUSHI_COUNT = 12;
 
 const keyframes = `
   @keyframes fadeIn {
@@ -73,6 +76,7 @@ const sushiTypes = {
   9: { name: "광어초밥", image: flatfighImg, requiredLikes: 30 },
   10: { name: "성게알초밥", image: uniImg, requiredLikes: 50 },
   11: { name: "참치초밥", image: tunaImg, requiredLikes: 80 },
+  12: { name: "연어알초밥", image: salmonEggImg, requiredLikes: 100 },
 };
 
 const SushiUnlock = ({ isOpen, onClose }) => {
@@ -163,21 +167,26 @@ const SushiUnlock = ({ isOpen, onClose }) => {
 
         <div style={progressContainer}>
           <div style={progressBarContainer}>
-            <span style={leftIconStyle}>❤️</span>
+            <div style={leftIconContainer}>
+              <img src={heartImg} alt="하트" style={leftIconStyle} />
+              <p style={leftTextStyle}>{likesReceived}</p>
+            </div>
             <div style={progressBar}>
               <div
                 style={{ ...progressFill, width: `${progressPercentage}%` }}
               />
             </div>
-            <img
-              src={nextSushi.image}
-              alt={nextSushi.name}
-              style={rightIconStyle}
-            />
+            <div style={rightIconContainer}>
+              <img
+                src={nextSushi.image}
+                alt={nextSushi.name}
+                style={rightIconStyle}
+              />
+              <p style={rightTextStyle}>
+                다음초밥까지 {nextSushi.requiredLikes - likesReceived}개!
+              </p>
+            </div>
           </div>
-          <span style={progressText}>
-            {likesReceived} / {nextSushi.requiredLikes}
-          </span>
         </div>
 
         <div style={sushiGrid}>
@@ -199,10 +208,14 @@ const SushiUnlock = ({ isOpen, onClose }) => {
                     </div>
                   ) : (
                     <div style={lockedStyle}>
-                      <span style={lockIconStyle}>🔒</span>
                       <div style={requiredLikesStyle}>
                         {sushiInfo.requiredLikes}개의 좋아요 필요
                       </div>
+                      <img
+                        src={padlockImg}
+                        alt="자물쇠"
+                        style={lockIconStyle}
+                      />
                       <div style={sushiUnlockNameStyle}>{sushiInfo.name}</div>
                     </div>
                   )}
@@ -241,7 +254,7 @@ const modalStyle = {
   width: "50vh",
   maxWidth: "90vw",
   border: "1vh solid #906C48",
-  borderRadius: "1.2vh",
+  borderRadius: "1.3vh",
   outline: "0.25vh solid #67523E",
   display: "flex",
   flexDirection: "column",
@@ -253,27 +266,25 @@ const modalStyle = {
 };
 
 const outerBoxStyle = {
-  width: "30vh",
-  border: "0.5vh solid #906C48",
-  borderRadius: "1.2vh",
-  marginTop: "0.3vh",
-  marginBottom: "3vh",
+  width: "26vh",
+  margin: "2vh",
+  border: "0.4vh solid #8B6B3E",
+  borderRadius: "1vh",
   backgroundColor: "#B2975C",
-  padding: "0.75vh",
+  padding: "0.6vh",
   boxSizing: "border-box",
-  position: "relative",
 };
 
 const innerBoxStyle = {
   width: "100%",
-  border: "0.3vh solid #906C48",
-  borderRadius: "1.2vh",
+  border: "0.2vh solid #906C48",
+  borderRadius: "0.5vh",
   backgroundColor: "#B2975C",
   textAlign: "center",
   color: "#5D4A37",
-  fontSize: "3vh",
+  fontSize: "2.3vh",
   fontWeight: "bold",
-  padding: "1vh",
+  padding: "0.5vh",
   boxSizing: "border-box",
 };
 
@@ -288,16 +299,14 @@ const cancelButtonStyle = {
   color: "#67523E",
   fontSize: "2.5vh",
   cursor: "pointer",
-  fontWeight: "bold",
 };
 
 const progressContainer = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  marginBottom: "1.5vh",
+  marginBottom: "3vh",
   width: "80%",
-  margin: "0 auto",
 };
 
 const progressBarContainer = {
@@ -314,6 +323,7 @@ const progressBar = {
   width: "calc(100% - 6vh)",
   height: "2vh",
   border: "0.2vh solid #906C48",
+  borderRadius: "0.6vh",
   overflow: "hidden",
   left: "3vh",
   right: "3vh",
@@ -323,27 +333,70 @@ const progressBar = {
 const progressFill = {
   height: "100%",
   backgroundColor: "#4BBE0E",
-  borderRadius: "2vh",
+  borderRadius: "0.6vh",
   transition: "width 0.5s ease-in-out",
+};
+
+const leftIconContainer = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  position: "absolute",
+  top: "-1.6vh",
+  left: "0vh",
+  zIndex: 3,
 };
 
 const leftIconStyle = {
   position: "absolute",
-  top: "-2.2vh",
-  left: "0",
-  fontSize: "4.8vh",
+  top: "-6.9vh",
+  left: "-6.5vh",
+  width: "20vh",
+  height: "20vh",
+};
+
+const leftTextStyle = {
+  position: "absolute",
+  top: "2vh",
+  left: "3vh",
+  margin: 0,
+  textAlign: "center",
+  fontSize: "2vh",
+  color: "#FFFFFF",
+};
+
+const rightIconContainer = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  position: "absolute",
+  top: "-1.4vh",
+  right: "-3vh",
   zIndex: 3,
 };
 
 const rightIconStyle = {
   position: "absolute",
-  right: "-10vh",
-  top: "-13vh",
+  right: "-9vh",
+  top: "-11.3vh",
   width: "30vh",
   height: "30vh",
   objectFit: "contain",
   zIndex: 3,
   pointerEvents: "none",
+};
+
+const rightTextStyle = {
+  position: "absolute",
+  width: "20vh",
+  right: "-4vh",
+  top: "5.5vh",
+  margin: 0,
+  textAlign: "center",
+  fontSize: "2vh",
+  color: "#5D4A37",
 };
 
 const progressText = {
@@ -368,6 +421,7 @@ const sushiOuterStyle = {
   padding: "0.5vh",
   boxSizing: "border-box",
   border: "0.3vh solid #906C48",
+  borderRadius: "1vh",
 };
 
 const sushiItem = {
@@ -403,7 +457,7 @@ const sushiImageStyle = {
 
 const sushiNameStyle = {
   position: "absolute",
-  top: "7vh",
+  bottom: "35%",
   width: "100%",
   color: "#5D4A37",
   textAlign: "center",
@@ -424,34 +478,34 @@ const lockedStyle = {
 
 const lockIconStyle = {
   position: "absolute",
-  width: "100%",
+  width: "100%", // 이미지 크기 조정
   height: "100%",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  top: "-0.8vh",
+  left: "-0.15vh",
+  top: "0.3vh",
+  scale: "1.5",
 };
 
 const requiredLikesStyle = {
   position: "absolute",
   width: "100%",
-  top: "5.5vh",
-  fontSize: "0.7vh",
+  height: "100%",
+  top: "45%",
+  fontSize: "0.65vh",
   textAlign: "center",
   wordBreak: "keep-all",
   color: "#5D4A37",
   textShadow: `
-    -0.5px -0.5px 0 #fff,
-    0.5px -0.5px 0 #fff,
-    -0.5px 0.5px 0 #fff,
-    0.5px 0.5px 0 #fff
+    -0.05vh -0.05vh 0 #fff,
+    0.05vh -0.05vh 0 #fff,
+    -0.05vh 0.05vh 0 #fff,
+    0.05vh 0.05vh 0 #fff
   `,
+  zIndex: "1",
 };
 
 const sushiUnlockNameStyle = {
   position: "absolute",
-  top: "7vh",
+  bottom: "35%",
   width: "100%",
   color: "#5D4A37",
   textAlign: "center",

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { countLike } from "../store/slices/memberSlice";
@@ -12,6 +12,7 @@ import NotificationModal from "../components/NotificationModal";
 import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 import SushiUnlockBar from "../components/SushiUnlockBar";
+import BgmContext from "../context/BgmProvider";
 
 import { useSpring, animated } from "@react-spring/web";
 
@@ -26,6 +27,8 @@ import plate from "../assets/sounds/plate.mp3";
 import { setIsNew } from "../store/slices/memberSlice";
 import Tutorial from "../components/Tutorial";
 import { useSSE } from "../hooks/useSSE";
+import SSEIndicator from "../components/SSEIndicator";
+import AnswerSubmitCheckModal from "../components/AnswerSubmitCheckModal";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -41,8 +44,10 @@ const Home = () => {
   const [isSushiViewOpen, setIsSushiViewOpen] = useState(false);
   const [selectedSushiData, setSelectedSushiData] = useState(null);
   const [startTutorial, setStartTutorial] = useState(false);
+  const [showAnswerSubmitModal, setShowAnswerSubmitModal] = useState(false);
 
   const audioRef = useRef(null);
+  const { isMuted } = useContext(BgmContext);
 
   // // ✅ `handleSetIsNew` 함수 정의
   // const handleSetIsNew = (value) => {
@@ -87,7 +92,12 @@ const Home = () => {
     setStartTutorial(true);
   };
 
-  useSSE();
+  const handleAnswerSubmit = () => {
+    setShowAnswerSubmitModal(true);
+  };
+
+  // useSSE();
+  const isSSEConnected = useSSE();
 
   useEffect(() => {
     // 현재 URL 경로에서 '/share/' 뒤의 값을 추출
@@ -104,11 +114,13 @@ const Home = () => {
   useEffect(() => {
     if (token) {
       dispatch(fetchSushiByToken(token)).then((response) => {
-        console.log("Fetched Sushi Data:", response.payload); // 데이터 확인
-        // 초밥 데이터가 성공적으로 불러와졌다면 모달 열기
+        console.log("Fetched Sushi Data:", response.payload);
+        // 초밥 데이터가 성공적으로 불러와졌다면 4초 후에 모달 열기
         if (response.payload) {
-          setSelectedSushiData(response.payload.data); // 불러온 초밥 데이터를 상태에 저장
-          setIsSushiViewOpen(true); // 모달 열기
+          setSelectedSushiData(response.payload.data);
+          setTimeout(() => {
+            setIsSushiViewOpen(true);
+          }, 2000);
         }
       });
     }
@@ -164,36 +176,57 @@ const Home = () => {
   // 초밥 모달이 열릴 때 소리 재생
   useEffect(() => {
     if (isSushiViewOpen && audioRef.current) {
-      audioRef.current.volume = 0.4;
+      // 음소거 상태에 따라 볼륨 설정
+      audioRef.current.volume = isMuted ? 0 : 0.5;
       audioRef.current.play();
     }
   }, [isSushiViewOpen]);
 
   const bgSpring = useSpring({
     opacity: allImagesLoaded ? 1 : 0,
-    transform: allImagesLoaded ? "translateY(2)" : "translateY(-50%)",
+    transform: allImagesLoaded ? "translateY(7%)" : "translateY(-50%)",
     config: { tension: 170, friction: 26 },
     delay: 1000,
   });
 
   const masterSpring = useSpring({
     opacity: allImagesLoaded ? 1 : 0,
-    transform: allImagesLoaded ? "scale(1)" : "scale(0.8)",
+    transform: allImagesLoaded ? "scale(1.2)" : "scale(0.8)",
     config: { tension: 170, friction: 26 },
     delay: 1500,
   });
 
   const deskSpring = useSpring({
     opacity: allImagesLoaded ? 1 : 0,
-    transform: allImagesLoaded ? "translateY(0)" : "translateY(50%)",
+    transform: allImagesLoaded ? "translateX(0)" : "translateX(-50%)",
     config: { tension: 170, friction: 26 },
     delay: 300,
+  });
+
+  const bellSpring = useSpring({
+    opacity: allImagesLoaded ? 1 : 0,
+    transform: allImagesLoaded ? "translateY(0)" : "translateY(-50%)",
+    config: { tension: 300, friction: 10 },
+    delay: 1700,
   });
 
   return (
     <>
       {/* 배경 이미지 */}
       <div style={styles.backgroundContainer}>
+        <animated.div
+          style={{
+            ...styles.backgroundLayer,
+            zIndex: 2,
+            position: "absolute",
+            backgroundImage: `url("${bgImg}")`,
+            opacity: bgSpring.opacity,
+            transform: bgSpring.transform,
+          }}
+        >
+          {/* SSE 연결 상태 표시 */}
+          <SSEIndicator isConnected={isSSEConnected} />
+        </animated.div>
         <animated.div
           style={{
             ...styles.backgroundLayer,
@@ -216,8 +249,17 @@ const Home = () => {
           onLoad={() => handleImageLoad("master")}
         ></animated.div>
 
-        {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
-        <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
+        <animated.div
+          style={{
+            ...styles.backgroundLayer,
+            zIndex: 2,
+            opacity: bellSpring.opacity,
+            transform: bellSpring.transform,
+          }}
+        >
+          {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
+          <NotificationBell onClick={openNotification} hasUnread={hasUnread} />
+        </animated.div>
 
         {/* 튜토리얼 버튼 */}
         <div style={styles.buttonContainer}>
@@ -225,14 +267,12 @@ const Home = () => {
             ?
           </button>
         </div>
-
         {startTutorial && (
           <Tutorial
             onClose={() => setStartTutorial(false)}
             showFullTutorial={false}
           />
         )}
-
         {/* 책상과 그 위의 요소들 */}
         <animated.div
           style={{
@@ -248,7 +288,6 @@ const Home = () => {
             style={styles.deskImage}
             onLoad={() => handleImageLoad("desk")}
           />
-
           {/* Rail */}
           <div style={styles.rail}>
             <Rail onSushiClick={handleSushiClick} />
@@ -262,17 +301,16 @@ const Home = () => {
             <SushiUnlockBar onClick={openSushiUnlock} />
           </div>
         </animated.div>
-
         {/* 모달 */}
         <div>
           <div style={{ position: "absolute", zIndex: "10" }}>
-            <div
+            {/* <div
               style={{
                 position: "fixed",
                 top: 0,
                 left: 0,
                 width: "100%",
-                height: "100%",
+                height: "71.88vh",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -282,8 +320,8 @@ const Home = () => {
               <div
                 style={{
                   position: "relative",
-                  top: "10.4vh",
-                  height: "90vh",
+                  bottom: 0,
+                  height: "71.88vh",
                   width: "55vh",
 
                   backgroundColor: "#fdfcc8",
@@ -293,23 +331,24 @@ const Home = () => {
                   pointerEvents: showLoadingScreen ? "auto" : "none",
                 }}
               />
-            </div>
+            </div> */}
 
             {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
 
             {/* <button onClick={handleSetIsNew}>튜토리얼 테스트</button> */}
 
-            {!allImagesLoaded && (
+            {/* {!allImagesLoaded && (
               <div>
                 <p> 초밥집에 입장하는 중..</p>
               </div>
-            )}
+            )} */}
             <audio ref={audioRef} src={plate} />
             {selectedSushiData && (
               <SushiView
                 isOpen={isSushiViewOpen}
                 onClose={() => setIsSushiViewOpen(false)}
+                onAnswerSubmit={handleAnswerSubmit}
                 sushiId={selectedSushiData.sushiId}
                 category={selectedSushiData.category}
                 sushiType={selectedSushiData.sushiType}
@@ -317,6 +356,10 @@ const Home = () => {
                 expirationTime={selectedSushiData.expirationTime}
               />
             )}
+            <AnswerSubmitCheckModal
+              isOpen={showAnswerSubmitModal}
+              onClose={() => setShowAnswerSubmitModal(false)}
+            />
 
             <SushiUnlock
               isOpen={isSushiUnlockOpen}
@@ -352,6 +395,7 @@ const styles = {
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
   },
+
   deskContainer: {
     position: "absolute",
     bottom: 0,

@@ -1,65 +1,89 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useSpring, animated } from "@react-spring/web";
 import unlockssImg from "../assets/home/open.webp";
 import Sushi from "./Sushi";
 import { useSelector, useDispatch } from "react-redux";
 import { countLike } from "../store/slices/memberSlice";
 
-/** 홈 화면에서 누르면 초밥해금 화면으로 넘어가는 컴포넌트
- *  1. 클릭 시 부모 컴포넌트에서 전달한 `onClick` 실행
- */
 const SushiUnlockBar = ({ onClick }) => {
   const dispatch = useDispatch();
   const likesReceived = useSelector((state) => state.member.likesReceived);
+  const prevLikesRef = useRef(likesReceived); // 이전 likesReceived 저장
 
-  // 컴포넌트 마운트 시 좋아요 수 가져오기
   useEffect(() => {
     dispatch(countLike());
   }, [dispatch]);
 
   const LIKE_THRESHOLDS = [0, 1, 2, 3, 6, 10, 15, 20, 30, 50, 80, 100];
 
-  // 현재 해금된 초밥 개수 계산
-  const unlockedSushiCount =
-    LIKE_THRESHOLDS.filter((like) => likesReceived >= like).length - 1;
+  const unlockedSushiCount = LIKE_THRESHOLDS.filter(
+    (like) => likesReceived >= like
+  ).length;
 
-  // 다음 해금될 초밥 찾기 (현재 받은 좋아요보다 큰 최소값을 찾음)
   const nextSushiIndex = LIKE_THRESHOLDS.findIndex(
     (like) => likesReceived < like
   );
 
   const nextSushiType =
-    nextSushiIndex !== -1 ? nextSushiIndex + 1 : LIKE_THRESHOLDS.length - 1;
+    nextSushiIndex !== -1 ? Math.min(nextSushiIndex + 1, 12) : 12;
 
-  // 현재 해금된 초밥의 최소 좋아요 수 & 다음 해금까지 필요한 좋아요 수
-  const currentThreshold = LIKE_THRESHOLDS[unlockedSushiCount];
-  const nextThreshold = LIKE_THRESHOLDS[nextSushiType];
+  const currentThreshold = LIKE_THRESHOLDS[unlockedSushiCount - 1] || 0;
+  const nextThreshold = LIKE_THRESHOLDS[nextSushiType - 1] || 100;
+
   const progressPercentage =
-    ((likesReceived - currentThreshold) / (nextThreshold - currentThreshold)) *
-    100;
+    nextThreshold > currentThreshold
+      ? ((likesReceived - currentThreshold) /
+          (nextThreshold - currentThreshold)) *
+        100
+      : 100;
+
+  // 🔥 격렬한 흔들림 애니메이션 설정
+  const [shake, setShake] = useState(false);
+  const shakeAnimation = useSpring({
+    from: { transform: "translateX(0px) rotate(0deg)" },
+    to: shake
+      ? [
+          { transform: "translateX(-3px) rotate(-3deg)" },
+          { transform: "translateX(1.5px) rotate(1.5deg)" },
+          { transform: "translateX(-5px) rotate(-5deg)" },
+          { transform: "translateX(5px) rotate(5deg)" },
+          { transform: "translateX(0px) rotate(0deg)" },
+        ]
+      : { transform: "translateX(0px) rotate(0deg)" },
+    config: { duration: 50 },
+    reset: true,
+    onRest: () => setShake(false),
+  });
+
+  // 이전 값과 비교하여 변경 시에만 흔들림 트리거
+  useEffect(() => {
+    if (likesReceived !== prevLikesRef.current) {
+      setShake(true);
+      prevLikesRef.current = likesReceived; // 이전 값 업데이트
+    }
+  }, [likesReceived]);
 
   return (
-    <div style={styles.container} onClick={onClick}>
+    <animated.div
+      style={{ ...styles.container, ...shakeAnimation }}
+      onClick={onClick}
+    >
       <img
         src={unlockssImg}
         alt="Unlock Sushi"
         style={styles.backgroundImage}
       />
 
-      {/* 진행 바 */}
       <div style={styles.progressContainer}>
         <div
-          style={{
-            ...styles.progressBar,
-            width: `${progressPercentage}%`,
-          }}
+          style={{ ...styles.progressBar, width: `${progressPercentage}%` }}
         />
       </div>
 
-      {/* 해금될 초밥 이미지 */}
       <div style={styles.sushiContainer}>
         <Sushi sushiType={nextSushiType} />
       </div>
-    </div>
+    </animated.div>
   );
 };
 
@@ -81,7 +105,6 @@ const styles = {
     width: "100%",
     height: "auto",
   },
-
   progressContainer: {
     position: "absolute",
     bottom: "37%",

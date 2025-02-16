@@ -2,10 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSushiDetail } from "../store/slices/sushiSlice";
 import { createAnswer } from "../store/slices/answerSlice";
+import AnswerSubmitCheckModal from "../components/AnswerSubmitCheckModal";
+import CommonAlertModal from "../components/CommonAlertModal";
 
 const SushiView = ({
   isOpen,
   onClose,
+  onAnswerSubmit,
   sushiId,
   category,
   sushiType,
@@ -25,6 +28,12 @@ const SushiView = ({
 
   const dispatch = useDispatch();
   const currentSushi = useSelector((state) => state.sushi.currentSushi);
+
+  // const [modalOpen, setModalOpen] = useState(false);
+  const [alertModal, setAlertModal] = useState({
+    isOpen: false,
+    message: "",
+  });
 
   // 카테고리별 형광펜 색상
   const titleShadowColors = {
@@ -46,7 +55,7 @@ const SushiView = ({
   useEffect(() => {
     if (isOpen && sushiId) {
       dispatch(fetchSushiDetail(sushiId));
-      if (currentSushi === 'loading') {
+      if (currentSushi === "loading") {
         return <div style={styles.loading}>로딩 중...</div>;
       }
     }
@@ -114,18 +123,29 @@ const SushiView = ({
     setShowAnswerInput(true);
   };
 
+  const showAlert = (message) => {
+    setAlertModal({
+      isOpen: true,
+      message,
+    });
+  };
+
   const handleSubmit = async () => {
     if (content.trim() === "") {
-      alert("답변 내용을 입력해주세요!");
+      showAlert("답변 내용을 입력해주세요!");
       return;
     }
     if (content.length > 500) {
-      alert("최대 500자까지 입력 가능해요!");
+      showAlert("최대 500자까지 입력 가능해요!");
+      return;
+    }
+    if (!category) {
+      showAlert("카테고리를 선택해주세요!");
       return;
     }
 
     if (sushiData.remainingAnswers <= 0) {
-      alert("답변이 마감된 초밥이에요!");
+      showAlert("답변이 마감된 초밥이에요!");
       return;
     }
 
@@ -133,11 +153,11 @@ const SushiView = ({
       await dispatch(createAnswer({ sushiId: sushiData.sushiId, content }));
       setShowAnswerInput(false);
       setContent("");
-      alert("답변이 제출되었습니다!");
+      onAnswerSubmit(); // 먼저 확인 모달 열기
       onClose();
     } catch (error) {
       console.error("답변 제출 실패:", error);
-      alert("답변 제출에 실패했습니다.");
+      showAlert("답변 제출에 실패했습니다.");
     }
   };
 
@@ -190,92 +210,103 @@ const SushiView = ({
   if (!isOpen) return null;
 
   return (
-    <div style={{
-      ...styles.modalOverlay,
-      opacity,
-      transition: 'opacity 0.3s ease-in-out'
-    }}>
-      <div style={{
-        ...styles.modalContent,
-        opacity,
-        transform: `translateY(${20 - (opacity * 20)}px)`,
-        transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out'
-      }}>
-        <div style={styles.container}>
-          <div style={styles.buttonRow}>
-            <div
-              style={{ width: "3vh", cursor: "pointer" }}
-              onClick={handleBack}
-            >
-              {" "}
-              &lt;
-            </div>
-            <div
-              style={{ width: "3vh", cursor: "pointer" }}
-              onClick={handleClose}
-            >
-              {" "}
-              X{" "}
-            </div>
-          </div>
-          {!showAnswerInput ? (
-            <>
-              <h3
-                style={{
-                  ...styles.title,
-                  boxShadow: `0 4px 0px ${titleShadowColor}`,
-                }}
+    <>
+      <div
+        style={{
+          ...styles.modalOverlay,
+          opacity,
+          transition: "opacity 0.3s ease-in-out",
+        }}
+      >
+        <div
+          style={{
+            ...styles.modalContent,
+            opacity,
+            transform: `translateY(${20 - opacity * 20}px)`,
+            transition: "opacity 0.3s ease-in-out, transform 0.3s ease-in-out",
+          }}
+        >
+          <div style={styles.container}>
+            <div style={styles.buttonRow}>
+              <div
+                style={{ width: "3vh", cursor: "pointer", fontSize: "2.5vh" }}
+                onClick={handleBack}
               >
-                {sushiData?.title}
-              </h3>
-              <div style={styles.contentContainer}>
-                <div style={styles.contentWrapper}>
-                  {showTopFade && <div style={styles.fadeIn} />}
-                  <div
-                    ref={contentRef}
-                    style={styles.content}
-                    onScroll={handleScroll}
-                  >
-                    <p style={styles.text}>{sushiData?.content}</p>
-                  </div>
-                  {showBottomFade && <div style={styles.fadeOut} />}
-                </div>
+                {" "}
+                &lt;
               </div>
-            </>
-          ) : (
-            <>
-              <h3
-                style={{
-                  ...styles.title,
-                  boxShadow: `0 4px 0px ${titleShadowColor}`,
-                }}
+              <div
+                style={{ width: "3vh", cursor: "pointer", fontSize: "2.5vh" }}
+                onClick={handleClose}
               >
-                {sushiData?.title}
-              </h3>
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="고민에 대한 의견을 나눠주세요"
-                maxLength={500}
-                style={styles.textarea}
-              />
-              <div style={styles.charCount}>{content.length} / 500</div>
-            </>
-          )}
-          <>
+                {" "}
+                X{" "}
+              </div>
+            </div>
             {!showAnswerInput ? (
-              <button onClick={handleOpenAnswerInput} style={styles.button}>
-                답변 작성
-              </button>
+              <>
+                <h3
+                  style={{
+                    ...styles.title,
+                    boxShadow: `0 0.5vh 0px ${titleShadowColor}`,
+                  }}
+                >
+                  {sushiData?.title}
+                </h3>
+                <div style={styles.contentContainer}>
+                  <div style={styles.contentWrapper}>
+                    {showTopFade && <div style={styles.fadeIn} />}
+                    <div
+                      ref={contentRef}
+                      style={styles.content}
+                      onScroll={handleScroll}
+                    >
+                      <p style={styles.text}>{sushiData?.content}</p>
+                    </div>
+                    {showBottomFade && <div style={styles.fadeOut} />}
+                  </div>
+                </div>
+              </>
             ) : (
-              <button onClick={handleSubmit} style={styles.button}>
-                제출하기
-              </button>
+              <>
+                <h3
+                  style={{
+                    ...styles.title,
+                    boxShadow: `0 0.5vh 0px ${titleShadowColor}`,
+                  }}
+                >
+                  {sushiData?.title}
+                </h3>
+                <textarea
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder="고민에 대한 의견을 나눠주세요"
+                  maxLength={500}
+                  style={styles.textarea}
+                />
+                <div style={styles.charCount}>{content.length} / 500</div>
+              </>
             )}
-          </>
+            <>
+              {!showAnswerInput ? (
+                <button onClick={handleOpenAnswerInput} style={styles.button}>
+                  답변 작성
+                </button>
+              ) : (
+                <button onClick={handleSubmit} style={styles.button}>
+                  제출하기
+                </button>
+              )}
+            </>
+          </div>
         </div>
       </div>
-    </div>
+      <CommonAlertModal
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, message: "" })}
+        message={alertModal.message}
+      />
+    </>
   );
 };
 
@@ -308,23 +339,23 @@ const styles = {
     width: "100%",
     height: "70vh",
     background: "#FFFEEC",
-    border: "8px #906C48 solid",
+    border: "1vh #906C48 solid",
     position: "relative",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     padding: "2vh",
     boxSizing: "border-box",
-    borderRadius: "4px",
+    borderRadius: "1vh",
     overflow: "hidden",
   },
   title: {
     display: "inline",
     margin: "0 2vh 1vh",
-    padding: "0 10px",
+    padding: "0 2vh",
     fontWeight: "bold",
     color: "#5D4A37",
-    fontSize: "1.3rem",
+    fontSize: "3vh",
   },
   contentContainer: {
     position: "relative",
@@ -350,7 +381,7 @@ const styles = {
   },
   text: {
     margin: "3vh 0",
-    fontSize: "1rem",
+    fontSize: "2.2vh",
     lineHeight: "1.3",
     wordBreak: "break-word",
   },
@@ -379,26 +410,26 @@ const styles = {
   textarea: {
     width: "35vh",
     flex: 1,
-    padding: "1vh",
-    marginTop: "2vh",
-    borderRadius: "6px",
-    border: "4px solid #B2975C",
+    padding: "1.2vh",
+    marginTop: "1.5vh",
+    borderRadius: "1vh",
+    border: "0.5vh solid #B2975C",
     fontFamily: "inherit",
-    fontSize: "1.1rem",
+    fontSize: "2vh",
     lineHeight: "1.5",
     resize: "none",
   },
   charCount: {
-    fontSize: "0.8rem",
+    fontSize: "1.5vh",
     textAlign: "right",
     padding: "0.5vh",
   },
   button: {
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "1vh",
     backgroundColor: "#B2975C",
     color: "#5D4A37",
-    fontSize: "1rem",
+    fontSize: "2vh",
     padding: "1vh 2vh",
     margin: "0",
     cursor: "pointer",
@@ -410,7 +441,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
-    fontSize: "1.5rem",
+    fontSize: "2vh",
     color: "#5D4A37",
   },
 };

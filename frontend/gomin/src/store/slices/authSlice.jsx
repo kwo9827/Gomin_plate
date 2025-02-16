@@ -16,7 +16,7 @@ export const kakaoLogin = createAsyncThunk(
 
 export const GoogleLogin = createAsyncThunk(
   "auth/GoogleLogin",
-  async ({ clientId,redirectUri }, { rejectWithValue }) => {
+  async ({ clientId, redirectUri }, { rejectWithValue }) => {
     try {
       const GoogleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=email profile`;
       window.location.href = GoogleAuthUrl;
@@ -39,7 +39,7 @@ export const socialLogin = createAsyncThunk(
       console.log("sociallogin 호출됐다고 !!");
       return response.data;
     } catch (error) {
-      console.log("socialLogin 실패 한거임 !!")
+      console.log("socialLogin 실패 한거임 !!");
       return rejectWithValue(error.response?.data || "소셜 로그인 요청 실패");
     }
   }
@@ -63,14 +63,13 @@ export const updateNickname = createAsyncThunk(
   async (nickname, { rejectWithValue }) => {
     try {
       const response = await api.put("/user/nickname", { nickname });
-      return response.data;  // 서버 응답 전체를 반환 ({success, data, error})
+      return response.data; // 서버 응답 전체를 반환 ({success, data, error})
     } catch (error) {
       console.error("닉네임 변경 실패:", error);
       return rejectWithValue("닉네임 변경 실패");
     }
   }
 );
-
 
 export const deleteAccount = createAsyncThunk(
   "auth/deleteAccount",
@@ -124,7 +123,7 @@ const authSlice = createSlice({
       .addCase(updateNickname.fulfilled, (state, action) => {
         if (state.user) {
           state.user.nickname = action.payload.data.nickname;
-          localStorage.setItem('userNickname', action.payload.data.nickname);
+          localStorage.setItem("userNickname", action.payload.data.nickname);
         }
       })
       .addCase(deleteAccount.fulfilled, (state) => {

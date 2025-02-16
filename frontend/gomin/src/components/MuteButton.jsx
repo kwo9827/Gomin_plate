@@ -14,13 +14,13 @@ const MuteButton = () => {
 const styles = {
   muteButton: {
     position: "fixed",
-    top: "20px",
-    right: "20px",
+    top: "3vh",
+    right: "3vh",
     zIndex: 1000,
     background: "transparent",
     color: "white",
     border: "none",
-    fontSize: "24px",
+    fontSize: "3vh",
     cursor: "pointer",
     opacity: 0.6,
     transition: "opacity 0.3s",

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSushi } from "../store/slices/sushiSlice";
 import Slider from "react-slick";
@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import nextPage from "../assets/sounds/nextPage.mp3";
+import BgmContext from '../context/BgmProvider';
 
 import cuttle from "../assets/sushi/cuttle.webp";
 import eel from "../assets/sushi/eel.webp";
@@ -20,7 +21,14 @@ import scallop from "../assets/sushi/가리비초밥.webp";
 import flatfish from "../assets/sushi/광어초밥.webp";
 import uni from "../assets/sushi/성게알초밥.webp";
 import tuna from "../assets/sushi/참치초밥.webp";
-import x from "../assets/x-twitter.png"
+import salmonRoe from "../assets/sushi/연어알초밥.webp";
+
+import padlock_color from "../assets/home/padlock_color.webp";
+import padlock from "../assets/home/padlock.webp";
+
+import x from "../assets/x-twitter.png";
+
+import CommonAlertModal from "../components/CommonAlertModal";
 
 const styles = `
   @keyframes slideUp {
@@ -75,6 +83,15 @@ const PostSushi = ({ onClose }) => {
   const [shareUrl, setShareUrl] = useState("");
   const audioRef = useRef(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [isConfirmPressed, setIsConfirmPressed] = useState(false);
+  const [isCancelPressed, setIsCancelPressed] = useState(false);
+  const isSubmittingRef = useRef(false);
+  const reRender = useCallback(() => {}, []);
+  const [alertModal, setAlertModal] = useState({
+    isOpen: false,
+    message: "",
+  });
+  const { isMuted } = useContext(BgmContext);
 
   const categoryMapping = {
     연애: 1,
@@ -97,6 +114,7 @@ const PostSushi = ({ onClose }) => {
     { id: 9, src: flatfish, name: "광어초밥", requiredLikes: 30 },
     { id: 10, src: uni, name: "성게알초밥", requiredLikes: 50 },
     { id: 11, src: tuna, name: "참치초밥", requiredLikes: 80 },
+    { id: 12, src: salmonRoe, name: "연어알초밥", requiredLikes: 100 },
   ];
 
   const settings = {
@@ -145,21 +163,29 @@ const PostSushi = ({ onClose }) => {
     }
   }, []);
 
+  const showAlert = (message) => {
+    setAlertModal({
+      isOpen: true,
+      message,
+    });
+  };
+
   const handleNext = () => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.5;
+      // 음소거 상태에 따라 볼륨 설정
+      audioRef.current.volume = isMuted ? 0 : 0.5;
       audioRef.current.play();
     }
     if (!category) {
-      alert("카테고리를 설정해주세요.");
+      showAlert("카테고리를 설정해주세요.");
       return;
     }
     if (sushiType === -1) {
-      alert("사용할 수 없는 초밥입니다.");
+      showAlert("사용할 수 없는 초밥입니다.");
       return;
     }
     if (!sushiType) {
-      alert("초밥을 골라주세요.");
+      showAlert("초밥을 골라주세요.");
       return;
     }
     setStep(2);
@@ -167,7 +193,8 @@ const PostSushi = ({ onClose }) => {
 
   const handleBack = () => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.5;
+      // 음소거 상태에 따라 볼륨 설정
+      audioRef.current.volume = isMuted ? 0 : 0.5;
       audioRef.current.play();
     }
     setStep(1);
@@ -175,41 +202,49 @@ const PostSushi = ({ onClose }) => {
 
   const handleSubmit = () => {
     if (title.length === 0 || content.length === 0) {
-      alert("제목과 내용을 모두 입력해주세요.");
+      showAlert("제목과 내용을 모두 입력해주세요.");
       return;
     }
     if (title.length > 30) {
-      alert("제목은 30자 이내로 입력해주세요.");
+      showAlert("제목은 30자 이내로 입력해주세요.");
       return;
     }
     if (content.length > 500) {
-      alert("내용은 500자 이내로 입력해주세요.");
+      showAlert("내용은 500자 이내로 입력해주세요.");
       return;
     }
     setShowModal(true);
   };
 
-  const handleConfirmSubmit = () => {
-    const sushiData = {
-      title,
-      content,
-      maxAnswers,
-      category,
-      sushiType,
-    };
-    console.log("등록된 내용:", sushiData);
-    dispatch(createSushi(sushiData)).then((response) => {
-      const { success, data, error } = response.payload; // 서버에서 반환된 token
-      const { token } = data; // 서버에서 반환된 token
-      // 공유 URL 생성 (이제 `token`을 포함한 URL을 생성)
-      const shareUrl = `share/${token}`;
-      setShareUrl(shareUrl); // shareUrl 상태 업데이트
-      console.log("공유 URL:", shareUrl);
+  const handleConfirmSubmit = async () => {
+    if (isSubmittingRef.current) {
+      return;
+    }
 
-      // 모달에서 공유 URL을 활용
+    isSubmittingRef.current = true;
+    reRender();
+
+    try {
+      const sushiData = {
+        title,
+        content,
+        maxAnswers,
+        category,
+        sushiType,
+      };
+      console.log("등록된 내용:", sushiData);
+      const response = await dispatch(createSushi(sushiData));
+      const { success, data, error } = response.payload;
+      const { token } = data;
+      const shareUrl = `share/${token}`;
+      setShareUrl(shareUrl);
+      console.log("공유 URL:", shareUrl);
       setShowModal(false);
       setShowCompleteModal(true);
-    });
+    } finally {
+      isSubmittingRef.current = false;
+      reRender();
+    }
   };
 
   const handleCompleteClose = () => {
@@ -224,11 +259,11 @@ const PostSushi = ({ onClose }) => {
   const handleCopyClipBoard = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
-      alert("클립보드에 링크가 복사되었어요.");
+      showAlert("클립보드에 링크가 복사되었어요.");
     } catch (err) {
       console.log(err);
     }
-  }
+  };
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
@@ -239,6 +274,11 @@ const PostSushi = ({ onClose }) => {
   React.useEffect(() => {
     setSushiType(sushiImages[0].id);
   }, []);
+
+  function useReRenderer() {
+    const [, setState] = useState({});
+    return useCallback(() => setState({}), []);
+  }
 
   return (
     <>
@@ -273,8 +313,8 @@ const PostSushi = ({ onClose }) => {
                 </button>
               </div>
               <p style={orderExplain}>
-                주문 가능 초밥의
-                <br /> 종류는 달라질 수 있습니다
+                유통기한이 임박한 초밥에는
+                <br /> 마스터냥의 조언이 달릴 수 있습니다
               </p>
               <hr style={divider} />
             </div>
@@ -293,7 +333,7 @@ const PostSushi = ({ onClose }) => {
                         checked={category === categoryMapping["연애"]}
                         onChange={handleCategoryChange}
                       />
-                      <span style={radioLabel}>연애</span>
+                      <span style={radioLabel}>사람 관계</span>
                     </label>
                     <label style={radioBtn}>
                       <input
@@ -304,7 +344,7 @@ const PostSushi = ({ onClose }) => {
                         checked={category === categoryMapping["우정"]}
                         onChange={handleCategoryChange}
                       />
-                      <span style={radioLabel}>우정</span>
+                      <span style={radioLabel}>금전 문제</span>
                     </label>
                     <label style={radioBtn}>
                       <input
@@ -315,7 +355,7 @@ const PostSushi = ({ onClose }) => {
                         checked={category === categoryMapping["진로"]}
                         onChange={handleCategoryChange}
                       />
-                      <span style={radioLabel}>진로</span>
+                      <span style={radioLabel}>건강 및 생활</span>
                     </label>
                     <label style={radioBtn}>
                       <input
@@ -326,7 +366,7 @@ const PostSushi = ({ onClose }) => {
                         checked={category === categoryMapping["건강"]}
                         onChange={handleCategoryChange}
                       />
-                      <span style={radioLabel}>건강</span>
+                      <span style={radioLabel}>공부 및 진로</span>
                     </label>
                     <label style={radioBtn}>
                       <input
@@ -337,7 +377,7 @@ const PostSushi = ({ onClose }) => {
                         checked={category === categoryMapping["가족"]}
                         onChange={handleCategoryChange}
                       />
-                      <span style={radioLabel}>가족</span>
+                      <span style={radioLabel}>자아실현</span>
                     </label>
                     <label style={radioBtn}>
                       <input
@@ -382,17 +422,93 @@ const PostSushi = ({ onClose }) => {
                                 ? "2px solid #FFD700"
                                 : "none",
                             textAlign: "center",
+                            position: "relative",
                           }}
                         >
-                          <img
+                          <div
                             style={{
-                              ...sliderSushi,
-                              opacity:
-                                likesReceived >= sushi.requiredLikes ? 1 : 0.5,
+                              position: "relative",
+                              display: "inline-block",
                             }}
-                            src={sushi.src}
-                            alt={sushi.name}
-                          />
+                          >
+                            <img
+                              style={{
+                                ...sliderSushi,
+                                opacity:
+                                  likesReceived >= sushi.requiredLikes
+                                    ? 1
+                                    : 0.5,
+                              }}
+                              src={sushi.src}
+                              alt={sushi.name}
+                            />
+                            {likesReceived < sushi.requiredLikes && (
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  top: "50%",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                  textAlign: "center",
+                                  width: "100%",
+                                }}
+                              >
+                                {/* 흑백버전 */}
+                                <img
+                                  src={padlock}
+                                  alt="padlock"
+                                  style={{
+                                    position: "relative",
+                                    top: "2.8vh",
+                                    left: "1.4vh",
+                                    width: "10vh",
+                                    height: "10vh",
+                                    pointerEvents: "none",
+                                    opacity: 0.8,
+                                  }}
+                                />
+                                <p
+                                  style={{
+                                    position: "relative",
+                                    margin: "0.5vh 0 0 0",
+                                    top: "0.6vh",
+                                    fontSize: "1.8vh",
+                                    opacity: 0.5,
+                                    color: "#454545",
+                                  }}
+                                >
+                                  {sushi.requiredLikes}개의 좋아요 필요
+                                </p>
+
+                                {/* 컬러버전
+                                <img
+                                  src={padlock_color}
+                                  alt="padlock"
+                                  style={{
+                                    position: "relative",
+                                    top: "2vh",
+                                    left: "3.2vh",
+                                    width: "6vh",
+                                    height: "6vh",
+                                    pointerEvents: "none",
+                                    opacity: 0.8,
+                                  }}
+                                />
+                                <p
+                                  style={{
+                                    position: "relative",
+                                    margin: "0.5vh 0 0 0",
+                                    top: "2.5vh",
+                                    color: "#454545",
+                                    fontSize: "1.8vh",
+                                    color: "red",
+                                  }}
+                                >
+                                  {sushi.requiredLikes}개의 좋아요 필요
+                                </p> */}
+                              </div>
+                            )}
+                          </div>
                           <p
                             style={{
                               opacity:
@@ -402,6 +518,7 @@ const PostSushi = ({ onClose }) => {
                               top: "-5vh",
                               textAlign: "center",
                               fontSize: "1.95vh",
+                              fontWeight: "bold",
                             }}
                           >
                             {sushi.name}
@@ -460,21 +577,48 @@ const PostSushi = ({ onClose }) => {
             {showModal && (
               <div style={submitModalStyle}>
                 <div style={submitModalContent}>
-                  <h3>
-                    고민을 제출하고 난 후에는 <br /> 수정할 수 없습니다.
-                  </h3>
+                  <p>고민을 제출하고 난 후에는 수정할 수 없습니다.</p>
                   <div style={buttonContainer}>
                     <button
-                      style={confirmButtonStyle}
-                      onClick={handleConfirmSubmit}
-                    >
-                      확인
-                    </button>
-                    <button
-                      style={cancelButtonStyle}
+                      style={{
+                        ...cancelButtonStyle,
+                        backgroundColor: isCancelPressed
+                          ? "#67523E"
+                          : "#A68564",
+                        transform: isCancelPressed
+                          ? "translateY(0.4vh)"
+                          : "translateY(-0.2vh)",
+                        boxShadow: isCancelPressed
+                          ? "0 0 0 #67523E"
+                          : "0 0.4vh 0 #67523E",
+                      }}
                       onClick={handleCancelSubmit}
+                      onMouseDown={() => setIsCancelPressed(true)}
+                      onMouseUp={() => setIsCancelPressed(false)}
+                      onMouseLeave={() => setIsCancelPressed(false)}
                     >
                       취소
+                    </button>
+                    <button
+                      style={{
+                        ...confirmButtonStyle,
+                        backgroundColor: isConfirmPressed
+                          ? "#863334"
+                          : "#C85253",
+
+                        transform: isConfirmPressed
+                          ? "translateY(0.4vh)"
+                          : "translateY(-0.2vh)",
+                        boxShadow: isConfirmPressed
+                          ? "0 0 0 #863334"
+                          : "0 0.4vh 0 #863334",
+                      }}
+                      onClick={handleConfirmSubmit}
+                      onMouseDown={() => setIsConfirmPressed(true)}
+                      onMouseUp={() => setIsConfirmPressed(false)}
+                      onMouseLeave={() => setIsConfirmPressed(false)}
+                    >
+                      확인
                     </button>
                   </div>
                 </div>
@@ -484,7 +628,7 @@ const PostSushi = ({ onClose }) => {
             {showCompleteModal && (
               <div style={submitModalStyle}>
                 <div style={submitModalContent}>
-                  <h3>제출이 완료되었습니다!</h3>
+                  <p>제출이 완료되었습니다!</p>
 
                   <button
                     style={confirmButtonStyle}
@@ -495,74 +639,84 @@ const PostSushi = ({ onClose }) => {
 
                   <p>공유하기</p>
 
-                <div style={buttonContainer}>
-                  {/* 링크복사 아이콘 */}
-                  <i 
-                    className="fas fa-link"
-                    onClick={() => handleCopyClipBoard(`${window.location.origin}/${shareUrl}`)}
-                    style={iconStyleR}
-                  ></i>
-
-                  {/* 카카오톡 공유 아이콘 */}
-                  <button
-                    style={iconButtonStyle}
-                    onClick={() => {
-                      if (!window.Kakao.isInitialized()) {
-                        window.Kakao.init(
-                          import.meta.env.VITE_KAKAO_JAVASCRIPT_ID
-                        );
+                  <div style={buttonContainer}>
+                    {/* 링크복사 아이콘 */}
+                    <i
+                      className="fas fa-link"
+                      onClick={() =>
+                        handleCopyClipBoard(
+                          `${window.location.origin}/${shareUrl}`
+                        )
                       }
+                      style={iconStyleR}
+                    ></i>
 
-                      window.Kakao.Link.sendCustom({
-                        templateId: 117216, // 본인 템플릿 ID
-                        templateArgs: {
-                          url: shareUrl,
-                        },
-                      });
-                      console.log("카카오톡 공유하기" + shareUrl);
-                    }}
-                  >
-                    <img
-                      src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
-                      alt="카카오톡 아이콘"
-                      style={iconStyleF}
-                    />
-                  </button>
+                    {/* 카카오톡 공유 아이콘 */}
+                    <button
+                      style={iconButtonStyle}
+                      onClick={() => {
+                        if (!window.Kakao.isInitialized()) {
+                          window.Kakao.init(
+                            import.meta.env.VITE_KAKAO_JAVASCRIPT_ID
+                          );
+                        }
 
-                  {/* 페이스북 공유 아이콘 */}
-                  <button
-                    style={iconButtonStyle}
-                    onClick={() => {
-                      window.open(
-                        `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${shareUrl}`,
-                        "_blank"
-                      );
-                      console.log("페이스북 공유하기");
-                    }}
-                  >
-                    <i className="fab fa-facebook-square" style={iconStyleF}></i>
-                  </button>
+                        window.Kakao.Link.sendCustom({
+                          templateId: 117216, // 본인 템플릿 ID
+                          templateArgs: {
+                            url: shareUrl,
+                          },
+                        });
+                        console.log("카카오톡 공유하기" + shareUrl);
+                      }}
+                    >
+                      <img
+                        src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
+                        alt="카카오톡 아이콘"
+                        style={iconStyleK}
+                      />
+                    </button>
 
-                  {/* X (구 트위터) 공유 아이콘 */}
-                  <a
-                    href={`https://x.com/intent/tweet?text=Check%20out%20this%20sushi%20post!&url=${window.location.origin}/${shareUrl}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={iconButtonStyle}
-                  >
-                    <img
-                      src={x}
-                      alt="X (Twitter) Icon"
-                      style={iconStyleX}
-                    />
-                  </a>
+                    {/* 페이스북 공유 아이콘 */}
+                    <button
+                      style={iconButtonStyle}
+                      onClick={() => {
+                        window.open(
+                          `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${shareUrl}`,
+                          "_blank"
+                        );
+                        console.log("페이스북 공유하기");
+                      }}
+                    >
+                      <i
+                        className="fa-brands fa-facebook-f"
+                        style={iconStyleF}
+                      ></i>
+                    </button>
+
+                    {/* X (구 트위터) 공유 아이콘 */}
+                    <a
+                      href={`https://x.com/intent/tweet?text=Check%20out%20this%20sushi%20post!&url=${window.location.origin}/${shareUrl}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={iconButtonStyle}
+                    >
+                      <img src={x} alt="X (Twitter) Icon" style={iconStyleX} />
+                    </a>
+                  </div>
                 </div>
-              </div>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* 공통 알림 모달 */}
+      <CommonAlertModal
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, message: "" })}
+        message={alertModal.message}
+      />
     </>
   );
 };
@@ -630,7 +784,7 @@ const orderExplain = {
   margin: "0",
   height: "4vh",
   paddingRight: "1vh",
-  fontSize: "1.55vh",
+  fontSize: "1.7vh",
   textAlign: "right",
   color: "#454545",
 };
@@ -735,6 +889,7 @@ const titleText = {
   resize: "none",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
+  padding: "1vh",
   width: "44vh",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
@@ -747,7 +902,8 @@ const contentText = {
   resize: "none",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
-  height: "36.8vh",
+  padding: "1vh",
+  height: "34.4vh",
   width: "44vh",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
@@ -785,6 +941,7 @@ const submitModalStyle = {
   justifyContent: "center",
   alignItems: "center",
   zIndex: 1000,
+  transition: "opacity 0.2s ease-in-out",
 };
 
 const submitModalContent = {
@@ -796,7 +953,7 @@ const submitModalContent = {
   textAlign: "center",
   border: "1vh solid #906C48",
   outline: "0.3vh solid #67523E",
-  fontSize: "2.8vh",
+  fontSize: "2.3vh",
 };
 
 const buttonContainer = {
@@ -806,7 +963,7 @@ const buttonContainer = {
   width: "100%",
   marginTop: "3vh",
   marginBottom: "1vh",
-  gap: "1.5vh",
+  gap: "3vh",
 };
 
 const iconButtonStyle = {
@@ -832,19 +989,32 @@ const iconStyleR = {
   verticalAlign: "middle", // 수직 정렬 맞추기
 };
 
-const iconStyleF = {
+const iconStyleK = {
   fontSize: "3.2em", // 아이콘 크기 일관성 (조금 작게 조정)
-  color: "#3b5998", // 아이콘 색상
   width: "40px", // 동일한 크기로 지정
   height: "40px", // 동일한 크기로 지정
   display: "inline-block",
   verticalAlign: "middle", // 수직 정렬 맞추기
 };
 
+const iconStyleF = {
+  fontSize: "2em",
+  backgroundColor: "#3b5998",
+  color: "#ffffff",
+  width: "40px",
+  height: "40px",
+  borderRadius: "15%",
+  lineHeight: "40px",
+  display: "inline-block",
+  textAlign: "center",
+  transition: "background-color 0.3s ease-in-out",
+  verticalAlign: "middle", // 수직 정렬 맞추기
+};
+
 const iconStyleX = {
   color: "#3b5998", // 아이콘 색상
-  width: "45px", // 동일한 크기로 지정
-  height: "45px", // 동일한 크기로 지정
+  width: "47px", // 동일한 크기로 지정
+  height: "47px", // 동일한 크기로 지정
   display: "inline-block",
   verticalAlign: "middle", // 수직 정렬 맞추기
 };
@@ -853,7 +1023,7 @@ const confirmButtonStyle = {
   padding: "1vh 0",
   border: "none",
   borderRadius: "1vh",
-  backgroundColor: "#dc3545",
+  backgroundColor: "#A68564",
   color: "white",
   cursor: "pointer",
   width: "40%",
@@ -861,13 +1031,14 @@ const confirmButtonStyle = {
   lineHeight: "1",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.8vh",
+  transition: "all 0.1s ease",
 };
 
 const cancelButtonStyle = {
   padding: "1vh 0",
   border: "none",
   borderRadius: "1vh",
-  backgroundColor: "#808080",
+  backgroundColor: "#C85253",
   color: "white",
   cursor: "pointer",
   width: "40%",
@@ -875,6 +1046,7 @@ const cancelButtonStyle = {
   lineHeight: "1",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.8vh",
+  transition: "all 0.1s ease",
 };
 
 const textCounter = {

@@ -28,15 +28,12 @@ const KakaoLoginButton = () => {
       onClick={handleKakaoLogin}
       style={{
         position: "absolute",
-        left: "calc(50% - 5vh)", // 잠시 왼쪽으로
+        left: "calc(50% - 5vh)",
         background: "#FEE500",
-        height: "7vh", // 화면 세로 크기에 비례하도록 설정
-        width: "7vh", // 가로 크기도 세로와 동일하게 설정
+        height: "7vh",
+        width: "7vh",
         border: "none",
-        borderRadius: "50%", // 원형으로 만들기
-        color: "#000",
-        fontWeight: "bold",
-        fontSize: "3vh", // 반응형 폰트 크기
+        borderRadius: "50%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -44,9 +41,21 @@ const KakaoLoginButton = () => {
         zIndex: "2",
       }}
     >
-      K
+      <svg 
+        width="60%" // 이거 조절 해서 말풍선 크기 조절
+        height="60%" // 이거 조절 해서 말풍선 크기 조절
+        viewBox="0 0 24 24" 
+        fill="#000000"
+        style={{
+          minWidth: "24px",
+          minHeight: "24px",
+        }}
+      >
+        <path d="M12 3C6.5 3 2 6.5 2 11c0 2.9 1.9 5.4 4.7 6.9-.2.6-.7 2.3-.8 2.7 0 0 0 .2.1.2s.2.1.3 0c.4-.3 4.1-2.8 4.7-3.2.3 0 .7.1 1 .1 5.5 0 10-3.5 10-8C22 6.5 17.5 3 12 3z"/>
+      </svg>
     </button>
   );
 };
+
 
 export default KakaoLoginButton;

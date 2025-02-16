@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMyAnswers } from "../store/slices/answerSlice";
 import SushiAnswerCard from "../components/SushiAnswerCard";
@@ -6,37 +6,90 @@ import { useTrail, animated } from "@react-spring/web";
 
 const MyAnswerList = () => {
   const dispatch = useDispatch();
-  const myAnswers = useSelector((state) => state.answer.myAnswers || {}); // 객체 초기화
+  const [displayAnswers, setDisplayAnswers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const [initialLoding, setInitialLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+
+    const fetchInitialData = async () => {
+      try {
+        const result = await dispatch(
+          fetchMyAnswers({
+            page: 1,
+            size: 10,
+          })
+        );
+
+        if (mounted && result.payload && result.payload.data) {
+          setInitialLoading(false);
+          setDisplayAnswers(result.payload.data.content);
+          setHasMore(result.payload.data.content.length === 10);
+        }
+      } catch (error) {
+        console.error("초기 데이터 로딩 실패:", error);
+      }
+    };
+
+    fetchInitialData();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const handleScroll = (e) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+
+    if (!loading && hasMore && scrollHeight - scrollTop <= clientHeight + 100) {
+      loadMore();
+    }
+  };
+
+  const loadMore = () => {
+    if (loading || !hasMore) return;
+
+    setLoading(true);
+    const nextPage = page + 1;
+
+    console.log("다음 페이지 요청:", { nextPage });
+
     dispatch(
       fetchMyAnswers({
-        page: 1,
+        page: nextPage,
         size: 10,
       })
     ).then((result) => {
-      console.log("내 답변 리스트:", result.payload.data.content);
+      if (result.payload && result.payload.data) {
+        const newAnswers = result.payload.data.content;
+
+        console.log("새로 불러온 답변 수", newAnswers.length);
+
+        if (newAnswers.length < 10) {
+          console.log("더 이상 불러올 데이터가 없습니다.");
+          setHasMore(false);
+        }
+        setDisplayAnswers((prev) => [...prev, ...newAnswers]);
+        setPage(nextPage);
+      }
+      setLoading(false);
     });
-  }, [dispatch]);
-
-  useEffect(() => {
-    console.log("현재 내 답변 상태:", myAnswers);
-  }, [myAnswers]);
-
-  // `myAnswers.content`가 존재하지 않으면 빈 배열을 기본값으로 설정
-  const answerList = myAnswers.content || [];
+  };
 
   // 애니메이션을 위해 useTrail 사용
-  const trail = useTrail(answerList.length, {
+  const trail = useTrail(displayAnswers.length, {
     opacity: 1,
     transform: "translateY(0px)",
     from: { opacity: 0, transform: "translateY(50px)" },
-    config: { tension: 250, friction: 25 }, // 애니메이션 속도 조절
+    config: { tension: 250, friction: 25 },
   });
 
   return (
-    <div style={styles.background}>
-      {/* 나의 답변 박스 */}
+    <div style={styles.background} onScroll={handleScroll}>
       <div style={styles.listContainer}>
         <div style={styles.position}>
           <div style={styles.outerBox}>
@@ -44,24 +97,37 @@ const MyAnswerList = () => {
           </div>
         </div>
 
-        {/* 답변 리스트 */}
-        {answerList.length > 0 ? (
+        {displayAnswers && displayAnswers.length > 0 ? (
           <ul style={styles.list}>
             {trail.map((props, index) => (
-              <animated.li key={answerList[index].sushiId} style={{ ...props, ...styles.listItem }}>
+              <animated.li
+                key={`${displayAnswers[index].sushiId}-${index}`}
+                style={{ ...props, ...styles.listItem }}
+              >
                 <SushiAnswerCard
-                  id={answerList[index].sushiId}
-                  category={answerList[index].category}
-                  title={answerList[index].title}
-                  content={answerList[index].content}
-                  showHeart={answerList[index].isLiked || answerList[index].getLike}
-                  sushiType={answerList[index].sushiType}
+                  id={displayAnswers[index].sushiId}
+                  category={displayAnswers[index].category}
+                  title={displayAnswers[index].title}
+                  content={displayAnswers[index].content}
+                  showHeart={
+                    displayAnswers[index].isLiked ||
+                    displayAnswers[index].getLike
+                  }
+                  sushiType={displayAnswers[index].sushiType}
                 />
               </animated.li>
             ))}
           </ul>
-        ) : (
+        ) : initialLoding ? (<div style={styles.noResult}></div>) : (
           <div style={styles.noResult}>등록된 답변이 없습니다.</div>
+        )}
+
+        {/* 로딩 표시 */}
+        {loading && <div style={styles.loadingText}>로딩 중...</div>}
+
+        {/* 더 이상 데이터가 없을 때 메시지 */}
+        {!hasMore && displayAnswers.length > 0 && (
+          <div style={styles.endMessage}>더 이상 답변이 없습니다.</div>
         )}
       </div>
     </div>
@@ -125,6 +191,18 @@ const styles = {
   },
   listItem: {
     marginBottom: "1vh",
+  },
+  loadingText: {
+    textAlign: "center",
+    color: "#8B6B3E",
+    fontSize: "2vh",
+    padding: "2vh 0",
+  },
+  endMessage: {
+    textAlign: "center",
+    color: "#8B6B3E",
+    fontSize: "2vh",
+    padding: "2vh 0",
   },
 };
 
