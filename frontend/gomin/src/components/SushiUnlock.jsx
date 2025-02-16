@@ -453,7 +453,7 @@ const sushiImageStyle = {
 
 const sushiNameStyle = {
   position: "absolute",
-  top: "7vh",
+  bottom: "4.4vh",
   width: "100%",
   color: "#5D4A37",
   textAlign: "center",
@@ -473,21 +473,19 @@ const lockedStyle = {
 };
 
 const lockIconStyle = {
-  position: "relative",
+  position: "absolute",
   width: "100%", // 이미지 크기 조정
   height: "100%",
   left: "-0.15vh",
-  top: "-0.2vh",
+  top: "0.3vh",
   scale: "1.5",
 };
 
 const requiredLikesStyle = {
-  position: "relative",
+  position: "absolute",
   width: "100%",
   height: "100%",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  top: "45%",
   fontSize: "0.7vh",
   textAlign: "center",
   wordBreak: "keep-all",
@@ -503,7 +501,7 @@ const requiredLikesStyle = {
 
 const sushiUnlockNameStyle = {
   position: "absolute",
-  top: "7vh",
+  bottom: "4.4vh",
   width: "100%",
   color: "#5D4A37",
   textAlign: "center",
