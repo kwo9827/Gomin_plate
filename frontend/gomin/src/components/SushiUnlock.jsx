@@ -453,7 +453,7 @@ const sushiImageStyle = {
 
 const sushiNameStyle = {
   position: "absolute",
-  bottom: "4.4vh",
+  bottom: "35%",
   width: "100%",
   color: "#5D4A37",
   textAlign: "center",
@@ -501,7 +501,7 @@ const requiredLikesStyle = {
 
 const sushiUnlockNameStyle = {
   position: "absolute",
-  bottom: "4.4vh",
+  bottom: "35%",
   width: "100%",
   color: "#5D4A37",
   textAlign: "center",
