@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.io.IOException;
 
@@ -20,6 +21,9 @@ import java.io.IOException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * SSE 요청이 timeout 되었을 때 발생하는 예외를 처리합니다.
+     */
     @ExceptionHandler(AsyncRequestTimeoutException.class)
     public void handleAsyncRequestTimeoutException(AsyncRequestTimeoutException e) {
         log.debug("SSE connection closed due to timeout - This is expected during server shutdown");
@@ -32,6 +36,9 @@ public class GlobalExceptionHandler {
         // 클라이언트 연결 종료는 정상적인 상황이므로 별도 처리 없이 void 반환
     }
 
+    /**
+     * SSE 요청이 인증되지 않았을 때 발생하는 예외를 처리합니다.
+     */
     @ExceptionHandler(AuthorizationDeniedException.class)
     public void handleAuthorizationDeniedException(AuthorizationDeniedException e, HttpServletRequest request) {
         if (request.isAsyncStarted()) {
@@ -93,7 +100,31 @@ public class GlobalExceptionHandler {
                 field,
                 defaultMessage
         );
-
         return ApiResponse.error(ErrorCode.INVALID_INPUT_VALUE, field + " : " + defaultMessage);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    protected ResponseEntity<ApiResponse<Object>> handleNoResourceFoundException(
+            NoResourceFoundException e, HttpServletRequest request) {
+        log.warn("[ResourceNotFound] {} {}", request.getMethod(), request.getRequestURI());
+        return ApiResponse.error(ErrorCode.RESOURCE_NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<ApiResponse<Object>> handleIllegalArgumentException(
+            IllegalArgumentException e, HttpServletRequest request) {
+        // HTTP 메소드 이름 관련 예외는 보안 시도로 간주
+        if (e.getMessage() != null && e.getMessage().contains("HTTP method names must be tokens")) {
+            log.warn("[InvalidRequest] Malformed HTTP method from IP: {}",
+                    request.getRemoteAddr());
+            return ApiResponse.error(ErrorCode.INVALID_INPUT_VALUE);
+        }
+
+        // 다른 IllegalArgumentException은 기존대로 처리
+        log.error("[IllegalArgument] {} {}: {}",
+                request.getMethod(),
+                request.getRequestURI(),
+                e.getMessage());
+        return ApiResponse.error(ErrorCode.INVALID_INPUT_VALUE);
     }
 }
