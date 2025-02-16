@@ -14,6 +14,7 @@ import postItGreen from "../assets/postIt/postIt2.webp";
 import postItBlue from "../assets/postIt/postIt3.webp";
 import postItRed from "../assets/postIt/postIt4.webp";
 import postItOrange from "../assets/postIt/postIt5.webp";
+import warningIcon from "../assets/postIt/Group 6.webp";
 
 import PawPrintIcon from "../components/icons/PawPrintIcon";
 
@@ -209,7 +210,7 @@ const SushiDetail = () => {
                     backgroundSize: "contain",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
-                    filter: item.isNegative ? "blur(8px)" : "none",
+                    // filter: item.isNegative ? "blur(2px)" : "none",
                     cursor: "pointer",
                     animation: `fadeIn 0.5s ease forwards ${
                       0.1 + index * 0.1
@@ -219,11 +220,22 @@ const SushiDetail = () => {
                   onClick={() => openAnswer(item, index)}
                 >
                   <div style={{ ...styles.postIt, backgroundImage: "none" }}>
-                    <p style={styles.postItText}>
-                      {item.content.length > 20
-                        ? `${item.content.slice(0, 20)}...`
-                        : item.content}
-                    </p>
+                    {item.isNegative && <div style={styles.warningIcon}></div>}
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        filter: item.isNegative ? "blur(2vh)" : "none",
+                        position: "relative",
+                        zIndex: 1,
+                      }}
+                    >
+                      <p style={styles.postItText}>
+                        {item.content.length > 20
+                          ? `${item.content.slice(0, 20)}...`
+                          : item.content}
+                      </p>
+                    </div>
 
                     {item.isGPT && (
                       <>
@@ -418,7 +430,7 @@ const styles = {
     top: "40%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    fontSize: "1vh",
+    fontSize: "0.9vh",
     color: "#5D4A37",
     textAlign: "center",
     width: "70%",
@@ -511,6 +523,19 @@ const styles = {
     transform: "scale(0.7) rotate(15deg)", // 약간 회전 추가
     zIndex: 3,
     color: "#4a4a4a",
+  },
+  warningIcon: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "4vh",
+    height: "4vh",
+    backgroundImage: `url(${warningIcon})`,
+    backgroundSize: "contain", // 이미지 크기를 div에 맞게 조정
+    backgroundRepeat: "no-repeat", // 이미지를 반복하지 않도록
+    zIndex: 2,
+    pointerEvents: "none",
   },
 };
 
