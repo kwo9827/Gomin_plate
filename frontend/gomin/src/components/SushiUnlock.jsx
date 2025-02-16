@@ -16,7 +16,6 @@ import uniImg from "../assets/sushi/성게알초밥.webp";
 import flatfighImg from "../assets/sushi/광어초밥.webp";
 import salmonEggImg from "../assets/sushi/연어알초밥.webp";
 
-const MAX_LIKES = 80; // 최대 좋아요 수 수정 (참치 해금 조건)
 const SUSHI_COUNT = 12;
 
 const keyframes = `
@@ -165,21 +164,26 @@ const SushiUnlock = ({ isOpen, onClose }) => {
 
         <div style={progressContainer}>
           <div style={progressBarContainer}>
-            <span style={leftIconStyle}>❤️</span>
+            <div style={leftIconContainer}>
+              <p style={leftIconStyle}>❤️</p>
+              <p style={{ ...leftTextStyle }}>{likesReceived}</p>
+            </div>
             <div style={progressBar}>
               <div
                 style={{ ...progressFill, width: `${progressPercentage}%` }}
               />
             </div>
-            <img
-              src={nextSushi.image}
-              alt={nextSushi.name}
-              style={rightIconStyle}
-            />
+            <div style={rightIconContainer}>
+              <img
+                src={nextSushi.image}
+                alt={nextSushi.name}
+                style={rightIconStyle}
+              />
+              <p style={rightTextStyle}>
+                다음초밥까지 {nextSushi.requiredLikes - likesReceived}개!
+              </p>
+            </div>
           </div>
-          <span style={progressText}>
-            {likesReceived} / {nextSushi.requiredLikes}
-          </span>
         </div>
 
         <div style={sushiGrid}>
@@ -295,9 +299,8 @@ const progressContainer = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  marginBottom: "1.5vh",
+  marginBottom: "3vh",
   width: "80%",
-  margin: "0 auto",
 };
 
 const progressBarContainer = {
@@ -328,23 +331,64 @@ const progressFill = {
   transition: "width 0.5s ease-in-out",
 };
 
-const leftIconStyle = {
+const leftIconContainer = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
   position: "absolute",
-  top: "-2.2vh",
-  left: "0",
-  fontSize: "4.8vh",
+  top: "-1.6vh",
+  left: "0vh",
+  zIndex: 3,
+};
+
+const leftIconStyle = {
+  margin: 0,
+  textAlign: "center",
+  fontSize: "4vh",
+  color: "#5D4A37",
+};
+
+const leftTextStyle = {
+  position: "absolute",
+  top: "2.1vh",
+  margin: 0,
+  textAlign: "center",
+  fontSize: "2vh",
+  color: "#FFD700",
+};
+
+const rightIconContainer = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  position: "absolute",
+  top: "-1.4vh",
+  right: "-3vh",
   zIndex: 3,
 };
 
 const rightIconStyle = {
   position: "absolute",
-  right: "-10vh",
-  top: "-13vh",
+  right: "-9vh",
+  top: "-11.3vh",
   width: "30vh",
   height: "30vh",
   objectFit: "contain",
   zIndex: 3,
   pointerEvents: "none",
+};
+
+const rightTextStyle = {
+  position: "absolute",
+  width: "20vh",
+  right: "-4vh",
+  top: "5.5vh",
+  margin: 0,
+  textAlign: "center",
+  fontSize: "2vh",
+  color: "#5D4A37",
 };
 
 const progressText = {
