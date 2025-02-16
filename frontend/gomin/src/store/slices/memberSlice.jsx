@@ -5,8 +5,8 @@ const initialState = {
   nickname: localStorage.getItem("userNickname") || "",
   email: "",
   likesReceived: 0,
-  accessToken: "123",
-  refreshToken: "",
+  accessToken: "default",
+  refreshToken: "default",
   isNew: false,
 };
 

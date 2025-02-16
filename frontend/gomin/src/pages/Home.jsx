@@ -161,7 +161,7 @@ const Home = () => {
       sessionStorage.setItem("hasVisitedHome", "true");
       setTimeout(() => {
         setHasRefreshed(true);
-        window.location.reload();
+        // window.location.reload();
       }, 100);
     } else {
       // fade out
