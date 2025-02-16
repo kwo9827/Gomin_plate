@@ -17,6 +17,7 @@ import flatfighImg from "../assets/sushi/광어초밥.webp";
 import salmonEggImg from "../assets/sushi/연어알초밥.webp";
 
 import padlockImg from "../assets/home/padlock_color.webp";
+import heartImg from "../assets/heart.webp";
 
 const SUSHI_COUNT = 12;
 
@@ -167,7 +168,7 @@ const SushiUnlock = ({ isOpen, onClose }) => {
         <div style={progressContainer}>
           <div style={progressBarContainer}>
             <div style={leftIconContainer}>
-              <p style={leftIconStyle}>❤️</p>
+              <img src={heartImg} alt="하트" style={leftIconStyle} />
               <p style={leftTextStyle}>{likesReceived}</p>
             </div>
             <div style={progressBar}>
@@ -348,15 +349,17 @@ const leftIconContainer = {
 };
 
 const leftIconStyle = {
-  margin: 0,
-  textAlign: "center",
-  fontSize: "4vh",
-  color: "#5D4A37",
+  position: "absolute",
+  top: "-6.9vh",
+  left: "-6.5vh",
+  width: "20vh",
+  height: "20vh",
 };
 
 const leftTextStyle = {
   position: "absolute",
-  top: "2.1vh",
+  top: "2vh",
+  left: "3vh",
   margin: 0,
   textAlign: "center",
   fontSize: "2vh",
@@ -418,6 +421,7 @@ const sushiOuterStyle = {
   padding: "0.5vh",
   boxSizing: "border-box",
   border: "0.3vh solid #906C48",
+  borderRadius: "1vh",
 };
 
 const sushiItem = {
@@ -486,15 +490,15 @@ const requiredLikesStyle = {
   width: "100%",
   height: "100%",
   top: "45%",
-  fontSize: "0.7vh",
+  fontSize: "0.65vh",
   textAlign: "center",
   wordBreak: "keep-all",
   color: "#5D4A37",
   textShadow: `
-    -0.5px -0.5px 0 #fff,
-    0.5px -0.5px 0 #fff,
-    -0.5px 0.5px 0 #fff,
-    0.5px 0.5px 0 #fff
+    -0.05vh -0.05vh 0 #fff,
+    0.05vh -0.05vh 0 #fff,
+    -0.05vh 0.05vh 0 #fff,
+    0.05vh 0.05vh 0 #fff
   `,
   zIndex: "1",
 };
