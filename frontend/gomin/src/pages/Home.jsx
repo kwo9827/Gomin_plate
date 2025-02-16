@@ -13,6 +13,7 @@ import SushiUnlock from "../components/SushiUnlock";
 import PostSushi from "./PostSushi";
 import SushiUnlockBar from "../components/SushiUnlockBar";
 import BgmContext from "../context/BgmProvider";
+import CommonAlertModal from "../components/CommonAlertModal";
 
 import { useSpring, animated } from "@react-spring/web";
 
@@ -95,6 +96,25 @@ const Home = () => {
   const handleAnswerSubmit = () => {
     setShowAnswerSubmitModal(true);
   };
+
+  const [alertModal, setAlertModal] = useState({
+    isOpen: false,
+    message: "",
+  });
+
+  const showAlert = (message) => {
+    setAlertModal({
+      isOpen: true,
+      message,
+    });
+  };
+
+  useEffect(() => {
+    if (isSushiViewOpen && selectedSushiData?.isClosed) {
+      showAlert("이미 마감된 초밥이에요!");
+      setIsSushiViewOpen(false); // 모달 열리지 않도록 막기
+    }
+  }, [isSushiViewOpen, selectedSushiData]);
 
   // useSSE();
   const isSSEConnected = useSSE();
@@ -344,7 +364,7 @@ const Home = () => {
               </div>
             )} */}
             <audio ref={audioRef} src={plate} />
-            {selectedSushiData && (
+            {selectedSushiData && isSushiViewOpen && !selectedSushiData.isClosed && (
               <SushiView
                 isOpen={isSushiViewOpen}
                 onClose={() => setIsSushiViewOpen(false)}
@@ -369,6 +389,11 @@ const Home = () => {
             <NotificationModal
               isOpen={isNotificationOpen}
               onClose={closeNotification}
+            />
+            <CommonAlertModal
+              isOpen={alertModal.isOpen}
+              onClose={() => setAlertModal({ isOpen: false, message: "" })}
+              message={alertModal.message}
             />
           </div>
         </div>
