@@ -25,7 +25,7 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
   };
 
   const dialogues = [
-    "어서오라냥. 처음 보는 분이다냥.",
+    "어서오라냥. 처음 보는 손님이다냥.",
     "고민 한접시의 이용 방법을 알려주겠다냥.",
     "준비가 되면 화면을 톡톡 눌러달라냥!",
   ];
