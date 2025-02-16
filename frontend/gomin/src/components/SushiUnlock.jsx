@@ -16,6 +16,8 @@ import uniImg from "../assets/sushi/성게알초밥.webp";
 import flatfighImg from "../assets/sushi/광어초밥.webp";
 import salmonEggImg from "../assets/sushi/연어알초밥.webp";
 
+import padlockImg from "../assets/home/padlock_color.webp";
+
 const SUSHI_COUNT = 12;
 
 const keyframes = `
@@ -166,7 +168,7 @@ const SushiUnlock = ({ isOpen, onClose }) => {
           <div style={progressBarContainer}>
             <div style={leftIconContainer}>
               <p style={leftIconStyle}>❤️</p>
-              <p style={{ ...leftTextStyle }}>{likesReceived}</p>
+              <p style={leftTextStyle}>{likesReceived}</p>
             </div>
             <div style={progressBar}>
               <div
@@ -205,10 +207,14 @@ const SushiUnlock = ({ isOpen, onClose }) => {
                     </div>
                   ) : (
                     <div style={lockedStyle}>
-                      <span style={lockIconStyle}>🔒</span>
                       <div style={requiredLikesStyle}>
                         {sushiInfo.requiredLikes}개의 좋아요 필요
                       </div>
+                      <img
+                        src={padlockImg}
+                        alt="자물쇠"
+                        style={lockIconStyle}
+                      />
                       <div style={sushiUnlockNameStyle}>{sushiInfo.name}</div>
                     </div>
                   )}
@@ -259,26 +265,25 @@ const modalStyle = {
 };
 
 const outerBoxStyle = {
-  width: "30vh",
-  maxWidth: "250px",
-  margin: "20px auto",
-  border: "4px solid #8B6B3E",
-  borderRadius: "8px",
+  width: "26vh",
+  margin: "2vh",
+  border: "0.4vh solid #8B6B3E",
+  borderRadius: "1vh",
   backgroundColor: "#B2975C",
-  padding: "6px",
+  padding: "0.6vh",
   boxSizing: "border-box",
 };
 
 const innerBoxStyle = {
   width: "100%",
-  border: "2px solid #906C48",
-  borderRadius: "4px",
+  border: "0.2vh solid #906C48",
+  borderRadius: "0.5vh",
   backgroundColor: "#B2975C",
   textAlign: "center",
   color: "#5D4A37",
-  fontSize: "1.5rem",
+  fontSize: "2.3vh",
   fontWeight: "bold",
-  padding: "6px 0",
+  padding: "0.5vh",
   boxSizing: "border-box",
 };
 
@@ -355,7 +360,7 @@ const leftTextStyle = {
   margin: 0,
   textAlign: "center",
   fontSize: "2vh",
-  color: "#FFD700",
+  color: "#FFFFFF",
 };
 
 const rightIconContainer = {
@@ -468,20 +473,21 @@ const lockedStyle = {
 };
 
 const lockIconStyle = {
-  position: "absolute",
-  width: "100%",
+  position: "relative",
+  width: "100%", // 이미지 크기 조정
   height: "100%",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  top: "-0.8vh",
+  left: "-0.15vh",
+  top: "-0.2vh",
+  scale: "1.5",
 };
 
 const requiredLikesStyle = {
-  position: "absolute",
+  position: "relative",
   width: "100%",
-  top: "5.5vh",
+  height: "100%",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   fontSize: "0.7vh",
   textAlign: "center",
   wordBreak: "keep-all",
@@ -492,6 +498,7 @@ const requiredLikesStyle = {
     -0.5px 0.5px 0 #fff,
     0.5px 0.5px 0 #fff
   `,
+  zIndex: "1",
 };
 
 const sushiUnlockNameStyle = {
