@@ -25,9 +25,9 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
   };
 
   const dialogues = [
-    "어서오세요. 처음 뵙는 분이군요.",
-    "고민 한접시의 이용 방법을 알려드릴게요.",
-    "준비가 되면 화면을 눌러 진행하세요!",
+    "어서오라냥. 처음 보는 분이다냥.",
+    "고민 한접시의 이용 방법을 알려주겠다냥.",
+    "준비가 되면 화면을 톡톡 눌러달라냥!",
   ];
 
   const tutorialSlides = [t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t9];
