@@ -1,3 +1,17 @@
+import postItPink from "../../../assets/postIt/postIt1.webp";
+import postItGreen from "../../../assets/postIt/postIt2.webp";
+import postItBlue from "../../../assets/postIt/postIt3.webp";
+import postItRed from "../../../assets/postIt/postIt4.webp";
+import postItOrange from "../../../assets/postIt/postIt5.webp";
+
+export const postItImages = {
+  pink: postItPink,
+  green: postItGreen,
+  blue: postItBlue,
+  red: postItRed,
+  orange: postItOrange,
+};
+
 export const modalStyles = {
   overlay: {
     position: "fixed",
@@ -14,73 +28,135 @@ export const modalStyles = {
   },
   postOuterBox: {
     position: "relative",
-    width: "55vh",
-    height: "55vh",
-    maxWidth: "500px",
-    maxHeight: "500px",
+    width: "40vh",
+    height: "40vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
   postIt: {
     position: "relative",
-    width: "55vh",
-    height: "55vh",
+    width: "40vh",
+    height: "40vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
   postItImage: {
-    position: "absolute",
-    top: "0",
-    right: "0%",
     width: "100%",
     height: "100%",
+    marginTop: "4vh",
+    transform: "scale(1.5)",
     objectFit: "contain",
   },
   closeButton: {
     position: "absolute",
-    top: "17%",
-    right: "22%",
+    top: "5%",
+    right: "8%",
     cursor: "pointer",
-    fontSize: "2.3vh",
-    zIndex: 3,
+    fontSize: "2.5vh",
     color: "#000000",
+    zIndex: 3,
   },
   content: {
-    position: "relative",
-    margin: "10px 0",
-    zIndex: 2,
-    width: "28vh",
-    height: "auto",
+    position: "absolute",
+    width: "80%",
+    height: "50%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     fontSize: "2vh",
-    bottom: "5%",
+    textAlign: "center",
   },
   heart: {
     position: "absolute",
-    bottom: "25%",
-    right: "20%",
+    bottom: "5%",
+    right: "5%",
     fontSize: "3vh",
     zIndex: 3,
     cursor: "pointer",
   },
-  pawPrint: {
+  // GPT Modal specific styles
+
+  // 이전 버전
+  // gptHeader: {
+  //   display: "flex",
+  //   alignItems: "center",
+  //   position: "absolute",
+  //   top: "22%",
+  //   left: "23%",
+  //   zIndex: 3,
+  // },
+  // gptHeaderTitle: {
+  //   color: "#424242",
+  //   fontSize: "2.2vh",
+  //   margin: "-0.5vh 0 0.5vh 1vh",
+  // },
+  // gptMasterIcon: {
+  //   width: "3vh",
+  //   height: "3vh",
+  //   marginRight: "1vh",
+  // },
+
+  gptHeader: {
+    display: "flex",
+    alignItems: "center",
     position: "absolute",
-    bottom: "25%",
-    right: "20%",
-    fontSize: "28px",
+    top: "10%", // 상단으로 이동
+    left: "18%", // 원래 좌측 위치 유지
     zIndex: 3,
-    color: "#4a4a4a",
   },
-  gptDisclaimer: {
+  gptHeaderTitle: {
+    color: "#424242",
+    fontSize: "2.2vh",
+    margin: "-0.5vh 0 0.5vh 1vh",
+  },
+  gptMasterIcon: {
     position: "absolute",
-    bottom: "25%",
-    left: "20%",
-    fontSize: "1.4vh",
-    color: "#666666",
+    width: "5vh",
+    height: "5vh",
+    bottom: "5%",
+    right: "10%",
     zIndex: 3,
+  },
+
+  // Negative Modal specific styles
+  negativeInnerBox: {
+    backgroundColor: "#fdf5e6",
+    padding: "3vh",
+    borderRadius: "2vh",
+    width: "40vh",
+    position: "relative",
+    textAlign: "center",
+    border: "1vh solid #906C48",
+    outline: "0.3vh solid #67523E",
+    fontSize: "2.3vh",
+  },
+  warningContent: {
+    position: "relative",
+    zIndex: 1,
+    fontSize: "2.3vh",
+  },
+  buttonBox: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    marginTop: "3vh",
+    marginBottom: "1vh",
+    gap: "5vh",
+  },
+  button: {
+    padding: "1vh 0",
+    border: "none",
+    borderRadius: "1vh",
+    color: "white",
+    cursor: "pointer",
+    width: "40%",
+    whiteSpace: "nowrap",
+    lineHeight: "1",
+    fontFamily: "Ownglyph, Ownglyph",
+    fontSize: "2.8vh",
+    transition: "all 0.1s ease",
   },
 };
