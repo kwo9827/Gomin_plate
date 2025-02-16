@@ -63,7 +63,7 @@ export const modalStyles = {
     position: "absolute",
     bottom: "25%",
     right: "20%",
-    fontSize: "28px",
+    fontSize: "3vh",
     zIndex: 3,
     cursor: "pointer",
   },
