@@ -235,7 +235,7 @@ const remainingTimeStyle = {
 const soldoutStyle = {
   position: "absolute",
   top: `calc(4 * var(--custom-vh))`,
-  left: `calc(1.9 * var(--custom-vh))`,
+  left: `calc(1.5 * var(--custom-vh))`,
   fontWeight: "bold",
   fontSize: `calc(2 * var(--custom-vh))`,
   textShadow: `
