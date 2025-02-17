@@ -187,7 +187,7 @@ const contentStyle = {
 
 const dividerStyle = {
   width: `calc(24 * var(--custom-vh))`,
-  border: "0.5px solid #BCBCBC",
+  border: `calc(0.05 * var(--custom-vh)) solid #BCBCBC`,
   margin: `calc(1 * var(--custom-vh)) 0`,
 };
 
