@@ -9,146 +9,156 @@ export const useSSE = (initialDelay = 3000) => {
   const [isConnected, setIsConnected] = useState(false);
   const eventSourceRef = useRef(null);
   const reconnectTimeoutRef = useRef(null);
-  const initialDelayTimeoutRef = useRef(null);
   const retryCountRef = useRef(0);
   const MAX_RETRIES = 10;
 
-  const cleanup = useCallback(() => {
-    if (eventSourceRef.current) {
-      console.log("Cleaning up SSE connection");
-      eventSourceRef.current.close();
-      eventSourceRef.current = null;
-    }
-    setIsConnected(false);
-  }, []);
+  const connectSSE = useCallback(() => {
+    console.log("connectSSE called, starting connection process...");
 
-  const connectSSE = useCallback(async () => {
     if (retryCountRef.current >= MAX_RETRIES) {
-      console.error(
-        `SSE connection failed - exceeded maximum retries (${MAX_RETRIES})`
-      );
-      cleanup();
+      console.error(`SSE connection failed after ${MAX_RETRIES} retries`);
       return;
     }
 
     const token = localStorage.getItem("accessToken");
     if (!token) {
-      console.error("No access token found for SSE connection");
-      cleanup();
+      console.error("No access token found");
       return;
     }
 
-    // 기존 연결이 있다면 정리
+    console.log("Token found, length:", token.length);
+
     if (eventSourceRef.current) {
-      cleanup();
-      // 연결 정리 후 약간의 지연
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("Cleaning up existing connection");
+      eventSourceRef.current.close();
+      eventSourceRef.current = null;
+      setIsConnected(false);
     }
 
     try {
-      console.log("Initiating new SSE connection");
-      const es = new EventSource(
-        `${import.meta.env.VITE_API_BASE_URL}/api/sse/subscribe`,
-        {
-          fetch: (input, init) =>
-            fetch(input, {
-              ...init,
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Cache-Control": "no-cache",
-              },
-              credentials: "include",
-            }),
-        }
-      );
+      const url = `${import.meta.env.VITE_API_BASE_URL}/api/sse/subscribe`;
+      console.log("Attempting to connect to:", url);
 
+      const es = new EventSource(url, {
+        fetch: (input, init) => {
+          console.log("Fetch called with headers:", Object.keys(init.headers));
+          return fetch(input, {
+            ...init,
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Cache-Control": "no-cache",
+            },
+            credentials: "include",
+          });
+        },
+      });
+
+      console.log("EventSource instance created");
       eventSourceRef.current = es;
 
-      const handleNotification = (event) => {
+      es.addEventListener("notification", (event) => {
+        console.log("Notification event received");
         const data = JSON.parse(event.data);
         dispatch(updateHasUnread(data.hasUnread));
-      };
+      });
 
-      const handleLikeCount = (event) => {
+      es.addEventListener("likeCount", (event) => {
+        console.log("LikeCount event received");
         const data = JSON.parse(event.data);
         dispatch(updateLikesReceived(data.totalLikes));
-      };
+      });
 
-      const handleShutdown = async () => {
-        cleanup();
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-
-        try {
-          const response = await fetch(
-            `${import.meta.env.VITE_API_BASE_URL}/api/health`
-          );
-          const health = await response.json();
-          if (health.status === "UP") {
-            window.location.reload();
-          }
-        } catch (error) {
-          console.error("Health check failed:", error);
+      es.addEventListener("shutdown", () => {
+        console.log("Shutdown event received");
+        setIsConnected(false);
+        if (eventSourceRef.current) {
+          eventSourceRef.current.close();
+          eventSourceRef.current = null;
         }
-      };
 
-      es.addEventListener("notification", handleNotification);
-      es.addEventListener("likeCount", handleLikeCount);
-      es.addEventListener("shutdown", handleShutdown);
+        const checkServer = async () => {
+          console.log("Checking server health");
+          try {
+            const response = await fetch(
+              `${import.meta.env.VITE_API_BASE_URL}/api/health`
+            );
+            const health = await response.json();
+            if (health.status === "UP") {
+              console.log("Server is back up, reloading page");
+              window.location.reload();
+            } else {
+              setTimeout(checkServer, 1000);
+            }
+          } catch (error) {
+            console.log("Health check failed:", error);
+            setTimeout(checkServer, 1000);
+          }
+        };
+
+        setTimeout(checkServer, 5000);
+      });
 
       es.onopen = () => {
-        console.log("SSE connection successful");
-        if (es === eventSourceRef.current) {
-          // 현재 활성 연결인지 확인
-          setIsConnected(true);
-          retryCountRef.current = 0;
-        }
+        console.log("SSE connection opened successfully");
+        setIsConnected(true); // 연결 성공하면 바로 상태 변경
+        retryCountRef.current = 0;
       };
 
       es.onerror = (error) => {
         console.error("SSE connection error:", error);
-        if (es === eventSourceRef.current) {
-          // 현재 활성 연결인지 확인
-          cleanup();
+        setIsConnected(false);
 
-          // 이미 재연결이 예약되어 있지 않은 경우에만
-          if (!reconnectTimeoutRef.current) {
-            retryCountRef.current += 1;
-            console.log(
-              `Scheduling SSE reconnection (${retryCountRef.current}/${MAX_RETRIES})`
-            );
-            reconnectTimeoutRef.current = setTimeout(() => {
-              reconnectTimeoutRef.current = null;
-              connectSSE();
-            }, 3000);
-          }
+        if (eventSourceRef.current) {
+          eventSourceRef.current.close();
+          eventSourceRef.current = null;
+        }
+
+        if (!reconnectTimeoutRef.current) {
+          retryCountRef.current += 1;
+          console.log(
+            `Scheduling reconnection attempt ${retryCountRef.current}/${MAX_RETRIES}`
+          );
+          reconnectTimeoutRef.current = setTimeout(() => {
+            reconnectTimeoutRef.current = null;
+            connectSSE();
+          }, 3000);
         }
       };
     } catch (error) {
-      console.error("Error creating EventSource:", error);
-      cleanup();
-      retryCountRef.current += 1;
+      console.error("Error while setting up EventSource:", error);
+      setIsConnected(false);
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+        eventSourceRef.current = null;
+      }
     }
-  }, [dispatch, cleanup]);
+  }, [dispatch]);
 
   useEffect(() => {
-    console.log("Initializing SSE with delay:", initialDelay);
-    initialDelayTimeoutRef.current = setTimeout(() => {
+    console.log(
+      `Setting up initial SSE connection with delay: ${initialDelay}ms`
+    );
+
+    const timer = setTimeout(() => {
+      console.log("Initial delay completed, attempting connection");
       connectSSE();
     }, initialDelay);
 
     return () => {
       console.log("Cleaning up SSE hook");
-      cleanup();
+      clearTimeout(timer);
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
-        reconnectTimeoutRef.current = null;
       }
-      if (initialDelayTimeoutRef.current) {
-        clearTimeout(initialDelayTimeoutRef.current);
-        initialDelayTimeoutRef.current = null;
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
       }
     };
-  }, [connectSSE, initialDelay, cleanup]);
+  }, [connectSSE, initialDelay]);
+
+  useEffect(() => {
+    console.log("Connection status changed:", isConnected);
+  }, [isConnected]);
 
   return isConnected;
 };
