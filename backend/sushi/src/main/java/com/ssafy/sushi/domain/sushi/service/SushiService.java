@@ -139,15 +139,21 @@ public class SushiService {
 
     @Transactional
     public void updateSushiExposure(Integer userId, Sushi sushi) {
-        // 사용자와 초밥에 대한 exposure 조회
-//        saveOrUpdate 패턴
-        sushiExposureRepository.save(
-                SuShiExposure.builder()
-                        .user(userRepository.getReferenceById(userId))
-                        .sushi(sushi)
-                        .timestamp(now())
-                        .build()
-        );
+        // 락을 사용하여 조회
+        sushiExposureRepository
+                .findByUserIdAndSushiIdWithLock(userId, sushi.getId())
+                .ifPresentOrElse(
+                        exposure -> exposure.updateTimestamp(),
+                        () -> {
+                            User user = userRepository.getReferenceById(userId);
+                            SuShiExposure newExposure = SuShiExposure.builder()
+                                    .user(user)
+                                    .sushi(sushi)
+                                    .timestamp(now())
+                                    .build();
+                            sushiExposureRepository.save(newExposure);
+                        }
+                );
     }
 
     private Sushi getSushiById(Integer sushiId) {
