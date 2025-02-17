@@ -26,11 +26,10 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     // 프론트엔드 단 에러
-    // if (!error.response) {
-    //   alert("서버와의 연결이 끊겼습니다.");
-    //   window.location.href = "/";
-    //   return Promise.reject(error);
-    // }
+    if (!error.response) {
+      console.error("Client-side or network error:", error.message);
+      return Promise.reject(error);
+    }
 
     // 에러 코드에 따른 alert 발생
     const errorCode = error.response?.data?.error?.code;
