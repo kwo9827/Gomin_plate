@@ -26,8 +26,8 @@ const NegativeAnswerModal = ({ isOpen, onClose, onConfirm }) => {
               ...modalStyles.button,
               backgroundColor: isCancelPressed ? "#67523E" : "#A68564",
               transform: isCancelPressed
-                ? "translateY(0.4vh)"
-                : "translateY(-0.2vh)",
+                ? "translateY(calc(0.4 * var(--custom-vh)))"
+                : "translateY(calc(-0.2 * var(--custom-vh))vh)",
               boxShadow: isCancelPressed
                 ? "0 0 0 #67523E"
                 : "0 0.4vh 0 #67523E",
@@ -44,8 +44,8 @@ const NegativeAnswerModal = ({ isOpen, onClose, onConfirm }) => {
               ...modalStyles.button,
               backgroundColor: isOpenPressed ? "#863334" : "#C85253",
               transform: isOpenPressed
-                ? "translateY(0.4vh)"
-                : "translateY(-0.2vh)",
+                ? "translateY(calc(0.4 * var(--custom-vh)))"
+                : "translateY(calc(-0.2 * var(--custom-vh)))",
               boxShadow: isOpenPressed ? "0 0 0 #863334" : "0 0.4vh 0 #863334",
             }}
           >
