@@ -79,7 +79,7 @@ const styles = {
     whiteSpace: "nowrap",
     lineHeight: "1",
     fontFamily: "Ownglyph, Ownglyph",
-    fontSize: "2.8vh",
+    fontSize: "calc( 2.8 * var(--custom-vh))",
     transition: "all 0.1s ease",
   },
 };
