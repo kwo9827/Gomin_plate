@@ -46,50 +46,74 @@ function App() {
     }
   }, [location.pathname, navigate]);
 
+  // App.jsx나 적절한 상위 컴포넌트에 추가
+  useEffect(() => {
+    const updateCustomVh = () => {
+      const container = document.querySelector(".container");
+      if (container) {
+        const containerHeight = container.offsetHeight;
+        const customVh = containerHeight / 100;
+        document.documentElement.style.setProperty(
+          "--custom-vh",
+          `${customVh}px`
+        );
+      }
+    };
+
+    updateCustomVh();
+    window.addEventListener("resize", updateCustomVh);
+
+    return () => window.removeEventListener("resize", updateCustomVh);
+  }, []);
+
   return (
     <BgmProvider>
-      <div className="container">
-        {shouldShowNavbar && <Navbar />}
-        <MuteButton />
-        <Routes>
-          <Route path="/" element={<Intro />} />
+      <div className="container vh-container">
+        <div className="container">
+          {shouldShowNavbar && <Navbar />}
+          <MuteButton />
+          <Routes>
+            <Route path="/" element={<Intro />} />
 
-          {/* <Route path="/home" element={<Home />} /> */}
-          <Route
-            path="/home"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
+            {/* <Route path="/home" element={<Home />} /> */}
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route path="/mysushilist" element={<MySushiList />} />
-          <Route path="/myanswerlist" element={<MyAnswerList />} />
-          <Route path="/sushidetail/:sushiId" element={<SushiDetail />} />
-          <Route path="/sushiview" element={<SushiView />} />
-          <Route path="/postsushi" element={<PostSushi />} />
-          <Route
-            path="/sushianswerdetail/:sushiId"
-            element={<SushiAnswerDetail />}
-          />
-          <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
-          <Route path="/oauth/google/callback" element={<OAuthCallback />} />
-          {/* <Route path="/share/:token" element={<Home />} /> */}
-          <Route
-            path="/share/:token"
-            element={
-              localStorage.getItem("accessToken") ? (
-                <Home />
-              ) : (
-                <Navigate
-                  to={`/?redirectUrl=${encodeURIComponent(location.pathname)}`}
-                />
-              )
-            }
-          />
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
+            <Route path="/mysushilist" element={<MySushiList />} />
+            <Route path="/myanswerlist" element={<MyAnswerList />} />
+            <Route path="/sushidetail/:sushiId" element={<SushiDetail />} />
+            <Route path="/sushiview" element={<SushiView />} />
+            <Route path="/postsushi" element={<PostSushi />} />
+            <Route
+              path="/sushianswerdetail/:sushiId"
+              element={<SushiAnswerDetail />}
+            />
+            <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
+            <Route path="/oauth/google/callback" element={<OAuthCallback />} />
+            {/* <Route path="/share/:token" element={<Home />} /> */}
+            <Route
+              path="/share/:token"
+              element={
+                localStorage.getItem("accessToken") ? (
+                  <Home />
+                ) : (
+                  <Navigate
+                    to={`/?redirectUrl=${encodeURIComponent(
+                      location.pathname
+                    )}`}
+                  />
+                )
+              }
+            />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </div>
       </div>
     </BgmProvider>
   );

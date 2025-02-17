@@ -364,18 +364,20 @@ const Home = () => {
               </div>
             )} */}
             <audio ref={audioRef} src={plate} />
-            {selectedSushiData && isSushiViewOpen && !selectedSushiData.isClosed && (
-              <SushiView
-                isOpen={isSushiViewOpen}
-                onClose={() => setIsSushiViewOpen(false)}
-                onAnswerSubmit={handleAnswerSubmit}
-                sushiId={selectedSushiData.sushiId}
-                category={selectedSushiData.category}
-                sushiType={selectedSushiData.sushiType}
-                remainingAnswers={selectedSushiData.remainingAnswers}
-                expirationTime={selectedSushiData.expirationTime}
-              />
-            )}
+            {selectedSushiData &&
+              isSushiViewOpen &&
+              !selectedSushiData.isClosed && (
+                <SushiView
+                  isOpen={isSushiViewOpen}
+                  onClose={() => setIsSushiViewOpen(false)}
+                  onAnswerSubmit={handleAnswerSubmit}
+                  sushiId={selectedSushiData.sushiId}
+                  category={selectedSushiData.category}
+                  sushiType={selectedSushiData.sushiType}
+                  remainingAnswers={selectedSushiData.remainingAnswers}
+                  expirationTime={selectedSushiData.expirationTime}
+                />
+              )}
             <AnswerSubmitCheckModal
               isOpen={showAnswerSubmitModal}
               onClose={() => setShowAnswerSubmitModal(false)}
@@ -427,7 +429,7 @@ const styles = {
     left: "-35%",
     transform: "translateX(-50%)",
     width: "auto%",
-    height: "28vh", // 책상의 높이 설정
+    height: "calc(28 * var(--custom-vh))", // 책상의 높이 설정
     zIndex: 3,
     display: "flex",
     flexDirection: "column",
