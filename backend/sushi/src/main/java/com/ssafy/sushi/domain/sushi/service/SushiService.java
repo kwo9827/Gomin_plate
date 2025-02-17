@@ -127,6 +127,11 @@ public class SushiService {
     public SushiOnRailResponse getRailSushi(Integer userId, Integer sushiId) {
         //초밥 조회
         Sushi sushi = getSushiById(sushiId);
+
+        if (answerRepository.existsAnswerByUserIdAndSushiId(userId, sushi.getId())) {
+            throw new CustomException(ErrorCode.ALREADY_ANSWERED);
+        }
+
         //노출시간 갱신
         updateSushiExposure(userId, sushi);
         return SushiOnRailResponse.of(sushi);

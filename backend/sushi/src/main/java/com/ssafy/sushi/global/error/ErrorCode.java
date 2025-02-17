@@ -40,6 +40,7 @@ public enum ErrorCode {
     ANSWER_ALREADY_LIKED(400, "R003", "이미 좋아요를 누른 답변입니다."),
     SELF_LIKE_DENIED(400, "R004", "자신의 답변에는 좋아요를 누를 수 없습니다."),
     SELF_ANSWER_DENIED(400, "R005", "자신의 초밥에는 답변할 수 없습니다."),
+    ALREADY_ANSWERED(400, "R006", "이미 답변한 초밥입니다."),
 
     // NOTIFICATION
     NOTIFICATION_NOT_FOUND(404, "N001", "알림을 찾을 수 없습니다."),
