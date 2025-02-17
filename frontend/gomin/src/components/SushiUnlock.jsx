@@ -136,7 +136,7 @@ const SushiUnlock = ({ isOpen, onClose }) => {
   const progressPercentage = Math.min(
     ((likesReceived - currentSushi.requiredLikes) /
       (nextSushi.requiredLikes - currentSushi.requiredLikes)) *
-      100,
+    100,
     100
   );
 
@@ -248,11 +248,9 @@ const modalStyle = {
   backgroundColor: "#fdf5e6",
   padding: "2.5vh",
   paddingTop: "2vh",
-  position: "relative",
   top: "6vh",
+  width: "calc( 50 * var(--custom-vh))",
   height: "fit-content",
-  width: "50vh",
-  maxWidth: "90vw",
   border: "1vh solid #906C48",
   borderRadius: "1.3vh",
   outline: "0.25vh solid #67523E",
@@ -266,7 +264,7 @@ const modalStyle = {
 };
 
 const outerBoxStyle = {
-  width: "26vh",
+  width: "70%",
   margin: "2vh",
   border: "0.4vh solid #8B6B3E",
   borderRadius: "1vh",
@@ -459,6 +457,7 @@ const sushiNameStyle = {
   position: "absolute",
   bottom: "35%",
   width: "100%",
+  height: "fit-content",
   color: "#5D4A37",
   textAlign: "center",
   fontSize: "0.8vh",
@@ -469,6 +468,7 @@ const lockedStyle = {
   width: "100%",
   height: "100%",
   display: "flex",
+  height: "--custom-vh",
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
@@ -507,6 +507,7 @@ const sushiUnlockNameStyle = {
   position: "absolute",
   bottom: "35%",
   width: "100%",
+  height: "fit-content",
   color: "#5D4A37",
   textAlign: "center",
   fontSize: "0.8vh",
