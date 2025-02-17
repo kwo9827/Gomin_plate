@@ -50,7 +50,7 @@ const styles = {
   },
   innerBox: {
     backgroundColor: "#fdf5e6",
-    padding: "0.2vh",
+    padding: "calc( 0.2 * var(--custom-vh))",
     borderRadius: "1vh",
     width: "calc( 35 * var(--custom-vh))",
     position: "relative",
@@ -64,9 +64,9 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    marginTop: "3vh",
-    marginBottom: "1vh",
-    gap: "5vh",
+    marginTop: "calc( 3 * var(--custom-vh))",
+    marginBottom: "calc( 1 * var(--custom-vh))",
+    gap: "calc( 5 * var(--custom-vh))",
   },
   OK: {
     padding: "1vh 0",
