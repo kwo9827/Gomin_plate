@@ -186,6 +186,7 @@ const SushiDetail = () => {
         {/* 본문 내용 */}
         <div style={styles.contentBox}>
           <p style={styles.content}>{content}</p>
+          {console.log({ content })}
         </div>
 
         <hr style={styles.divider} />
@@ -304,8 +305,8 @@ const styles = {
   background: {
     padding: "3vh",
     position: "relative",
-    height: "100vh",
-    width: "55vh",
+    height: "calc( 100 * var(--custom-vh))",
+    width: "calc( 55 * var(--custom-vh))",
     overflow: "hidden",
     boxSizing: "border-box",
   },
@@ -314,28 +315,28 @@ const styles = {
     backgroundColor: "#FFFEEC",
     position: "relative",
     zIndex: 2,
-    width: "48vh",
-    maxWidth: "60vh",
-    height: "80vh",
-    margin: "-0.5vh auto",
-    padding: "2vh",
+    width: "calc( 48 * var(--custom-vh))",
+    maxWidth: "calc( 60 * var(--custom-vh))",
+    height: "calc( 80 * var(--custom-vh))",
+    margin: "calc( -0.5 * var(--custom-vh)) auto",
+    padding: "calc( 2 * var(--custom-vh))",
     boxSizing: "border-box",
     border: "0.6vh solid #8B6B3E",
-    borderRadius: "1.2vh",
+    borderRadius: "calc( 1.2 * var(--custom-vh))h",
   },
 
   /**헤더 컨테이너 */
   headerContainer: {
     display: "flex",
-    height: "10vh",
+    height: "calc( 10 * var(--custom-vh))",
   },
 
   /**뒤로가기 버튼 */
   backButton: {
     position: "absolute",
-    left: "2vh",
+    left: "calc( 2 * var(--custom-vh))",
     fontFamily: "'Ownglyph', Ownglyph",
-    fontSize: "2.4vh",
+    fontSize: "calc( 2.4 * var(--custom-vh))",
     fontWeight: "bold",
     background: "transparent",
     border: "none",
@@ -345,7 +346,7 @@ const styles = {
   /**제목 */
   title: {
     width: "80%",
-    fontSize: "3.5vh",
+    fontSize: "calc( 3.5 * var(--custom-vh))",
     textAlign: "center",
     margin: "0 auto",
     flex: "0 1 auto",
@@ -361,21 +362,21 @@ const styles = {
   },
   /**날짜 */
   date: {
-    fontSize: "1.8vh",
+    fontSize: "calc( 1.8 * var(--custom-vh))",
+    height: "calc( 2 * var(--custom-vh))",
     color: "#8B6B3E",
     textAlign: "right",
-    marginRight: "2vh",
-    marginTop: "1vh",
-    marginBottom: "1vh",
+    marginRight: "calc( 2 * var(--custom-vh))",
+    margin: "calc( 1 * var(--custom-vh)) 0",
   },
   /**내용 박스 */
   contentBox: {
     overflowY: "auto",
-    padding: "1vh",
-    paddingLeft: "2vh",
-    height: "22vh",
-    borderRadius: "0.8vh",
-    border: "0.4vh solid #B2975C",
+    padding: "calc( 1 * var(--custom-vh))",
+    paddingLeft: "calc( 2 * var(--custom-vh))",
+    height: "calc( 22 * var(--custom-vh))",
+    borderRadius: "calc( 0.8 * var(--custom-vh))",
+    border: "calc( 0.4 * var(--custom-vh)) solid #B2975C",
   },
   /**내용 */
   content: {
@@ -386,16 +387,17 @@ const styles = {
   /**구분선 */
   divider: {
     width: "90%",
-    margin: "2vh auto",
-    border: "0.1vh solid #B2975C",
+    height: "0",
+    margin: "calc( 2 * var(--custom-vh)) auto",
+    border: "calc(0.1 * var(--custom-vh)) solid #B2975C",
   },
   /**포스트잇 컨테이너 */
   postItContainer: {
     position: "relative",
-    width: "40vh",
-    height: "25vh",
-    top: "5vh",
-    left: "5.2vh",
+    width: "calc( 40 * var(--custom-vh))",
+    height: "calc( 25 * var(--custom-vh))",
+    top: "calc( 5 * var(--custom-vh))",
+    left: "calc( 5.2 * var(--custom-vh))",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -451,46 +453,46 @@ const styles = {
     position: "relative",
     display: "flex",
     justifyContent: "center",
-    bottom: "17vh",
+    bottom: "calc( 17 * var(--custom-vh))",
     height: "16%",
     width: "100%",
   },
   /**왼쪽, 오른쪽 화살표 */
   arrowLeft: {
     position: "relative",
-    top: "3vh",
+    top: "calc( 3 * var(--custom-vh))",
     marginRight: "auto",
-    height: "3vh",
-    width: "3vh",
+    height: "calc( 3 * var(--custom-vh))",
+    width: "calc( 3 * var(--custom-vh))",
     background: "transparent",
     border: "none",
     cursor: "pointer",
     color: "#8B6B3E",
     fontFamily: "'Ownglyph', Ownglyph",
-    fontSize: "3vh",
+    fontSize: "calc( 3 * var(--custom-vh))",
     fontWeight: "bold",
   },
   arrowRight: {
     position: "relative",
-    top: "3vh",
+    top: "calc( 3 * var(--custom-vh))",
     marginLeft: "auto",
-    height: "3vh",
-    width: "3vh",
+    height: "calc( 3 * var(--custom-vh))",
+    width: "calc( 3 * var(--custom-vh))",
     background: "transparent",
     border: "none",
     cursor: "pointer",
     color: "#8B6B3E",
     fontFamily: "'Ownglyph', Ownglyph",
-    fontSize: "3vh",
+    fontSize: "calc( 3 * var(--custom-vh))",
     fontWeight: "bold",
   },
   /**마감 안된 답변 안내문 */
   catMessage: {
     textAlign: "center",
-    fontSize: "2.6vh",
+    fontSize: "calc(2.6 * var(--custom-vh))",
     fontWeight: "bold",
     color: "#8B6B3E",
-    marginBottom: "2vh",
+    marginBottom: "calc(2 * var(--custom-vh))",
   },
   loading: {
     display: "flex",
