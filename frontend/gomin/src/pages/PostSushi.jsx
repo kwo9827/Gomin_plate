@@ -631,8 +631,16 @@ const PostSushi = ({ onClose }) => {
                   <p>제출이 완료되었습니다!</p>
 
                   <button
-                    style={confirmButtonStyle}
+                    style={{
+                      ...confirmButtonStyle,
+                      backgroundColor: isCancelPressed ? "#67523E" : "#A68564",
+                      transform: isCancelPressed ? "translateY(0.4vh)" : "translateY(-0.2vh)",
+                      boxShadow: isCancelPressed ? "0 0 0 #67523E" : "0 0.4vh 0 #67523E",
+                    }}
                     onClick={handleCompleteClose}
+                    onMouseDown={() => setIsCancelPressed(true)}
+                    onMouseUp={() => setIsCancelPressed(false)}
+                    onMouseLeave={() => setIsCancelPressed(false)}
                   >
                     확인
                   </button>
