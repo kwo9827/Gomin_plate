@@ -103,7 +103,7 @@ const outerContainerStyle = {
   justifyContent: "center",
   alignItems: "center",
   width: `calc(49 * var(--custom-vh))`,
-  margin: `calc(1.5 * var(--custom-vh)) auto`,
+  margin: `calc(0.5 * var(--custom-vh)) auto`,
   padding: `calc(0.8 * var(--custom-vh))`,
   backgroundColor: "#906C48",
   borderRadius: `calc(1.3 * var(--custom-vh))`,
