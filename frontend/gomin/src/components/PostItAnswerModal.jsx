@@ -68,6 +68,7 @@ const styles = {
   },
   closeButton: {
     position: "absolute",
+    height: "calc( 3 * var(--custom-vh))",
     top: "17%",
     right: "22%",
     cursor: "pointer",
@@ -90,6 +91,7 @@ const styles = {
   },
   heart: {
     position: "absolute",
+    height: "calc( 4 * var(--custom-vh))",
     bottom: "25%",
     right: "20%",
     fontSize: "calc(3 * var(--custom-vh))",
