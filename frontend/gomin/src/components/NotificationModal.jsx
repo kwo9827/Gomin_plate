@@ -206,7 +206,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
+    width: "90%",
     // maxWidth: "100%",
     margin: "0 auto",
     padding: "0.7vh 0",
