@@ -212,10 +212,14 @@ const styles = {
   listContainer: {
     position: "relative",
     zIndex: 2,
-    width: `calc(55 * var(--custom-vh))`,
+    width: "100%",
+    maxWidth: `calc(55 * var(--custom-vh))`,
     margin: "0 auto",
     padding: `calc(3 * var(--custom-vh))`,
     boxSizing: "border-box",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   position: {
     // position: "sticky",
@@ -295,8 +299,8 @@ const styles = {
   list: {
     listStyle: "none",
     padding: 0,
-    margin: 0,
-    width: `calc(50 * var(--custom-vh))`,
+    margin: "0 auto",
+    width: "100%",
     height: `calc(100 * var(--custom-vh))`,
     display: "flex",
     flexDirection: "column",
