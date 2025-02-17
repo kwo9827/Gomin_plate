@@ -11,11 +11,11 @@ public class AnswerAnalysisService {
 
     private final GPTService gptService;
 
-    public Boolean analyzeSentiment(String text) {
+    public Boolean analyzeSentiment(String title, String content, String text) {
         // GPT에게 윤리성 분석을 요청하고, 분석 결과에 따라 부정적이라면 true, 아니면 false를 반환
         String sentimentAnalysis;
         try {
-            sentimentAnalysis = gptService.analyzeNegative(text);
+            sentimentAnalysis = gptService.analyzeNegative(title, content, text);
         } catch (CustomException e) {
             sentimentAnalysis = "positive";
         }
