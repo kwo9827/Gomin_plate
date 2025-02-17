@@ -5,8 +5,21 @@ const AnswerSubmitCheckModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div stlye={styles.overlay} onClick={onClose}>
-      <div style={styles.modal}>
+    <div
+      style={{
+        ...styles.overlay,
+        opacity: isOpen ? 1 : 0,
+        pointerEvents: isOpen ? 'auto' : 'none'
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          ...styles.modal,
+          transform: isOpen ? 'scale(1)' : 'scale(0.8)',
+          opacity: isOpen ? 1 : 0
+        }}
+      >
         <div style={styles.innerBox}>
           <p>♧ 답변이 제출되었다냥 †</p>
           <div style={styles.buttonBox}>
@@ -36,21 +49,21 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     zIndex: 9999,
-    transition: "opacity 0.2s ease-in-out", // 더 부드러운 페이드 효과
+    transition: "all 0.3s ease-in-out",
   },
   modal: {
-    width: "calc( 50 * var(--custom-vh))",
+    position: "relative",
+    width: "calc(50 * var(--custom-vh))",
     height: "fit-content",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 1000,
     transition: "all 0.3s ease-in-out",
-    transform: "translateY(-20px)",
   },
   innerBox: {
     backgroundColor: "#fdf5e6",
-    padding: "calc( 0.2 * var(--custom-vh))",
+    padding: "0.2vh",
     borderRadius: "1vh",
     width: "calc( 35 * var(--custom-vh))",
     position: "relative",
@@ -64,9 +77,9 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    marginTop: "calc( 3 * var(--custom-vh))",
-    marginBottom: "calc( 1 * var(--custom-vh))",
-    gap: "calc( 5 * var(--custom-vh))",
+    marginTop: "3vh",
+    marginBottom: "1vh",
+    gap: "5vh",
   },
   OK: {
     padding: "1vh 0",
