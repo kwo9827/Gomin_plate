@@ -126,6 +126,7 @@ const textContainerStyle = {
   overflow: "hidden",
   display: "flex",
   flexDirection: "column",
+  marginLeft: `calc(1.5 * var(--custom-vh))`,
 };
 
 const titleStyle = {
