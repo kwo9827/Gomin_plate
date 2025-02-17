@@ -61,7 +61,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
   // 제목을 6글자로 제한
   const truncateTitle = (title) => {
     if (!title) return "";
-    return title.length > 6 ? `[${title.slice(0, 6)}...]` : `[${title}]`;
+    return title.length > 15 ? `[${title.slice(0, 15)}...]` : `제목: ${title}`;
   };
 
   if (!isOpen && !show) return null;
@@ -73,14 +73,13 @@ const NotificationModal = ({ isOpen, onClose }) => {
       >
         <div style={styles.outerBox}>
           <div style={styles.innerBox}>알림</div>
-          <button style={styles.readAllButton} onClick={readAllNotification}>
-            ✓ 모두 읽음
-          </button>
           <button style={styles.cancelButton} onClick={onClose}>
             ✖
           </button>
         </div>
-
+        <button style={styles.readAllButton} onClick={readAllNotification}>
+          ✓ 모두 읽음
+        </button>
         <div>
           {status === "loading" ? (
             <p style={styles.emptyText}>로딩 중...</p>
@@ -109,7 +108,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
                           <div style={styles.title}>{notification.message}</div>
                           <div style={styles.contentText}>
                             {truncateTitle(notification.sushi.title)}{" "}
-                            {notification.message}
+                            {/* {notification.message} */}
                           </div>
                           <div style={styles.time}>
                             {new Date(notification.createdAt).toLocaleString()}
@@ -208,8 +207,8 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    maxWidth: "100%",
-    margin: "0",
+    // maxWidth: "100%",
+    margin: "0 auto",
     padding: "0.7vh 0",
     boxSizing: "border-box",
     border: "0.2vh solid #D4C5B1",
@@ -242,6 +241,7 @@ const styles = {
   },
   /* 알림 이미지 */
   image: {
+    border: "0.1vh solid #999999",
     width: "100%",
     height: "100%",
   },
@@ -282,8 +282,8 @@ const styles = {
   /* 모두 읽음 버튼 */
   readAllButton: {
     position: "absolute",
-    top: "7vh",
-    right: "0.8vh",
+    top: "9vh",
+    right: "1.0%",
     padding: "0.6vh 1.2vh",
     backgroundColor: "transparent",
     color: "#67523E",
@@ -296,12 +296,15 @@ const styles = {
     alignItems: "center",
     gap: "0.5vh",
     opacity: 0.8,
+    zIndex: 10,
+    minWidth: "20px",
+    height: "3vh",
   },
   /* 닫기 버튼 */
   cancelButton: {
     position: "absolute",
     top: "1.2vh",
-    right: "1.5vh",
+    right: "2%",
     padding: "0.6vh 1.2vh",
     border: "none",
     backgroundColor: "transparent",
@@ -309,6 +312,14 @@ const styles = {
     fontSize: "2.5vh",
     cursor: "pointer",
     fontWeight: "bold",
+    zIndex: 10,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "3vh",
+    height: "3vh",
+    minWidth: "20px",
+    minHeight: "20px",
   },
 };
 
