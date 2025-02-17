@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@react-spring/web": "^9.7.5",
-    "workbox-webpack-plugin": "^7.3.0"
-  }
-}
