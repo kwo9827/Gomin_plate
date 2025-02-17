@@ -281,8 +281,8 @@ const styles = {
   /* 모두 읽음 버튼 */
   readAllButton: {
     position: "absolute",
-    top: "9vh",
-    right: "1.0%",
+    top: "10vh",
+    right: "8.0%",
     padding: "0.6vh 1.2vh",
     backgroundColor: "transparent",
     color: "#67523E",
