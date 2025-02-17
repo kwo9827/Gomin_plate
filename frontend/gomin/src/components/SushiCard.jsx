@@ -161,6 +161,7 @@ const textContainerStyle = {
   overflow: "hidden",
   display: "flex",
   flexDirection: "column",
+  marginLeft: `calc(1.5 * var(--custom-vh))`,
 };
 
 const titleStyle = {
@@ -187,7 +188,7 @@ const contentStyle = {
 
 const dividerStyle = {
   width: `calc(24 * var(--custom-vh))`,
-  border: `calc(0.05 * var(--custom-vh)) solid #BCBCBC`,
+  border: "0.5px solid #BCBCBC",
   margin: `calc(1 * var(--custom-vh)) 0`,
 };
 
@@ -197,8 +198,8 @@ const remainingAnswersStyle = {
   textAlign: "right",
   bottom: 0,
   color: "#f0f0f0",
-  marginTop: `calc(6.5 * var(--custom-vh))`,
-  marginLeft: `calc(9 * var(--custom-vh))`,
+  marginTop: `calc(5.8 * var(--custom-vh))`,
+  marginLeft: `calc(10 * var(--custom-vh))`,
   padding: `0 calc(1 * var(--custom-vh))`,
   height: `calc(3 * var(--custom-vh))`,
   minWidth: `calc(1 * var(--custom-vh))`,
@@ -234,7 +235,7 @@ const remainingTimeStyle = {
 const soldoutStyle = {
   position: "absolute",
   top: `calc(4 * var(--custom-vh))`,
-  left: `calc(2.6 * var(--custom-vh))`,
+  left: `calc(1.9 * var(--custom-vh))`,
   fontWeight: "bold",
   fontSize: `calc(2 * var(--custom-vh))`,
   textShadow: `
