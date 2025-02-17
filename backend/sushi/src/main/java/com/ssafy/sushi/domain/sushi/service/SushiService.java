@@ -127,6 +127,11 @@ public class SushiService {
     public SushiOnRailResponse getRailSushi(Integer userId, Integer sushiId) {
         //초밥 조회
         Sushi sushi = getSushiById(sushiId);
+
+        if (answerRepository.existsAnswerByUserIdAndSushiId(userId, sushi.getId())) {
+            throw new CustomException(ErrorCode.ALREADY_ANSWERED);
+        }
+
         //노출시간 갱신
         updateSushiExposure(userId, sushi);
         return SushiOnRailResponse.of(sushi);
@@ -135,22 +140,14 @@ public class SushiService {
     @Transactional
     public void updateSushiExposure(Integer userId, Sushi sushi) {
         // 사용자와 초밥에 대한 exposure 조회
-        SuShiExposure exposure = sushiExposureRepository.findByUserIdAndSushiId(userId, sushi.getId());
-
-        // 이미 존재하면 timestamp만 갱신
-        if (exposure != null) {
-            exposure.updateTimestamp();
-        } else {
-            // 존재하지 않으면 새로운 exposure 생성
-            User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-            exposure = SuShiExposure.builder()
-                    .user(user)
-                    .sushi(sushi)
-                    .timestamp(now())
-                    .build();
-            sushiExposureRepository.save(exposure);
-        }
+//        saveOrUpdate 패턴
+        sushiExposureRepository.save(
+                SuShiExposure.builder()
+                        .user(userRepository.getReferenceById(userId))
+                        .sushi(sushi)
+                        .timestamp(now())
+                        .build()
+        );
     }
 
     private Sushi getSushiById(Integer sushiId) {
