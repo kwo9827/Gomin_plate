@@ -62,7 +62,7 @@ public class AnswerService {
         }
 
         // 감성 분석 수행
-        Boolean isNegative = answerAnalysisService.analyzeSentiment(request.getContent());
+        Boolean isNegative = answerAnalysisService.analyzeSentiment(sushi.getTitle(), sushi.getContent(), request.getContent());
 
         // 답변 생성
         Answer answer = Answer.builder()
