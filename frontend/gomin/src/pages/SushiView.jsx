@@ -411,7 +411,7 @@ const styles = {
   },
   textarea: {
     width: "calc( 35 * var(--custom-vh))",
-    flex: 1,
+    height: "calc( 900 * var(--custom-vh))",
     padding: "1.2vh",
     marginTop: "1.5vh",
     borderRadius: "1vh",
@@ -420,6 +420,7 @@ const styles = {
     fontSize: "2vh",
     lineHeight: "1.5",
     resize: "none",
+    boxSizing: "border-box",
   },
   charCount: {
     fontSize: "1.5vh",
