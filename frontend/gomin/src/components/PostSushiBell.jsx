@@ -1,7 +1,7 @@
 import React, { useRef, useContext } from "react";
 import bellImg from "../assets/home/bell.webp";
 import orderBellSound from "../assets/sounds/nextPage.mp3";
-import BgmContext from '../context/BgmProvider';
+import BgmContext from "../context/BgmProvider";
 
 /** 홈 화면에서 누르면 초밥(질문)을 등록하는 화면으로 넘어가는 컴포넌트
  *  1. 클릭 시 부모 컴포넌트에서 전달한 `onClick` 실행
@@ -20,7 +20,13 @@ const PostSushiBell = ({ onClick }) => {
   };
 
   return (
-    <div onClick={() => { onClick(); handlePlaySound(); }} style={{ cursor: "pointer" }}>
+    <div
+      onClick={() => {
+        onClick();
+        handlePlaySound();
+      }}
+      style={{ cursor: "pointer" }}
+    >
       <img
         src={bellImg}
         alt="Post Sushi Bell"
@@ -29,8 +35,8 @@ const PostSushiBell = ({ onClick }) => {
           bottom: "-25%",
           right: "20%",
           cursor: "pointer",
-          width: "8vh",
-          height: "7vh",
+          width: "calc( 8 * var(--custom-vh))",
+          height: "calc( 7 * var(--custom-vh))",
           objectFit: "cover",
         }}
       />

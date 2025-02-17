@@ -27,7 +27,7 @@ body,
 
 /* container에 vh-container 상속 */
 .container {
-  composes: vh-container;
+  /* composes: vh-container; */
   display: flex;
   flex-direction: column;
   width: min(55vh, 100vw);

@@ -55,8 +55,8 @@ const Rail = ({ onSushiClick }) => {
       className="rail-container"
       style={{
         position: "relative",
-        width: "100vh",
-        height: "30vh",
+        width: "calc( 100 * var(--custom-vh))",
+        height: "calc( 30 * var(--custom-vh))",
         overflow: "hidden",
       }}
     >
@@ -84,10 +84,10 @@ const Rail = ({ onSushiClick }) => {
       <style>{`
                 @keyframes slide {
                     from {
-                        transform: translateX(-40vh);
+                        transform: translateX(calc( -40 * var(--custom-vh)));
                     }
                     to {
-                        transform: translateX(calc(100vw + 40vh));
+                        transform: translateX(calc(100vw + calc( 40 * var(--custom-vh))));
                     }
                 }
             `}</style>
