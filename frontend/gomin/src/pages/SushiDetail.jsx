@@ -14,7 +14,7 @@ import postItGreen from "../assets/postIt/postIt2.webp";
 import postItBlue from "../assets/postIt/postIt3.webp";
 import postItRed from "../assets/postIt/postIt4.webp";
 import postItOrange from "../assets/postIt/postIt5.webp";
-import warningIcon from "../assets/postIt/Group 6.webp";
+import warningIcon from "../assets/postIt/Group 5.svg";
 
 import PawPrintIcon from "../components/icons/PawPrintIcon";
 
