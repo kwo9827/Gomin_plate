@@ -147,9 +147,7 @@ const styles = {
   /* 모달 스타일 */
   modal: {
     top: "6vh",
-    width: "90%",
-    maxWidth: "50vh",
-    minWidth: "30vh",
+    width: "calc( 50 * var(--custom-vh))",
     height: "60%",
     padding: "2.5vh",
     paddingTop: "1vh",
