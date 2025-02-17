@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import nextPage from "../assets/sounds/nextPage.mp3";
-import BgmContext from '../context/BgmProvider';
+import BgmContext from "../context/BgmProvider";
 
 import cuttle from "../assets/sushi/cuttle.webp";
 import eel from "../assets/sushi/eel.webp";
@@ -316,13 +316,14 @@ const PostSushi = ({ onClose }) => {
                 유통기한이 임박한 초밥에는
                 <br /> 마스터냥의 조언이 달릴 수 있습니다
               </p>
-              <hr style={divider} />
             </div>
+            <hr style={divider} />
 
             <div style={orderFormBody}>
               {step === 1 ? (
                 <>
                   <p style={orderSet}>질문 카테고리 설정</p>
+                  <hr style={divider} />
                   <div style={radioContainer}>
                     <label style={radioBtn}>
                       <input
@@ -634,8 +635,12 @@ const PostSushi = ({ onClose }) => {
                     style={{
                       ...confirmButtonStyle,
                       backgroundColor: isCancelPressed ? "#67523E" : "#A68564",
-                      transform: isCancelPressed ? "translateY(0.4vh)" : "translateY(-0.2vh)",
-                      boxShadow: isCancelPressed ? "0 0 0 #67523E" : "0 0.4vh 0 #67523E",
+                      transform: isCancelPressed
+                        ? "translateY(0.4vh)"
+                        : "translateY(-0.2vh)",
+                      boxShadow: isCancelPressed
+                        ? "0 0 0 #67523E"
+                        : "0 0.4vh 0 #67523E",
                     }}
                     onClick={handleCompleteClose}
                     onMouseDown={() => setIsCancelPressed(true)}
@@ -744,26 +749,25 @@ const overlayStyle = {
 
 const modalStyle = {
   position: "relative",
-  top: "6vh",
-  height: "80vh",
-  width: "50vh",
-  maxWidth: "90vw",
+  height: "calc( 75 * var(--custom-vh))",
+  width: "calc( 50 * var(--custom-vh))",
   animation: "slideUp 0.7s ease-out", // 아래에서 위로 슬라이드 애니메이션으로 변경
 };
 
 const orderForm = {
   backgroundColor: "#F4F4F4",
   border: "solid 0.3rem #454545",
-  height: "80vh",
+  height: "100%",
 };
 
 const orderFormHeader = {
-  height: "14.3vh",
+  height: "20%",
 };
 
 const orderFormHeaderTop = {
   display: "flex",
-  height: "10vh",
+  justifyContent: "space-between",
+  height: "70%",
 };
 
 const orderTitle = {
@@ -775,11 +779,9 @@ const orderTitle = {
 };
 
 const closeBtn = {
-  position: "absolute",
-  top: "1.2vh",
-  right: "1.2vh",
-  width: "5vh",
-  height: "5vh",
+  position: "relative",
+  width: "7vh",
+  height: "7vh",
   border: "none",
   backgroundColor: "transparent",
   color: "#454545",
@@ -790,7 +792,7 @@ const closeBtn = {
 
 const orderExplain = {
   margin: "0",
-  height: "4vh",
+  height: "30%",
   paddingRight: "1vh",
   fontSize: "1.7vh",
   textAlign: "right",
@@ -798,7 +800,7 @@ const orderExplain = {
 };
 
 const orderFormBody = {
-  height: "65.7vh",
+  height: "80%",
 };
 
 const divider = {
@@ -807,6 +809,7 @@ const divider = {
 };
 
 const orderSet = {
+  height: "4%",
   margin: "0",
   padding: "1vh",
   fontSize: "2.3vh",
@@ -814,12 +817,10 @@ const orderSet = {
 };
 
 const radioContainer = {
-  margin: "0",
-  paddingTop: "0.5vh",
-  paddingBottom: "2vh",
-  display: "flex",
-  flexWrap: "wrap",
-  justifyContent: "space-around",
+  height: "15%",
+  margin: "1vh 2vh",
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
   gap: "1vh",
   accentColor: "black",
   fontSize: "1.95vh",
@@ -827,15 +828,24 @@ const radioContainer = {
 };
 
 const radioBtn = {
-  flexBasis: "calc(33.33% - 1rem)",
-  textAlign: "left",
+  position: "relative",
+  width: "100%",
+  height: "100%",
   display: "flex",
-  gap: "0.5vh",
-  accentColor: "#454545",
+  alignItems: "center",
+  justifyContent: "center",
+  border: "1px solid #454545",
+  borderRadius: "0.5vh",
+  cursor: "pointer",
 };
 
 const radioLabel = {
-  marginTop: "0.5vh",
+  position: "relative",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  textAlign: "center",
+  width: "100%",
 };
 
 const rangeInput = {
@@ -848,6 +858,7 @@ const rangeInput = {
 };
 
 const presentPerson = {
+  height: "4%",
   margin: "0",
   padding: "1vh",
   textAlign: "right",
