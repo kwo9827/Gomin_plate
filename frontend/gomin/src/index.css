@@ -57,11 +57,11 @@ body,
     html,
     body,
     #root {
-      margin-top: -50px;
+      margin-top: 0;
     }
 
     .container {
-      transform: translateY(-50px);
+      transform: none;
     }
   }
 }
