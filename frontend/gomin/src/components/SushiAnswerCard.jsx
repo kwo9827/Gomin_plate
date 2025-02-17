@@ -48,9 +48,9 @@ const SushiAnswerCard = ({
 
 const heartIconStyle = {
   position: "absolute",
-  top: "1vh",
-  right: "1vh",
-  fontSize: "2.7vh",
+  top: `calc(1 * var(--custom-vh))`,
+  right: `calc(1 * var(--custom-vh))`,
+  fontSize: `calc(2.7 * var(--custom-vh))`,
 };
 
 const outerContainerStyle = {
@@ -58,27 +58,27 @@ const outerContainerStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  width: "49vh",
-  margin: "1.5vh auto",
-  padding: "0.8vh",
+  width: `calc(49 * var(--custom-vh))`,
+  margin: `calc(1.5 * var(--custom-vh)) auto`,
+  padding: `calc(0.8 * var(--custom-vh))`,
   backgroundColor: "#906C48",
-  borderRadius: "1.3vh",
+  borderRadius: `calc(1.3 * var(--custom-vh))`,
   boxSizing: "border-box",
 };
 
 const middleContainerStyle = {
-  width: "47.5vh",
+  width: `calc(47.5 * var(--custom-vh))`,
   backgroundColor: "#B2975C",
-  borderRadius: "0.8vh",
-  padding: "1.1vh",
+  borderRadius: `calc(0.8 * var(--custom-vh))`,
+  padding: `calc(1.1 * var(--custom-vh))`,
   boxSizing: "border-box",
 };
 
 const innerContainerStyle = {
   position: "relative",
-  width: "45.3vh",
+  width: `calc(45.3 * var(--custom-vh))`,
   backgroundColor: "#FFFFF0",
-  borderRadius: "0.6vh",
+  borderRadius: `calc(0.6 * var(--custom-vh))`,
   padding: "0px",
   boxSizing: "border-box",
   display: "flex",
@@ -88,24 +88,25 @@ const innerContainerStyle = {
 
 /**스시 이미지 감싸는 테두리 */
 const sushiOuterImageStyle = {
-  width: "18vh",
-  height: "15vh",
+  width: `calc(15 * var(--custom-vh))`,
+  height: `calc(15 * var(--custom-vh))`,
   overflow: "hidden",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  borderRadius: "2vh",
-  // backgroundColor: "#F5F5DC",
+  borderRadius: `calc(2 * var(--custom-vh))`,
+  position: "relative",
 };
 
 /**스시 사진 크기 조절 */
 /**이 부분을 수정해주세요. */
 const sushiImageStyle = {
   position: "absolute",
-  width: "20vh",
-  height: "20vh",
+  width: "100%",
+  height: "100%",
   overflow: "hidden",
-  transform: "translate(-0.8vh, 1vh) scale(0.8)",
+  transform: "scale(0.8)",
+  objectFit: "contain",
 };
 
 // const sushiImageStyle = {
@@ -120,21 +121,23 @@ const sushiImageStyle = {
 const textContainerStyle = {
   flex: 1,
   overflow: "hidden",
+  display: "flex",
+  flexDirection: "column",
 };
 
 const titleStyle = {
-  width: "20vh",
-  fontSize: "3vh",
+  width: `calc(20 * var(--custom-vh))`,
+  fontSize: `calc(3 * var(--custom-vh))`,
   fontWeight: "bold",
   color: "#5A4628",
-  margin: "1vh 0",
+  margin: `calc(0.5 * var(--custom-vh)) 0 0 0`,
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
 };
 const contentStyle = {
-  width: "23vh",
-  fontSize: "2.5vh",
+  width: `calc(23 * var(--custom-vh))`,
+  fontSize: `calc(2.5 * var(--custom-vh))`,
   color: "#8D7B7B",
   lineHeight: "1.4",
   display: "-webkit-box",
@@ -144,9 +147,9 @@ const contentStyle = {
 };
 
 const dividerStyle = {
-  width: "24vh",
-  border: "0.5px solid #BCBCBC",
-  margin: "1vh 0",
+  width: `calc(24 * var(--custom-vh))`,
+  border: `calc(0.05 * var(--custom-vh)) solid #BCBCBC`,
+  margin: `calc(1 * var(--custom-vh)) 0`,
 };
 
 export default SushiAnswerCard;

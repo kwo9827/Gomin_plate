@@ -99,10 +99,10 @@ const MyAnswerList = () => {
 
         {displayAnswers && displayAnswers.length > 0 ? (
           <ul style={styles.list}>
-            {trail.map((props, index) => (
+            {trail.map((style, index) => (
               <animated.li
                 key={`${displayAnswers[index].sushiId}-${index}`}
-                style={{ ...props, ...styles.listItem }}
+                style={style}
               >
                 <SushiAnswerCard
                   id={displayAnswers[index].sushiId}
@@ -118,7 +118,9 @@ const MyAnswerList = () => {
               </animated.li>
             ))}
           </ul>
-        ) : initialLoding ? (<div style={styles.noResult}></div>) : (
+        ) : initialLoding ? (
+          <div style={styles.noResult}></div>
+        ) : (
           <div style={styles.noResult}>등록된 답변이 없습니다.</div>
         )}
 
@@ -138,8 +140,8 @@ const styles = {
   /** 배경 스타일 */
   background: {
     position: "relative",
-    height: "100vh",
-    width: "55vh",
+    height: `calc(100 * var(--custom-vh))`,
+    width: `calc(55 * var(--custom-vh))`,
     overflowY: "auto",
     scrollbarWidth: "none",
   },
@@ -147,62 +149,70 @@ const styles = {
   listContainer: {
     position: "relative",
     zIndex: 2,
-    width: "55vh",
+    width: `calc(55 * var(--custom-vh))`,
     margin: "0 auto",
-    padding: "3vh",
+    padding: `calc(3 * var(--custom-vh))`,
     boxSizing: "border-box",
   },
   position: {},
   /** 나의 답변 외부 박스 */
   outerBox: {
-    width: "35vh",
-    margin: "0 auto 1.5vh",
-    border: "0.7vh solid #8B6B3E",
-    borderRadius: "1.2vh",
+    width: `calc(35 * var(--custom-vh))`,
+    margin: `0 auto calc(1.5 * var(--custom-vh))`,
+    border: `calc(0.7 * var(--custom-vh)) solid #8B6B3E`,
+    borderRadius: `calc(1.2 * var(--custom-vh))`,
     backgroundColor: "#B2975C",
-    padding: "1vh",
+    padding: `calc(1 * var(--custom-vh))`,
     boxSizing: "border-box",
   },
   /** 나의 답변 내부 박스 */
   innerBox: {
     width: "100%",
-    border: "0.3vh solid #906C48",
-    borderRadius: "0.6vh",
+    border: `calc(0.3 * var(--custom-vh)) solid #906C48`,
+    borderRadius: `calc(0.6 * var(--custom-vh))`,
     backgroundColor: "#B2975C",
     textAlign: "center",
     color: "#5D4A37",
-    fontSize: "3.8vh",
+    fontSize: `calc(3.8 * var(--custom-vh))`,
     fontWeight: "bold",
-    padding: "0.7vh 0",
+    padding: `calc(0.7 * var(--custom-vh)) 0`,
     boxSizing: "border-box",
   },
   /** 검색 결과 없을 때 */
   noResult: {
     textAlign: "center",
     color: "#8B6B3E",
-    fontSize: "2.8vh",
-    marginTop: "3.5vh",
+    fontSize: `calc(2.8 * var(--custom-vh))`,
+    marginTop: `calc(3.5 * var(--custom-vh))`,
   },
   /** 글 리스트 스타일 */
   list: {
     listStyle: "none",
     padding: 0,
     margin: 0,
+    width: `calc(50 * var(--custom-vh))`,
+    height: `calc(100 * var(--custom-vh))`,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
-  listItem: {
-    marginBottom: "1vh",
-  },
+  // listItem: {
+  //   width: "100%",
+  //   padding: `0 calc(1.5 * var(--custom-vh))`,
+  //   boxSizing: "border-box",
+  //   marginBottom: `calc(1 * var(--custom-vh))`,
+  // },
   loadingText: {
     textAlign: "center",
     color: "#8B6B3E",
-    fontSize: "2vh",
-    padding: "2vh 0",
+    fontSize: `calc(2 * var(--custom-vh))`,
+    padding: `calc(2 * var(--custom-vh)) 0`,
   },
   endMessage: {
     textAlign: "center",
     color: "#8B6B3E",
-    fontSize: "2vh",
-    padding: "2vh 0",
+    fontSize: `calc(2 * var(--custom-vh))`,
+    padding: `calc(2 * var(--custom-vh)) 0`,
   },
 };
 
