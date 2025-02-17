@@ -3,7 +3,7 @@ import { useSpring, animated } from "@react-spring/web";
 import alarmTrueImg from "../assets/home/alarmON.webp";
 import alarmFalseImg from "../assets/home/alarmOFF.webp";
 import notificationBell from "../assets/sounds/notificationBell.mp3";
-import BgmContext from '../context/BgmProvider';
+import BgmContext from "../context/BgmProvider";
 
 const NotificationBell = ({ onClick, hasUnread }) => {
   const audioRef = useRef(null);
@@ -54,7 +54,7 @@ const NotificationBell = ({ onClick, hasUnread }) => {
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
-        width: "50vh",
+        width: "calc( 50 * var(--custom-vh))",
         height: "100%",
         zIndex: 2,
         transformOrigin: "90% 30%",

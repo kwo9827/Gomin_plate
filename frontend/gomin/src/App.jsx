@@ -68,10 +68,10 @@ function App() {
 
   return (
     <BgmProvider>
+      <MuteButton />
       <div className="container vh-container">
         <div className="container">
           {shouldShowNavbar && <Navbar />}
-          <MuteButton />
           <Routes>
             <Route path="/" element={<Intro />} />
 

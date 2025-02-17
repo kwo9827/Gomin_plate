@@ -14,8 +14,8 @@ const MuteButton = () => {
 const styles = {
   muteButton: {
     position: "fixed",
-    top: "3vh",
-    right: "3vh",
+    top: "calc( 3 * var(--custom-vh))",
+    right: "calc( 2 * var(--custom-vh))",
     zIndex: 1000,
     background: "transparent",
     color: "white",
