@@ -137,7 +137,7 @@ const styles = {
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -146,11 +146,11 @@ const styles = {
   },
   /* 모달 스타일 */
   modal: {
-    position: "relative",
     top: "6vh",
-    width: "50vh",
-    maxWidth: "90vw",
-    height: "80vh",
+    width: "90%",
+    maxWidth: "50vh",
+    minWidth: "30vh",
+    height: "60%",
     padding: "2.5vh",
     paddingTop: "1vh",
     backgroundColor: "#FFFAF0",
@@ -164,8 +164,9 @@ const styles = {
   },
   /* '알림' 외부 박스 */
   outerBox: {
-    width: "30vh",
-    // maxWidth: "250px",
+    width: "70%",
+    minWidth: "20vh",
+    height: "13%",
     margin: "0 auto 3vh auto",
     marginTop: "1.5vh",
     border: "0.4vh solid #8B6B3E",
@@ -177,6 +178,7 @@ const styles = {
   /* '알림' 내부 박스 */
   innerBox: {
     width: "100%",
+    height: "100%",
     border: "0.3vh solid #906C48",
     borderRadius: "0.5vh",
     backgroundColor: "#B2975C",
@@ -191,7 +193,7 @@ const styles = {
   list: {
     listStyle: "none",
     padding: 0,
-    width: "43.1vh",
+    width: "100%",
   },
   /* 알림 아이템 컨테이너 */
   listItem: {
@@ -207,7 +209,6 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     width: "90%",
-    // maxWidth: "100%",
     margin: "0 auto",
     padding: "0.7vh 0",
     boxSizing: "border-box",
