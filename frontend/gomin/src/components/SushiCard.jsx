@@ -92,9 +92,9 @@ const SushiCard = ({
 
 const heartIconStyle = {
   position: "absolute",
-  top: "8px",
-  right: "8px",
-  fontSize: "1.3rem",
+  top: `calc(0.8 * var(--custom-vh))`,
+  right: `calc(0.8 * var(--custom-vh))`,
+  fontSize: `calc(1.3 * var(--custom-vh))`,
 };
 
 const outerContainerStyle = {
@@ -102,27 +102,27 @@ const outerContainerStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  width: "49vh",
-  margin: "1.5vh auto",
-  padding: "0.8vh",
+  width: `calc(49 * var(--custom-vh))`,
+  margin: `calc(1.5 * var(--custom-vh)) auto`,
+  padding: `calc(0.8 * var(--custom-vh))`,
   backgroundColor: "#906C48",
-  borderRadius: "1.3vh",
+  borderRadius: `calc(1.3 * var(--custom-vh))`,
   boxSizing: "border-box",
 };
 
 const middleContainerStyle = {
-  width: "47.5vh",
+  width: `calc(47.5 * var(--custom-vh))`,
   backgroundColor: "#B2975C",
-  borderRadius: "0.8vh",
-  padding: "1.1vh",
+  borderRadius: `calc(0.8 * var(--custom-vh))`,
+  padding: `calc(1.1 * var(--custom-vh))`,
   boxSizing: "border-box",
 };
 
 const innerContainerStyle = {
   position: "relative",
-  width: "45.3vh",
+  width: `calc(45.3 * var(--custom-vh))`,
   backgroundColor: "#FFFFF0",
-  borderRadius: "0.6vh",
+  borderRadius: `calc(0.6 * var(--custom-vh))`,
   padding: "0px",
   boxSizing: "border-box",
   display: "flex",
@@ -132,23 +132,24 @@ const innerContainerStyle = {
 
 /**스시 이미지 감싸는 테두리 */
 const sushiOuterImageStyle = {
-  width: "18vh",
-  height: "15vh",
+  width: `calc(15 * var(--custom-vh))`,
+  height: `calc(15 * var(--custom-vh))`,
   overflow: "hidden",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  borderRadius: "2vh",
-  // backgroundColor: "#F5F5DC",
+  borderRadius: `calc(2 * var(--custom-vh))`,
+  position: "relative",
 };
 
 /**스시 사진 크기 조절 */
 const sushiImageStyle = {
   position: "absolute",
-  width: "20vh",
-  height: "20vh",
+  width: "100%",
+  height: "100%",
   overflow: "hidden",
-  transform: "translate(-0.8vh, 1vh) scale(0.8)",
+  transform: "scale(0.8)",
+  objectFit: "contain",
 };
 
 const textContainerStyle = {
@@ -159,19 +160,19 @@ const textContainerStyle = {
 };
 
 const titleStyle = {
-  width: "20vh",
-  fontSize: "3vh",
+  width: `calc(20 * var(--custom-vh))`,
+  fontSize: `calc(3 * var(--custom-vh))`,
   fontWeight: "bold",
   color: "#5A4628",
-  margin: "0.5vh 0 0 0",
+  margin: `calc(0.5 * var(--custom-vh)) 0 0 0`,
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
 };
 
 const contentStyle = {
-  width: "23vh",
-  fontSize: "2.5vh",
+  width: `calc(23 * var(--custom-vh))`,
+  fontSize: `calc(2.5 * var(--custom-vh))`,
   color: "#8D7B7B",
   lineHeight: "1.4",
   display: "-webkit-box",
@@ -181,69 +182,71 @@ const contentStyle = {
 };
 
 const dividerStyle = {
-  width: "24vh",
+  width: `calc(24 * var(--custom-vh))`,
   border: "0.5px solid #BCBCBC",
-  margin: "1vh 0",
+  margin: `calc(1 * var(--custom-vh)) 0`,
 };
 
+/*남아있는 답변 */
 const remainingAnswersStyle = {
   position: "relative",
   textAlign: "right",
   bottom: 0,
   color: "#f0f0f0",
-  marginTop: "6.5vh",
-  marginLeft: "9vh",
-  padding: "0 1vh",
-  height: "3vh",
-  minWidth: "1vh",
+  marginTop: `calc(6.5 * var(--custom-vh))`,
+  marginLeft: `calc(9 * var(--custom-vh))`,
+  padding: `0 calc(1 * var(--custom-vh))`,
+  height: `calc(3 * var(--custom-vh))`,
+  minWidth: `calc(1 * var(--custom-vh))`,
   width: "auto",
   border: "none",
-  borderRadius: "1vh",
-  fontSize: "2.2vh",
+  borderRadius: `calc(1 * var(--custom-vh))`,
+  fontSize: `calc(2.2 * var(--custom-vh))`,
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   backgroundColor: "#E86100",
 };
-
+/*남아있는 시간 표시 */
 const remainingTimeStyle = {
   position: "absolute",
-  top: "1.7vh",
-  left: "1.3vh",
+  top: `calc(1.7 * var(--custom-vh))`,
+  left: `calc(1.3 * var(--custom-vh))`,
   backgroundColor: "#454545",
-  fontSize: "2vh",
+  fontSize: `calc(2 * var(--custom-vh))`,
   border: "none",
-  borderRadius: "0.5vh",
+  borderRadius: `calc(0.5 * var(--custom-vh))`,
   width: "auto",
-  height: "3vh",
+  height: `calc(3 * var(--custom-vh))`,
   color: "#f0f0f0",
-  marginTop: "0.8vh",
+  marginTop: `calc(0.8 * var(--custom-vh))`,
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  padding: "0 1vh",
+  padding: `0 calc(1 * var(--custom-vh))`,
   transform: "rotate(-25deg)",
 };
-
+/*Sold Out 표시 */
 const soldoutStyle = {
   position: "absolute",
-  top: "4vh",
-  left: "2.6vh",
-  // backgroundColor: "#454545",
+  top: `calc(4 * var(--custom-vh))`,
+  left: `calc(2.6 * var(--custom-vh))`,
   fontWeight: "bold",
-  fontSize: "2vh",
-  textShadow:
-    "0.3vh 0.3vh 0.6vh rgb(255, 255, 255), -0.3vh -0.3vh 0.6vh rgb(255, 255, 255)",
-  border: "0.5vh solid #454545",
-  borderRadius: "0.5vh",
+  fontSize: `calc(2 * var(--custom-vh))`,
+  textShadow: `
+    calc(0.3 * var(--custom-vh)) calc(0.3 * var(--custom-vh)) calc(0.6 * var(--custom-vh)) rgb(255, 255, 255),
+    calc(-0.3 * var(--custom-vh)) calc(-0.3 * var(--custom-vh)) calc(0.6 * var(--custom-vh)) rgb(255, 255, 255)
+  `,
+  border: `calc(0.5 * var(--custom-vh)) solid #454545`,
+  borderRadius: `calc(0.5 * var(--custom-vh))`,
   width: "auto",
-  height: "3vh",
+  height: `calc(3 * var(--custom-vh))`,
   color: "#454545",
-  marginTop: "0.8vh",
+  marginTop: `calc(0.8 * var(--custom-vh))`,
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  padding: "0 0.5vh",
+  padding: `0 calc(0.5 * var(--custom-vh))`,
   transform: "rotate(-15deg)",
 };
 

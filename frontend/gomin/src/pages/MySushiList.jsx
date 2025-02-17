@@ -24,7 +24,7 @@ const MySushiList = () => {
 
   useEffect(() => {
     console.log(displaySushi);
-  }, [displaySushi])
+  }, [displaySushi]);
 
   useEffect(() => {
     let mounted = true;
@@ -106,7 +106,7 @@ const MySushiList = () => {
   };
 
   /*검색 엔터 기능 */
-  const OnSearchSubmit = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       onSearch();
     }
@@ -137,11 +137,10 @@ const MySushiList = () => {
               type="text"
               value={search}
               onChange={onChange}
-              onKeyPress={OnSearchSubmit}
+              onKeyDown={handleKeyDown}
               placeholder="고민을 검색해주세요"
               style={styles.searchInput}
               className="custom-placeholder"
-            // onKeyPress={(e) => e.key === "Enter" && onSearch()}
             />
             <i
               className="fas fa-search"
@@ -182,7 +181,9 @@ const MySushiList = () => {
               </animated.li>
             ))}
           </ul>
-        ) : initialLoding ? (<div style={styles.noResult}></div>) : (
+        ) : initialLoding ? (
+          <div style={styles.noResult}></div>
+        ) : (
           <div style={styles.noResult}>일치하는 고민이 없습니다.</div>
         )}
 
@@ -202,18 +203,18 @@ const styles = {
   /**배경 스타일 */
   background: {
     position: "relative",
-    height: "100vh",
-    width: "55vh",
+    height: `calc(100 * var(--custom-vh))`,
+    width: `calc(55 * var(--custom-vh))`,
     overflowY: "auto",
     scrollbarWidth: "none",
   },
   /**리스트 감싸는 스타일 */
   listContainer: {
-    position: "absolute",
+    position: "relative",
     zIndex: 2,
-    width: "55vh",
+    width: `calc(55 * var(--custom-vh))`,
     margin: "0 auto",
-    padding: "3vh",
+    padding: `calc(3 * var(--custom-vh))`,
     boxSizing: "border-box",
   },
   position: {
@@ -224,25 +225,25 @@ const styles = {
   },
   /**나의 고민 외부 박스 */
   outerBox: {
-    width: "35vh",
-    margin: "0 auto 1.5vh",
-    border: "0.7vh solid #8B6B3E",
-    borderRadius: "1.2vh",
+    width: `calc(35 * var(--custom-vh))`,
+    margin: `0 auto calc(1.5 * var(--custom-vh))`,
+    border: `calc(0.7 * var(--custom-vh)) solid #8B6B3E`,
+    borderRadius: `calc(1.2 * var(--custom-vh))`,
     backgroundColor: "#B2975C",
-    padding: "1vh",
+    padding: `calc(1 * var(--custom-vh))`,
     boxSizing: "border-box",
   },
   /**나의 고민 내부 박스 */
   innerBox: {
     width: "100%",
-    border: "0.3vh solid #906C48",
-    borderRadius: "0.6vh",
+    border: `calc(0.3 * var(--custom-vh)) solid #906C48`,
+    borderRadius: `calc(0.6 * var(--custom-vh))`,
     backgroundColor: "#B2975C",
     textAlign: "center",
     color: "#5D4A37",
-    fontSize: "3.8vh",
+    fontSize: `calc(3.8 * var(--custom-vh))`,
     fontWeight: "bold",
-    padding: "0.7vh 0",
+    padding: `calc(0.7 * var(--custom-vh)) 0`,
     boxSizing: "border-box",
   },
 
@@ -250,23 +251,24 @@ const styles = {
   searchContainer: {
     display: "flex",
     justifyContent: "center",
-    marginBottom: "1vh",
+    marginBottom: `calc(1 * var(--custom-vh))`,
+    height: `calc(5.8 * var(--custom-vh))`,
   },
 
   /**돋보기 감싸는거 */
   inputWrapper: {
     position: "relative",
-    width: "45vh",
+    width: `calc(45 * var(--custom-vh))`,
   },
 
   /**검색창 내부 스타일 */
   searchInput: {
-    width: "45vh",
-    height: "5.8vh",
-    fontSize: "1.8vh",
+    width: `calc(45 * var(--custom-vh))`,
+    height: `calc(5.8 * var(--custom-vh))`,
+    fontSize: `calc(1.8 * var(--custom-vh))`,
     textAlign: "center",
-    border: "0.3vh solid #906C48",
-    borderRadius: "1vh",
+    border: `calc(0.3 * var(--custom-vh)) solid #906C48`,
+    borderRadius: `calc(1 * var(--custom-vh))`,
     outline: "none",
     boxSizing: "border-box",
   },
@@ -274,10 +276,10 @@ const styles = {
   /** 입력창 내부 돋보기 아이콘 */
   searchIcon: {
     position: "absolute",
-    right: "2vh",
-    top: "50%",
+    right: `calc(1 * var(--custom-vh))`,
+    top: "73%",
     transform: "translateY(-50%)",
-    fontSize: "3vh",
+    fontSize: `calc(3 * var(--custom-vh))`,
     color: "#906C48",
     cursor: "pointer",
   },
@@ -286,28 +288,33 @@ const styles = {
   noResult: {
     textAlign: "center",
     color: "#8B6B3E",
-    fontSize: "2.8vh",
-    marginTop: "3.5vh",
+    fontSize: `calc(2.8 * var(--custom-vh))`,
+    marginTop: `calc(3.5 * var(--custom-vh))`,
   },
   /**글 리스트 스타일 */
   list: {
     listStyle: "none",
     padding: 0,
     margin: 0,
+    width: `calc(50 * var(--custom-vh))`,
+    height: `calc(100 * var(--custom-vh))`,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
 
   loadingText: {
     textAlign: "center",
     color: "#8B6B3E",
-    fontSize: "2vh",
-    padding: "2vh 0",
+    fontSize: `calc(2 * var(--custom-vh))`,
+    padding: `calc(2 * var(--custom-vh)) 0`,
   },
 
   endMessage: {
     textAlign: "center",
     color: "#8B6B3E",
-    fontSize: "2vh",
-    padding: "2vh 0",
+    fontSize: `calc(2 * var(--custom-vh))`,
+    padding: `calc(2 * var(--custom-vh)) 0`,
   },
 };
 
