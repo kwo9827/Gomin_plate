@@ -96,17 +96,20 @@ const sushiOuterImageStyle = {
   alignItems: "center",
   borderRadius: `calc(2 * var(--custom-vh))`,
   position: "relative",
+  backgroundColor: "#FFFFF0", // 배경색 추가
 };
 
 /**스시 사진 크기 조절 */
-/**이 부분을 수정해주세요. */
 const sushiImageStyle = {
   position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%) scale(0.8)",
   width: "100%",
   height: "100%",
-  overflow: "hidden",
-  transform: "scale(0.8)",
-  objectFit: "contain",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 };
 
 // const sushiImageStyle = {
