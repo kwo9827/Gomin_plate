@@ -18,13 +18,31 @@ body,
   overflow: hidden;
 }
 
+/* vh-container 클래스 추가 */
+.vh-container {
+  height: calc(min(55vh, 100vw) * (100 / 55));
+  max-height: 100vh;
+  position: relative;
+}
+
+/* container에 vh-container 상속 */
 .container {
+  composes: vh-container;
   display: flex;
   flex-direction: column;
-  width: 55vh;
-  height: 100dvh;
+  width: min(55vh, 100vw);
   box-sizing: border-box;
   background-color: #fdfcc8;
+}
+
+/* vh 단위를 사용하는 자식 요소들은 vh-container를 기준으로 설정 */
+.vh-container > * {
+  height: inherit;
+}
+
+/* 자식 요소들에 대한 vh 계산 */
+.vh-container [style*="vh"] {
+  height: inherit;
 }
 
 /* 스크롤바 기본 스타일 */

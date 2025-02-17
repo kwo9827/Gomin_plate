@@ -127,7 +127,7 @@ const Navbar = () => {
 // 스타일
 const styles = {
   navbar: {
-    width: "55vh",
+    width: "100%",
     backgroundSize: "100% auto",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
