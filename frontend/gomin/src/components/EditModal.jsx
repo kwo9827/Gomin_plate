@@ -185,7 +185,7 @@ const styles = {
     visibility: "hidden",
   },
   modal: {
-    width: "calc( 50 * var(--custom-vh))",
+    width: "calc( 48.5 * var(--custom-vh))",
     height: "fit-content",
     display: "flex",
     justifyContent: "center",
