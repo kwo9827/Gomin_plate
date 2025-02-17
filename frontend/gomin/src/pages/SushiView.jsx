@@ -54,10 +54,16 @@ const SushiView = ({
 
   useEffect(() => {
     if (isOpen && sushiId) {
-      dispatch(fetchSushiDetail(sushiId));
-      if (currentSushi === "loading") {
-        return <div style={styles.loading}>로딩 중...</div>;
-      }
+      dispatch(fetchSushiDetail(sushiId))
+        .unwrap()
+        .catch(() => {
+          handleClose();
+        });
+
+      // 이거 주석 해제시 axios에러받을때 에러발생함 (useEffect 안에서 JSX를 반환)
+      // if (currentSushi === "loading") {
+      //   return <div style={styles.loading}>로딩 중...</div>;
+      // }
     }
   }, [dispatch, sushiId, isOpen]);
 
@@ -208,6 +214,10 @@ const SushiView = ({
   }, []);
 
   if (!isOpen) return null;
+
+  if (currentSushi === "loading") {
+    return <div style={styles.loading}>로딩 중...</div>;
+  }
 
   return (
     <>
