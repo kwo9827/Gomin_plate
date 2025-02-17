@@ -8,6 +8,8 @@ import React, { useState } from "react";
 const SSEIndicator = ({ isConnected }) => {
   const [showText, setShowText] = useState(false);
 
+  console.log("indicator 알림 : ", isConnected);
+
   return (
     <div
       style={{
