@@ -356,7 +356,7 @@ const leftIconStyle = {
 const leftTextStyle = {
   position: "absolute",
   top: "2vh",
-  left: "2.5vh",
+  left: "calc(3 * var(--custom-vh))",
   margin: 0,
   textAlign: "center",
   fontSize: "2vh",
