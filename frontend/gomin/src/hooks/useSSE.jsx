@@ -141,7 +141,7 @@ export const useSSE = (initialDelay = 3000) => {
 
   useEffect(() => {
     initialDelayTimeoutRef.current = setTimeout(() => {
-      connectSSE().catch(console.error);
+
     }, initialDelay);
 
     return () => {
