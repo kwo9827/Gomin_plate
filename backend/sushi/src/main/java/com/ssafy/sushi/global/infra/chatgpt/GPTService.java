@@ -77,7 +77,7 @@ public class GPTService {
 
     private String createNegativePrompt(String title, String content, String text) {
         return String.format("""
-                다음 답변에 대해 본 고민과 관련이 없거나, 부적절하거나 비윤리적인 내용이 포함되어 있는지 분석해주세요.
+                다음 답변에 대해 본 고민과 관련이 없거나, 부적절하거나 비윤리적인 내용이 포함되어 있는지 분석해주세요. 만약 답변이 애매모호하거나 의도는 긍정적일 수 있지만 표현이 다소 모호하다면, 그런 답변은 'positive'로 분석해주세요.
                 분석 기준:\s
                 - 타인에게 상처를 줄 수 있는 언어나 표현
                 - 인종, 성별, 성적 지향 등에 대한 혐오 발언
