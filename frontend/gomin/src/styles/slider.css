@@ -8,25 +8,38 @@
   position: relative;
 }
 
+.slick-slider {
+  height: 100%;
+}
+
+.slick-track {
+  position: relative;
+  height: 100%;
+}
+
 /* 이미지 컨테이너 */
 .slider {
   display: flex !important;
   flex-direction: column;
-  width: 15vh;
-  height: 29.3vh;
-  padding: 2vh;
+  height: auto;
+  margin-top: 4vh;
   box-sizing: border-box;
 }
 
 /* 이미지 스타일링 */
 .slider img {
   width: 10vh;
-  height: 0vh;
+  height: auto;
   overflow: hidden;
   object-fit: contain;
   display: block;
   transform: scale(3);
   transition: transform 0.3s ease-in-out;
+}
+
+.slider p {
+  position: relative;
+  margin-top: 8vh;
 }
 
 .slick-current img {

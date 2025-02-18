@@ -74,7 +74,7 @@ const PostSushi = ({ onClose }) => {
   const [step, setStep] = useState(1);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [maxAnswers, setMaxAnswers] = useState(1);
+  const [maxAnswers, setMaxAnswers] = useState(5);
   const [category, setCategory] = useState(0);
   const [sushiType, setSushiType] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -304,9 +304,8 @@ const PostSushi = ({ onClose }) => {
             <div style={orderFormHeader}>
               <div style={orderFormHeaderTop}>
                 <p style={orderTitle}>
-                  마음속 이야기를
-                  <br />
-                  적는 고민 작성서
+                  마음속 이야기를 적는
+                  <br /> 고민 작성서
                 </p>
                 <button style={closeBtn} onClick={handleClose}>
                   ✖
@@ -465,10 +464,8 @@ const PostSushi = ({ onClose }) => {
                                   alt="padlock"
                                   style={{
                                     position: "relative",
-                                    top: "2.8vh",
-                                    left: "1.4vh",
-                                    width: "10vh",
-                                    height: "10vh",
+                                    top: "calc( 3 * var(--custom-vh))",
+                                    left: "calc( 3.2 * var(--custom-vh))",
                                     pointerEvents: "none",
                                     opacity: 0.8,
                                   }}
@@ -819,17 +816,21 @@ const divider = {
 const orderSet = {
   height: "4%",
   margin: "0",
+  marginBlockStart: "0",
+  marginBlockEnd: "0",
   padding: "1vh",
   fontSize: "2.3vh",
   color: "#454545",
 };
 
 const radioContainer = {
-  height: "15%",
+  height: "10%",
+  marginTop: "2%",
   marginLeft: "2%",
+  marginBottom: "2%",
   display: "grid",
   gridTemplateColumns: "repeat(3, 1fr)",
-  gap: "3%",
+  gap: "1%",
   accentColor: "black",
   fontSize: "1.95vh",
   color: "#454545",
@@ -837,8 +838,6 @@ const radioContainer = {
 
 const radioBtn = {
   position: "relative",
-  width: "100%",
-  height: "100%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -846,6 +845,9 @@ const radioBtn = {
 };
 
 const radioInput = {
+  position: "relative",
+  height: "calc( 1.6 * var(--custom-vh))",
+  width: "calc( 1.6 * var(--custom-vh))",
   margin: "0",
   marginRight: "5%",
 };
@@ -860,6 +862,7 @@ const radioLabel = {
 
 const rangeInput = {
   position: "relative",
+  marginTop: "2%",
   height: "5%",
   width: "96%",
   display: "block",
@@ -870,6 +873,8 @@ const rangeInput = {
 const presentPerson = {
   height: "4%",
   margin: "0",
+  marginTop: "2%",
+  marginBottom: "2%",
   paddingRight: "1vh",
   textAlign: "right",
   fontSize: "1.95vh",
@@ -878,21 +883,22 @@ const presentPerson = {
 
 const sliderContainer = {
   position: "relative",
-  height: "auto",
+  height: "43%",
   width: "100%",
   color: "#454545",
 };
 
 const sliderSushi = {
+  position: "relative",
   display: "block",
   margin: "0 auto",
-  height: "24vh",
+  height: "100%",
   pointerEvents: "none",
 };
 
 const orderFormFooter = {
   position: "relative",
-  height: "10%",
+  height: "fit-content",
   width: "100%",
   marginTop: "auto",
 };
@@ -900,10 +906,34 @@ const orderFormFooter = {
 const pageSelect = {
   position: "relative",
   display: "flex",
+  height: "auto",
+  padding: "0.5vh",
+  paddingTop: "0.7vh",
+  paddingBottom: "0.7vh",
 };
 
 const nextBtn = {
-  margin: "0.6vh",
+  marginLeft: "auto",
+  border: "0",
+  backgroundColor: "transparent",
+  cursor: "pointer",
+  fontFamily: "Ownglyph, Ownglyph",
+  fontSize: "3vh",
+  color: "#454545",
+  height: "fit-content",
+};
+
+const backBtn = {
+  border: "0",
+  backgroundColor: "transparent",
+  cursor: "pointer",
+  fontFamily: "Ownglyph, Ownglyph",
+  fontSize: "3vh",
+  color: "#454545",
+  height: "fit-content",
+};
+
+const submitBtn = {
   marginLeft: "auto",
   border: "0",
   backgroundColor: "transparent",
@@ -944,27 +974,6 @@ const contentText = {
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
   boxSizing: "border-box",
-  color: "#454545",
-};
-
-const backBtn = {
-  margin: "0.6vh",
-  border: "0",
-  backgroundColor: "transparent",
-  cursor: "pointer",
-  fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "3vh",
-  color: "#454545",
-};
-
-const submitBtn = {
-  margin: "0.6vh",
-  marginLeft: "auto",
-  border: "0",
-  backgroundColor: "transparent",
-  cursor: "pointer",
-  fontFamily: "Ownglyph, Ownglyph",
-  fontSize: "3vh",
   color: "#454545",
 };
 
