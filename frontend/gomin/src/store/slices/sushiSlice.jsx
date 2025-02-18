@@ -69,7 +69,7 @@ const sushiSlice = createSlice({
     currentSushi: null,
     status: "idle",
     error: null,
-    railSpeed: 5,
+    railSpeed: 15,
   },
   reducers: {
     clearCurrentSushi: (state) => {
