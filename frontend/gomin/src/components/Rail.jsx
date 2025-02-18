@@ -12,6 +12,8 @@ const Rail = ({ onSushiClick }) => {
   const [bufferSushi, setBufferSushi] = useState([]);
   const [activeSushi, setActiveSushi] = useState([]);
 
+  const [railSpeed, setRailSpeed] = useState(5);
+
   // 초기 데이터 로드
   useEffect(() => {
     dispatch(fetchRailSushi());
@@ -50,6 +52,8 @@ const Rail = ({ onSushiClick }) => {
     }
   }, [sushiList]);
 
+  console.log(railSpeed);
+
   return (
     <div
       className="rail-container"
@@ -66,7 +70,7 @@ const Rail = ({ onSushiClick }) => {
           style={{
             position: "absolute",
             left: "0px",
-            animation: `slide 17s linear forwards`,
+            animation: `slide ${railSpeed}s linear forwards`,
             top: "50%",
             transform: "translateY(-50%)",
           }}
