@@ -69,10 +69,21 @@ const sushiSlice = createSlice({
     currentSushi: null,
     status: "idle",
     error: null,
+    railSpeed: 5,
   },
   reducers: {
     clearCurrentSushi: (state) => {
       state.currentSushi = null;
+    },
+    increaseRailSpeed: (state) => {
+      if (state.railSpeed > 5) {
+        state.railSpeed -= 0.5;
+      }
+    },
+    decreaseRailSpeed: (state) => {
+      if (state.railSpeed < 20) {
+        state.railSpeed += 0.5;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -119,5 +130,5 @@ const sushiSlice = createSlice({
   },
 });
 
-export const { clearCurrentSushi } = sushiSlice.actions;
+export const { clearCurrentSushi, increaseRailSpeed, decreaseRailSpeed } = sushiSlice.actions;
 export default sushiSlice.reducer;
