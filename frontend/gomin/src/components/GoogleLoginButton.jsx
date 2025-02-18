@@ -7,7 +7,7 @@ const GoogleLoginButton = () => {
 
   const handleGoogleLogin = () => {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    const redirectUri = "http://localhost:5173/oauth/google/callback"; // 리다이렉트 URI
+    const redirectUri = "https://www.gomin.my/oauth/google/callback"; // 리다이렉트 URI
 
     // URL에서 redirectUrl 파라미터 가져오기
     const searchParams = new URLSearchParams(window.location.search);
