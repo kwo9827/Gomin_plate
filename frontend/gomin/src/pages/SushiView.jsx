@@ -55,9 +55,9 @@ const SushiView = ({
   useEffect(() => {
     if (isOpen && sushiId) {
       dispatch(fetchSushiDetail(sushiId));
-      if (currentSushi === "loading") {
-        return <div style={styles.loading}>로딩 중...</div>;
-      }
+      // if (currentSushi === "loading") {
+      //   return <div style={styles.loading}>로딩 중...</div>;
+      // }
     }
   }, [dispatch, sushiId, isOpen]);
 
