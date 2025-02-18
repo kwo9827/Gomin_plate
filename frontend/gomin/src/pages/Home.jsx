@@ -317,7 +317,7 @@ const Home = () => {
             <PostSushiBell onClick={openPostSushi} />
           </div>
           {/* 속도 조절 버튼 */}
-          <div style={styles.speedControls}>
+          {/* <div style={styles.speedControls}>
             <button
               onClick={() => dispatch(increaseRailSpeed())}
               style={styles.speedButton}
@@ -330,7 +330,7 @@ const Home = () => {
             >
               -
             </button>
-          </div>
+          </div> */}
           {/* 해금요소 */}
           <div style={styles.unlock}>
             <SushiUnlockBar onClick={openSushiUnlock} />
