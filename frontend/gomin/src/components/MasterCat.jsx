@@ -12,9 +12,9 @@ export default function MasterCat() {
     } else if (clickCount === 15) {
       playSound("/src/assets/sounds/haak.mp3");
       setShowA(true);
-      //   setTimeout(() => {
-      //     setShowA(false);
-      //   }, 800);
+      setTimeout(() => {
+        setShowA(false);
+      }, 800);
     } else if (clickCount === 20) {
       setClickCount(0);
     }
