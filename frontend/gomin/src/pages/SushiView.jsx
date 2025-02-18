@@ -5,13 +5,7 @@ import { createAnswer } from "../store/slices/answerSlice";
 import AnswerSubmitCheckModal from "../components/AnswerSubmitCheckModal";
 import CommonAlertModal from "../components/CommonAlertModal";
 
-const SushiView = ({
-  isOpen,
-  onClose,
-  onAnswerSubmit,
-  sushiId,
-  category,
-}) => {
+const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
   const [sushiData, setSushiData] = useState(null);
   const [content, setContent] = useState("");
   const [showAnswerInput, setShowAnswerInput] = useState(false);
@@ -205,10 +199,6 @@ const SushiView = ({
   }, []);
 
   if (!isOpen) return null;
-
-  if (currentSushi === "loading") {
-    return <div style={styles.loading}>로딩 중...</div>;
-  }
 
   return (
     <>
