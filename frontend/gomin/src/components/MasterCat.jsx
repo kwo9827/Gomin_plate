@@ -1,4 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
+import BgmContext from "../context/BgmProvider";
+import grr from "../assets/sounds/grr.mp3";
+import meow from "../assets/sounds/meow.mp3"
+import haak from "../assets/sounds/haak.mp3"
 
 export default function MasterCat() {
   const [clickCount, setClickCount] = useState(0);
@@ -6,11 +10,20 @@ export default function MasterCat() {
   const [pressTimer, setPressTimer] = useState(null);
   const [showA, setShowA] = useState(false);
 
+  const audioRef = useRef(new Audio());
+  const { isMuted } = useContext(BgmContext);
+
   useEffect(() => {
-    if (clickCount === 5) {
-      playSound("/src/assets/sounds/meow.mp3");
-    } else if (clickCount === 15) {
-      playSound("/src/assets/sounds/haak.mp3");
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : 0.6;
+    }
+
+    if (clickCount === 5 && audioRef.current) {
+      audioRef.current.src = meow;
+      audioRef.current.play();
+    } else if (clickCount === 15 && audioRef.current) {
+      audioRef.current.src = haak;
+      audioRef.current.play();
       setShowA(true);
       setTimeout(() => {
         setShowA(false);
@@ -18,17 +31,15 @@ export default function MasterCat() {
     } else if (clickCount === 20) {
       setClickCount(0);
     }
-  }, [clickCount]);
-
-  const playSound = (src) => {
-    const audio = new Audio(src);
-    audio.play();
-  };
+  }, [clickCount, isMuted]);
 
   const handleMouseDown = () => {
     setIsPressing(true);
     const timer = setTimeout(() => {
-      playSound("/src/assets/sounds/grr.mp3");
+      if(audioRef.current){
+        audioRef.current.src = grr;
+        audioRef.current.play();
+      }
     }, 3000);
     setPressTimer(timer);
   };
