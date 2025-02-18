@@ -240,6 +240,12 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
                   style={{
                     ...styles.title,
                     boxShadow: `0 calc( 0.5 * var(--custom-vh)) 0px ${titleShadowColor}`,
+                    fontSize: "calc( 3 * var(--custom-vh))",
+                    height: "auto",
+                    minHeight: "calc( 3 * var(--custom-vh))",
+                    lineHeight: "calc( 4 * var(--custom-vh))",
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word"
                   }}
                 >
                   {sushiData?.title}
@@ -342,13 +348,11 @@ const styles = {
     overflow: "hidden",
   },
   title: {
-    display: "inline",
+    display: "inline-block",
     margin: "0 calc( 2 * var(--custom-vh)) calc( 1 * var(--custom-vh))",
     padding: "0 calc( 2 * var(--custom-vh))",
     fontWeight: "bold",
     color: "#5D4A37",
-    fontSize: "calc( 3 * var(--custom-vh))",
-    height: "calc( 3 * var(--custom-vh))",
   },
   contentContainer: {
     position: "relative",
