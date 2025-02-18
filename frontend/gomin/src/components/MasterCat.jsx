@@ -12,9 +12,9 @@ export default function MasterCat() {
     } else if (clickCount === 15) {
       playSound("/src/assets/sounds/haak.mp3");
       setShowA(true);
-      setTimeout(() => {
-        setShowA(false);
-      }, 800);
+      //   setTimeout(() => {
+      //     setShowA(false);
+      //   }, 800);
     } else if (clickCount === 20) {
       setClickCount(0);
     }
@@ -53,7 +53,7 @@ export default function MasterCat() {
         transform: "translateX(-50%) translateY(-50%)",
         width: "calc( 15 * var(--custom-vh))",
         height: "calc( 20 * var(--custom-vh))",
-        padding: "50px",
+        padding: "calc( 5 * var(--custom-vh))",
         textAlign: "center",
         cursor: "pointer",
         zIndex: 5,
@@ -65,7 +65,7 @@ export default function MasterCat() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            gap: "5vh",
+            gap: "calc( 5 * var(--custom-vh))",
             height: "100%",
           }}
         >
