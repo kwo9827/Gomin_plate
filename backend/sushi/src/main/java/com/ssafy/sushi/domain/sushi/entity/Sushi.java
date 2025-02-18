@@ -27,7 +27,7 @@ public class Sushi extends BaseEntity {
     @JoinColumn(name = "sushi_type_id")
     private SushiType sushiType; //초밥 종류
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title; //제목
 
     @Column(nullable = false, columnDefinition = "TEXT")

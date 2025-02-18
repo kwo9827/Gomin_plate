@@ -15,7 +15,7 @@ public class SushiType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String name; //초밥 종류
 
     @Column(name = "required_likes")
