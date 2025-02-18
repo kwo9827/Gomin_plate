@@ -18,7 +18,6 @@ const KakaoLoginButton = () => {
 
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
     window.location.href = kakaoAuthUrl;
-
   };
 
   return (
@@ -26,10 +25,10 @@ const KakaoLoginButton = () => {
       onClick={handleKakaoLogin}
       style={{
         position: "absolute",
-        left: "calc(50% - 5vh)",
+        left: "calc(50% - calc( 5 * var(--custom-vh)))",
         background: "#FEE500",
-        height: "7vh",
-        width: "7vh",
+        height: "calc( 7 * var(--custom-vh))",
+        width: "calc( 7 * var(--custom-vh))",
         border: "none",
         borderRadius: "50%",
         display: "flex",
@@ -54,6 +53,5 @@ const KakaoLoginButton = () => {
     </button>
   );
 };
-
 
 export default KakaoLoginButton;
