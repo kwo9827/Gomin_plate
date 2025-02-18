@@ -150,7 +150,14 @@ const Intro = () => {
       )}
 
       <div style={styles.buttoncontainer}>
-        <h2 style={{ marginBottom: "1vh", fontSize: "4.5vh" }}>로그인</h2>
+        <h2
+          style={{
+            marginBottom: "calc( 1 * var(--custom-vh))",
+            fontSize: "calc( 4.5 * var(--custom-vh))",
+          }}
+        >
+          로그인
+        </h2>
         <KakaoLoginButton />
         <GoogleLoginButton />
       </div>
@@ -161,7 +168,7 @@ const Intro = () => {
 const styles = {
   backgroundContainer: {
     position: "relative",
-    height: "100vh",
+    height: "calc( 100 * var(--custom-vh))",
     width: "100%",
     overflow: "hidden",
   },
@@ -170,7 +177,7 @@ const styles = {
     top: 0,
     left: 0,
     width: "100%",
-    height: "105vh",
+    height: "calc( 105 * var(--custom-vh))",
     scale: "1.1",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
@@ -178,28 +185,29 @@ const styles = {
   },
   buttoncontainer: {
     position: "absolute",
+    height: "calc( 6 * var(--custom-vh))",
     zIndex: 2,
     color: "#fff",
-    right: "12vh",
-    bottom: "35vh",
+    right: "calc( 12 * var(--custom-vh))",
+    bottom: "calc( 35 * var(--custom-vh))",
   },
   installButtonContainer: {
     position: "absolute",
     zIndex: 2,
     color: "#fff",
     display: "flex",
-    right: "1.5vh",
-    top: "1.5vh",
+    right: "calc( 1.5 * var(--custom-vh))",
+    top: "calc( 1.5 * var(--custom-vh))",
   },
   installButton: {
-    height: "3vh",
-    width: "3vh",
+    height: "calc( 3 * var(--custom-vh))",
+    width: "calc( 3 * var(--custom-vh))",
     border: "none",
-    borderRadius: "3vh",
+    borderRadius: "calc( 3 * var(--custom-vh))",
     color: "#2e4485",
     fontFamily: "inherit",
     fontWeight: "bold",
-    fontSize: "2.2vh",
+    fontSize: "calc( 2.2 * var(--custom-vh))",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
