@@ -38,7 +38,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
   const readAllNotification = () => {
     dispatch(markAsReadAll()).then(() => {
       // 알림 전체 읽기를 완료한 후 notifications 비우기
-      dispatch(fetchNotifications({ page: 1, size: 10 })); // 또는 빈 배열로 설정
+      dispatch(fetchNotifications({ page: 1, size: 10 }));
       // 읽지 않은 알림 존재 여부 dispatch
       dispatch(fetchUnreadExists());
     });
@@ -58,7 +58,6 @@ const NotificationModal = ({ isOpen, onClose }) => {
     }
   };
 
-  // 제목을 6글자로 제한
   const truncateTitle = (title) => {
     if (!title) return "";
     return title.length > 15 ? `[${title.slice(0, 15)}...]` : `제목: ${title}`;
@@ -77,9 +76,11 @@ const NotificationModal = ({ isOpen, onClose }) => {
             ✖
           </button>
         </div>
-        <button style={styles.readAllButton} onClick={readAllNotification}>
-          ✓ 모두 읽음
-        </button>
+        {notifications.length > 0 && (
+          <button style={styles.readAllButton} onClick={readAllNotification}>
+            ✓ 모두 읽음
+          </button>
+        )}
         <div>
           {status === "loading" ? (
             <p style={styles.emptyText}>로딩 중...</p>
@@ -281,7 +282,7 @@ const styles = {
   /* 모두 읽음 버튼 */
   readAllButton: {
     position: "absolute",
-    top: "16%",
+    top: "10vh",
     right: "8.0%",
     padding: "0.6vh 1.2vh",
     backgroundColor: "transparent",
