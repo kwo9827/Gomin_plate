@@ -26,8 +26,12 @@ api.interceptors.response.use(
     }
 
     // 에러 코드에 따른 alert 발생
-    const errorCode = error.response?.data?.error?.code;
-    alert(ERROR_MESSAGES[errorCode] || ERROR_MESSAGES.DEFAULT);
+    if (errorCode && ERROR_MESSAGES[errorCode]) {
+      alert(ERROR_MESSAGES[errorCode]);
+    } else {
+      // 등록되지 않은 에러는 콘솔에만 출력
+      console.error("Unregistered error:", error.response?.data);
+    }
 
     const authErrors = ["A001"]; // 로그인 필요
     const oauthErrors = ["O001", "O002", "O003", "O004", "O005"];
