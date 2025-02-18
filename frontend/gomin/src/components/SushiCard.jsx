@@ -74,7 +74,7 @@ const SushiCard = ({
                 <div style={remainingAnswersStyle}>
                   {maxAnswers - remainingAnswers}
                 </div>
-                {remainingTime > 0 && <div style={soldoutStyle}>SOLD OUT</div>}
+                <div style={soldoutStyle}>SOLD OUT</div>
               </>
             )}
           </div>
