@@ -28,18 +28,26 @@ export const fetchMySushi = createAsyncThunk(
 /* 레일에 있는 초밥 중 특정 초밥에 대한 데이터를 불러오는 API */
 export const fetchSushiDetail = createAsyncThunk(
   "sushi/fetchDetail",
-  async (sushiId) => {
-    const response = await api.get(`/sushi/rail/${sushiId}`);
-    return response.data;
+  async (sushiId, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/sushi/rail/${sushiId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
   }
 );
 
 /* 링크에 포함된 토큰으로로 특정 초밥에 대한 데이터를 불러오는 API */
 export const fetchSushiByToken = createAsyncThunk(
   "sushi/fetchByToken",
-  async (token) => {
-    const response = await api.get(`/share/${token}`);
-    return response.data;
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/share/${token}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
   }
 );
 
@@ -111,7 +119,7 @@ const sushiSlice = createSlice({
       })
       .addCase(fetchSushiDetail.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = action.payload;
       })
       .addCase(fetchMySushiDetail.pending, (state) => {
         state.currentSushi = "loading";
@@ -126,9 +134,21 @@ const sushiSlice = createSlice({
       })
       .addCase(clearCurrentSushi, (state) => {
         state.currentSushi = null;
+      })
+      .addCase(fetchSushiByToken.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchSushiByToken.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.currentSushi = action.payload.data;
+      })
+      .addCase(fetchSushiByToken.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearCurrentSushi, increaseRailSpeed, decreaseRailSpeed } = sushiSlice.actions;
+export const { clearCurrentSushi, increaseRailSpeed, decreaseRailSpeed } =
+  sushiSlice.actions;
 export default sushiSlice.reducer;

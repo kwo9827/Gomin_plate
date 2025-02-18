@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/font.css";
 
-const AnswerSubmitCheckModal = ({ isOpen, onClose }) => {
+const AnswerSubmitCheckModal = ({ isOpen, onClose, isOwnSushi = false }) => {
   if (!isOpen) return null;
 
   return (
@@ -9,19 +9,23 @@ const AnswerSubmitCheckModal = ({ isOpen, onClose }) => {
       style={{
         ...styles.overlay,
         opacity: isOpen ? 1 : 0,
-        pointerEvents: isOpen ? 'auto' : 'none'
+        pointerEvents: isOpen ? "auto" : "none",
       }}
       onClick={onClose}
     >
       <div
         style={{
           ...styles.modal,
-          transform: isOpen ? 'scale(1)' : 'scale(0.8)',
-          opacity: isOpen ? 1 : 0
+          transform: isOpen ? "scale(1)" : "scale(0.8)",
+          opacity: isOpen ? 1 : 0,
         }}
       >
         <div style={styles.innerBox}>
-          <p>♧ 답변이 제출되었다냥 †</p>
+          <p>
+            {isOwnSushi
+              ? "♧ 본인의 초밥에는 답변할 수 없다냥 †"
+              : "♧ 답변이 제출되었다냥 †"}
+          </p>
           <div style={styles.buttonBox}>
             <button
               style={styles.OK}

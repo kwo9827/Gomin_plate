@@ -16,9 +16,9 @@ export const kakaoLogin = createAsyncThunk(
 
 export const GoogleLogin = createAsyncThunk(
   "auth/GoogleLogin",
-  async ({ clientId, redirectUri }, { rejectWithValue }) => {
+  async ({ clientId, redirectUri, state }, { rejectWithValue }) => {
     try {
-      const GoogleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=email profile`;
+      const GoogleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=email profile&state=${state}`;
       window.location.href = GoogleAuthUrl;
     } catch (error) {
       return rejectWithValue(error.response?.data || "카카오 로그인 요청 실패");
@@ -64,7 +64,6 @@ export const updateNickname = createAsyncThunk(
       const response = await api.put("/user/nickname", { nickname });
       return response.data; // 서버 응답 전체를 반환 ({success, data, error})
     } catch (error) {
-
       return rejectWithValue("닉네임 변경 실패");
     }
   }

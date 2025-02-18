@@ -6,21 +6,25 @@ import api from "../../api/axios";
 /* 답변 생성 하는 API */
 export const createAnswer = createAsyncThunk(
   "answer/create",
-  async ({ sushiId, content }) => {
-    const response = await api.post(`/sushi/rail/${sushiId}/answer`, {
-      content,
-    });
-    return response.data;
+  async ({ sushiId, content }, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`/sushi/rail/${sushiId}/answer`, {
+        content,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
   }
 );
 
 /* 답변에 대한 좋아요를 누르는 API */
 export const toggleLike = createAsyncThunk(
-    "answer/toggleLike",
-    async (answerId) => {
-        const response = await api.post(`/answer/${answerId}/like`);
-        return { answerId, data: response.data };
-    }
+  "answer/toggleLike",
+  async (answerId) => {
+    const response = await api.post(`/answer/${answerId}/like`);
+    return { answerId, data: response.data };
+  }
 );
 
 /* 본인이 단 답변에 대한 초밥 리스트를 불러오는 API */
@@ -64,6 +68,10 @@ const answerSlice = createSlice({
       .addCase(createAnswer.fulfilled, (state, action) => {
         state.status = "idle";
         state.answers.push(action.payload.data);
+      })
+      .addCase(createAnswer.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       })
       .addCase(toggleLike.fulfilled, (state, action) => {
         const answer = state.answers.find(

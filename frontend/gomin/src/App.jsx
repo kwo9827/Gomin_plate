@@ -20,6 +20,7 @@ import OAuthCallback from "./components/OAuthCallback";
 import ErrorPage from "./pages/ErrorPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MuteButton from "./components/MuteButton";
+import ShareRoute from "./components/share/ShareRoute";
 
 function App() {
   const location = useLocation();
@@ -92,7 +93,7 @@ function App() {
             <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
             <Route path="/oauth/google/callback" element={<OAuthCallback />} />
             {/* <Route path="/share/:token" element={<Home />} /> */}
-            <Route
+            {/* <Route
               path="/share/:token"
               element={
                 localStorage.getItem("accessToken") ? (
@@ -105,7 +106,8 @@ function App() {
                   />
                 )
               }
-            />
+            /> */}
+            <Route path="/share/:token" element={<ShareRoute />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>

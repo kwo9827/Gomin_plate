@@ -24,7 +24,7 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    const errorCode = error.response?.data?.code;
+    const errorCode = error.response?.data?.error?.code;
     const status = error.response?.status;
 
     // 401 Unauthorized 에러 처리
@@ -35,7 +35,14 @@ api.interceptors.response.use(
     }
 
     // 에러 코드에 따른 alert 발생
-    if (errorCode && ERROR_MESSAGES[errorCode]) {
+
+    const nonAlertErrors = ["R005", "R006"]; // 알림 모달 따로 구현한 에러
+
+    if (
+      errorCode &&
+      ERROR_MESSAGES[errorCode] &&
+      !nonAlertErrors.includes(errorCode)
+    ) {
       alert(ERROR_MESSAGES[errorCode]);
     } else {
       // 등록되지 않은 에러는 콘솔에만 출력
@@ -50,7 +57,7 @@ api.interceptors.response.use(
       window.location.href = "/";
     }
     // 홈 이동이 필요한 에러
-    else if (["S003", "S004", "S005", "R001", "R005"].includes(errorCode)) {
+    else if (["S003", "S004", "S005", "R001"].includes(errorCode)) {
       window.location.href = "/home";
     }
 

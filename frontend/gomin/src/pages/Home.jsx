@@ -2,7 +2,12 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { countLike } from "../store/slices/memberSlice";
-import { fetchSushiByToken, increaseRailSpeed, decreaseRailSpeed } from "../store/slices/sushiSlice";
+import {
+  fetchSushiByToken,
+  increaseRailSpeed,
+  decreaseRailSpeed,
+} from "../store/slices/sushiSlice";
+import { fetchSushiDetail } from "../store/slices/sushiSlice";
 import { useLocation } from "react-router-dom";
 
 import Rail from "../components/Rail";
@@ -46,6 +51,7 @@ const Home = () => {
   const [selectedSushiData, setSelectedSushiData] = useState(null);
   const [startTutorial, setStartTutorial] = useState(false);
   const [showAnswerSubmitModal, setShowAnswerSubmitModal] = useState(false);
+  const [isOwnSushi, setIsOwnSushi] = useState(false);
 
   const audioRef = useRef(null);
   const { isMuted } = useContext(BgmContext);
@@ -55,9 +61,16 @@ const Home = () => {
   //   dispatch(setIsNew(value));
   // };
 
-  const handleSushiClick = (sushiData) => {
-    setSelectedSushiData(sushiData);
-    setIsSushiViewOpen(true);
+  const handleSushiClick = async (sushiData) => {
+    try {
+      await dispatch(fetchSushiDetail(sushiData.sushiId)).unwrap();
+      setSelectedSushiData(sushiData);
+      setIsSushiViewOpen(true);
+    } catch (error) {
+      if (error.error?.code === "R006") {
+        showAlert("이미 답변한 초밥이다냥!");
+      }
+    }
   };
 
   const [imagesLoaded, setImagesLoaded] = useState({
@@ -93,7 +106,8 @@ const Home = () => {
     setStartTutorial(true);
   };
 
-  const handleAnswerSubmit = () => {
+  const handleAnswerSubmit = (isOwn = false) => {
+    setIsOwnSushi(isOwn);
     setShowAnswerSubmitModal(true);
   };
 
@@ -132,15 +146,26 @@ const Home = () => {
 
   // 토큰을 사용하여 초밥 데이터 불러오기
   useEffect(() => {
+    console.log("work");
+    console.log(token);
     if (token) {
-      dispatch(fetchSushiByToken(token)).then((response) => {
-        if (response.payload) {
-          setSelectedSushiData(response.payload.data);
-          setTimeout(() => {
-            setIsSushiViewOpen(true);
-          }, 2000);
-        }
-      });
+      dispatch(fetchSushiByToken(token))
+        .unwrap() // unwrap 추가
+        .then((response) => {
+          console.log(response);
+          if (response.data) {
+            setSelectedSushiData(response.data);
+            setTimeout(() => {
+              setIsSushiViewOpen(true);
+            }, 2000);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          if (error.error?.code === "R006") {
+            showAlert("이미 답변한 초밥이다냥!");
+          }
+        });
     }
   }, [token, dispatch]);
 
@@ -358,6 +383,7 @@ const Home = () => {
             <AnswerSubmitCheckModal
               isOpen={showAnswerSubmitModal}
               onClose={() => setShowAnswerSubmitModal(false)}
+              isOwnSushi={isOwnSushi}
             />
 
             <SushiUnlock
