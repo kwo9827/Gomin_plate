@@ -11,8 +11,7 @@ const Rail = ({ onSushiClick }) => {
   const sushiList = useSelector((state) => state.sushi.railSushi);
   const [bufferSushi, setBufferSushi] = useState([]);
   const [activeSushi, setActiveSushi] = useState([]);
-
-  const [railSpeed, setRailSpeed] = useState(5);
+  const railSpeed = useSelector((state) => state.sushi.railSpeed);
 
   // 초기 데이터 로드
   useEffect(() => {
@@ -52,8 +51,6 @@ const Rail = ({ onSushiClick }) => {
     }
   }, [sushiList]);
 
-  console.log(railSpeed);
-
   return (
     <div
       className="rail-container"
@@ -86,15 +83,15 @@ const Rail = ({ onSushiClick }) => {
         </div>
       ))}
       <style>{`
-                @keyframes slide {
-                    from {
-                        transform: translateX(calc( -40 * var(--custom-vh)));
-                    }
-                    to {
-                        transform: translateX(calc(100vw + calc( 40 * var(--custom-vh))));
-                    }
-                }
-            `}</style>
+        @keyframes slide {
+          from {
+            transform: translateX(calc( -40 * var(--custom-vh)));
+          }
+          to {
+            transform: translateX(calc(100vw + calc( 40 * var(--custom-vh))));
+          }
+        }
+      `}</style>
     </div>
   );
 };
