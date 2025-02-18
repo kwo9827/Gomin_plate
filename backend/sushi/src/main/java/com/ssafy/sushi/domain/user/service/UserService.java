@@ -1,11 +1,10 @@
 package com.ssafy.sushi.domain.user.service;
 
-import com.ssafy.sushi.domain.user.repository.UserRepository;
 import com.ssafy.sushi.domain.user.dto.request.UpdateNicknameRequest;
 import com.ssafy.sushi.domain.user.dto.response.UserLikeNumResponse;
 import com.ssafy.sushi.domain.user.dto.response.UserNicknameChangeResponse;
 import com.ssafy.sushi.domain.user.entity.User;
-import com.ssafy.sushi.domain.user.dto.response.UserInfoResponse;
+import com.ssafy.sushi.domain.user.repository.UserRepository;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
-
-
-    public UserInfoResponse getUserInfo(Integer userId) {
-        User user = userRepository.findById(userId).orElseThrow(() ->
-                new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        return UserInfoResponse.of(user);
-    }
 
     public UserLikeNumResponse getUserLikeNum(Integer userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
@@ -53,5 +44,9 @@ public class UserService {
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
         userRepository.delete(user);
+    }
+
+    public Boolean existsById(Integer userId) {
+        return userRepository.existsById(userId);
     }
 }
