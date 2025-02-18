@@ -30,6 +30,7 @@ import Tutorial from "../components/Tutorial";
 import { useSSE } from "../hooks/useSSE";
 import SSEIndicator from "../components/SSEIndicator";
 import AnswerSubmitCheckModal from "../components/AnswerSubmitCheckModal";
+import MasterCat from "../components/mastercat";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -266,6 +267,7 @@ const Home = () => {
           }}
           onLoad={() => handleImageLoad("master")}
         ></animated.div>
+        <MasterCat />
 
         <animated.div
           style={{
