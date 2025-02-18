@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUnreadExists } from "../store/slices/notificationSlice";
 import { countLike } from "../store/slices/memberSlice";
-import { fetchSushiByToken } from "../store/slices/sushiSlice";
+import { fetchSushiByToken, increaseRailSpeed, decreaseRailSpeed } from "../store/slices/sushiSlice";
 import { useLocation } from "react-router-dom";
 
 import Rail from "../components/Rail";
@@ -25,7 +25,6 @@ import SushiView from "./SushiView";
 
 import plate from "../assets/sounds/plate.mp3";
 
-import { setIsNew } from "../store/slices/memberSlice";
 import Tutorial from "../components/Tutorial";
 import { useSSE } from "../hooks/useSSE";
 import SSEIndicator from "../components/SSEIndicator";
@@ -312,15 +311,32 @@ const Home = () => {
           <div style={styles.rail}>
             <Rail onSushiClick={handleSushiClick} />
           </div>
+
           {/* 주문벨 */}
           <div style={styles.bell}>
             <PostSushiBell onClick={openPostSushi} />
+          </div>
+          {/* 속도 조절 버튼 */}
+          <div style={styles.speedControls}>
+            <button
+              onClick={() => dispatch(increaseRailSpeed())}
+              style={styles.speedButton}
+            >
+              +
+            </button>
+            <button
+              onClick={() => dispatch(decreaseRailSpeed())}
+              style={styles.speedButton}
+            >
+              -
+            </button>
           </div>
           {/* 해금요소 */}
           <div style={styles.unlock}>
             <SushiUnlockBar onClick={openSushiUnlock} />
           </div>
         </animated.div>
+
         {/* 모달 */}
         <div>
           <div style={{ position: "absolute", zIndex: "10" }}>
@@ -442,6 +458,27 @@ const styles = {
     whiteSpace: "nowrap",
     lineHeight: "1",
     fontFamily: "inherit",
+  },
+  speedControls: {
+    position: "absolute",
+    left: "50%",
+    bottom: "22%",
+    display: "flex",
+    gap: "10px",
+    zIndex: 5,
+  },
+  speedButton: {
+    padding: "8px 16px",
+    fontSize: "18px",
+    backgroundColor: "#ada782",
+    color: "#dfdbaf",
+    border: "2px solid #dfdbaf",
+    borderRadius: "8px",
+    cursor: "pointer",
+    transition: "all 0.2s",
+    "&:hover": {
+      backgroundColor: "#8f8a6d",
+    },
   },
 };
 
