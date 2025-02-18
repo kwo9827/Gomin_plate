@@ -198,7 +198,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     width: "100%",
-    marginBottom: "1vh",
+    marginBottom: `calc(1 * var(--custom-vh))`,
   },
   /* 알림 아이템 외부 컨테이너 */
   outerContainer: {
@@ -208,16 +208,16 @@ const styles = {
     alignItems: "center",
     width: "90%",
     margin: "0 auto",
-    padding: "0.7vh 0",
+    padding: `calc(0.7 * var(--custom-vh)) 0`,
     boxSizing: "border-box",
-    border: "0.2vh solid #D4C5B1",
+    border: `calc(0.2 * var(--custom-vh)) solid #D4C5B1`,
     backgroundColor: "#FFFEFA",
-    marginBottom: "0",
+    marginBottom: 0,
   },
   /* 알림 아이템 중간 컨테이너 */
   middleContainer: {
-    width: "50vh",
-    padding: "1vh 2vh",
+    width: `calc(50 * var(--custom-vh))`,
+    padding: `calc(1 * var(--custom-vh)) calc(2 * var(--custom-vh))`,
     boxSizing: "border-box",
     backgroundColor: "#FFFEFA",
   },
@@ -232,15 +232,15 @@ const styles = {
   },
   /* 알림 이미지 컨테이너 */
   notificationImage: {
-    width: "9.2vh",
-    height: "9.2vh",
-    marginRight: "2vh",
-    borderRadius: "1vh",
+    width: `calc(9.2 * var(--custom-vh))`,
+    height: `calc(9.2 * var(--custom-vh))`,
+    marginRight: `calc(2 * var(--custom-vh))`,
+    borderRadius: `calc(1 * var(--custom-vh))`,
     objectFit: "cover",
   },
   /* 알림 이미지 */
   image: {
-    border: "0.1vh solid #999999",
+    border: `calc(0.1 * var(--custom-vh)) solid #999999`,
     width: "100%",
     height: "100%",
   },
@@ -250,10 +250,10 @@ const styles = {
   },
   /* 알림 메시지 스타일 */
   title: {
-    fontSize: "2.2vh",
+    fontSize: `calc(2.2 * var(--custom-vh))`,
     fontWeight: "bold",
     color: "#5A4628",
-    marginBottom: "1vh",
+    marginBottom: `calc(1 * var(--custom-vh))`,
     display: "-webkit-box",
     WebkitLineClamp: 2, // 최대 2줄까지 표시
     WebkitBoxOrient: "vertical",
@@ -262,21 +262,21 @@ const styles = {
   },
   /* 초밥 제목 스타일 */
   contentText: {
-    fontSize: "1.8vh",
+    fontSize: `calc(1.8 * var(--custom-vh))`,
     color: "#8D7B7B",
     lineHeight: "1.4",
-    marginBottom: "5px",
+    marginBottom: `calc(0.5 * var(--custom-vh))`,
   },
   /* 알림 시간 */
   time: {
-    fontSize: "1.5vh",
+    fontSize: `calc(1.5 * var(--custom-vh))`,
     color: "#666",
   },
   /* 알림없을때 */
   emptyText: {
     textAlign: "center",
     color: "#666",
-    padding: "20px",
+    padding: `calc(2 * var(--custom-vh))`,
   },
   /* 모두 읽음 버튼 */
   readAllButton: {

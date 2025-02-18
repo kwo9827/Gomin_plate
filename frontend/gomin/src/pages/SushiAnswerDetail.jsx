@@ -216,7 +216,6 @@ const styles = {
     color: "#8B6B3E",
     textAlign: "right",
     marginRight: "calc(2 * var(--custom-vh))",
-    marginRight: "calc( 2 * var(--custom-vh))",
     margin: "calc( 1 * var(--custom-vh)) 0",
   },
   contentBox: {

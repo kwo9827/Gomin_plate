@@ -466,7 +466,6 @@ const sushiNameStyle = {
 const lockedStyle = {
   position: "absolute",
   width: "100%",
-  height: "100%",
   display: "flex",
   height: "--custom-vh",
   flexDirection: "column",
