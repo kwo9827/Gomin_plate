@@ -19,7 +19,7 @@ export const modalStyles = {
     left: "50%",
     transform: "translateX(-50%) translateY(-50%)",
     width: "calc( 55 * var(--custom-vh))",
-    height: "calc( 100 * var(--custom-vh))",
+    height: "100%",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     display: "flex",
     justifyContent: "center",
