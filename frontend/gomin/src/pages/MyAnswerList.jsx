@@ -149,10 +149,14 @@ const styles = {
   listContainer: {
     position: "relative",
     zIndex: 2,
-    width: `calc(55 * var(--custom-vh))`,
+    width: "100%",
+    maxWidth: `calc(55 * var(--custom-vh))`,
     margin: "0 auto",
     padding: `calc(3 * var(--custom-vh))`,
     boxSizing: "border-box",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   position: {},
   /** 나의 답변 외부 박스 */

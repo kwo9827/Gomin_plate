@@ -59,7 +59,7 @@ const outerContainerStyle = {
   justifyContent: "center",
   alignItems: "center",
   width: `calc(49 * var(--custom-vh))`,
-  margin: `calc(1.5 * var(--custom-vh)) auto`,
+  margin: `calc(0.5 * var(--custom-vh)) auto`,
   padding: `calc(0.8 * var(--custom-vh))`,
   backgroundColor: "#906C48",
   borderRadius: `calc(1.3 * var(--custom-vh))`,
@@ -96,17 +96,20 @@ const sushiOuterImageStyle = {
   alignItems: "center",
   borderRadius: `calc(2 * var(--custom-vh))`,
   position: "relative",
+  backgroundColor: "#FFFFF0", // 배경색 추가
 };
 
 /**스시 사진 크기 조절 */
-/**이 부분을 수정해주세요. */
 const sushiImageStyle = {
   position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%) scale(0.8)",
   width: "100%",
   height: "100%",
-  overflow: "hidden",
-  transform: "scale(0.8)",
-  objectFit: "contain",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 };
 
 // const sushiImageStyle = {
@@ -123,6 +126,7 @@ const textContainerStyle = {
   overflow: "hidden",
   display: "flex",
   flexDirection: "column",
+  marginLeft: `calc(1.5 * var(--custom-vh))`,
 };
 
 const titleStyle = {

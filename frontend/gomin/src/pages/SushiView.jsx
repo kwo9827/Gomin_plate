@@ -54,10 +54,16 @@ const SushiView = ({
 
   useEffect(() => {
     if (isOpen && sushiId) {
-      dispatch(fetchSushiDetail(sushiId));
-      if (currentSushi === "loading") {
-        return <div style={styles.loading}>로딩 중...</div>;
-      }
+      dispatch(fetchSushiDetail(sushiId))
+        .unwrap()
+        .catch(() => {
+          handleClose();
+        });
+
+      // 이거 주석 해제시 axios에러받을때 에러발생함 (useEffect 안에서 JSX를 반환)
+      // if (currentSushi === "loading") {
+      //   return <div style={styles.loading}>로딩 중...</div>;
+      // }
     }
   }, [dispatch, sushiId, isOpen]);
 
@@ -209,6 +215,10 @@ const SushiView = ({
 
   if (!isOpen) return null;
 
+  if (currentSushi === "loading") {
+    return <div style={styles.loading}>로딩 중...</div>;
+  }
+
   return (
     <>
       <div
@@ -248,7 +258,7 @@ const SushiView = ({
                 <h3
                   style={{
                     ...styles.title,
-                    boxShadow: `0 0.5vh 0px ${titleShadowColor}`,
+                    boxShadow: `0 calc( 0.5 * var(--custom-vh)) 0px ${titleShadowColor}`,
                   }}
                 >
                   {sushiData?.title}
@@ -315,7 +325,8 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     width: "100%",
-    padding: "0.3vh",
+    height: "calc( 3 * var(--custom-vh))",
+    padding: "calc( 0.3 * var(--custom-vh))",
   },
   modalOverlay: {
     position: "fixed",
@@ -331,13 +342,13 @@ const styles = {
   },
   modalContent: {
     position: "relative",
-    top: "6vh",
-    height: "80vh",
-    width: "46vh",
+    top: "calc( 6 * var(--custom-vh))",
+    height: "calc( 80 * var(--custom-vh))",
+    width: "calc( 46 * var(--custom-vh))",
   },
   container: {
     width: "100%",
-    height: "70vh",
+    height: "calc( 70 * var(--custom-vh))",
     background: "#FFFEEC",
     border: "1vh #906C48 solid",
     position: "relative",
@@ -351,15 +362,16 @@ const styles = {
   },
   title: {
     display: "inline",
-    margin: "0 2vh 1vh",
-    padding: "0 2vh",
+    margin: "0 calc( 2 * var(--custom-vh)) calc( 1 * var(--custom-vh))",
+    padding: "0 calc( 2 * var(--custom-vh))",
     fontWeight: "bold",
     color: "#5D4A37",
-    fontSize: "3vh",
+    fontSize: "calc( 3 * var(--custom-vh))",
+    height: "calc( 3 * var(--custom-vh))",
   },
   contentContainer: {
     position: "relative",
-    width: "100%",
+    width: "93%",
     flex: 1,
     overflow: "hidden",
   },
@@ -375,22 +387,22 @@ const styles = {
     right: 0,
     bottom: 0,
     overflowY: "scroll",
-    margin: "2vh",
+    // margin: "calc( 2 * var(--custom-vh))",
     scrollbarWidth: "none",
     msOverflowStyle: "none",
   },
   text: {
     margin: "3vh 0",
-    fontSize: "2.2vh",
+    fontSize: "calc( 2.2 * var(--custom-vh))",
     lineHeight: "1.3",
     wordBreak: "break-word",
   },
   fadeIn: {
     position: "absolute",
-    top: "2vh",
+    top: "calc( 2 * var(--custom-vh))",
     left: 0,
     right: 0,
-    height: "5vh",
+    height: "calc( 5 * var(--custom-vh))",
     background:
       "linear-gradient(to top, rgba(255, 254, 236, 0), rgba(255, 254, 236, 1))",
     pointerEvents: "none",
@@ -398,18 +410,18 @@ const styles = {
   },
   fadeOut: {
     position: "absolute",
-    bottom: "2vh",
+    bottom: "calc( 2 * var(--custom-vh))",
     left: 0,
     right: 0,
-    height: "5vh",
+    height: "calc( 5 * var(--custom-vh))",
     background:
       "linear-gradient(to bottom, rgba(255, 254, 236, 0), rgba(255, 254, 236, 1))",
     pointerEvents: "none",
     zIndex: 1,
   },
   textarea: {
-    width: "35vh",
-    flex: 1,
+    width: "calc( 35 * var(--custom-vh))",
+    height: "calc( 900 * var(--custom-vh))",
     padding: "1.2vh",
     marginTop: "1.5vh",
     borderRadius: "1vh",
@@ -418,6 +430,7 @@ const styles = {
     fontSize: "2vh",
     lineHeight: "1.5",
     resize: "none",
+    boxSizing: "border-box",
   },
   charCount: {
     fontSize: "1.5vh",
@@ -430,7 +443,8 @@ const styles = {
     backgroundColor: "#B2975C",
     color: "#5D4A37",
     fontSize: "2vh",
-    padding: "1vh 2vh",
+    padding: "calc( 1 * var(--custom-vh)) calc( 2 * var(--custom-vh))",
+    height: "calc(4 * var(--custom-vh))",
     margin: "0",
     cursor: "pointer",
     transition: "background-color 0.3s",

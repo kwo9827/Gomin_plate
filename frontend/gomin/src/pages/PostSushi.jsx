@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import nextPage from "../assets/sounds/nextPage.mp3";
-import BgmContext from '../context/BgmProvider';
+import BgmContext from "../context/BgmProvider";
 
 import cuttle from "../assets/sushi/cuttle.webp";
 import eel from "../assets/sushi/eel.webp";
@@ -316,8 +316,8 @@ const PostSushi = ({ onClose }) => {
                 유통기한이 임박한 초밥에는
                 <br /> 마스터냥의 조언이 달릴 수 있습니다
               </p>
-              <hr style={divider} />
             </div>
+            <hr style={divider} />
 
             <div style={orderFormBody}>
               {step === 1 ? (
@@ -326,6 +326,7 @@ const PostSushi = ({ onClose }) => {
                   <div style={radioContainer}>
                     <label style={radioBtn}>
                       <input
+                        style={radioInput}
                         type="radio"
                         id="category1"
                         name="category"
@@ -337,6 +338,7 @@ const PostSushi = ({ onClose }) => {
                     </label>
                     <label style={radioBtn}>
                       <input
+                        style={radioInput}
                         type="radio"
                         id="category2"
                         name="category"
@@ -348,6 +350,7 @@ const PostSushi = ({ onClose }) => {
                     </label>
                     <label style={radioBtn}>
                       <input
+                        style={radioInput}
                         type="radio"
                         id="category3"
                         name="category"
@@ -359,6 +362,7 @@ const PostSushi = ({ onClose }) => {
                     </label>
                     <label style={radioBtn}>
                       <input
+                        style={radioInput}
                         type="radio"
                         id="category4"
                         name="category"
@@ -370,6 +374,7 @@ const PostSushi = ({ onClose }) => {
                     </label>
                     <label style={radioBtn}>
                       <input
+                        style={radioInput}
                         type="radio"
                         id="category5"
                         name="category"
@@ -381,6 +386,7 @@ const PostSushi = ({ onClose }) => {
                     </label>
                     <label style={radioBtn}>
                       <input
+                        style={radioInput}
                         type="radio"
                         id="category6"
                         name="category"
@@ -537,7 +543,7 @@ const PostSushi = ({ onClose }) => {
                   </div>
                 </>
               ) : (
-                <div>
+                <>
                   <p style={orderSet}>제목</p>
                   <hr style={divider} />
                   <textarea
@@ -570,7 +576,7 @@ const PostSushi = ({ onClose }) => {
                       </button>
                     </div>
                   </div>
-                </div>
+                </>
               )}
             </div>
 
@@ -634,8 +640,12 @@ const PostSushi = ({ onClose }) => {
                     style={{
                       ...confirmButtonStyle,
                       backgroundColor: isCancelPressed ? "#67523E" : "#A68564",
-                      transform: isCancelPressed ? "translateY(0.4vh)" : "translateY(-0.2vh)",
-                      boxShadow: isCancelPressed ? "0 0 0 #67523E" : "0 0.4vh 0 #67523E",
+                      transform: isCancelPressed
+                        ? "translateY(0.4vh)"
+                        : "translateY(-0.2vh)",
+                      boxShadow: isCancelPressed
+                        ? "0 0 0 #67523E"
+                        : "0 0.4vh 0 #67523E",
                     }}
                     onClick={handleCompleteClose}
                     onMouseDown={() => setIsCancelPressed(true)}
@@ -744,26 +754,25 @@ const overlayStyle = {
 
 const modalStyle = {
   position: "relative",
-  top: "6vh",
-  height: "80vh",
-  width: "50vh",
-  maxWidth: "90vw",
+  height: "calc( 75 * var(--custom-vh))",
+  width: "calc( 50 * var(--custom-vh))",
   animation: "slideUp 0.7s ease-out", // 아래에서 위로 슬라이드 애니메이션으로 변경
 };
 
 const orderForm = {
   backgroundColor: "#F4F4F4",
   border: "solid 0.3rem #454545",
-  height: "80vh",
+  height: "100%",
 };
 
 const orderFormHeader = {
-  height: "14.3vh",
+  height: "20%",
 };
 
 const orderFormHeaderTop = {
   display: "flex",
-  height: "10vh",
+  justifyContent: "space-between",
+  height: "70%",
 };
 
 const orderTitle = {
@@ -775,11 +784,9 @@ const orderTitle = {
 };
 
 const closeBtn = {
-  position: "absolute",
-  top: "1.2vh",
-  right: "1.2vh",
-  width: "5vh",
-  height: "5vh",
+  position: "relative",
+  width: "7vh",
+  height: "7vh",
   border: "none",
   backgroundColor: "transparent",
   color: "#454545",
@@ -790,7 +797,7 @@ const closeBtn = {
 
 const orderExplain = {
   margin: "0",
-  height: "4vh",
+  height: "30%",
   paddingRight: "1vh",
   fontSize: "1.7vh",
   textAlign: "right",
@@ -798,7 +805,10 @@ const orderExplain = {
 };
 
 const orderFormBody = {
-  height: "65.7vh",
+  height: "80%",
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
 };
 
 const divider = {
@@ -807,6 +817,7 @@ const divider = {
 };
 
 const orderSet = {
+  height: "4%",
   margin: "0",
   padding: "1vh",
   fontSize: "2.3vh",
@@ -814,49 +825,60 @@ const orderSet = {
 };
 
 const radioContainer = {
-  margin: "0",
-  paddingTop: "0.5vh",
-  paddingBottom: "2vh",
-  display: "flex",
-  flexWrap: "wrap",
-  justifyContent: "space-around",
-  gap: "1vh",
+  height: "15%",
+  marginLeft: "2%",
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gap: "3%",
   accentColor: "black",
   fontSize: "1.95vh",
   color: "#454545",
 };
 
 const radioBtn = {
-  flexBasis: "calc(33.33% - 1rem)",
-  textAlign: "left",
+  position: "relative",
+  width: "100%",
+  height: "100%",
   display: "flex",
-  gap: "0.5vh",
-  accentColor: "#454545",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+};
+
+const radioInput = {
+  margin: "0",
+  marginRight: "5%",
 };
 
 const radioLabel = {
-  marginTop: "0.5vh",
+  position: "relative",
+  margin: "0",
+  marginRight: "auto",
+  height: "fit-content",
+  width: "fit-content",
 };
 
 const rangeInput = {
-  height: "3vh",
+  position: "relative",
+  height: "5%",
   width: "96%",
-  margin: "0 auto",
-  marginTop: "1vh",
   display: "block",
+  margin: "0 auto",
   accentColor: "#454545",
 };
 
 const presentPerson = {
+  height: "4%",
   margin: "0",
-  padding: "1vh",
+  paddingRight: "1vh",
   textAlign: "right",
   fontSize: "1.95vh",
   color: "#454545",
 };
 
 const sliderContainer = {
-  height: "26.5vh",
+  position: "relative",
+  height: "auto",
   width: "100%",
   color: "#454545",
 };
@@ -869,13 +891,14 @@ const sliderSushi = {
 };
 
 const orderFormFooter = {
-  position: "absolute",
-  bottom: "0",
-  height: "4.4vh",
-  width: "98%",
+  position: "relative",
+  height: "10%",
+  width: "100%",
+  marginTop: "auto",
 };
 
 const pageSelect = {
+  position: "relative",
   display: "flex",
 };
 
@@ -891,6 +914,7 @@ const nextBtn = {
 };
 
 const titleText = {
+  position: "relative",
   backgroundColor: "transparent",
   border: 0,
   outline: "none",
@@ -898,12 +922,16 @@ const titleText = {
   scrollbarWidth: "none",
   msOverflowStyle: "none",
   padding: "1vh",
-  width: "44vh",
+  width: "100%",
+  height: "7%",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
+  boxSizing: "border-box",
+  color: "#454545",
 };
 
 const contentText = {
+  position: "relative",
   backgroundColor: "transparent",
   border: 0,
   outline: "none",
@@ -911,10 +939,12 @@ const contentText = {
   scrollbarWidth: "none",
   msOverflowStyle: "none",
   padding: "1vh",
-  height: "34.4vh",
-  width: "44vh",
+  height: "69%",
+  width: "100%",
   fontFamily: "Ownglyph, Ownglyph",
   fontSize: "2.3vh",
+  boxSizing: "border-box",
+  color: "#454545",
 };
 
 const backBtn = {
@@ -954,14 +984,16 @@ const submitModalStyle = {
 
 const submitModalContent = {
   backgroundColor: "#fdf5e6",
-  padding: "3vh",
+  padding: "4%",
   borderRadius: "2vh",
-  width: "40vh",
+  height: "fit-content",
+  width: "calc( 50 * var(--custom-vh))",
   position: "relative",
   textAlign: "center",
   border: "1vh solid #906C48",
   outline: "0.3vh solid #67523E",
   fontSize: "2.3vh",
+  boxSizing: "border-box",
 };
 
 const buttonContainer = {
@@ -1058,6 +1090,9 @@ const cancelButtonStyle = {
 };
 
 const textCounter = {
+  position: "relative",
+  height: "3%",
+  bottom: "0",
   margin: "0",
   padding: "0.5vh",
   textAlign: "right",

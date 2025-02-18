@@ -40,10 +40,10 @@ const styles = {
     // height: "80vh",
 
     /*추가 디자인 안되면 주석 처리 ㄱㄱ */
-    width: "80vh",
-    height: "80vh",
-    maxWidth: "500px",
-    maxHeight: "500px",
+    width: "calc(80 * var(--custom-vh))",
+    height: "calc(80 * var(--custom-vh))",
+    // maxWidth: "500px",
+    // maxHeight: "500px",
     /*여기까지 주석! */
 
     display: "flex",
@@ -52,8 +52,8 @@ const styles = {
   },
   postIt: {
     position: "relative",
-    width: "55vh",
-    height: "55vh",
+    width: "calc(55 * var(--custom-vh))",
+    height: "calc(55 * var(--custom-vh))",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -68,10 +68,11 @@ const styles = {
   },
   closeButton: {
     position: "absolute",
+    height: "calc( 3 * var(--custom-vh))",
     top: "17%",
     right: "22%",
     cursor: "pointer",
-    fontSize: "2.5vh",
+    fontSize: "calc(2.5 * var(--custom-vh))",
     zIndex: 3,
     color: "#000000",
   },
@@ -79,20 +80,21 @@ const styles = {
     position: "relative",
     margin: "10px 0",
     zIndex: 2,
-    width: "28vh",
+    width: "calc(28 * var(--custom-vh))",
     height: "auto",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     // fontSize: "clamp(14px, 1.5vw, 18px)", // 반응형 폰트 크기
-    fontSize: "2vh",
+    fontSize: "calc(2 * var(--custom-vh))",
     bottom: "5%",
   },
   heart: {
     position: "absolute",
+    height: "calc( 4 * var(--custom-vh))",
     bottom: "25%",
     right: "20%",
-    fontSize: "3vh",
+    fontSize: "calc(3 * var(--custom-vh))",
     zIndex: 3,
     cursor: "pointer",
   },
