@@ -11,7 +11,6 @@ api.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   } else {
-
   }
 
   return config;
@@ -22,6 +21,16 @@ api.interceptors.response.use(
   (error) => {
     // 프론트엔드 단 에러
     if (!error.response) {
+      return Promise.reject(error);
+    }
+
+    const errorCode = error.response?.data?.code;
+    const status = error.response?.status;
+
+    // 401 Unauthorized 에러 처리
+    if (status === 401) {
+      localStorage.removeItem("accessToken"); // 토큰 삭제
+      window.location.href = "/";
       return Promise.reject(error);
     }
 
