@@ -30,7 +30,7 @@ import Tutorial from "../components/Tutorial";
 import { useSSE } from "../hooks/useSSE";
 import SSEIndicator from "../components/SSEIndicator";
 import AnswerSubmitCheckModal from "../components/AnswerSubmitCheckModal";
-import MasterCat from "../components/mastercat";
+import MasterCat from "../components/MasterCat";
 
 const Home = () => {
   const dispatch = useDispatch();

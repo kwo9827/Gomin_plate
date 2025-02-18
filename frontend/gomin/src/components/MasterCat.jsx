@@ -46,6 +46,8 @@ export default function MasterCat() {
       onClick={() => setClickCount((prev) => prev + 1)}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
+      onTouchStart={handleMouseDown}
+      onTouchEnd={handleMouseUp}
       style={{
         position: "relative",
         top: "50%",

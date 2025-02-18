@@ -136,7 +136,7 @@ const SushiUnlock = ({ isOpen, onClose }) => {
   const progressPercentage = Math.min(
     ((likesReceived - currentSushi.requiredLikes) /
       (nextSushi.requiredLikes - currentSushi.requiredLikes)) *
-    100,
+      100,
     100
   );
 
@@ -356,7 +356,7 @@ const leftIconStyle = {
 const leftTextStyle = {
   position: "absolute",
   top: "2vh",
-  left: "3vh",
+  left: "2.5vh",
   margin: 0,
   textAlign: "center",
   fontSize: "2vh",
