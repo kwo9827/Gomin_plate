@@ -1,7 +1,8 @@
 package com.ssafy.sushi.domain.answer.repository;
 
-import com.ssafy.sushi.domain.answer.entity.Answer;
 import com.ssafy.sushi.domain.answer.dto.response.MyAnswerListResponse;
+import com.ssafy.sushi.domain.answer.entity.Answer;
+import com.ssafy.sushi.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,4 +31,8 @@ public interface AnswerRepository extends JpaRepository<Answer, Integer> {
             "JOIN FETCH a.sushi " +
             "WHERE a.user.id = :userId AND a.sushi.id = :sushiId")
     Optional<Answer> findMyAnswerDetail(Integer userId, Integer sushiId);
+
+    boolean existsAnswerByUserIdAndSushiId(Integer user_id, Integer sushi_id);
+
+    Integer user(User user);
 }

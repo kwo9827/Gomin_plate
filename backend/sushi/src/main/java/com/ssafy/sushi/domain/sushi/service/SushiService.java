@@ -7,15 +7,14 @@ import com.ssafy.sushi.domain.share.repository.ShareTokenRepository;
 import com.ssafy.sushi.domain.sushi.dto.request.CreateSushiRequest;
 import com.ssafy.sushi.domain.sushi.dto.response.*;
 import com.ssafy.sushi.domain.sushi.entity.Category;
-import com.ssafy.sushi.domain.sushi.entity.SuShiExposure;
 import com.ssafy.sushi.domain.sushi.entity.Sushi;
 import com.ssafy.sushi.domain.sushi.entity.SushiType;
 import com.ssafy.sushi.domain.sushi.repository.CategoryRepository;
 import com.ssafy.sushi.domain.sushi.repository.SushiExposureRepository;
 import com.ssafy.sushi.domain.sushi.repository.SushiRepository;
 import com.ssafy.sushi.domain.sushi.repository.SushiTypeRepository;
-import com.ssafy.sushi.domain.user.repository.UserRepository;
 import com.ssafy.sushi.domain.user.entity.User;
+import com.ssafy.sushi.domain.user.repository.UserRepository;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
@@ -127,6 +126,11 @@ public class SushiService {
     public SushiOnRailResponse getRailSushi(Integer userId, Integer sushiId) {
         //초밥 조회
         Sushi sushi = getSushiById(sushiId);
+
+        if (answerRepository.existsAnswerByUserIdAndSushiId(userId, sushi.getId())) {
+            throw new CustomException(ErrorCode.ALREADY_ANSWERED);
+        }
+
         //노출시간 갱신
         updateSushiExposure(userId, sushi);
         return SushiOnRailResponse.of(sushi);
@@ -134,23 +138,12 @@ public class SushiService {
 
     @Transactional
     public void updateSushiExposure(Integer userId, Sushi sushi) {
-        // 사용자와 초밥에 대한 exposure 조회
-        SuShiExposure exposure = sushiExposureRepository.findByUserIdAndSushiId(userId, sushi.getId());
-
-        // 이미 존재하면 timestamp만 갱신
-        if (exposure != null) {
-            exposure.updateTimestamp();
-        } else {
-            // 존재하지 않으면 새로운 exposure 생성
-            User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-            exposure = SuShiExposure.builder()
-                    .user(user)
-                    .sushi(sushi)
-                    .timestamp(now())
-                    .build();
-            sushiExposureRepository.save(exposure);
-        }
+        // 락을 사용하여 조회
+        sushiExposureRepository.insertOrUpdateExposure(
+                userId,
+                sushi.getId(),
+                now()
+        );
     }
 
     private Sushi getSushiById(Integer sushiId) {
