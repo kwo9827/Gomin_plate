@@ -91,7 +91,6 @@ const Sushi = ({
   return (
     <div
       className="sushi"
-      // onClick={handleSushiClick}
       style={{
         cursor: "pointer",
         textAlign: "center",
@@ -134,15 +133,25 @@ const Sushi = ({
             style={{
               width: "calc( 46 * var(--custom-vh))",
               height: "calc( 12 * var(--custom-vh))",
-              overflow: "hidden", // 넘치는 부분 숨기기
+              overflow: "hidden",
               objectFit: "cover",
               objectPosition: "center",
               position: "absolute",
               top: "47.8%",
               left: "49%",
               transform: "translate(-50%, -50%)",
-              willChange: "transform", // 모바일 최적화
-              imageRendering: "crisp-edges", // 이미지 흐려짐 방지
+              willChange: "transform",
+              imageRendering: "crisp-edges",
+              transition: "all 0.3s ease",
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translate(-50%, -60%)";
+              e.currentTarget.style.filter = "brightness(1.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translate(-50%, -50%)";
+              e.currentTarget.style.filter = "brightness(1)";
             }}
           />
         )}
