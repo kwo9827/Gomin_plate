@@ -43,22 +43,6 @@ const Navbar = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   switch (location.pathname) {
-  //     case "/Home":
-  //       setBgImage(navHomeImg);
-  //       break;
-  //     case "/MySushiList":
-  //       setBgImage(navSushiImg);
-  //       break;
-  //     case "/MyAnswerList":
-  //       setBgImage(navAnswerImg);
-  //       break;
-  //     default:
-  //       setBgImage(navImg);
-  //   }
-  // }, [location.pathname]);
-
   useEffect(() => {
     const getBgImage = () => {
       switch (location.pathname) {

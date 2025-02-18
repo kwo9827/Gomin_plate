@@ -8,8 +8,6 @@ import React, { useState } from "react";
 const SSEIndicator = ({ isConnected }) => {
   const [showText, setShowText] = useState(false);
 
-  console.log("indicator 알림 : ", isConnected);
-
   return (
     <div
       style={{
@@ -19,8 +17,6 @@ const SSEIndicator = ({ isConnected }) => {
         padding: "1vh",
         display: "flex",
         alignItems: "center",
-        // backgroundColor: "rgba(0, 0, 0, 0.2)",
-        // backdropFilter: "blur(4px)",
         borderRadius: "0.5vh",
         cursor: "pointer",
       }}
@@ -33,7 +29,6 @@ const SSEIndicator = ({ isConnected }) => {
           height: "calc(0.4 * var(--custom-vh))",
           borderRadius: "50%",
           backgroundColor: isConnected ? "#e9d263" : "#915653",
-          // animation: isConnected ? "pulse 2s infinite" : "none",
         }}
       />
       {showText && (

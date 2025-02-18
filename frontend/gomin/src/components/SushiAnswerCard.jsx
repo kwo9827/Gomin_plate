@@ -14,14 +14,12 @@ const SushiAnswerCard = ({
 
   const handleClick = () => {
     if (!id) {
-      console.log("sushiId가 존재하지 않습니다.", { id });
+      alert("초밥 데이터가 존재하지 않습니다.");
       return;
     }
     navigate(`/sushianswerdetail/${id}`);
   };
 
-  /**초밥 타입 콘솔창 확인 */
-  // console.log("sushiType 값 확인:", sushiType);
 
   return (
     <div style={outerContainerStyle} onClick={handleClick}>
@@ -111,15 +109,6 @@ const sushiImageStyle = {
   justifyContent: "center",
   alignItems: "center",
 };
-
-// const sushiImageStyle = {
-//   width: "90px",
-//   height: "90px",
-//   transform: "scale(1.5)",
-//   marginRight: "10px",
-//   borderRadius: "8px",
-//   objectFit: "cover",
-// };
 
 const textContainerStyle = {
   flex: 1,

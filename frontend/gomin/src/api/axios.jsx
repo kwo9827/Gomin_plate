@@ -6,18 +6,13 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  // const token = useSelector((state) => state.member.accessToken);
-
   const token = localStorage.getItem("accessToken");
 
   if (token) {
-    // alert("토큰 있음. " + "path: " + config.url);
     config.headers.Authorization = `Bearer ${token}`;
   } else {
-    // alert("토큰 없음. " + "path: " + config.url);
-  }
 
-  // config.headers.Authorization = `Bearer test`;
+  }
 
   return config;
 });
@@ -27,7 +22,6 @@ api.interceptors.response.use(
   (error) => {
     // 프론트엔드 단 에러
     if (!error.response) {
-      console.error("Client-side or network error:", error.message);
       return Promise.reject(error);
     }
 
@@ -40,7 +34,6 @@ api.interceptors.response.use(
 
     // 페이지 이동이 필요한 에러 (인증, 권한)
     if ([...authErrors, ...oauthErrors].includes(errorCode)) {
-      console.log("문제나서 홈으로");
       window.location.href = "/";
     }
     // 홈 이동이 필요한 에러

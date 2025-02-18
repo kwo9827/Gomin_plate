@@ -25,16 +25,11 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [accessToken, setAccessToken] = useState(
-    localStorage.getItem("accessToken")
-  );
-
   // Navbar 표시 여부 결정
   const shouldShowNavbar = location.pathname !== "/";
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
-    // const accessToken = "123";
 
     if (
       !accessToken &&

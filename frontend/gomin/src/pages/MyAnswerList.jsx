@@ -31,7 +31,6 @@ const MyAnswerList = () => {
           setHasMore(result.payload.data.content.length === 10);
         }
       } catch (error) {
-        console.error("초기 데이터 로딩 실패:", error);
       }
     };
 
@@ -56,8 +55,6 @@ const MyAnswerList = () => {
     setLoading(true);
     const nextPage = page + 1;
 
-    console.log("다음 페이지 요청:", { nextPage });
-
     dispatch(
       fetchMyAnswers({
         page: nextPage,
@@ -67,10 +64,7 @@ const MyAnswerList = () => {
       if (result.payload && result.payload.data) {
         const newAnswers = result.payload.data.content;
 
-        console.log("새로 불러온 답변 수", newAnswers.length);
-
         if (newAnswers.length < 10) {
-          console.log("더 이상 불러올 데이터가 없습니다.");
           setHasMore(false);
         }
         setDisplayAnswers((prev) => [...prev, ...newAnswers]);
@@ -200,12 +194,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
   },
-  // listItem: {
-  //   width: "100%",
-  //   padding: `0 calc(1.5 * var(--custom-vh))`,
-  //   boxSizing: "border-box",
-  //   marginBottom: `calc(1 * var(--custom-vh))`,
-  // },
+
   loadingText: {
     textAlign: "center",
     color: "#8B6B3E",

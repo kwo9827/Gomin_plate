@@ -31,20 +31,14 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    // padding: "10px",
     zIndex: 1000,
   },
   postOuterBox: {
     position: "relative",
-    // width: "80vh",
-    // height: "80vh",
 
     /*추가 디자인 안되면 주석 처리 ㄱㄱ */
     width: "calc(80 * var(--custom-vh))",
     height: "calc(80 * var(--custom-vh))",
-    // maxWidth: "500px",
-    // maxHeight: "500px",
-    /*여기까지 주석! */
 
     display: "flex",
     justifyContent: "center",
@@ -85,7 +79,6 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    // fontSize: "clamp(14px, 1.5vw, 18px)", // 반응형 폰트 크기
     fontSize: "calc(2 * var(--custom-vh))",
     bottom: "5%",
   },

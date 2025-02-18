@@ -14,10 +14,8 @@ const initialState = {
 export const countLike = createAsyncThunk("member/countLike", async () => {
   try {
     const response = await api.get("/user/my-like");
-    console.log("API 응답 데이터", response.data);
     return response.data.data;
   } catch (error) {
-    console.log("API 요청 실패", error);
   }
 });
 
@@ -33,7 +31,6 @@ const memberSlice = createSlice({
     },
     setAuthData: (state, action) => {
       const { accessToken, refreshToken, user } = action.payload;
-      console.log("user.isNew:", user.isNew);
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
       state.nickname = user.nickname;
@@ -63,7 +60,6 @@ const memberSlice = createSlice({
         state.likesReceived = action.payload.totalLikes;
       })
       .addCase(countLike.rejected, (state, action) => {
-        console.error("좋아요 수 조회 실패:", action.error);
       });
   },
 });

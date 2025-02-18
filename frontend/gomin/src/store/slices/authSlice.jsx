@@ -39,7 +39,6 @@ export const socialLogin = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      console.log("socialLogin 실패 한거임 !!");
       return rejectWithValue(error.response?.data || "소셜 로그인 요청 실패");
     }
   }
@@ -65,7 +64,7 @@ export const updateNickname = createAsyncThunk(
       const response = await api.put("/user/nickname", { nickname });
       return response.data; // 서버 응답 전체를 반환 ({success, data, error})
     } catch (error) {
-      console.error("닉네임 변경 실패:", error);
+
       return rejectWithValue("닉네임 변경 실패");
     }
   }

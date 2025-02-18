@@ -241,7 +241,6 @@ const overlayStyle = {
   justifyContent: "center",
   alignItems: "center",
   animation: "fadeIn 0.3s ease-in-out forwards",
-  // backdropFilter: "blur(10px)",
 };
 
 const modalStyle = {

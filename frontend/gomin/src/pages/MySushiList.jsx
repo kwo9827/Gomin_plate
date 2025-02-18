@@ -22,9 +22,6 @@ const MySushiList = () => {
     setSearch(e.target.value);
   };
 
-  useEffect(() => {
-    console.log(displaySushi);
-  }, [displaySushi]);
 
   useEffect(() => {
     let mounted = true;
@@ -43,7 +40,7 @@ const MySushiList = () => {
           setHasMore(result.payload.data.content.length === 10);
         }
       } catch (error) {
-        console.error("초기 데이터 로딩 실패:", error);
+
       }
     };
     fetchInitialData();
@@ -66,7 +63,7 @@ const MySushiList = () => {
     if (loading || !hasMore) return;
     setLoading(true);
     const nextPage = page + 1;
-    console.log("다음 페이지:", { nextPage });
+
     dispatch(
       fetchMySushi({
         keyword: search,
@@ -76,9 +73,9 @@ const MySushiList = () => {
     ).then((result) => {
       if (result.payload && result.payload.data) {
         const newSushi = result.payload.data.content;
-        console.log("새로 불러온 게시글 수", newSushi.length);
+
         if (newSushi.length < 10) {
-          console.log("더 이상 불러올 데이터가 없습니다.");
+
           setHasMore(false);
         }
         setDisplaySushi((prev) => [...prev, ...newSushi]);
@@ -95,13 +92,14 @@ const MySushiList = () => {
         keyword: search,
       })
     ).then((result) => {
-      console.log(search);
+
       const apiResult = result.payload.data.content;
       // const filtered = apiResult.filter((sushi) =>
       //   sushi.title.toLowerCase().includes(search.toLowerCase())
       // );
       setDisplaySushi(apiResult);
-      console.log(apiResult);
+
+
     });
   };
 

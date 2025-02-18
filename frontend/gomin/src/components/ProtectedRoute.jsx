@@ -16,4 +16,4 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-export default ProtectedRoute; // 추가된 부분
+export default ProtectedRoute; 

@@ -16,7 +16,6 @@ export const BgmProvider = ({ children }) => {
     if (!isMuted && isPlaying) {
       audio
         .play()
-        .catch((err) => console.log("자동 재생 차단됨:", err));
     } else {
       audio.pause();
     }

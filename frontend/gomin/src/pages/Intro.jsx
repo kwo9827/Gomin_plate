@@ -113,11 +113,9 @@ const Intro = () => {
 
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === "accepted") {
-          console.log("사용자가 앱 설치를 수락했습니다");
           setIsAppInstalled(true);
           setInstallButtonVisible(false);
         } else {
-          console.log("사용자가 앱 설치를 거부했습니다");
         }
         setDeferredPrompt(null);
       });

@@ -16,12 +16,12 @@ const NotificationBell = ({ onClick, hasUnread }) => {
     from: { transform: "translateX(0px) rotate(0deg)" },
     to: shake
       ? [
-          { transform: "translateX(-2px) rotate(-2deg)" },
-          { transform: "translateX(2px) rotate(2deg)" },
-          { transform: "translateX(-2px) rotate(-2deg)" },
-          { transform: "translateX(2px) rotate(2deg)" },
-          { transform: "translateX(0px) rotate(0deg)" },
-        ]
+        { transform: "translateX(-2px) rotate(-2deg)" },
+        { transform: "translateX(2px) rotate(2deg)" },
+        { transform: "translateX(-2px) rotate(-2deg)" },
+        { transform: "translateX(2px) rotate(2deg)" },
+        { transform: "translateX(0px) rotate(0deg)" },
+      ]
       : { transform: "translateX(0px) rotate(0deg)" },
     config: { duration: 50 },
     reset: true,
@@ -33,7 +33,7 @@ const NotificationBell = ({ onClick, hasUnread }) => {
     if (!prevHasUnread.current && hasUnread) {
       setShake(true);
     }
-    prevHasUnread.current = hasUnread; // 이전 값 업데이트
+    prevHasUnread.current = hasUnread;
   }, [hasUnread]);
 
   // 흔들림 시작 시 소리 재생
@@ -42,7 +42,7 @@ const NotificationBell = ({ onClick, hasUnread }) => {
       audioRef.current.volume = 0.4;
       audioRef.current.play();
     }
-  }, [shake, isMuted]); // shake 상태와 isMuted 상태가 변경될 때마다 실행
+  }, [shake, isMuted]);
 
   return (
     <animated.div

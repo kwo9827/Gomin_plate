@@ -73,7 +73,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     zIndex: 9999,
-    transition: "opacity 0.2s ease-in-out", // 더 부드러운 페이드 효과
+    transition: "opacity 0.2s ease-in-out",
   },
   modal: {
     position: "fixed",

@@ -86,7 +86,7 @@ const SushiDetail = () => {
     const postItColor = postItColors[postItImages[index % 5]];
 
     if (answer.isNegative) {
-      console.log("부적절한 답변");
+
       // setNegativeAnswer(answer);
       setNegativeAnswer({ ...answer, postItColor });
       setNegativeModalOpen(true);
@@ -94,7 +94,7 @@ const SushiDetail = () => {
       setSelectedAnswer({ ...answer, postItColor });
       setGptModalOpen(true);
     } else {
-      console.log("적절한 답변");
+
       // const postItColor = postItColors[postItImages[index % 5]];
       setSelectedAnswer({ ...answer, postItColor });
       setModalOpen(true);
@@ -186,7 +186,6 @@ const SushiDetail = () => {
         {/* 본문 내용 */}
         <div style={styles.contentBox}>
           <p style={styles.content}>{content}</p>
-          {console.log({ content })}
         </div>
 
         <hr style={styles.divider} />
@@ -213,9 +212,8 @@ const SushiDetail = () => {
                     backgroundRepeat: "no-repeat",
                     // filter: item.isNegative ? "blur(2px)" : "none",
                     cursor: "pointer",
-                    animation: `fadeIn 0.5s ease forwards ${
-                      0.1 + index * 0.1
-                    }s`,
+                    animation: `fadeIn 0.5s ease forwards ${0.1 + index * 0.1
+                      }s`,
                     opacity: 0,
                   }}
                   onClick={() => openAnswer(item, index)}

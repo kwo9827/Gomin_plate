@@ -11,9 +11,6 @@ const SushiView = ({
   onAnswerSubmit,
   sushiId,
   category,
-  sushiType,
-  remainingAnswers,
-  expirationTime,
 }) => {
   const [sushiData, setSushiData] = useState(null);
   const [content, setContent] = useState("");
@@ -59,11 +56,6 @@ const SushiView = ({
         .catch(() => {
           handleClose();
         });
-
-      // 이거 주석 해제시 axios에러받을때 에러발생함 (useEffect 안에서 JSX를 반환)
-      // if (currentSushi === "loading") {
-      //   return <div style={styles.loading}>로딩 중...</div>;
-      // }
     }
   }, [dispatch, sushiId, isOpen]);
 
@@ -162,7 +154,6 @@ const SushiView = ({
       onAnswerSubmit(); // 먼저 확인 모달 열기
       onClose();
     } catch (error) {
-      console.error("답변 제출 실패:", error);
       showAlert("답변 제출에 실패했습니다.");
     }
   };

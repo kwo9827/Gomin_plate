@@ -24,12 +24,6 @@ import violetImg from "../assets/plates/violet.webp";
 import grayImg from "../assets/plates/gray.webp";
 import whiteImg from "../assets/plates/white.webp";
 
-/** 레일에서 흘러가는 초밥 하나에 대한 컴포넌트
- * 1. 레일에 흘러가는 초밥 데이터를 보여줄 컴포넌트
- * 2. id를 받아서 초밥을 구분하고
- * 3. 클릭시 sushiview로 id state를 넘기며 navigate됨
- * 4. 초밥 종류를 인자로 받아서 초밥이 다르게 보여지게 구현하면 됨
- */
 
 const Sushi = ({
   sushiId,
@@ -39,7 +33,6 @@ const Sushi = ({
   expirationTime,
   onSushiClick,
 }) => {
-  // const navigate = useNavigate();
 
   // 고민 카테고리 매핑
   const categories = {

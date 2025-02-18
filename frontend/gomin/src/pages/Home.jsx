@@ -134,8 +134,6 @@ const Home = () => {
   useEffect(() => {
     if (token) {
       dispatch(fetchSushiByToken(token)).then((response) => {
-        console.log("Fetched Sushi Data:", response.payload);
-        // 초밥 데이터가 성공적으로 불러와졌다면 4초 후에 모달 열기
         if (response.payload) {
           setSelectedSushiData(response.payload.data);
           setTimeout(() => {
@@ -324,45 +322,6 @@ const Home = () => {
         {/* 모달 */}
         <div>
           <div style={{ position: "absolute", zIndex: "10" }}>
-            {/* <div
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "71.88vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                pointerEvents: showLoadingScreen ? "auto" : "none",
-              }}
-            >
-              <div
-                style={{
-                  position: "relative",
-                  bottom: 0,
-                  height: "71.88vh",
-                  width: "55vh",
-
-                  backgroundColor: "#fdfcc8",
-                  zIndex: 9999,
-                  opacity: showLoadingScreen ? 1 : 0,
-                  transition: "opacity 1s ease-out",
-                  pointerEvents: showLoadingScreen ? "auto" : "none",
-                }}
-              />
-            </div> */}
-
-            {/* <button onClick={openModal}>닉네임 모달 열기</button> */}
-            {/* <Modal isOpen={isModalOpen} onClose={closeModal} /> */}
-
-            {/* <button onClick={handleSetIsNew}>튜토리얼 테스트</button> */}
-
-            {/* {!allImagesLoaded && (
-              <div>
-                <p> 초밥집에 입장하는 중..</p>
-              </div>
-            )} */}
             <audio ref={audioRef} src={plate} />
             {selectedSushiData &&
               isSushiViewOpen &&
@@ -472,7 +431,6 @@ const styles = {
     border: "calc( 0.6 * var(--custom-vh)) solid",
     borderRadius: "calc( 5 * var(--custom-vh))",
     backgroundColor: "#ada782",
-    // backgroundColor: "#a6a07a",
     color: "#dfdbaf",
     fontSize: "calc( 2.5 * var(--custom-vh))",
     fontWeight: "bold",

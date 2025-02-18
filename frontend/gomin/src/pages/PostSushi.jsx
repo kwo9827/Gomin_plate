@@ -86,7 +86,7 @@ const PostSushi = ({ onClose }) => {
   const [isConfirmPressed, setIsConfirmPressed] = useState(false);
   const [isCancelPressed, setIsCancelPressed] = useState(false);
   const isSubmittingRef = useRef(false);
-  const reRender = useCallback(() => {}, []);
+  const reRender = useCallback(() => { }, []);
   const [alertModal, setAlertModal] = useState({
     isOpen: false,
     message: "",
@@ -232,13 +232,13 @@ const PostSushi = ({ onClose }) => {
         category,
         sushiType,
       };
-      console.log("등록된 내용:", sushiData);
+
       const response = await dispatch(createSushi(sushiData));
-      const { success, data, error } = response.payload;
+      const { data } = response.payload;
       const { token } = data;
       const shareUrl = `share/${token}`;
       setShareUrl(shareUrl);
-      console.log("공유 URL:", shareUrl);
+
       setShowModal(false);
       setShowCompleteModal(true);
     } finally {
@@ -261,7 +261,6 @@ const PostSushi = ({ onClose }) => {
       await navigator.clipboard.writeText(text);
       showAlert("클립보드에 링크가 복사되었어요.");
     } catch (err) {
-      console.log(err);
     }
   };
   const handleClose = () => {
@@ -414,9 +413,8 @@ const PostSushi = ({ onClose }) => {
                     <Slider {...settings}>
                       {sushiImages.map((sushi, index) => (
                         <div
-                          className={`slider ${
-                            currentSlide === index ? "active" : ""
-                          }`}
+                          className={`slider ${currentSlide === index ? "active" : ""
+                            }`}
                           key={sushi.id}
                           style={{
                             cursor:
@@ -685,7 +683,7 @@ const PostSushi = ({ onClose }) => {
                             url: shareUrl,
                           },
                         });
-                        console.log("카카오톡 공유하기" + shareUrl);
+
                       }}
                     >
                       <img
@@ -703,7 +701,7 @@ const PostSushi = ({ onClose }) => {
                           `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${shareUrl}`,
                           "_blank"
                         );
-                        console.log("페이스북 공유하기");
+
                       }}
                     >
                       <i

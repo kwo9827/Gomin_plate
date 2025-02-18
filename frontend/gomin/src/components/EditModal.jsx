@@ -43,12 +43,10 @@ const EditModal = ({ isOpen, onClose, onConfirm }) => {
     }
     try {
       const result = await dispatch(updateNickname(nickname)).unwrap();
-      console.log("변경 성공:", result);
       localStorage.setItem("userNickname", nickname);
       alert("닉네임이 성공적으로 변경되었습니다.");
       handleClose();
     } catch (err) {
-      console.log("변경 실패:", err);
       setError("닉네임 변경에 실패했습니다. 다시 시도해주세요.");
     }
   };

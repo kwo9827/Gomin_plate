@@ -15,19 +15,14 @@ export const useSSE = (initialDelay = 3000) => {
   const MAX_RETRIES = 10; // 최대 재시도 횟수 설정
 
   const cleanup = () => {
-    console.log("cleanup 시작");
     if (eventSourceRef.current) {
-      console.log("cleanup : 이미 연결중인거 닫기");
       eventSourceRef.current.close();
       eventSourceRef.current = null;
     }
-    // 모든 타임아웃 clear
     if (reconnectTimeoutRef.current) {
-      console.log("cleanup : 재연결 타임아웃 clear");
       clearTimeout(reconnectTimeoutRef.current);
     }
     if (connectionTimeoutRef.current) {
-      console.log("cleanup : 초기 연결 타임아웃 clear");
       clearTimeout(connectionTimeoutRef.current);
     }
     reconnectTimeoutRef.current = null;
@@ -35,36 +30,23 @@ export const useSSE = (initialDelay = 3000) => {
   };
 
   const connectSSE = useCallback(async () => {
-    // 이미 연결된 상태인지 체크
     if (eventSourceRef.current && eventSourceRef.current.readyState === 1) {
-      console.log("connectSSE : 이미 연결된 상태입니다.");
       return;
     }
 
-    console.log("cleanup호출: connectSSE 시작");
-    cleanup(); // 기존 연결 정리
+    cleanup();
 
-    // 최대 재시도 횟수 체크
     if (retryCountRef.current >= MAX_RETRIES) {
-      console.error(`SSE 연결 실패 - 최대 재시도 횟수(${MAX_RETRIES}회) 초과`);
       setIsConnected(false);
-      return; // 더 이상 재연결 시도하지 않음
+      return;
     }
 
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
-      console.error("sse 연결위한 토큰 없음");
       setIsConnected(false);
       return;
     }
-
-    // if (eventSourceRef.current) {
-    //   eventSourceRef.current.close();
-    //   eventSourceRef.current = null;
-    //   setIsConnected(false);
-    //   await new Promise((resolve) => setTimeout(resolve, 1000));
-    // }
 
     eventSourceRef.current = new EventSource(
       `${import.meta.env.VITE_API_BASE_URL}/api/sse/subscribe`,
@@ -81,33 +63,18 @@ export const useSSE = (initialDelay = 3000) => {
       }
     );
 
-    // 초기 연결 타임아웃 체크 추가
     connectionTimeoutRef.current = setTimeout(() => {
       if (!eventSourceRef.current || eventSourceRef.current.readyState !== 1) {
-        console.error("SSE 초기 연결 실패 - 타임아웃");
         setIsConnected(false);
         retryCountRef.current += 1;
 
         if (retryCountRef.current >= MAX_RETRIES) {
-          console.error(
-            `SSE 연결 실패 - 최대 재시도 횟수(${MAX_RETRIES}회) 초과`
-          );
           return;
         }
 
-        console.log("cleanup호출: 타임아웃 발생");
         cleanup();
 
-        // if (eventSourceRef.current) {
-        //   eventSourceRef.current.close();
-        //   eventSourceRef.current = null;
-        // }
-
-        // 이미 재연결이 예약되어 있지 않은 경우에만 재연결 (onError에서 재연결 예약할 수도 있음)
         if (!reconnectTimeoutRef.current) {
-          console.log(
-            `초기 연결 실패로 인한 sse 재연결 시도 (${retryCountRef.current}/${MAX_RETRIES})`
-          );
           connectSSE();
         }
       }
@@ -128,7 +95,6 @@ export const useSSE = (initialDelay = 3000) => {
     // 서버 셧다운 이벤트 처리
     eventSourceRef.current.addEventListener("shutdown", (event) => {
       setIsConnected(false);
-      console.log("cleanup호출: 셧다운 발생");
       cleanup();
 
       const checkServerAndReconnect = async () => {
@@ -153,30 +119,19 @@ export const useSSE = (initialDelay = 3000) => {
 
     // 연결 시
     eventSourceRef.current.onopen = () => {
-      console.log("SSE 연결 성공");
       setIsConnected(true);
       retryCountRef.current = 0;
     };
 
     // 연결 에러 시
     eventSourceRef.current.onerror = (error) => {
-      console.error("SSE 에러발생", error);
       setIsConnected(false);
       retryCountRef.current += 1;
 
-      console.log("cleanup호출: 에러 발생");
       cleanup();
-
-      // if (eventSourceRef.current) {
-      //   eventSourceRef.current.close();
-      //   eventSourceRef.current = null;
-      // }
 
       if (!reconnectTimeoutRef.current && retryCountRef.current < MAX_RETRIES) {
         reconnectTimeoutRef.current = setTimeout(() => {
-          console.log(
-            `SSE 재연결 시도 (${retryCountRef.current}/${MAX_RETRIES})`
-          );
           connectSSE();
           reconnectTimeoutRef.current = null;
         }, 3000);
@@ -189,33 +144,9 @@ export const useSSE = (initialDelay = 3000) => {
       connectSSE().catch(console.error);
     }, initialDelay);
 
-    // connectSSE().catch(console.error);
-
-    //   return () => {
-    //     retryCountRef.current = 0;
-    //     setIsConnected(false);
-    //     if (eventSourceRef.current) {
-    //       eventSourceRef.current.close();
-    //       eventSourceRef.current = null;
-    //     }
-    //     if (reconnectTimeoutRef.current) {
-    //       // 에러시 재연결
-    //       clearTimeout(reconnectTimeoutRef.current);
-    //     }
-    //     if (connectionTimeoutRef.current) {
-    //       // 초기 연결 타임아웃
-    //       clearTimeout(connectionTimeoutRef.current);
-    //     }
-    //     if (initialDelayTimeoutRef.current) {
-    //       clearTimeout(initialDelayTimeoutRef.current);
-    //     }
-    //   };
-    // }, [connectSSE, initialDelay]);
-
     return () => {
       retryCountRef.current = 0;
       setIsConnected(false);
-      console.log("cleanup호출: return 시작(언마운트 or 값 변경)");
       cleanup();
       if (initialDelayTimeoutRef.current) {
         clearTimeout(initialDelayTimeoutRef.current);

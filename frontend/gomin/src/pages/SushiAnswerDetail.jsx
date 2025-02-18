@@ -131,24 +131,6 @@ const SushiAnswerDetail = () => {
             </div>
           </div>
         </div>
-        {/* <div style={styles.arrowContainer}>
-          {currentPage > 0 && (
-            <button
-              onClick={() => setCurrentPage(currentPage - 1)}
-              style={styles.arrowLeft}
-            >
-              ◀
-            </button>
-          )}
-          {currentPage < totalPages - 1 && (
-            <button
-              onClick={() => setCurrentPage(currentPage + 1)}
-              style={styles.arrowRight}
-            >
-              ▶
-            </button>
-          )}
-        </div> */}
       </div>
       {modalOpen && (
         <PostItAnswerModal

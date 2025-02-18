@@ -19,8 +19,6 @@ const KakaoLoginButton = () => {
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
     window.location.href = kakaoAuthUrl;
 
-    // 기존 전달 코드
-    // dispatch(kakaoLogin({ clientId, redirectUri }));
   };
 
   return (
@@ -41,17 +39,17 @@ const KakaoLoginButton = () => {
         zIndex: "2",
       }}
     >
-      <svg 
+      <svg
         width="60%" // 이거 조절 해서 말풍선 크기 조절
         height="60%" // 이거 조절 해서 말풍선 크기 조절
-        viewBox="0 0 24 24" 
+        viewBox="0 0 24 24"
         fill="#000000"
         style={{
           minWidth: "24px",
           minHeight: "24px",
         }}
       >
-        <path d="M12 3C6.5 3 2 6.5 2 11c0 2.9 1.9 5.4 4.7 6.9-.2.6-.7 2.3-.8 2.7 0 0 0 .2.1.2s.2.1.3 0c.4-.3 4.1-2.8 4.7-3.2.3 0 .7.1 1 .1 5.5 0 10-3.5 10-8C22 6.5 17.5 3 12 3z"/>
+        <path d="M12 3C6.5 3 2 6.5 2 11c0 2.9 1.9 5.4 4.7 6.9-.2.6-.7 2.3-.8 2.7 0 0 0 .2.1.2s.2.1.3 0c.4-.3 4.1-2.8 4.7-3.2.3 0 .7.1 1 .1 5.5 0 10-3.5 10-8C22 6.5 17.5 3 12 3z" />
       </svg>
     </button>
   );
