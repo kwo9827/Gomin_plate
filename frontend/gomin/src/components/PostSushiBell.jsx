@@ -5,7 +5,7 @@ import BgmContext from "../context/BgmProvider";
 
 
 const PostSushiBell = ({ onClick }) => {
-  const audioRef = useRef(null); // audio 요소를 참조하기 위한 ref 생성
+  const audioRef = useRef(new Audio());
   const { isMuted } = useContext(BgmContext);
 
   // 클릭 시 효과음 재생

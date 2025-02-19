@@ -22,7 +22,6 @@ const SushiAnswerDetail = () => {
   const {
     title = "",
     content = "",
-    expirationTime = new Date(),
     createdAt = new Date(),
     answer = [],
     isLiked = new Boolean(),

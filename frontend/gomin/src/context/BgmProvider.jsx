@@ -11,7 +11,7 @@ export const BgmProvider = ({ children }) => {
   useEffect(() => {
     const audio = audioRef.current;
     audio.loop = true;
-    audio.volume = 0.2; // 기본 볼륨 설정
+    audio.volume = 0.1; // 기본 볼륨 설정
 
     if (!isMuted && isPlaying) {
       audio
@@ -29,7 +29,7 @@ export const BgmProvider = ({ children }) => {
     const audio = audioRef.current;
 
     if (isMuted) {
-      audio.volume = 0.2; // 음소거 해제 시 볼륨 복원
+      audio.volume = 0.1; // 음소거 해제 시 볼륨 복원
       setIsPlaying(true); // 음악 재생 시작
     } else {
       audio.volume = 0; // 음소거 시 볼륨 0
