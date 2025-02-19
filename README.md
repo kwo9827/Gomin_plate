@@ -20,7 +20,7 @@
 >
 >초밥이 되어 긴 레일을 돌아, 다시 당신에게 돌아오는데...
 
-## 🔉서비스 개요
+# 🔉서비스 개요
 
 <div align="center">
 <img src="https://github.com/user-attachments/assets/f9e2b23c-2520-46a7-bd51-5c36265ecac0" width="80%">
