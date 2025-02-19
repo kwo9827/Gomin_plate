@@ -14,17 +14,10 @@ public class AuthenticationUtil {
     private final UserRepository userRepository;
 
     public Integer getCurrentUserId(UserPrincipal userPrincipal) {
-        if (userPrincipal == null || userPrincipal.getId() == null) {
+        if (userPrincipal == null || userPrincipal.getId() == null || !userRepository.existsById(userPrincipal.getId())) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_ACCESS);
         }
 
-        userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
         return userPrincipal.getId();
-    }
-
-    public static Integer getCurrentUserIdCanNull(UserPrincipal userPrincipal) {
-        return userPrincipal == null ? null : userPrincipal.getId();
     }
 }

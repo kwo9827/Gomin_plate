@@ -47,8 +47,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                             authorize
                                     .requestMatchers(AntPathRequestMatcher.antMatcher("/api/sse/subscribe")).permitAll()
-//                                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/notification/subscribe")).permitAll()
-//                                    .requestMatchers(AntPathRequestMatcher.antMatcher("/api/user/my-like/subscribe")).permitAll()
                                     .requestMatchers("/api/**").permitAll()
                                     .anyRequest().authenticated()
                 )
