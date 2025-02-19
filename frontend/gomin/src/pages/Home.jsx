@@ -19,6 +19,7 @@ import PostSushi from "./PostSushi";
 import SushiUnlockBar from "../components/SushiUnlockBar";
 import BgmContext from "../context/BgmProvider";
 import CommonAlertModal from "../components/CommonAlertModal";
+import PushAgreeModal from "../components/webpush/PushAgreeModal";
 
 import { useSpring, animated } from "@react-spring/web";
 
@@ -53,6 +54,8 @@ const Home = () => {
   const [showAnswerSubmitModal, setShowAnswerSubmitModal] = useState(false);
   const [isOwnSushi, setIsOwnSushi] = useState(false);
 
+  const [showPushAgreeModal, setShowPushAgreeModal] = useState(false);
+
   const audioRef = useRef(null);
   const { isMuted } = useContext(BgmContext);
 
@@ -70,6 +73,13 @@ const Home = () => {
       if (error.error?.code === "R006") {
         showAlert("이미 답변한 초밥이다냥!");
       }
+    }
+  };
+
+  const handlePostSushiComplete = () => {
+    // 알림 권한이 'default' 상태일 때만 모달 표시
+    if (Notification.permission === "default") {
+      setShowPushAgreeModal(true);
     }
   };
 
@@ -109,6 +119,11 @@ const Home = () => {
   const handleAnswerSubmit = (isOwn = false) => {
     setIsOwnSushi(isOwn);
     setShowAnswerSubmitModal(true);
+
+    // 자신의 초밥에 답변한 게 아닐 때만 알림 권한 체크
+    if (!isOwn && Notification.permission === "default") {
+      setShowPushAgreeModal(true);
+    }
   };
 
   const [alertModal, setAlertModal] = useState({
@@ -146,13 +161,10 @@ const Home = () => {
 
   // 토큰을 사용하여 초밥 데이터 불러오기
   useEffect(() => {
-    console.log("work");
-    console.log(token);
     if (token) {
       dispatch(fetchSushiByToken(token))
         .unwrap() // unwrap 추가
         .then((response) => {
-          console.log(response);
           if (response.data) {
             setSelectedSushiData(response.data);
             setTimeout(() => {
@@ -390,11 +402,24 @@ const Home = () => {
               isOpen={isSushiUnlockOpen}
               onClose={closeSushiUnlock}
             />
-            {isPostSushiOpen && <PostSushi onClose={closePostSushi} />}
+            {isPostSushiOpen && (
+              <PostSushi
+                onClose={closePostSushi}
+                onComplete={handlePostSushiComplete}
+              />
+            )}
             <NotificationModal
               isOpen={isNotificationOpen}
               onClose={closeNotification}
             />
+
+            {showPushAgreeModal && (
+              <PushAgreeModal
+                isOpen={showPushAgreeModal}
+                onClose={() => setShowPushAgreeModal(false)}
+              />
+            )}
+
             <CommonAlertModal
               isOpen={alertModal.isOpen}
               onClose={() => setAlertModal({ isOpen: false, message: "" })}

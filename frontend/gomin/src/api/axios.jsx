@@ -69,4 +69,30 @@ api.interceptors.response.use(
   }
 );
 
+// FCM 토큰 등록
+export const registerFCMToken = async (token) => {
+  try {
+    const response = await api.post("/fcm/token ", {
+      token: token,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("FCM 토큰 등록 실패:", error);
+    throw error;
+  }
+};
+
+// FCM 토큰 삭제
+export const unregisterFCMToken = async (token) => {
+  try {
+    const response = await api.delete("/fcm/token", {
+      token: token,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("FCM 토큰 삭제 실패:", error);
+    throw error;
+  }
+};
+
 export default api;

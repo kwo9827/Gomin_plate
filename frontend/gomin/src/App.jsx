@@ -92,21 +92,6 @@ function App() {
             />
             <Route path="/oauth/kakao/callback" element={<OAuthCallback />} />
             <Route path="/oauth/google/callback" element={<OAuthCallback />} />
-            {/* <Route path="/share/:token" element={<Home />} /> */}
-            {/* <Route
-              path="/share/:token"
-              element={
-                localStorage.getItem("accessToken") ? (
-                  <Home />
-                ) : (
-                  <Navigate
-                    to={`/?redirectUrl=${encodeURIComponent(
-                      location.pathname
-                    )}`}
-                  />
-                )
-              }
-            /> */}
             <Route path="/share/:token" element={<ShareRoute />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
