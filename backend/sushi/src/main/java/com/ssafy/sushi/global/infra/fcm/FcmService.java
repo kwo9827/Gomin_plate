@@ -29,9 +29,6 @@ public class FcmService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        System.out.println("user = " + user.getNickname());
-        System.out.println("token = " + token);
-
         // 동일한 토큰이 이미 있는지 확인
         if (!fcmRepository.existsByToken(token)) {
             FcmToken fcmToken = FcmToken.create(user, token);
