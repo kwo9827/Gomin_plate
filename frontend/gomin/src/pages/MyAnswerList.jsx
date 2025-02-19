@@ -82,8 +82,18 @@ const MyAnswerList = () => {
     config: { tension: 250, friction: 25 },
   });
 
+  const scrollToTop = () => {
+    const container = document.querySelector('.background');
+    if (container) {
+      container.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
-    <div style={styles.background} onScroll={handleScroll}>
+    <div className="background" style={styles.background} onScroll={handleScroll}>
       <div style={styles.listContainer}>
         <div style={styles.position}>
           <div style={styles.outerBox}>
@@ -126,6 +136,9 @@ const MyAnswerList = () => {
           <div style={styles.endMessage}>더 이상 답변이 없습니다.</div>
         )}
       </div>
+      <button onClick={scrollToTop} style={styles.scrollTopButton}>
+        ︽
+      </button>
     </div>
   );
 };
@@ -206,6 +219,30 @@ const styles = {
     color: "#8B6B3E",
     fontSize: `calc(2 * var(--custom-vh))`,
     padding: `calc(2 * var(--custom-vh)) 0`,
+  },
+
+  scrollTopButton: {
+    position: "fixed",
+    bottom: "5vh",
+    right: "5vh",
+    width: "4vh",
+    height: "4vh",
+    backgroundColor: "rgba(178, 151, 92, 0.6)",
+    border: "none",
+    borderRadius: "50%",
+    color: "#FFFEFA",
+    fontSize: "1.8vh",
+    cursor: "pointer",
+    zIndex: 1000,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backdropFilter: "blur(2px)",
+    transition: "opacity 0.3s ease",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    "&:hover": {
+      backgroundColor: "rgba(178, 151, 92, 0.8)",
+    }
   },
 };
 
