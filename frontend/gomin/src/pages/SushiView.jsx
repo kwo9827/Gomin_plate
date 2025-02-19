@@ -43,19 +43,15 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
     }
   }, [isOpen]);
 
-  // useEffect(() => {
-  //   if (isOpen && sushiId) {
-  //     dispatch(fetchSushiDetail(sushiId))
-  //       .unwrap()
-  //       .catch((error) => {
-  //         if (error.error?.code === "R006") {
-  //           showAlert("이미 답변한 초밥이다냥!");
-  //         } else {
-  //           handleClose();
-  //         }
-  //       });
-  //   }
-  // }, [dispatch, sushiId, isOpen]);
+  useEffect(() => {
+    if (isOpen && sushiId) {
+      dispatch(fetchSushiDetail(sushiId))
+        .unwrap()
+        .catch(() => {
+          handleClose();
+        });
+    }
+  }, [dispatch, sushiId, isOpen]);
 
   useEffect(() => {
     setTitleShadowColor(
@@ -146,20 +142,13 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
     }
 
     try {
-      await dispatch(
-        createAnswer({ sushiId: sushiData.sushiId, content })
-      ).unwrap();
+      await dispatch(createAnswer({ sushiId: sushiData.sushiId, content }));
       setShowAnswerInput(false);
       setContent("");
-      onAnswerSubmit(false); // 먼저 확인 모달 열기
+      onAnswerSubmit();
       onClose();
     } catch (error) {
-      if (error.error?.code === "R005") {
-        onAnswerSubmit(true); // 본인 초밥 답변 시도
-        onClose();
-      } else {
-        showAlert("답변 제출에 실패했습니다.");
-      }
+      showAlert("답변 제출에 실패했습니다.");
     }
   };
 
@@ -167,7 +156,6 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
     setOpacity(0);
     setTimeout(() => {
       setShowAnswerInput(false);
-      setContent("");
       setSushiData({
         sushiId: "",
         title: "",
@@ -185,7 +173,6 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
   const handleBack = () => {
     if (showAnswerInput) {
       setShowAnswerInput(false);
-      setContent("");
     } else {
       handleClose();
     }
@@ -256,7 +243,7 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
                     minHeight: "calc( 3 * var(--custom-vh))",
                     lineHeight: "calc( 4 * var(--custom-vh))",
                     whiteSpace: "pre-wrap",
-                    wordBreak: "break-word",
+                    wordBreak: "break-word"
                   }}
                 >
                   {sushiData?.title}
