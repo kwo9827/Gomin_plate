@@ -218,14 +218,22 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
           <div style={styles.container}>
             <div style={styles.buttonRow}>
               <div
-                style={{ width: "3vh", cursor: "pointer", fontSize: "2.5vh" }}
+                style={{
+                  width: "calc( 3 * var(--custom-vh))",
+                  cursor: "pointer",
+                  fontSize: "calc( 2.5 * var(--custom-vh))",
+                }}
                 onClick={handleBack}
               >
                 {" "}
                 &lt;
               </div>
               <div
-                style={{ width: "3vh", cursor: "pointer", fontSize: "2.5vh" }}
+                style={{
+                  width: "calc( 3 * var(--custom-vh))",
+                  cursor: "pointer",
+                  fontSize: "calc( 2.5 * var(--custom-vh))",
+                }}
                 onClick={handleClose}
               >
                 {" "}
@@ -267,7 +275,7 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
                 <h3
                   style={{
                     ...styles.title,
-                    boxShadow: `0 0.5vh 0px ${titleShadowColor}`,
+                    boxShadow: `0 calc( 0.5 * var(--custom-vh)) 0px ${titleShadowColor}`,
                   }}
                 >
                   {sushiData?.title}
@@ -354,13 +362,13 @@ const styles = {
   },
   contentContainer: {
     position: "relative",
-    width: "93%",
+    width: "90%",
     flex: 1,
     overflow: "hidden",
   },
   contentWrapper: {
     position: "relative",
-    height: "100%",
+    height: "97%",
     overflow: "hidden",
   },
   content: {
@@ -382,7 +390,7 @@ const styles = {
   },
   fadeIn: {
     position: "absolute",
-    top: "calc( 2 * var(--custom-vh))",
+    top: 0,
     left: 0,
     right: 0,
     height: "calc( 5 * var(--custom-vh))",
@@ -393,7 +401,7 @@ const styles = {
   },
   fadeOut: {
     position: "absolute",
-    bottom: "calc( 2 * var(--custom-vh))",
+    bottom: "0",
     left: 0,
     right: 0,
     height: "calc( 5 * var(--custom-vh))",
@@ -405,18 +413,18 @@ const styles = {
   textarea: {
     width: "calc( 35 * var(--custom-vh))",
     height: "calc( 900 * var(--custom-vh))",
-    padding: "1.2vh",
-    marginTop: "1.5vh",
-    borderRadius: "1vh",
+    padding: "calc( 1.2 * var(--custom-vh))",
+    marginTop: "calc( 1.5 * var(--custom-vh))",
+    borderRadius: "calc( 1 * var(--custom-vh))",
     border: "0.5vh solid #B2975C",
     fontFamily: "inherit",
-    fontSize: "2vh",
+    fontSize: "calc( 2 * var(--custom-vh))",
     lineHeight: "1.5",
     resize: "none",
     boxSizing: "border-box",
   },
   charCount: {
-    fontSize: "1.5vh",
+    fontSize: "calc( 1.5 * var(--custom-vh))",
     textAlign: "right",
     padding: "0.5vh",
   },
@@ -425,7 +433,7 @@ const styles = {
     borderRadius: "1vh",
     backgroundColor: "#B2975C",
     color: "#5D4A37",
-    fontSize: "2vh",
+    fontSize: "calc( 2 * var(--custom-vh))",
     padding: "calc( 1 * var(--custom-vh)) calc( 2 * var(--custom-vh))",
     height: "calc(4 * var(--custom-vh))",
     margin: "0",
@@ -437,7 +445,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "100vh",
+    height: "calc( 100 * var(--custom-vh))",
     fontSize: "2vh",
     color: "#5D4A37",
   },
