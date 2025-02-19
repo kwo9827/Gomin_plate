@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")  // deleted_at 필드 변경할 것
+@SQLDelete(sql = "UPDATE user SET deleted_at = DATE_ADD(NOW(), INTERVAL 9 HOUR) WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 public class User extends BaseEntity {
 

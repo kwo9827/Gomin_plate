@@ -1,14 +1,14 @@
 package com.ssafy.sushi.domain.user.controller;
 
+import com.ssafy.sushi.domain.auth.dto.TokenValidationResult;
 import com.ssafy.sushi.domain.user.dto.request.UpdateNicknameRequest;
-import com.ssafy.sushi.domain.user.dto.response.UserInfoResponse;
 import com.ssafy.sushi.domain.user.dto.response.UserLikeNumResponse;
 import com.ssafy.sushi.domain.user.dto.response.UserNicknameChangeResponse;
 import com.ssafy.sushi.domain.user.service.UserService;
 import com.ssafy.sushi.global.common.response.ApiResponse;
 import com.ssafy.sushi.global.common.util.AuthenticationUtil;
 import com.ssafy.sushi.global.security.UserPrincipal;
-import com.ssafy.sushi.global.sse.SseService;
+import com.ssafy.sushi.global.security.jwt.JwtTokenProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,19 +23,25 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final SseService sseService;
     private final AuthenticationUtil authenticationUtil;
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    @GetMapping("/me")
-    public ResponseEntity<ApiResponse<UserInfoResponse>> createUser(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @CookieValue(name = "refreshToken", required = false) String refreshToken) {
-        Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
+    @GetMapping("/validate/{token}")
+    public ResponseEntity<ApiResponse<Boolean>> validateToken(@PathVariable String token) {
+        TokenValidationResult result = jwtTokenProvider.validateToken(token);
+        if (!result.isValid()) {
+            return ApiResponse.success(false);
+        }
 
-        System.out.println(refreshToken);
-
-        return ApiResponse.success(userService.getUserInfo(userId));
+        try {
+            Integer userId = jwtTokenProvider.getUserId(token);
+            Boolean exists = userService.existsById(userId);
+            return ApiResponse.success(exists);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ApiResponse.success(false);
+        }
     }
 
     @DeleteMapping("/me")
@@ -47,20 +53,6 @@ public class UserController {
 
         return ApiResponse.success(HttpStatus.OK);
     }
-
-//    @GetMapping(value = "/my-like/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-//    public SseEmitter likeSubscribe(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-//        try {
-//            Integer userId = authenticationUtil.getCurrentUserId(userPrincipal);
-//            return sseService.subscribeLikeCount(userId);
-//        } catch (CustomException e) {
-//            log.info("SSE Access Denied catch User");
-////            SseEmitter emitter = new SseEmitter(0L);
-////            emitter.complete();
-////            return emitter;
-//            return null;
-//        }
-//    }
 
     @GetMapping("/my-like")
     public ResponseEntity<ApiResponse<UserLikeNumResponse>> getUserLikeNum(
