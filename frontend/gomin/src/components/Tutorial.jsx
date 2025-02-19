@@ -7,7 +7,6 @@ import t0 from "../assets/tuto/0.webp";
 import t01 from "../assets/tuto/01.webp";
 import t2 from "../assets/tuto/2.webp";
 import t3 from "../assets/tuto/03.webp";
-// import t6 from "../assets/tuto/6.webp";
 import t7 from "../assets/tuto/7.webp";
 import t8 from "../assets/tuto/8.webp";
 import t9 from "../assets/tuto/9.webp";
