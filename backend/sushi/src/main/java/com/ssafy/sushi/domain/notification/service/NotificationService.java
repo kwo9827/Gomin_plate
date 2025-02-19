@@ -13,17 +13,22 @@ import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
 import com.ssafy.sushi.global.infra.fcm.FcmRepository;
 import com.ssafy.sushi.global.infra.fcm.FcmService;
+import com.ssafy.sushi.global.infra.fcm.FcmToken;
 import com.ssafy.sushi.global.infra.fcm.dto.LikeFcmRequestDto;
 import com.ssafy.sushi.global.infra.fcm.dto.SoldOutFcmRequestDto;
 import com.ssafy.sushi.global.sse.SseNotificationEvent;
 import com.ssafy.sushi.global.sse.SseService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -51,17 +56,32 @@ public class NotificationService {
         notificationRepository.save(notification);
         SseNotificationEvent event = SseNotificationEvent.of(true);
 
-
         if (notificationType.getCode() == '1' || notificationType.getCode() == '2') {
-            fcmRepository.findAllByUserId(receiveUser.getId())
-                    .forEach(fcmToken -> {
-                        fcmService.sendSoldOutFCM(SoldOutFcmRequestDto.of(fcmToken.getToken(), sushi.getUser().getNickname(), sushi.getTitle()));
-                    });
+            List<FcmToken> tokens = fcmRepository.findAllByUserId(receiveUser.getId());
+            for (FcmToken fcmToken : tokens) {
+                try {
+                    fcmService.sendSoldOutFCM(SoldOutFcmRequestDto.of(
+                            fcmToken.getToken(),
+                            sushi.getUser().getNickname(),
+                            sushi.getTitle()
+                    ));
+                } catch (Exception e) {
+                    log.error("Failed to send FCM notification to token: {}", fcmToken.getToken(), e);
+                }
+            }
         } else if (notificationType.getCode() == '3') {
-            fcmRepository.findAllByUserId(receiveUser.getId())
-                    .forEach(fcmToken -> {
-                        fcmService.sendLikeFCM(LikeFcmRequestDto.of(fcmToken.getToken(), sushi.getUser().getNickname(), sushi.getTitle()));
-                    });
+            List<FcmToken> tokens = fcmRepository.findAllByUserId(receiveUser.getId());
+            for (FcmToken fcmToken : tokens) {
+                try {
+                    fcmService.sendLikeFCM(LikeFcmRequestDto.of(
+                            fcmToken.getToken(),
+                            sushi.getUser().getNickname(),
+                            sushi.getTitle()
+                    ));
+                } catch (Exception e) {
+                    log.error("Failed to send FCM notification to token: {}", fcmToken.getToken(), e);
+                }
+            }
         }
 
         sseService.notify(receiveUser.getId(), event);

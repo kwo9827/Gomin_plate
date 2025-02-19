@@ -30,4 +30,12 @@ public class FcmController {
         fcmService.saveToken(userId, request.getToken());
         return ApiResponse.success(HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/token")
+    public ResponseEntity<ApiResponse<Void>> removeToken(
+            @RequestBody FcmTokenRequest request) {
+
+        fcmService.removeToken(request.getToken());
+        return ApiResponse.success(HttpStatus.OK);
+    }
 }
