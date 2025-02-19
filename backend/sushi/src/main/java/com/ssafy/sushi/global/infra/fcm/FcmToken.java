@@ -8,7 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "fcm_tokens")
+@Table(name = "fcm_tokens",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "UK_fcm_tokens_user_token",
+                        columnNames = {"user_id", "token"}
+                )
+        })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FcmToken {
