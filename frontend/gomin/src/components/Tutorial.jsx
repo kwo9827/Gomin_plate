@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import Dialog from "../components/Dialog";
 
 //튜토리얼 이미지
+import t00 from "../assets/tuto/00.webp";
 import t0 from "../assets/tuto/0.webp";
-import t1 from "../assets/tuto/1.webp";
+import t01 from "../assets/tuto/01.webp";
 import t2 from "../assets/tuto/2.webp";
-import t3 from "../assets/tuto/3.webp";
-import t4 from "../assets/tuto/4.webp";
-import t5 from "../assets/tuto/5.webp";
+import t3 from "../assets/tuto/03.webp";
 import t6 from "../assets/tuto/6.webp";
 import t7 from "../assets/tuto/7.webp";
 import t8 from "../assets/tuto/8.webp";
@@ -25,12 +24,15 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
   };
 
   const dialogues = [
-    "환영합니다냥. 처음 뵙겠습니다냥",
-    "고민 한접시 이용법을 설명해드리겠다냥",
-    "준비되시면 화면을 터치해주시기 바랍니다냥",
+    "어서오세요. 처음 뵙는 분이군요.",
+    "저는 고민 한접시의 주인장, 마스터 냥입니다.",
+    "이 곳은 손님의 고민을 풀어놓기도 하고",
+    "다른 손님들의 고민을 들어주기도 하는 작은 식당입니다.",
+    "작고 다양한 초밥들로 마음을 든든히 채워보세요.",
+    "고민 한 접시의 이용 방법을 간단히 설명해드리겠습니다.",
   ];
 
-  const tutorialSlides = [t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t9];
+  const tutorialSlides = [t00, t0, t01, t3, t7, t8, t2, t10, t9];
 
   useEffect(() => {
     if (showFullTutorial) {
