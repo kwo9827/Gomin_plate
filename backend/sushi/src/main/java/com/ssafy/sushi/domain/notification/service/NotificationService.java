@@ -62,7 +62,7 @@ public class NotificationService {
                 try {
                     fcmService.sendSoldOutFCM(SoldOutFcmRequestDto.of(
                             fcmToken.getToken(),
-                            sushi.getUser().getNickname(),
+                            receiveUser.getNickname(),
                             sushi.getTitle()
                     ));
                 } catch (Exception e) {
@@ -75,7 +75,7 @@ public class NotificationService {
                 try {
                     fcmService.sendLikeFCM(LikeFcmRequestDto.of(
                             fcmToken.getToken(),
-                            sushi.getUser().getNickname(),
+                            receiveUser.getNickname(),
                             sushi.getTitle()
                     ));
                 } catch (Exception e) {
