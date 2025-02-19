@@ -20,7 +20,7 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
   const dispatch = useDispatch();
   const currentSushi = useSelector((state) => state.sushi.currentSushi);
 
-  // const [modalOpen, setModalOpen] = useState(false);
+  const [showPushAgreeModal, setShowPushAgreeModal] = useState(false);
   const [alertModal, setAlertModal] = useState({
     isOpen: false,
     message: "",
@@ -147,6 +147,11 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
       setContent("");
       onAnswerSubmit();
       onClose();
+
+      // 알림 권한이 'default' 상태일 때만 모달 표시
+      if (Notification.permission === "default") {
+        setShowPushAgreeModal(true); // Home 컴포넌트의 state
+      }
     } catch (error) {
       showAlert("답변 제출에 실패했습니다.");
     }
@@ -251,7 +256,7 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
                     minHeight: "calc( 3 * var(--custom-vh))",
                     lineHeight: "calc( 4 * var(--custom-vh))",
                     whiteSpace: "pre-wrap",
-                    wordBreak: "break-word"
+                    wordBreak: "break-word",
                   }}
                 >
                   {sushiData?.title}

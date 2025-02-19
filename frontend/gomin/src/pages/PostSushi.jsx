@@ -68,7 +68,7 @@ const styles = `
   }
 `;
 
-const PostSushi = ({ onClose }) => {
+const PostSushi = ({ onClose, onComplete }) => {
   const dispatch = useDispatch();
   const likesReceived = useSelector((state) => state.member.likesReceived);
   const [step, setStep] = useState(1);
@@ -86,7 +86,7 @@ const PostSushi = ({ onClose }) => {
   const [isConfirmPressed, setIsConfirmPressed] = useState(false);
   const [isCancelPressed, setIsCancelPressed] = useState(false);
   const isSubmittingRef = useRef(false);
-  const reRender = useCallback(() => { }, []);
+  const reRender = useCallback(() => {}, []);
   const [alertModal, setAlertModal] = useState({
     isOpen: false,
     message: "",
@@ -250,6 +250,8 @@ const PostSushi = ({ onClose }) => {
   const handleCompleteClose = () => {
     setShowCompleteModal(false);
     onClose();
+
+    onComplete?.();
   };
 
   const handleCancelSubmit = () => {
@@ -260,8 +262,7 @@ const PostSushi = ({ onClose }) => {
     try {
       await navigator.clipboard.writeText(text);
       showAlert("클립보드에 링크가 복사되었어요.");
-    } catch (err) {
-    }
+    } catch (err) {}
   };
   const handleClose = () => {
     setIsClosing(true);
@@ -412,8 +413,9 @@ const PostSushi = ({ onClose }) => {
                     <Slider {...settings}>
                       {sushiImages.map((sushi, index) => (
                         <div
-                          className={`slider ${currentSlide === index ? "active" : ""
-                            }`}
+                          className={`slider ${
+                            currentSlide === index ? "active" : ""
+                          }`}
                           key={sushi.id}
                           style={{
                             cursor:
@@ -680,7 +682,6 @@ const PostSushi = ({ onClose }) => {
                             url: shareUrl,
                           },
                         });
-
                       }}
                     >
                       <img
@@ -698,7 +699,6 @@ const PostSushi = ({ onClose }) => {
                           `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/${shareUrl}`,
                           "_blank"
                         );
-
                       }}
                     >
                       <i
