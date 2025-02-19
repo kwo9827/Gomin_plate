@@ -63,6 +63,16 @@ const NotificationModal = ({ isOpen, onClose }) => {
     return title.length > 15 ? `[${title.slice(0, 15)}...]` : `제목: ${title}`;
   };
 
+  const scrollToTop = () => {
+    const container = document.querySelector('.notification-container');
+    if (container) {
+      container.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   if (!isOpen && !show) return null;
 
   return (
@@ -81,46 +91,51 @@ const NotificationModal = ({ isOpen, onClose }) => {
             ✓ 모두 읽음
           </button>
         )}
-        <div>
+        <div className="notification-container" style={styles.notificationContainer}>
           {status === "loading" ? (
             <p style={styles.emptyText}>로딩 중...</p>
           ) : notifications.length > 0 ? (
-            <ul style={styles.list}>
-              {notifications.map((notification) => (
-                <li
-                  key={notification.notificationId}
-                  style={styles.listItem}
-                  onClick={() => handleNotificationClick(notification)}
-                >
-                  <div style={styles.outerContainer}>
-                    <div style={styles.middleContainer}>
-                      <div style={styles.innerContainer}>
-                        <div style={styles.notificationImage}>
-                          <img
-                            src={getNotificationImage(
-                              notification.notificationType
-                            )}
-                            alt="알림 이미지"
-                            style={styles.image}
-                          />
-                        </div>
-
-                        <div style={styles.textContainer}>
-                          <div style={styles.title}>{notification.message}</div>
-                          <div style={styles.contentText}>
-                            {truncateTitle(notification.sushi.title)}{" "}
-                            {/* {notification.message} */}
+            <>
+              <ul style={styles.list}>
+                {notifications.map((notification) => (
+                  <li
+                    key={notification.notificationId}
+                    style={styles.listItem}
+                    onClick={() => handleNotificationClick(notification)}
+                  >
+                    <div style={styles.outerContainer}>
+                      <div style={styles.middleContainer}>
+                        <div style={styles.innerContainer}>
+                          <div style={styles.notificationImage}>
+                            <img
+                              src={getNotificationImage(
+                                notification.notificationType
+                              )}
+                              alt="알림 이미지"
+                              style={styles.image}
+                            />
                           </div>
-                          <div style={styles.time}>
-                            {new Date(notification.createdAt).toLocaleString()}
+
+                          <div style={styles.textContainer}>
+                            <div style={styles.title}>{notification.message}</div>
+                            <div style={styles.contentText}>
+                              {truncateTitle(notification.sushi.title)}{" "}
+                              {/* {notification.message} */}
+                            </div>
+                            <div style={styles.time}>
+                              {new Date(notification.createdAt).toLocaleString()}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+              <button onClick={scrollToTop} style={styles.scrollTopButton}>
+                ︽
+              </button>
+            </>
           ) : (
             <p style={styles.emptyText}>알림이 없습니다.</p>
           )}
@@ -156,10 +171,12 @@ const styles = {
     border: "1vh solid #906C48",
     borderRadius: "1.3vh",
     outline: "0.25vh solid #67523E",
-    overflowY: "auto",
+    overflowY: "hidden",
     boxSizing: "border-box",
     scrollbarWidth: "none",
     transition: "transform 0.3s ease",
+    display: "flex",
+    flexDirection: "column"
   },
   /* '알림' 외부 박스 */
   outerBox: {
@@ -193,6 +210,7 @@ const styles = {
     listStyle: "none",
     padding: 0,
     width: "100%",
+    flex: 1,
   },
   /* 알림 아이템 컨테이너 */
   listItem: {
@@ -320,6 +338,36 @@ const styles = {
     height: "3vh",
     minWidth: "20px",
     minHeight: "20px",
+  },
+  notificationContainer: {
+    flex: 1,
+    overflowY: 'auto',
+    paddingRight: '1vh',
+    marginTop: '2vh',
+    marginBottom: '2vh',
+    display: 'flex',
+    flexDirection: 'column',
+    '&::-webkit-scrollbar': {  // 웹킷 기반 브라우저용
+      display: 'none'
+    },
+    scrollbarWidth: 'none',    // 파이어폭스용
+    msOverflowStyle: 'none',   // IE용
+  },
+  scrollTopButton: {
+    width: "4vh",
+    height: "4vh",
+    margin: "1vh auto",
+    marginTop: "2vh",
+    display: "block",
+    backgroundColor: "#B2975C",
+    border: "none",
+    borderRadius: "50%",
+    color: "#FFFEFA",
+    fontSize: "1.8vh",         // 캐럿 크기 조정
+    cursor: "pointer",
+    flexShrink: 0,
+    lineHeight: "3vh",         // 수직 정렬 조정
+    fontFamily: "monospace",   // 캐럿 모양 개선을 위한 폰트 변경
   },
 };
 
