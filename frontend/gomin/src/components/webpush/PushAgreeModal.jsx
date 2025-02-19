@@ -15,8 +15,7 @@ const PushAgreeModal = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onClose={onClose}
       onConfirm={handlePermission}
-      message="웹 밖에서도 초밥 마감 및 좋아요에 대한 알림을 받아 볼 수 있어요!
-알림을 허용하시겠습니까?"
+      message="알림을 허용하면 창을 닫아도 초밥 마감 & 좋아요 획득 소식을 받을 수 있어요!"
     />
   );
 };
