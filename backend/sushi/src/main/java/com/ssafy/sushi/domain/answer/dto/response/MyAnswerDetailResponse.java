@@ -19,7 +19,7 @@ public class MyAnswerDetailResponse {
     private Integer maxAnswers;
     private Integer remainingAnswers;
     private Boolean isLiked;
-    private LocalDateTime expirationTime;
+    private LocalDateTime createdAt;
     private String answer;
 
     public static MyAnswerDetailResponse of(Answer answer) {
@@ -33,7 +33,7 @@ public class MyAnswerDetailResponse {
                 .sushiType(sushi.getSushiType().getId())
                 .maxAnswers(sushi.getMaxAnswers())
                 .remainingAnswers(sushi.getRemainingAnswers())
-                .expirationTime(sushi.getExpirationTime())
+                .createdAt(sushi.getCreatedAt())
                 .isLiked(answer.getIsLiked())
                 .answer(answer.getContent())
                 .build();

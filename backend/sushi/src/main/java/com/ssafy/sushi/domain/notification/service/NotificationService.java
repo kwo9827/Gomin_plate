@@ -11,6 +11,10 @@ import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.global.common.CustomPage;
 import com.ssafy.sushi.global.error.ErrorCode;
 import com.ssafy.sushi.global.error.exception.CustomException;
+import com.ssafy.sushi.global.infra.fcm.FcmRepository;
+import com.ssafy.sushi.global.infra.fcm.FcmService;
+import com.ssafy.sushi.global.infra.fcm.dto.LikeFcmRequestDto;
+import com.ssafy.sushi.global.infra.fcm.dto.SoldOutFcmRequestDto;
 import com.ssafy.sushi.global.sse.SseNotificationEvent;
 import com.ssafy.sushi.global.sse.SseService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class NotificationService {
 
     private final SseService sseService;
+    private final FcmService fcmService;
     private final NotificationRepository notificationRepository;
+    private final FcmRepository fcmRepository;
 
     @Value("${app.domain}")
     private String host;
@@ -43,8 +49,21 @@ public class NotificationService {
                 .build();
 
         notificationRepository.save(notification);
-
         SseNotificationEvent event = SseNotificationEvent.of(true);
+
+
+        if (notificationType.getCode() == '1' || notificationType.getCode() == '2') {
+            fcmRepository.findAllByUserId(receiveUser.getId())
+                    .forEach(fcmToken -> {
+                        fcmService.sendSoldOutFCM(SoldOutFcmRequestDto.of(fcmToken.getToken(), sushi.getUser().getNickname(), sushi.getTitle()));
+                    });
+        } else if (notificationType.getCode() == '3') {
+            fcmRepository.findAllByUserId(receiveUser.getId())
+                    .forEach(fcmToken -> {
+                        fcmService.sendLikeFCM(LikeFcmRequestDto.of(fcmToken.getToken(), sushi.getUser().getNickname(), sushi.getTitle()));
+                    });
+        }
+
         sseService.notify(receiveUser.getId(), event);
     }
 
