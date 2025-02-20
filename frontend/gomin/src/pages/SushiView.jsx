@@ -163,6 +163,7 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
         onAnswerSubmit(true); // 본인 초밥 답변 시도
         onClose();
       } else {
+        console.error(error);
         showAlert("답변 제출에 실패했습니다.");
       }
     }
