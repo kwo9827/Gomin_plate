@@ -142,10 +142,16 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
     }
 
     try {
-      await dispatch(createAnswer({ sushiId: sushiData.sushiId, content }));
+      await dispatch(
+        createAnswer({ sushiId: sushiData.sushiId, content })
+      ).unwrap();
+
+
       setShowAnswerInput(false);
       setContent("");
-      onAnswerSubmit();
+
+      onAnswerSubmit(false); // 먼저 확인 모달 열기
+
       onClose();
 
       // 알림 권한이 'default' 상태일 때만 모달 표시
@@ -153,7 +159,12 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
         setShowPushAgreeModal(true); // Home 컴포넌트의 state
       }
     } catch (error) {
-      showAlert("답변 제출에 실패했습니다.");
+      if (error.error?.code === "R005") {
+        onAnswerSubmit(true); // 본인 초밥 답변 시도
+        onClose();
+      } else {
+        showAlert("답변 제출에 실패했습니다.");
+      }
     }
   };
 
