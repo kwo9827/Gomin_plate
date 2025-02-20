@@ -3,8 +3,7 @@ import { getToken, onMessage } from "firebase/messaging";
 import { messaging } from "../firebase-config";
 import { registerFCMToken, unregisterFCMToken } from "../api/axios";
 
-const VAPID_KEY =
-  "BBJX5JfSQ2ia-fa7rKWGD3q480cSuWtspnxE-W4KgAQ4ktOKI_95nYdYq1mGa4G8JYbwk56sEpHTa6-UTjljAUw";
+const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
 
 export const useNotification = () => {
   const [token, setToken] = useState("");
@@ -105,13 +104,13 @@ export const useNotification = () => {
 
     const unsubscribe = onMessage(messaging, (payload) => {
       // 포그라운드에서 알림을 표시하려면 아래 주석을 해제
-      // if (payload.data) {
-      //   showNotification({
-      //     title: payload.data.title,
-      //     body: payload.data.body,
-      //     icon: "/pushlogo.png",
-      //   });
-      // }
+      if (payload.data) {
+        showNotification({
+          title: payload.data.title,
+          body: payload.data.body,
+          icon: "/pushlogo.png",
+        });
+      }
 
       // 여기에 인앱 알림 구현도 가능
 
