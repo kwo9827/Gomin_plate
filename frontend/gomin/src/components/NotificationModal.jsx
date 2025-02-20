@@ -133,7 +133,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
                 ))}
               </ul>
               <button onClick={scrollToTop} style={styles.scrollTopButton}>
-                ︽
+                ⮝
               </button>
             </>
           ) : (
