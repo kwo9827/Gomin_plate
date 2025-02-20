@@ -89,8 +89,8 @@
 <table>
 <tr>
 <td><img src="https://i.postimg.cc/3Rzxrzp8/pwa.jpg" width="250px"></td>
-<td><img src="https://i.postimg.cc/q70Bz8zK/sse.gif" width="250px"></td>
 <td><img src="https://i.postimg.cc/L4VbsXh5/image.gif" width="250px"></td>
+<td><img src="https://i.postimg.cc/FKDfvPDz/image.gif" width="250px"></td>
 </tr>
 </table>
   
