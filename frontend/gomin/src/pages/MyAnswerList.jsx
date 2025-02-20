@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMyAnswers } from "../store/slices/answerSlice";
 import SushiAnswerCard from "../components/SushiAnswerCard";
 import { useTrail, animated } from "@react-spring/web";
+import directionIcon from "../assets/direction.svg";
 
 const MyAnswerList = () => {
   const dispatch = useDispatch();
@@ -137,7 +138,15 @@ const MyAnswerList = () => {
         )}
       </div>
       <button onClick={scrollToTop} style={styles.scrollTopButton}>
-        ⮝
+        <img
+          src={directionIcon}
+          alt="위로 가기"
+          style={{
+            width: "calc(3 * var(--custom-vh))",
+            height: "calc(3 * var(--custom-vh))",
+            filter: "brightness(0) invert(1)",
+          }}
+        />
       </button>
     </div>
   );
