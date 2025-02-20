@@ -61,7 +61,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
 
   const truncateTitle = (title) => {
     if (!title) return "";
-    return title.length > 15 ? `[${title.slice(0, 15)}...]` : `제목: ${title}`;
+    return title.length > 15 ? `[${title.slice(0, 30)}...]` : `[${title}]`;
   };
 
   const scrollToTop = () => {
