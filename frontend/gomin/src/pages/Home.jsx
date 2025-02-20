@@ -72,10 +72,6 @@ const Home = () => {
     } catch (error) {
       if (error.error?.code === "R006") {
         showAlert("이미 답변한 초밥이다냥!");
-      } else if (error.error?.code === "S004") {
-        showAlert("이미 마감된 초밥이에요!");
-      } else if (error.error?.code === "R005") {
-        showAlert("자신의 초밥에는 답변을 달 수 없다냥");
       }
     }
   };
@@ -167,7 +163,7 @@ const Home = () => {
   useEffect(() => {
     if (token) {
       dispatch(fetchSushiByToken(token))
-        .unwrap()
+        .unwrap() // unwrap 추가
         .then((response) => {
           if (response.data) {
             setSelectedSushiData(response.data);
@@ -177,12 +173,9 @@ const Home = () => {
           }
         })
         .catch((error) => {
+          console.error(error);
           if (error.error?.code === "R006") {
             showAlert("이미 답변한 초밥이다냥!");
-          } else if (error.error?.code === "S004") {
-            showAlert("이미 마감된 초밥이에요!");
-          } else if (error.error?.code === "R005") {
-            showAlert("자신의 초밥에는 답변을 달 수 없다냥");
           }
         });
     }
