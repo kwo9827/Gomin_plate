@@ -15,10 +15,7 @@
       property="og:image"
       content="https://res.cloudinary.com/gominsushi/image/upload/v1739762080/%EA%B3%B5%EC%9C%A0_nssh19.png"
     />
-    <meta
-      property="og:description"
-      content="내 고민 초밥을 먹어줘🍽️"
-    />
+    <meta property="og:description" content="내 고민 초밥을 먹어줘🍽️" />
 
     <!-- 캐시 버스팅을 위한 메타 태그 추가 -->
     <meta
@@ -50,43 +47,19 @@
 
     <!-- 서비스 워커 등록 스크립트 추가 -->
     <script>
-      // if ("serviceWorker" in navigator) {
-      //   window.addEventListener("load", () => {
-      //     navigator.serviceWorker
-      //       .register("/firebase-messaging-sw.js", {
-      //         scope: "/",
-      //       })
-      //       .then((registration) => {
-      //         // console.log("서비스 워커가 등록되었습니다:", registration);
-      //       })
-      //       .catch((err) => {
-      //         console.error("서비스 워커 등록 실패:", err);
-      //       });
-      //   });
-      // }
-
       if ("serviceWorker" in navigator) {
-        // 인앱브라우저 체크
-        const userAgent = navigator.userAgent.toLowerCase();
-        const isInApp = /kakaotalk|instagram|naver|line|fb|fban|fbios/.test(
-          userAgent
-        );
-
-        if (!isInApp) {
-          // 일반 브라우저일 때만 Service Worker 등록
-          window.addEventListener("load", () => {
-            navigator.serviceWorker
-              .register("/firebase-messaging-sw.js", {
-                scope: "/",
-              })
-              .then((registration) => {
-                console.log("서비스 워커가 등록되었습니다:", registration);
-              })
-              .catch((err) => {
-                console.error("서비스 워커 등록 실패:", err);
-              });
-          });
-        }
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/firebase-messaging-sw.js", {
+              scope: "/",
+            })
+            .then((registration) => {
+              // console.log("서비스 워커가 등록되었습니다:", registration);
+            })
+            .catch((err) => {
+              console.error("서비스 워커 등록 실패:", err);
+            });
+        });
       }
     </script>
   </body>
