@@ -63,7 +63,7 @@
   
   
 
-<img src="https://github.com/user-attachments/assets/d7f58fbe-42b8-4075-896d-d6bd420b5775" width="40%">
+<img src="https://i.postimg.cc/vHBVmwpy/image.gif" width="40%">
 
   
 
@@ -86,13 +86,16 @@
 
 ### 🧒 사용자 편의 요소
 
+<table>
+<tr>
+<td><img src="https://i.postimg.cc/3Rzxrzp8/pwa.jpg" width="250px"></td>
+<td><img src="https://i.postimg.cc/q70Bz8zK/sse.gif" width="250px"></td>
+<td><img src="https://i.postimg.cc/L4VbsXh5/image.gif" width="250px"></td>
+</tr>
+</table>
   
+<img src="https://i.postimg.cc/RV4z1MMr/image.gif" height="200px">
 
-<PWA 설치> <튜토리얼> <SSE>
-
-<img src="https://i.postimg.cc/L4VbsXh5/image.gif" width="40%">
-
-  
 
 PWA로 앱처럼 설치할 수 있고, 첫 방문에는 친절한 튜토리얼이 안내해드려요. 끝없이 이어지는 무한 스크롤과 아기자기한 애니메이션으로 더욱 즐거운 경험을 선사합니다.
 
