@@ -63,11 +63,26 @@
 
 // 먼저 iOS 인앱브라우저 체크 함수
 const isIOSInAppBrowser = () => {
-  // Service Worker 컨텍스트에서는 navigator.userAgent 대신 self.navigator.userAgent 사용
-  const ua = self.navigator.userAgent.toLowerCase();
-  const isIOS = /iphone|ipad|ipod/.test(ua);
-  const isInApp = /kakaotalk|instagram|naver\(inapp|fb(ios|an)/.test(ua);
-  return isIOS && isInApp;
+  try {
+    const ua = self.navigator.userAgent.toLowerCase();
+
+    // iOS 기기 체크 (더 포괄적인 체크)
+    const isIOS = /iphone|ipad|ipod|mac/.test(ua) && "ontouchend" in self;
+
+    // 주요 인앱브라우저 체크 (더 많은 케이스 추가)
+    const isInApp =
+      /kakaotalk|instagram|naver\(inapp|fb(ios|an)|line|whatsapp|band|kakaolink|kakaoplus/.test(
+        ua
+      );
+
+    // WKWEBVIEW 체크 (iOS 인앱브라우저의 일반적인 특징)
+    const isWKWebView = ua.includes("wkwebview");
+
+    return isIOS && (isInApp || isWKWebView);
+  } catch (error) {
+    console.error("Error checking iOS in-app browser:", error);
+    return false;
+  }
 };
 
 // iOS 인앱브라우저가 아닐 때만 Firebase 초기화
