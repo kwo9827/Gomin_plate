@@ -28,12 +28,12 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
 
   // 카테고리별 형광펜 색상
   const titleShadowColors = {
-    1: "rgba(255, 0, 0, 0.4)", // 사랑
-    2: "rgba(255, 255, 0, 0.4)", // 우정
-    3: "rgba(0, 179, 255, 0.4)", // 건강
-    4: "rgba(83, 178, 0, 0.4)", // 진로
-    5: "rgba(183, 6, 227, 0.4)", // 가족
-    6: "rgba(157, 157, 157, 0.4)", // 기타
+    1: "rgba(255, 0, 0, 0.4)",
+    2: "rgba(255, 255, 0, 0.4)",
+    3: "rgba(0, 179, 255, 0.4)",
+    4: "rgba(83, 178, 0, 0.4)",
+    5: "rgba(183, 6, 227, 0.4)",
+    6: "rgba(157, 157, 157, 0.4)",
   };
 
   useEffect(() => {
@@ -145,7 +145,6 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
       await dispatch(
         createAnswer({ sushiId: sushiData.sushiId, content })
       ).unwrap();
-
 
       setShowAnswerInput(false);
       setContent("");
