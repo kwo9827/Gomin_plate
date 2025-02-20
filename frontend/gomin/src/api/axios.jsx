@@ -65,6 +65,10 @@ api.interceptors.response.use(
     // R003(이미 좋아요 누름), R004(자신의 답변 좋아요) 등
 
     // 그 외 에러는 Promise.reject로 전달하여 각 컴포넌트에서 처리할 수 있도록 함
+    if (error.response?.data?.error?.code === "R005") {
+      // R005 에러 발생 시
+      return Promise.reject(error.response.data);
+    }
     return Promise.reject(error);
   }
 );
