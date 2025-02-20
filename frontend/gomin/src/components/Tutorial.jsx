@@ -88,9 +88,9 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
         <div
           style={{
             position: "absolute",
-            top: "25vh",
-            left: "28vh",
-            width: "25vh",
+            top: "calc( 25 * var(--custom-vh))",
+            left: "calc( 28 * var(--custom-vh))",
+            width: "calc( 25 * var(--custom-vh))",
           }}
         >
           <Dialog
@@ -154,7 +154,7 @@ const styles = {
   },
   tutorialContent: {
     borderRadius: "12px",
-    width: "45vh",
+    width: "calc( 45 * var(--custom-vh))",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
