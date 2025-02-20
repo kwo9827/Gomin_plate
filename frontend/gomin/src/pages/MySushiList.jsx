@@ -3,6 +3,7 @@ import SushiCard from "../components/SushiCard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMySushi } from "../store/slices/sushiSlice";
 import { useTrail, animated } from "@react-spring/web"; // react-spring 라이브러리에서 useTrail, animated 가져오기
+import directionIcon from "../assets/direction.svg";  // 파일 상단에 추가
 
 import "../styles/font.css";
 
@@ -204,7 +205,15 @@ const MySushiList = () => {
         )} */}
       </div>
       <button onClick={scrollToTop} style={styles.scrollTopButton}>
-        ⮝
+        <img
+          src={directionIcon}
+          alt="위로 가기"
+          style={{
+            width: "calc(3 * var(--custom-vh))",
+            height: "calc(3 * var(--custom-vh))",
+            filter: "brightness(0) invert(1)", // SVG를 흰색으로 변경
+          }}
+        />
       </button>
     </div>
   );
