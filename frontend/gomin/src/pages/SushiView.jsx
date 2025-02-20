@@ -30,8 +30,8 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
   const titleShadowColors = {
     1: "rgba(255, 0, 0, 0.4)",
     2: "rgba(255, 255, 0, 0.4)",
-    3: "rgba(0, 179, 255, 0.4)",
-    4: "rgba(83, 178, 0, 0.4)",
+    3: "rgba(83, 178, 0, 0.4)",
+    4: "rgba(0, 179, 255, 0.4)",
     5: "rgba(183, 6, 227, 0.4)",
     6: "rgba(157, 157, 157, 0.4)",
   };
