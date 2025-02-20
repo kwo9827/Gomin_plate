@@ -1,8 +1,6 @@
 package com.ssafy.sushi.global.infra.fcm;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.*;
 import com.ssafy.sushi.domain.user.entity.User;
 import com.ssafy.sushi.domain.user.repository.UserRepository;
 import com.ssafy.sushi.global.error.ErrorCode;
@@ -77,6 +75,14 @@ public class FcmService {
                 .putData("body", body)
                 .putData("url", "https://www.gomin.my/")
                 .putData("timestamp", String.valueOf(System.currentTimeMillis()))
+                .setAndroidConfig(AndroidConfig.builder()
+                        .setPriority(AndroidConfig.Priority.HIGH)
+                        .build())
+                .setApnsConfig(ApnsConfig.builder()
+                        .setAps(Aps.builder()
+                                .setContentAvailable(true)
+                                .build())
+                        .build())
                 .build();
     }
 
