@@ -40,8 +40,8 @@ api.interceptors.response.use(
 
     if (
       errorCode &&
-      ERROR_MESSAGES[errorCode] &&
-      !nonAlertErrors.includes(errorCode)
+      ERROR_MESSAGES[errorCode]
+      // && !nonAlertErrors.includes(errorCode)
     ) {
       alert(ERROR_MESSAGES[errorCode]);
     } else {
