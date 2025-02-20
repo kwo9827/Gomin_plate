@@ -73,7 +73,7 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
         <div
           style={{
             position: "fixed",
-            top: "50%",
+            top: "40%",
             left: "50%",
             zIndex: 8,
             backgroundColor: "transparent",
