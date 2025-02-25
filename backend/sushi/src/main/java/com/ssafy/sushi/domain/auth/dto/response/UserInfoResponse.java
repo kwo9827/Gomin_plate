@@ -12,11 +12,6 @@ public class UserInfoResponse {
     private Boolean isNew;
 
     public static UserInfoResponse of(User user, Boolean isNew) {
-
-        if (user.getId() == 12) {
-            isNew = true;
-        }
-
         return UserInfoResponse.builder()
                 .id(user.getId().toString())
                 .nickname(user.getNickname())
