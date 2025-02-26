@@ -11,9 +11,12 @@ import static java.time.LocalDateTime.now;
 @Entity
 @Table(name = "sushi_exposure",
         uniqueConstraints = {
-        @UniqueConstraint(
-                name = "sushi_exposure_userId_sushiId_unique",
-                columnNames = {"user_id", "sushi_id"})})
+                @UniqueConstraint(
+                        name = "sushi_exposure_userId_sushiId_unique",
+                        columnNames = {"user_id", "sushi_id"})},
+        indexes = {
+                @Index(name = "idx_user_timestamp", columnList = "user_id, timestamp")
+        })
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
