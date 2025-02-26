@@ -158,14 +158,18 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
       const result = await dispatch(
         createAnswer({ sushiId: sushiData.sushiId, content })
       ).unwrap();
-      window.alert("API 성공: " + JSON.stringify(result, null, 2)); // 서버 응답 확인
+      window.alert("API 성공: " + JSON.stringify(result, null, 2));
 
-      // 상태 업데이트와 콜백을 별도 try로 분리
+      // 하나씩 실행하며 테스트
       try {
         setShowAnswerInput(false);
+        window.alert("setShowAnswerInput 성공");
         setContent("");
+        window.alert("setContent 성공");
         onAnswerSubmit(false);
+        window.alert("onAnswerSubmit 성공");
         onClose();
+        window.alert("onClose 성공");
 
         if (!isWebView() && Notification.permission === "default") {
           setShowPushAgreeModal(true);
@@ -175,21 +179,8 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
         showAlert("답변은 등록되었으나 후속 처리에 실패했습니다.");
       }
     } catch (error) {
-      const errorDetails = {
-        message: error.message || "메시지 없음",
-        stack: error.stack || "스택 없음",
-        code: error.code || "코드 없음",
-        raw: error.toString(),
-      };
-      window.alert("API 에러: " + JSON.stringify(errorDetails, null, 2));
-      if (error.error?.code === "R005") {
-        onAnswerSubmit(true);
-        onClose();
-      } else {
-        showAlert(
-          "답변 제출에 실패했습니다: " + (error.message || "알 수 없는 오류")
-        );
-      }
+      window.alert("API 에러: " + JSON.stringify(error, null, 2));
+      // 나머지 에러 처리
     }
   };
 
