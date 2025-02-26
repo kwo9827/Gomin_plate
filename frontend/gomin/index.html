@@ -45,20 +45,51 @@
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- 서비스 워커 등록 스크립트 추가! -->
     <script>
+      function detectBrowserEnvironment() {
+        const ua = navigator.userAgent;
+        const isWKWebView = window.webkit && window.webkit.messageHandlers;
+        const results = {
+          isIOS: /iPad|iPhone|iPod/.test(ua) && !window.MSStream,
+          isSafari: /^((?!chrome|android).)*safari/i.test(ua),
+          isKakaoTalk: /KAKAOTALK/i.test(ua),
+          isNaver: /NAVER\(inapp/i.test(ua),
+          isInstagram: /Instagram/i.test(ua),
+          isFacebook: /FBAN|FBAV/i.test(ua),
+          isLine: /Line/i.test(ua),
+          isStandalone: window.navigator.standalone === true,
+          isWKWebView: isWKWebView,
+          isIOSInAppBrowser: false,
+        };
+        if (results.isIOS) {
+          results.isIOSInAppBrowser =
+            results.isWKWebView ||
+            results.isKakaoTalk ||
+            results.isNaver ||
+            results.isInstagram ||
+            results.isFacebook ||
+            results.isLine ||
+            (!results.isSafari && !results.isStandalone);
+        }
+        return results.isIOSInAppBrowser;
+      }
+
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("/firebase-messaging-sw.js", {
-              scope: "/",
-            })
-            .then((registration) => {
-              // console.log("서비스 워커가 등록되었습니다:", registration);
-            })
-            .catch((err) => {
-              console.error("서비스 워커 등록 실패:", err);
-            });
+          if (!detectBrowserEnvironment()) {
+            navigator.serviceWorker
+              .register("/firebase-messaging-sw.js", { scope: "/" })
+              .then((registration) => {
+                console.log("서비스 워커가 등록되었습니다:", registration);
+              })
+              .catch((err) => {
+                console.error("서비스 워커 등록 실패:", err);
+              });
+          } else {
+            console.log(
+              "iOS 인앱 브라우저에서는 서비스 워커를 등록하지 않습니다."
+            );
+          }
         });
       }
     </script>
