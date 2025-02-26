@@ -155,29 +155,40 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
     }
 
     try {
-      await dispatch(
+      const result = await dispatch(
         createAnswer({ sushiId: sushiData.sushiId, content })
       ).unwrap();
+      window.alert("API 성공: " + JSON.stringify(result, null, 2)); // 서버 응답 확인
 
-      setShowAnswerInput(false);
-      setContent("");
+      // 상태 업데이트와 콜백을 별도 try로 분리
+      try {
+        setShowAnswerInput(false);
+        setContent("");
+        onAnswerSubmit(false);
+        onClose();
 
-      onAnswerSubmit(false); // 먼저 확인 모달 열기
-
-      onClose();
-
-      // 알림 권한이 'default' 상태일 때만 모달 표시
-      if (!isWebView() && Notification.permission === "default") {
-        // 웹뷰 제외
-        setShowPushAgreeModal(true);
+        if (!isWebView() && Notification.permission === "default") {
+          setShowPushAgreeModal(true);
+        }
+      } catch (postError) {
+        window.alert("후속 처리 실패: " + JSON.stringify(postError, null, 2));
+        showAlert("답변은 등록되었으나 후속 처리에 실패했습니다.");
       }
     } catch (error) {
+      const errorDetails = {
+        message: error.message || "메시지 없음",
+        stack: error.stack || "스택 없음",
+        code: error.code || "코드 없음",
+        raw: error.toString(),
+      };
+      window.alert("API 에러: " + JSON.stringify(errorDetails, null, 2));
       if (error.error?.code === "R005") {
-        onAnswerSubmit(true); // 본인 초밥 답변 시도
+        onAnswerSubmit(true);
         onClose();
       } else {
-        console.error(error);
-        showAlert("답변 제출에 실패했습니다.");
+        showAlert(
+          "답변 제출에 실패했습니다: " + (error.message || "알 수 없는 오류")
+        );
       }
     }
   };
