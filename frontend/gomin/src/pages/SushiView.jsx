@@ -158,6 +158,7 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
         setShowPushAgreeModal(true); // Home 컴포넌트의 state
       }
     } catch (error) {
+      window.alert("에러 발생: " + JSON.stringify(error, null, 2)); // 웹뷰에서 에러 확인용
       if (error.error?.code === "R005") {
         onAnswerSubmit(true); // 본인 초밥 답변 시도
         onClose();
