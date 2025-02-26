@@ -2,6 +2,21 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-0BBB9S7JHZ"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-0BBB9S7JHZ");
+    </script>
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
@@ -80,7 +95,7 @@
             navigator.serviceWorker
               .register("/firebase-messaging-sw.js", { scope: "/" })
               .then((registration) => {
-                console.log("서비스 워커가 등록되었습니다:", registration);
+                // console.log("서비스 워커가 등록되었습니다:", registration);
               })
               .catch((err) => {
                 console.error("서비스 워커 등록 실패:", err);
