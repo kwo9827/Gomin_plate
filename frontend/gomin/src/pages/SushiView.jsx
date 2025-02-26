@@ -122,6 +122,19 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
     });
   };
 
+  const isWebView = () => {
+    const ua = navigator.userAgent;
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+    const isAndroid = /Android/.test(ua);
+    const isWKWebView = window.webkit && window.webkit.messageHandlers;
+    const isIOSWebView = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(
+      ua
+    );
+    return (
+      (isIOS && (isWKWebView || isIOSWebView)) || (isAndroid && /wv/.test(ua))
+    );
+  };
+
   const handleSubmit = async () => {
     if (content.trim() === "") {
       showAlert("답변 내용을 입력해주세요!");
@@ -154,11 +167,11 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
       onClose();
 
       // 알림 권한이 'default' 상태일 때만 모달 표시
-      if (Notification.permission === "default") {
-        setShowPushAgreeModal(true); // Home 컴포넌트의 state
+      if (!isWebView() && Notification.permission === "default") {
+        // 웹뷰 제외
+        setShowPushAgreeModal(true);
       }
     } catch (error) {
-      window.alert("에러 발생: " + JSON.stringify(error, null, 2)); // 웹뷰에서 에러 확인용
       if (error.error?.code === "R005") {
         onAnswerSubmit(true); // 본인 초밥 답변 시도
         onClose();
