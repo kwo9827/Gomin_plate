@@ -190,6 +190,7 @@ const Home = () => {
 
   return (
     <>
+      {/* 배경 이미지 */}
       <div style={styles.backgroundContainer}>
         <animated.div
           style={{
@@ -201,8 +202,10 @@ const Home = () => {
             transform: bgSpring.transform,
           }}
         >
+          {/* SSE 연결 상태 표시 */}
           <SSEIndicator isConnected={isSSEConnected} />
         </animated.div>
+        {/* 고양이마스터 */}
         <animated.div
           style={{
             ...styles.backgroundLayer,
@@ -232,11 +235,13 @@ const Home = () => {
             transform: bellSpring.transform,
           }}
         >
+          {/* 알림 : 새로운 알림이 있을 때, 없을 떄 */}
           <NotificationBell
             onClick={() => setIsNotificationOpen(true)}
             hasUnread={hasUnread}
           />
         </animated.div>
+        {/* 튜토리얼 버튼 */}
         <div style={styles.buttonContainer}>
           <button style={styles.button} onClick={() => setStartTutorial(true)}>
             ?
@@ -248,6 +253,7 @@ const Home = () => {
             showFullTutorial={false}
           />
         )}
+        {/* 책상과 그 위의 요소들 */}
         <animated.div
           style={{
             ...styles.deskContainer,
@@ -255,15 +261,18 @@ const Home = () => {
             transform: deskSpring.transform,
           }}
         >
+          {/* 책상 */}
           <img
             src={deskImg}
             alt="Desk"
             style={styles.deskImage}
             onLoad={() => handleImageLoad("desk")}
           />
+          {/* Rail */}
           <div style={styles.rail}>
             <Rail onSushiClick={handleSushiClick} />
           </div>
+          {/* 주문벨 */}
           <div style={styles.bell}>
             <PostSushiBell onClick={() => setIsPostSushiOpen(true)} />
           </div>
@@ -324,4 +333,105 @@ const Home = () => {
 };
 
 // styles는 그대로 유지
+const styles = {
+  backgroundContainer: {
+    position: "relative",
+    height: "calc( 100 * var(--custom-vh))",
+    width: "100%",
+    overflow: "hidden",
+  },
+  backgroundLayer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    scale: "1.1",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+  },
+
+  deskContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: "-35%",
+    transform: "translateX(-50%)",
+    width: "auto%",
+    height: "calc(28 * var(--custom-vh))", // 책상의 높이 설정
+    zIndex: 3,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-end", // 책상이 컨테이너 하단에 붙도록
+  },
+  deskImage: {
+    width: "auto",
+    height: "100%",
+    objectFit: "contain",
+  },
+  rail: {
+    position: "absolute",
+    bottom: "56%",
+    left: "50%",
+    width: "100%",
+    transform: "translateX(-50%)",
+    zIndex: 4,
+  },
+  bell: {
+    position: "absolute",
+    right: "23%",
+    bottom: "25%",
+    zIndex: 5,
+  },
+  unlock: {
+    position: "absolute",
+    left: "24%",
+    bottom: "22%",
+    zIndex: 5,
+  },
+  buttonContainer: {
+    position: "absolute",
+    left: "calc( 49.5 * var(--custom-vh))",
+    top: "calc( 51.1 * var(--custom-vh))",
+    zIndex: 5,
+  },
+  button: {
+    padding: "calc( 0.2 * var(--custom-vh))",
+    border: "calc( 0.6 * var(--custom-vh)) solid",
+    borderRadius: "calc( 5 * var(--custom-vh))",
+    backgroundColor: "#ada782",
+    color: "#dfdbaf",
+    fontSize: "calc( 2.5 * var(--custom-vh))",
+    fontWeight: "bold",
+    cursor: "pointer",
+    width: "calc( 4 * var(--custom-vh))",
+    height: "calc( 4 * var(--custom-vh))",
+    whiteSpace: "nowrap",
+    lineHeight: "1",
+    fontFamily: "inherit",
+  },
+  speedControls: {
+    position: "absolute",
+    left: "50%",
+    bottom: "22%",
+    display: "flex",
+    gap: "10px",
+    zIndex: 5,
+  },
+  speedButton: {
+    padding: "8px 16px",
+    fontSize: "18px",
+    backgroundColor: "#ada782",
+    color: "#dfdbaf",
+    border: "2px solid #dfdbaf",
+    borderRadius: "8px",
+    cursor: "pointer",
+    transition: "all 0.2s",
+    "&:hover": {
+      backgroundColor: "#8f8a6d",
+    },
+  },
+};
+
 export default Home;
