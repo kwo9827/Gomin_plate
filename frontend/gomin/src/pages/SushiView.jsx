@@ -136,51 +136,30 @@ const SushiView = ({ isOpen, onClose, onAnswerSubmit, sushiId, category }) => {
   };
 
   const handleSubmit = async () => {
-    if (content.trim() === "") {
-      showAlert("답변 내용을 입력해주세요!");
-      return;
-    }
-    if (content.length > 500) {
-      showAlert("최대 500자까지 입력 가능해요!");
-      return;
-    }
-    if (!category) {
-      showAlert("카테고리를 선택해주세요!");
-      return;
-    }
-
-    if (sushiData.remainingAnswers <= 0) {
-      showAlert("답변이 마감된 초밥이에요!");
-      return;
-    }
-
     try {
       const result = await dispatch(
         createAnswer({ sushiId: sushiData.sushiId, content })
       ).unwrap();
-      window.alert("API 성공: " + JSON.stringify(result, null, 2));
 
-      // 하나씩 실행하며 테스트
-      try {
-        setShowAnswerInput(false);
-        window.alert("setShowAnswerInput 성공");
-        setContent("");
-        window.alert("setContent 성공");
-        onAnswerSubmit(false);
-        window.alert("onAnswerSubmit 성공");
+      setShowAnswerInput(false);
+      setContent("");
+      if (isWebView()) {
+        showAlert("♧ 답변이 제출되었다냥 †"); // 웹뷰에서는 showAlert
         onClose();
-        window.alert("onClose 성공");
-
-        if (!isWebView() && Notification.permission === "default") {
+      } else {
+        onAnswerSubmit(false); // 브라우저에서는 기존 로직
+        onClose();
+        if (Notification.permission === "default") {
           setShowPushAgreeModal(true);
         }
-      } catch (postError) {
-        window.alert("후속 처리 실패: " + JSON.stringify(postError, null, 2));
-        showAlert("답변은 등록되었으나 후속 처리에 실패했습니다.");
       }
     } catch (error) {
-      window.alert("API 에러: " + JSON.stringify(error, null, 2));
-      // 나머지 에러 처리
+      if (error.error?.code === "R005") {
+        onAnswerSubmit(true);
+        onClose();
+      } else {
+        showAlert("답변 제출에 실패했습니다: " + (error.message || ""));
+      }
     }
   };
 
