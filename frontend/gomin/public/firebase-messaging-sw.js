@@ -5,7 +5,11 @@ importScripts(
   "https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"
 );
 
-// Firebase 초기화
+/**
+ * https://github.com/CodeSoom/ConStu/issues/133
+ * public디렉토리는 env로 환경변수 처리가 불가하며
+ * firebase의 클라이언트단 api key는 공개되어도 무방함
+ */
 firebase.initializeApp({
   apiKey: "AIzaSyBkpeAuPG6D4TyeY6QCXRvBUqiNdOjRfeg",
   authDomain: "onegominsushi.firebaseapp.com",
