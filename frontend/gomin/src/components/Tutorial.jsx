@@ -82,6 +82,22 @@ const Tutorial = ({ onClose, showFullTutorial = true }) => {
         />
       )}
 
+      {(showDialog || showTutorial) && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "transparent",
+            zIndex: 7,
+            pointerEvents: "auto",
+          }}
+          onClick={(e) => e.stopPropagation()}
+        />
+      )}
+
       {showDialog && (
         <div
           style={{

@@ -52,7 +52,8 @@ export const useNotification = () => {
         if (!registration) {
           throw new Error("서비스 워커가 등록되지 않았습니다.");
         }
-        return await getFCMToken(registration);
+        await getFCMToken(registration);
+        return "granted"; // 권한 상태를 반환
       }
 
       const permission = await Notification.requestPermission();
@@ -63,14 +64,15 @@ export const useNotification = () => {
         if (!registration) {
           throw new Error("서비스 워커가 등록되지 않았습니다.");
         }
-        return await getFCMToken(registration);
+        await getFCMToken(registration);
+        return "granted"; // 권한 상태를 반환
       }
 
-      throw new Error(`알림 권한이 거부되었습니다: ${permission}`);
+      return permission; //"denied" or "default"
     } catch (error) {
       setError(error.message);
       console.error("알림 권한 요청 실패:", error);
-      return null;
+      return "error";
     }
   }, [getFCMToken]);
 
