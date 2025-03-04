@@ -56,35 +56,43 @@ public class NotificationService {
         notificationRepository.save(notification);
         SseNotificationEvent event = SseNotificationEvent.of(true);
 
+        // fcm 전송
+        String userNickname = receiveUser.getNickname();
+        String sushiTitle = sushi.getTitle();
+        Integer userId = receiveUser.getId();
+
+
         if (notificationType.getCode() == '1' || notificationType.getCode() == '2') {
-            List<FcmToken> tokens = fcmRepository.findAllByUserId(receiveUser.getId());
+            List<FcmToken> tokens = fcmRepository.findAllByUserId(userId);
             for (FcmToken fcmToken : tokens) {
+                String token = fcmToken.getToken();
                 try {
                     fcmService.sendSoldOutFCM(SoldOutFcmRequestDto.of(
-                            fcmToken.getToken(),
-                            receiveUser.getNickname(),
-                            sushi.getTitle()
+                            token,
+                            userNickname,
+                            sushiTitle
                     ));
                 } catch (Exception e) {
-                    log.error("Failed to send FCM notification to token: {}", fcmToken.getToken(), e);
+                    log.error("Failed to send FCM notification to token: {}", token, e);
                 }
             }
         } else if (notificationType.getCode() == '3') {
-            List<FcmToken> tokens = fcmRepository.findAllByUserId(receiveUser.getId());
+            List<FcmToken> tokens = fcmRepository.findAllByUserId(userId);
             for (FcmToken fcmToken : tokens) {
+                String token = fcmToken.getToken();
                 try {
                     fcmService.sendLikeFCM(LikeFcmRequestDto.of(
-                            fcmToken.getToken(),
-                            receiveUser.getNickname(),
-                            sushi.getTitle()
+                            token,
+                            userNickname,
+                            sushiTitle
                     ));
                 } catch (Exception e) {
-                    log.error("Failed to send FCM notification to token: {}", fcmToken.getToken(), e);
+                    log.error("Failed to send FCM notification to token: {}", token, e);
                 }
             }
         }
 
-        sseService.notify(receiveUser.getId(), event);
+        sseService.notify(userId, event);
     }
 
     public CustomPage<MyNotificationListResponse> getMyNotificationList(Integer userId, Pageable pageable) {
